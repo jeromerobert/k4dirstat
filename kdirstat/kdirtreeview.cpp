@@ -26,6 +26,7 @@
 #include "kdirtreeiterators.h"
 #include "kpacman.h"
 
+#define SEPARATE_READ_JOBS_COL	0
 
 using namespace KDirStat;
 
@@ -40,7 +41,11 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _doLazyClone	= true;
     _doPacManAnimation	= false;
     _updateInterval	= 333;	// millisec
+    _sortCol		= -1;
+
+#if SEPARATE_READ_JOBS_COL
     _readJobsCol	= -1;
+#endif
     setRootIsDecorated( false );
 
     int numCol = 0;
@@ -56,12 +61,18 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     addColumn( i18n( "Subdirs"			) ); _totalSubDirsCol	= numCol++;
     addColumn( i18n( "Last Change"		) ); _latestMtimeCol	= numCol++;
 
+#if ! SEPARATE_READ_JOBS_COL
+    _readJobsCol = _percentBarCol;
+#endif
+
     setColumnAlignment ( _totalSizeCol,		AlignRight );
     setColumnAlignment ( _percentNumCol,	AlignRight );
     setColumnAlignment ( _ownSizeCol,		AlignRight );
     setColumnAlignment ( _totalItemsCol,	AlignRight );
     setColumnAlignment ( _totalFilesCol,	AlignRight );
     setColumnAlignment ( _totalSubDirsCol,	AlignRight );
+    setColumnAlignment ( _readJobsCol,		AlignRight );
+
 
     setSorting( _totalSizeCol );
 
@@ -120,23 +131,45 @@ KDirTreeView::~KDirTreeView()
 void
 KDirTreeView::busyDisplay()
 {
+#if SEPARATE_READ_JOBS_COL
     if ( _readJobsCol < 0 )
     {
 	_readJobsCol = header()->count();
 	addColumn( i18n( "Read Jobs" ) );
 	setColumnAlignment( _readJobsCol, AlignRight );
     }
+#else
+    _readJobsCol = _percentBarCol;
+#endif
 }
 
 
 void
 KDirTreeView::idleDisplay()
 {
+#if SEPARATE_READ_JOBS_COL
     if ( _readJobsCol >= 0 )
     {
 	removeColumn( _readJobsCol );
-	_readJobsCol = -1;
     }
+#else
+    if ( _sortCol == _readJobsCol && _sortCol >= 0 )
+    {
+	// A pathological case: The user requested sorting by read jobs, and
+	// now that everything is read, the items are still in that sort order.
+	// Not only is that sort order now useless (since all read jobs are
+	// done), it is contrary to the (now changed) semanantics of this
+	// column. Calling QListView::sort() might do the trick, but we can
+	// never know just how clever that QListView widget tries to be and
+	// maybe avoid another sorting by the same column - so let's use the
+	// easy way out and sort by another column that has the same sorting
+	// semantics like the percentage bar column (that had doubled as the
+	// read job column while reading) now has.
+
+	setSorting( _percentNumCol );
+    }
+#endif
+    _readJobsCol = -1;
 }
 
 
@@ -758,6 +791,14 @@ KDirTreeView::saveConfig() const
 
 
 void
+KDirTreeView::setSorting( int column, bool increasing )
+{
+    _sortCol = column;
+    QListView::setSorting( column, increasing );
+}
+
+
+void
 KDirTreeView::logActivity( int points )
 {
     emit userActivity( points );
@@ -968,7 +1009,16 @@ KDirTreeViewItem::updateSummary()
 
 	if ( _view->readJobsCol() >= 0 )
 	{
+#if SEPARATE_READ_JOBS_COL
 	    setText( _view->readJobsCol(),	" " + formatCount( _orig->pendingReadJobs(), true ) );
+#else
+	    int jobs 		= _orig->pendingReadJobs();
+	    QString text	= "";
+
+	    if ( jobs > 0 )
+		text = i18n( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
+	    setText( _view->readJobsCol(), text );
+#endif
 	}
     }
 
@@ -1311,6 +1361,12 @@ KDirTreeViewItem::key( int column, bool ascending ) const
     static QString sortKey;
     NOT_USED( ascending );
 
+#if ! SEPARATE_READ_JOBS_COL
+    if ( column == _view->readJobsCol() )
+    {
+	sortKey.sprintf( "%010d", INT_MAX - _orig->pendingReadJobs() );
+    } else
+#endif
     if ( column == _view->totalSizeCol()  ||
 	 column == _view->percentNumCol() ||
 	 column == _view->percentBarCol()   )
@@ -1329,10 +1385,8 @@ KDirTreeViewItem::key( int column, bool ascending ) const
     } else if ( column == _view->totalSubDirsCol() )
     {
 	sortKey.sprintf( "%010d", INT_MAX - _orig->totalSubDirs() );
-    } else if ( column == _view->readJobsCol() )
-    {
-	sortKey.sprintf( "%010d", INT_MAX - _orig->pendingReadJobs() );
-    } else if ( column == _view->latestMtimeCol() )
+    }
+    else if ( column == _view->latestMtimeCol() )
     {
 	sortKey = formatTimeDate( _orig->latestMtime() );
     } else
@@ -1388,7 +1442,19 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 	    }
 	    else
 	    {
-		painter->eraseRect( 0, 0, width, height() );
+		if ( _view->percentBarCol() == _view->readJobsCol()
+		     && ! _pacMan )
+		{
+		    QListViewItem::paintCell( painter,
+					      colorGroup,
+					      column,
+					      width,
+					      alignment );
+		}
+		else
+		{
+		    painter->eraseRect( 0, 0, width, height() );
+		}
 	    }
 	}
     }

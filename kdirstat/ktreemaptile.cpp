@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-30
  */
 
 
@@ -24,6 +24,8 @@
 
 
 using namespace KDirStat;
+using std::max;
+using std::min;
 
 
 KTreemapTile::KTreemapTile( KTreemapView *	parentView,
@@ -200,7 +202,7 @@ KTreemapTile::squarify( const QRect & 			rect,
     // kdDebug() << "squarify() " << _orig << " " << rect << endl;
 
     KFileInfoList row;
-    int length = std::max( rect.width(), rect.height() );
+    int length = max( rect.width(), rect.height() );
 
     if ( length == 0 )	// Sanity check
     {
@@ -229,8 +231,8 @@ KTreemapTile::squarify( const QRect & 			rect,
 	if ( ! row.isEmpty() && sum != 0 && (*it)->totalSize() != 0 )
 	{
 	    double sumSquare        = sum * sum;
-	    double worstAspectRatio = std::max( scaledLengthSquare * row.first()->totalSize() / sumSquare,
-						sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
+	    double worstAspectRatio = max( scaledLengthSquare * row.first()->totalSize() / sumSquare,
+					   sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
 
 	    if ( lastWorstAspectRatio >= 0.0 &&
 		worstAspectRatio > lastWorstAspectRatio )
@@ -271,7 +273,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
     KOrientation dir = rect.width() > rect.height() ? KTreemapHorizontal : KTreemapVertical;
 
     // This row's primary length is the longer one.
-    int primary = std::max( rect.width(), rect.height() );
+    int primary = max( rect.width(), rect.height() );
 
     // This row's secondary length is determined by the area (the number of
     // pixels) to be allocated for all of the row's items.
@@ -393,7 +395,12 @@ KTreemapTile::drawShape( QPainter & painter )
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	    painter.setBrush( _parentView->dirFillColor() );
 	else
+	{
+	    painter.setBrush( _parentView->tileColor( _orig ) );
+#if 0
 	    painter.setBrush( _parentView->fileFillColor() );
+#endif
+	}
 
 	QCanvasRectangle::drawShape( painter );
     }
@@ -413,16 +420,14 @@ KTreemapTile::renderCushion()
     double 	nx;
     double 	ny;
     double 	cosa;
-    int		x;
-    int		y;
-    int		light;
+    int		x, y;
+    int		red, green, blue;
 
 
     // Cache some values. They are used for each loop iteration, so let's try
     // to keep multiple indirect references down.
 
     int		ambientLight	= parentView()->ambientLight();
-    int		lightIntensity	= parentView()->lightIntensity();
     double 	lightX		= parentView()->lightX();
     double 	lightY		= parentView()->lightY();
     double 	lightZ		= parentView()->lightZ();
@@ -435,6 +440,11 @@ KTreemapTile::renderCushion()
     int		x0 		= rect.x();
     int		y0 		= rect.y();
 
+    QColor	color		= parentView()->tileColor( _orig );
+    int		maxRed		= max( 0, color.red()   - ambientLight );
+    int		maxGreen	= max( 0, color.green() - ambientLight );
+    int		maxBlue		= max( 0, color.blue()  - ambientLight );
+
     QImage image( rect.width(), rect.height(), 32 );
 
     for ( y = 0; y < rect.height(); y++ )
@@ -444,15 +454,20 @@ KTreemapTile::renderCushion()
 	    nx = 2.0 * xx2 * (x+x0) + xx1;
 	    ny = 2.0 * yy2 * (y+y0) + yy1;
 	    cosa  = ( nx * lightX + ny * lightY + lightZ ) / sqrt( nx*nx + ny*ny + 1.0 );
-	    light = (int) ( lightIntensity * cosa + 0.5 );
+	    
+	    red	  = (int) ( maxRed   * cosa + 0.5 );
+	    green = (int) ( maxGreen * cosa + 0.5 );
+	    blue  = (int) ( maxBlue  * cosa + 0.5 );
 
-	    if ( light < 0 )
-		light = 0;
+	    if ( red   < 0 )	red   = 0;
+	    if ( green < 0 )	green = 0;
+	    if ( blue  < 0 )	blue  = 0;
 
-	    light += ambientLight;
+	    red   += ambientLight;
+	    green += ambientLight;
+	    blue  += ambientLight;
 
-	    image.setPixel( x, y, qRgb( light, light, light ) );
-	    // image.setPixel( x, y, qRgb( 0, 0, light ) );
+	    image.setPixel( x, y, qRgb( red, green, blue) );
 	}
     }
 
@@ -476,7 +491,7 @@ KTreemapTile::ensureContrast( QImage & image )
 
 	int x1 = image.width() - 6;
 	int x2 = image.width() - 1;
-	int interval = std::max( image.height() / 10, 5 );
+	int interval = max( image.height() / 10, 5 );
 	int sameColorCount = 0;
 
 
@@ -506,7 +521,7 @@ KTreemapTile::ensureContrast( QImage & image )
 
 	int y1 = image.height() - 6;
 	int y2 = image.height() - 1;
-	int interval = std::max( image.width() / 10, 5 );
+	int interval = max( image.width() / 10, 5 );
 	int sameColorCount = 0;
 
 	for ( int x = interval; x < image.width(); x += interval )

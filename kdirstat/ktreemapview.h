@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-08
+ *   Updated:	2003-01-30
  */
 
 
@@ -95,6 +95,12 @@ namespace KDirStat
 	 * to be searched.
 	 **/
 	KTreemapTile * findTile( KFileInfo * node );
+
+	/**
+	 * Returns a suitable color for 'file' based on a set of internal rules
+	 * (according to filename extension, MIME type or permissions).
+	 **/
+	QColor tileColor( KFileInfo * file );
 
 
     public slots:
@@ -260,18 +266,10 @@ namespace KDirStat
 	const QColor & dirFillColor() const { return _dirFillColor; }
 
 	/**
-	 * Returns the intensity of ambient light for cushion shading.
-	 * ambientLight() + lightIntensity() are in the range [0..255].
+	 * Returns the intensity of ambient light for cushion shading 
+	 * [0..255]
 	 **/
 	int ambientLight() const { return _ambientLight; }
-
-	/**
-	 * Returns the intensity of a directed light source for cushion
-	 * shading.
-	 *
-	 * ambientLight() + lightIntensity() are in the range [0..255].
-	 **/
-	int lightIntensity() const { return _lightIntensity; }
 
 	/**
 	 * Returns the X coordinate of a directed light source for cushion
@@ -305,7 +303,7 @@ namespace KDirStat
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KFileInfo *item );
+	void selectionChanged( KFileInfo * item );
 
 	/**
 	 * Emitted when the treemap changes, e.g. is rebuilt, zoomed in, or
@@ -382,7 +380,6 @@ namespace KDirStat
 	QColor			_dirFillColor;
 
 	int			_ambientLight;
-	int			_lightIntensity;
 
 	double			_lightX;
 	double			_lightY;

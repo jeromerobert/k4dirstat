@@ -4,16 +4,19 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-28
+ *   Updated:	2003-01-30
  */
 
+
+#include <sys/stat.h>
+
+#include <qevent.h>
+#include <qregexp.h>
 
 #include <kapp.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
-
-#include <qevent.h>
 
 #include "kdirtree.h"
 #include "ktreemapview.h"
@@ -88,7 +91,6 @@ KTreemapView::readConfig()
     config->setGroup( "Treemaps" );
 
     _ambientLight	= config->readNumEntry( "AmbientLight"		,  DefaultAmbientLight );
-    _lightIntensity	= 255 - _ambientLight;
 
     _heightScaleFactor	= config->readDoubleNumEntry( "HeightScaleFactor" , DefaultHeightScaleFactor );
     _autoResize		= config->readBoolEntry( "AutoResize"		, true	);
@@ -524,6 +526,109 @@ KTreemapView::visibleSize()
     setVScrollBarMode( oldVMode );
 
     return size;
+}
+
+
+QColor
+KTreemapView::tileColor( KFileInfo * file )
+{
+    if ( file )
+    {
+	if ( file->isFile() )
+	{
+	    // Find the filename extension: Everything after the first '.'
+	    QString ext = file->name().section( '.', 1 );
+
+	    while ( ! ext.isEmpty() )
+	    {
+		QString lowerExt = ext.lower();
+		
+		// Try case sensitive comparisions first
+	    
+		if ( ext == ".moc.ccc"	)	return Qt::red;
+		if ( ext == "~"		)	return Qt::red;
+		if ( ext == "bak"	)	return Qt::red;
+		
+		if ( ext == "c"		)	return Qt::blue;
+		if ( ext == "cpp"	)	return Qt::blue;
+		if ( ext == "cc"	)	return Qt::blue;
+		if ( ext == "h"		)	return Qt::blue;
+		if ( ext == "hpp"	)	return Qt::blue;
+		
+		if ( ext == "o"		)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == "lo"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == "la"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == "a"		)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == "rpm"	)	return QColor( 0xff, 0xa0, 0x00 );
+		
+		if ( lowerExt == "tar.bz2" )	return Qt::green;
+		if ( lowerExt == "tar.gz"  )	return Qt::green;
+		if ( lowerExt == "tgz"	)	return Qt::green;
+		if ( lowerExt == "bz2"	)	return Qt::green;
+		if ( lowerExt == "bz"	)	return Qt::green;
+		if ( lowerExt == "gz"	)	return Qt::green;
+
+		if ( lowerExt == "html"	)	return Qt::blue;
+		if ( lowerExt == "htm"	)	return Qt::blue;
+		if ( lowerExt == "txt"	)	return Qt::blue;
+		if ( lowerExt == "doc"	)	return Qt::blue;
+
+		if ( lowerExt == "png"	)	return Qt::cyan;
+		if ( lowerExt == "jpg"	)	return Qt::cyan;
+		if ( lowerExt == "jpeg"	)	return Qt::cyan;
+		if ( lowerExt == "gif"	)	return Qt::cyan;
+		if ( lowerExt == "tif"	)	return Qt::cyan;
+		if ( lowerExt == "tiff"	)	return Qt::cyan;
+		if ( lowerExt == "bmp"	)	return Qt::cyan;
+		if ( lowerExt == "xpm"	)	return Qt::cyan;
+		if ( lowerExt == "tga"	)	return Qt::cyan;
+	    
+		if ( lowerExt == "wav"	)	return Qt::yellow;
+		if ( lowerExt == "mp3"	)	return Qt::yellow;
+		
+		if ( lowerExt == "avi"	)	return QColor( 0xa0, 0xff, 0x00 );
+		if ( lowerExt == "mov"	)	return QColor( 0xa0, 0xff, 0x00 );
+		if ( lowerExt == "mpg"	)	return QColor( 0xa0, 0xff, 0x00 );
+		if ( lowerExt == "mpeg"	)	return QColor( 0xa0, 0xff, 0x00 );
+		
+		if ( lowerExt == "pdf"	)	return Qt::blue;
+		if ( lowerExt == "ps"	)	return Qt::cyan;
+
+		
+		// Some DOS/Windows types
+		
+		if ( lowerExt == "exe"	)	return Qt::magenta;
+		if ( lowerExt == "com"	)	return Qt::magenta;
+		if ( lowerExt == "dll"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( lowerExt == "zip"	)	return Qt::green;
+		if ( lowerExt == "arj"	)	return Qt::green;
+
+	    
+		// No match so far? Try the next extension. Some files might have
+		// more than one, e.g., "tar.bz2" - if there is no match for
+		// "tar.bz2", there might be one for just "bz2".
+	    
+		ext = ext.section( '.', 1 );
+	    }
+
+	    // Shared libs
+	    if ( QRegExp( "lib.*\\.so.*" ).exactMatch( file->name() ) )
+		return QColor( 0xff, 0xa0, 0x00 );
+	    
+	    // Very special, but common: Core dumps
+	    if ( file->name() == "core" )	return Qt::red;
+
+	    // Special case: Executables 
+	    if ( ( file->mode() & S_IXUSR  ) == S_IXUSR )	return Qt::magenta;
+	}
+	else // Directories
+	{
+	    // TO DO
+	    return Qt::blue;
+	}
+    }
+
+    return Qt::white;
 }
 
 
