@@ -7,7 +7,7 @@
  *
  *   Updated:	2002-01-29
  *
- *   $Id: kfeedback.cpp,v 1.2 2002/01/29 14:47:03 hundhammer Exp $
+ *   $Id: kfeedback.cpp,v 1.3 2002/01/31 15:39:12 harry1701 Exp $
  *
  */
 
@@ -133,7 +133,9 @@ KFeedbackForm::KFeedbackForm( const QString &	feedbackMailAddress,
     _comment = new QMultiLineEdit( this );				CHECK_PTR( _comment );
 
     label->setBuddy( _comment );
+#if (QT_VERSION < 300)
     _comment->setFixedVisibleLines( 5 );
+#endif
     _comment->setWordWrap( QMultiLineEdit::FixedColumnWidth );
     _comment->setWrapColumnOrWidth( 70 );
 }

@@ -69,7 +69,7 @@ endif
 
 
 
-kdirstat_LDADD = $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+kdirstat_LDADD = $(LIB_QTREEMAP) $(LIB_KFILE) -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Utilities/
