@@ -1,3 +1,8 @@
+2002-01-10  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed repaint error in percentage bar column when scrolling
+	* Fixed repaint error when resizing percentage bar column
+
 2002-01-04  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 1.8.3-beta

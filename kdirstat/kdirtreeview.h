@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-01-10
  *
- *   $Id: kdirtreeview.h,v 1.10 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.11 2002/01/10 16:01:10 hundhammer Exp $
  *
  */
 
@@ -386,6 +386,15 @@ namespace KDirStat
 	void 	popupContextInfo	( const QPoint &	pos,
 					  const QString & 	info );
 
+    protected slots:
+
+	/**
+	 * Notification that a column has just been resized, thus may need
+	 * repaining. 
+	 **/
+        void columnResized( int column, int oldSize, int newSize );
+
+
     signals:
 
 	/**
@@ -641,6 +650,7 @@ namespace KDirStat
 				  int			width,
 				  const QColor &	fillColor,
 				  const QColor &	barBackground	);
+
 
     private:
 

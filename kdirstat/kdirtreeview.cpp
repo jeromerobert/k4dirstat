@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-01-10
  *
- *   $Id: kdirtreeview.cpp,v 1.12 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.13 2002/01/10 16:01:10 hundhammer Exp $
  *
  */
 
@@ -106,8 +106,11 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
 	     this,	SLOT  ( selectItem		( QListViewItem * ) ) );
 
-    connect ( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
-	      this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
+    connect( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
+	     this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
+
+    connect( header(),	SIGNAL( sizeChange   ( int, int, int ) ),
+	     this,	SLOT  ( columnResized( int, int, int ) ) );
 
    _contextInfo	  = new QPopupMenu;
    _idContextInfo = _contextInfo->insertItem ( "dummy" );
@@ -761,6 +764,17 @@ KDirTreeView::saveConfig() const
 }
 
 
+
+void
+KDirTreeView::columnResized( int column, int oldSize, int newSize )
+{
+    NOT_USED( oldSize );
+    NOT_USED( newSize );
+
+    if ( column == _percentBarCol )
+	triggerUpdate();
+}
+
 void
 KDirTreeView::sendMailToOwner()
 {
@@ -1276,6 +1290,8 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 {
     if ( column == _view->percentBarCol() )
     {
+	painter->setBackgroundColor( colorGroup.base() );
+	
 	if ( _percent > 0.0 )
 	{
 	    if ( _pacMan )
@@ -1284,7 +1300,6 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 		_pacMan = 0;
 	    }
 
-	    painter->setBackgroundColor( colorGroup.base() );
 	    int level = _orig->treeLevel();
 	    paintPercentageBar ( _percent,
 				 painter,
@@ -1299,8 +1314,11 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 	    {
 		// kdDebug() << "Animating PacMan for " << _orig << endl;
 		// painter->setBackgroundColor( _view->treeBackground() );
-		painter->setBackgroundColor( colorGroup.base() );
 		_pacMan->animate( painter, QRect( 0, 0, width, height() ) );
+	    }
+	    else
+	    {
+		painter->eraseRect( 0, 0, width, height() );
 	    }
 	}
     }
@@ -1359,7 +1377,7 @@ KDirTreeViewItem::paintPercentageBar( float		percent,
 	 * pixel less than specified. Altough this is very likely just a
 	 * plain old bug, it is documented that way. Obviously, Qt just
 	 * maps the fillRect() call directly to XDrawRectangle() so they
-	 * inheritit that bug (although the Qt doc stays silent about
+	 * inherited that bug (although the Qt doc stays silent about
 	 * it). So it is really necessary to compensate for that missing
 	 * pixel in each dimension.
 	 *
