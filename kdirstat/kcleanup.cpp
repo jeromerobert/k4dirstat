@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-30
  */
 
 
@@ -17,6 +17,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kglobalsettings.h>
 
 #include "kcleanup.h"
 #include "kdirsaver.h"
@@ -174,7 +175,7 @@ KCleanup::confirmation( KFileInfo * item )
 
     if ( KMessageBox::warningContinueCancel( 0,				// parentWidget
 					     msg,			// message
-					     i18n( "Please confirm" ),	// caption
+					     i18n( "Please Confirm" ),	// caption
 					     i18n( "Confirm" )		// confirmButtonLabel
 					     ) == KMessageBox::Continue )
 	return true;
@@ -312,6 +313,7 @@ KCleanup::expandVariables( const KFileInfo *	item,
 
     expanded.replace ( QRegExp ( "%p"	), "\"" + item->url()  + "\"" );
     expanded.replace ( QRegExp ( "%n"	), "\"" + item->name() + "\"" );
+    expanded.replace ( QRegExp ( "%t"	), KGlobalSettings::trashPath() );
 
     return expanded;
 }

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-30
  */
 
 
@@ -111,7 +111,7 @@ KCleanup *
 KStdCleanup::moveToTrashBin( KActionCollection *parent )
 {
     KCleanup *cleanup = new KCleanup( "cleanup_move_to_trash_bin",
-				      "kfmclient move %p ~/KDesktop/Trash",
+				      "kfmclient move %p %t",
 				      i18n( "Delete (to Trash &Bin)" ),
 				      parent );
     CHECK_PTR( cleanup );

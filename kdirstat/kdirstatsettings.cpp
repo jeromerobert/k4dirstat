@@ -4,7 +4,7 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-08
+ *   Updated:	2003-01-30
  */
 
 
@@ -103,8 +103,8 @@ KSettingsDialog::slotDefault()
     if ( KMessageBox::warningContinueCancel( this,
 					     i18n( "Really revert all settings to their default values?\n"
 						   "You will lose all changes you ever made!" ),
-					     i18n( "Please confirm" ),			// caption
-					     i18n( "&Really revert to defaults" )	// continueButton
+					     i18n( "Please Confirm" ),			// caption
+					     i18n( "&Really Revert to Defaults" )	// continueButton
 					     ) == KMessageBox::Continue )
     {
 	emit defaultClicked();
@@ -190,7 +190,7 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
     {
 	QString labelText;
 
-	labelText=i18n( "Tree level %1" ).arg(i+1);
+	labelText=i18n( "Tree Level %1" ).arg(i+1);
 	_colorLabel[i] = new QLabel( labelText, this );
 	grid->addWidget( _colorLabel [i], i, 0 );
 
@@ -547,7 +547,7 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // Grid layout for the edit fields, their labels, some
     // explanatory text and the "recurse?" check box.
 
-    QGridLayout *grid = new QGridLayout( 6,	// rows
+    QGridLayout *grid = new QGridLayout( 7,	// rows
 					 2,	// cols
 					 4 );	// spacing
     fieldsBox->addLayout( grid, 0 );
@@ -564,24 +564,27 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     _title	= new QLineEdit( _fields );					grid->addWidget( _title,   0, 1 );
     _command	= new QLineEdit( _fields );					grid->addWidget( _command, 1, 1 );
     label	= new QLabel( _title,	i18n( "&Title:"		), _fields );	grid->addWidget( label,	   0, 0 );
-    label	= new QLabel( _command, i18n( "&Command line:"	), _fields );	grid->addWidget( label,	   1, 0 );
+    label	= new QLabel( _command, i18n( "&Command Line:"	), _fields );	grid->addWidget( label,	   1, 0 );
 
-    label = new QLabel( i18n( "%p full path" ), _fields );
+    label = new QLabel( i18n( "%p Full Path" ), _fields );
     grid->addWidget( label, 2, 1 );
 
-    label = new QLabel( i18n( "%n file / directory name without path"), _fields );
+    label = new QLabel( i18n( "%n File / Directory Name Without Path" ), _fields );
     grid->addWidget( label, 3, 1 );
+
+    label = new QLabel( i18n( "%t KDE Trash Directory" ), _fields );
+    grid->addWidget( label, 4, 1 );
 
 
     // "Recurse into subdirs" check box
 
-    _recurse = new QCheckBox( i18n( "&Recurse into subdirectories" ), _fields );
-    grid->addWidget( _recurse, 4, 1 );
+    _recurse = new QCheckBox( i18n( "&Recurse into Subdirectories" ), _fields );
+    grid->addWidget( _recurse, 5, 1 );
 
     // "Ask for confirmation" check box
 
-    _askForConfirmation = new QCheckBox( i18n( "&Ask for confirmation" ), _fields );
-    grid->addWidget( _askForConfirmation, 5, 1 );
+    _askForConfirmation = new QCheckBox( i18n( "&Ask for Confirmation" ), _fields );
+    grid->addWidget( _askForConfirmation, 6, 1 );
 
 
     // The "Works for..." check boxes, grouped together in a button group.
@@ -594,7 +597,7 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
 
     _worksForDir	= new QCheckBox( i18n( "&Directories"		), worksFor );
     _worksForFile	= new QCheckBox( i18n( "&Files"			), worksFor );
-    _worksForDotEntry	= new QCheckBox( i18n( "<Files> p&seudo entries"), worksFor );
+    _worksForDotEntry	= new QCheckBox( i18n( "<Files> P&seudo Entries"), worksFor );
 
     worksForBox->addWidget( _worksForDir	, 1 );
     worksForBox->addWidget( _worksForFile	, 1 );
@@ -604,8 +607,8 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     _worksForProtocols = new QComboBox( false, worksFor );
     worksForBox->addWidget( _worksForProtocols, 1 );
 
-    _worksForProtocols->insertItem( i18n( "On local machine only ('file:/' protocol)" ) );
-    _worksForProtocols->insertItem( i18n( "Network transparent (ftp, smb, tar, ...)" ) );
+    _worksForProtocols->insertItem( i18n( "On Local Machine Only ('file:/' Protocol)" ) );
+    _worksForProtocols->insertItem( i18n( "Network Transparent (ftp, smb, tar, ...)" ) );
 
 
     // Grid layout for combo boxes at the bottom
@@ -636,10 +639,10 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // than mere numeric IDs. One of these days I'm going to rewrite this
     // thing!
 
-    _refreshPolicy->insertItem( i18n( "No refresh"			) );
-    _refreshPolicy->insertItem( i18n( "Refresh this entry"		) );
-    _refreshPolicy->insertItem( i18n( "Refresh this entry's parent"	) );
-    _refreshPolicy->insertItem( i18n( "Assume entry has been deleted"	) );
+    _refreshPolicy->insertItem( i18n( "No Refresh"			) );
+    _refreshPolicy->insertItem( i18n( "Refresh This Entry"		) );
+    _refreshPolicy->insertItem( i18n( "Refresh This Entry's Parent"	) );
+    _refreshPolicy->insertItem( i18n( "Assume Entry Has Been Deleted"	) );
 
 
     outerBox->activate();
@@ -893,7 +896,7 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     grid->addWidget( label,		1, 0 );
     grid->addWidget( _minTileSize,	1, 1 );
 
-    _autoResize		= new QCheckBox( i18n( "Auto-&resize Treemap" ), vbox );
+    _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), vbox );
 
 
     // Connections

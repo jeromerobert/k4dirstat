@@ -5,7 +5,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-28
+ *   Updated:	2003-01-30
  */
 
 
@@ -130,7 +130,7 @@ KFeedbackForm::KFeedbackForm( const QString &	feedbackMailAddress,
     // Free-text comment field
     //
 
-    label = new QLabel( "\n" + i18n( "&Additional comments:" ), this );	CHECK_PTR( label );
+    label = new QLabel( "\n" + i18n( "&Additional Comments:" ), this );	CHECK_PTR( label );
     _comment = new QMultiLineEdit( this );				CHECK_PTR( _comment );
 
     label->setBuddy( _comment );

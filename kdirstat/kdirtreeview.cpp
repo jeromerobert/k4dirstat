@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-28
+ *   Updated:	2003-01-30
  */
 
 
@@ -784,7 +784,7 @@ KDirTreeView::sendMailToOwner()
     }
 
     QString owner = KAnyDirReadJob::owner( fixedUrl( _selection->orig()->url() ) );
-    QString subject = i18n( "Disk usage" );
+    QString subject = i18n( "Disk Usage" );
     QString body =
 	i18n("Please check your disk usage and clean up if you can. Thank you." )
 	+ "\n\n"

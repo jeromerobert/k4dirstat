@@ -1052,7 +1052,10 @@ command will be invoked with <userinput>/bin/sh</userinput>, so you can use
 everything the default shell provides - including pipelines, logical 'and' or
 'or' ('&amp;&amp;' or '||', respectively) or multiple commands separated by
 semicolons. Use '%p' for the full path (or URL) of the currently selected file
-or directory or '%n' for the name without path.
+or directory or '%n' for the name without path. '%t' will be expanded to the
+full path name of the KDE trash directory (usually ${HOME}/Desktop/Trash, but
+since this tends to change between different KDE versions it is safer to use
+'%t').
 </para>
 <para>
 &kdirstat;
