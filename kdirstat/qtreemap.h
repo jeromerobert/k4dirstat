@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.2 2001/06/30 17:08:29 harry1701 Exp $
+ *   $Id: qtreemap.h,v 1.3 2001/07/01 17:06:22 alexannika Exp $
  *
  */
 
@@ -27,7 +27,7 @@
 #include <qstatusbar.h>
 #include <qmenubar.h>
 #include <qmainwindow.h>
-#include "kdirtree.h"
+//#include "kdirtree.h"
 #include <qpen.h>
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -40,6 +40,7 @@
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 
+
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
 #endif
@@ -47,6 +48,8 @@
 // Open a new name space since KDE's name space is pretty much cluttered
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
+
+class Object;
 
 namespace KDirStat
 {
@@ -103,69 +106,6 @@ namespace KDirStat
   class QTreeMapOptions;
   class QTreeMapWindow;
 
-  class QTreeMapWindow : public QMainWindow {
-    Q_OBJECT
-
-  public:
-    //QTreeMapWindow(QWidget * parent = 0 );
-    QTreeMapWindow( );
-
-    QTreeMapArea *getArea();
-
-    void makeRadioPopup(QPopupMenu *menu, const QString& title, const char *slot, const int param);
-
-    public slots:
-
-    void setStatusBar(KDirInfo *found);
-    void setDirectoryLabel(KDirInfo *newdir);
-    void selectDrawmode(int id);
-    void selectShading(int id);
-    void selectBorderWidth(int id);
-    void selectStartDirection(int id);
-    void changeDrawText(int id);
-
-    void redoOptions();
-
-    //void paintEvent(QPaintEvent *event);
-
-
-  private:
-
-    QTreeMapOptions *options;
-
-  QLabel *dir_name_label;
-  QLabel *info_label;
-  QPushButton *up_button;
-
-  QTreeMapArea *graph_widget;
-
-  QPushButton *test_button;
-
-  QPopupMenu *popup;
-  int popup_id;
-
-  QMenuBar *menubar;
-  QStatusBar *statusbar;
-  QToolBar  *toolbar;
-  QPopupMenu *menu_file;
-  QPopupMenu *menu_options;
-  QPopupMenu *menu_paint_mode;
-  QPopupMenu *menu_draw_mode;
-  QPopupMenu *menu_border_width;
-  QPopupMenu *menu_start_direction;
-
-  QPushButton *zoom_out_button;
-  QPushButton *zoom_in_button;
-
-  QButtonGroup *radio_group;
-  
-  QScrollView *scrollview;
-  QWidget *desktop;
-
-  int menu_file_id,menu_options_id;
-
-  };
-
   class QTMcolorScheme {
   public:
     QString schemeName;
@@ -214,9 +154,9 @@ namespace KDirStat
     QTreeMapArea(QWidget *parent=0);
     ~QTreeMapArea();
 
-    void drawTreeMap(KDirInfo *dutree);
-    void setTreeMap(KDirInfo *dutree);
-    KDirInfo *findClickedMap(KDirInfo *dutree,int x,int y,int findmode);
+    void drawTreeMap(Object *dutree);
+    void setTreeMap(Object *dutree);
+    Object *findClickedMap(Object *dutree,int x,int y,int findmode);
 
     void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *);
@@ -227,12 +167,25 @@ namespace KDirStat
     QTreeMapOptions *getOptions();
     void  resizeEvent( QResizeEvent *ev);
     void mousePressEvent(QMouseEvent *mouse);
-  QString  tellUnit(int size);
+    //  QString  tellUnit(int size);
 
+  // pure virtual functions
+
+    virtual QString fullName(Object *node) =0;
+    virtual Object *firstChild(Object *node) =0;
+    virtual int   totalSize(Object *node) =0;
+    virtual bool isLeaf(Object *node)=0;
+    virtual bool isNode(Object *node)=0;
+    virtual bool isSameLevelChild(Object *node)=0;
+    virtual Object *nextChild(Object *node)=0;
+    virtual Object *sameLevelChild(Object *node)=0;
+    virtual QString tellUnit(int size)=0;
+    virtual Object *parentNode(Object *node)=0;
+  
 
   private:
 
-    void drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx=-1,int fy=-1,int find_mode=FIND_NOTHING);
+    void drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx=-1,int fy=-1,int find_mode=FIND_NOTHING);
     void paintEntry(int x0, int y0, int xd, int yd,QString entry_name,bool direction,int level,const QColor &basecolor,int pmode,Cushion *c);
   
     void initOptions();
@@ -248,20 +201,20 @@ namespace KDirStat
   QWidget *widget;
   QPen mypen;
   QPixmap offscreen;
-  QPixmap *offscreenptr;
+  //  QPixmap *offscreenptr;
   QPainter *win_painter;
 
   QColor rotate_colors[20];
   int color_index;
 
-  KDirInfo *root_tree;
+  Object *root_tree;
 
   QToolTip *tooltip;
 
   QVBox *info_box;
   QHBox *dir_box;
 
-  KDirInfo *found_kfileinfo;
+  Object *found_kfileinfo;
   QColor tooltipBgColor;
   QColor tooltipFgColor;
   QColor dirBaseColor;
@@ -282,10 +235,11 @@ namespace KDirStat
   float cushion_surface[1][2];
 
   public slots:
-      void directoryUp();
+
+  void directoryUp();
   void buttonUp();
   void deleteFile();
-  void deleteFile(KDirInfo *convicted);
+  void deleteFile(Object *convicted);
   void deleteFile(int id);
   void shellWindow(int id);
   void browserWindow(int id);
@@ -293,8 +247,8 @@ namespace KDirStat
   void zoomOut();
 
   signals:
-      void highlighted(KDirInfo *high);
-      void changedDirectory(KDirInfo *newdir);
+      void highlighted(Object *high);
+      void changedDirectory(Object *newdir);
   };
 
 } // namespace
