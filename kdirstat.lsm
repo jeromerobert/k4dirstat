@@ -1,0 +1,14 @@
+Begin3
+Title:		KDirStat 
+Version:	1.7.6-Devel
+Entered-date:	2001-06-29
+Description:	Grapical 'du' (disk usage) utility for KDE 2.x
+Keywords:	Disk usage, cleanup
+Author:         Stefan Hundhammer <sh@suse.de> 
+Maintained-by:  Stefan Hundhammer <sh@suse.de> 
+Primary-site:	http://www.suse.de/~sh/kdirstat
+Home-page:      http://www.suse.de/~sh/kdirstat
+Original-site:  http://www.suse.de/~sh/kdirstat
+Platforms:	Linux and other Unices
+Copying-policy:	GNU Public License
+End

@@ -1,0 +1,12 @@
+# KDE Config File  
+[Desktop Entry]
+Type=Application
+Exec=kdirstat -caption "%c" %i %m  
+Icon=kdirstat.png
+MiniIcon=kdirstat.png
+DocPath=kdirstat/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=KDirStat
+Name[de]=KDirStat

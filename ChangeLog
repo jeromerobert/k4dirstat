@@ -1,0 +1,28 @@
+2001-06-29  Stefan Hundhammer  <sh@suse.de>
+
+	* Moved CVS to SourceForge
+
+2001-06-24  Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* V1.7.6-Devel
+        * Removed Zoom Bug
+        * Removed DM_FILES Bug
+        * Faster shading (dirs are always drawn flat)
+        * New directory coloring (shades of grey)
+        * Options for start direction, border width, draw text
+        * Removed most compiler warnings
+
+2001-06-18  Stefan Hundhammer  <sh@suse.de>
+
+	* V1.7.3-Devel
+	* Applied first treemap patch from 
+	  Alexander Rawass <alexannika@users.sourceforge.net>
+	* Added Alexander Rawass to authors list
+	* Improved treemap repaint behaviour (not perfect yet)
+
+2001-06-17  Stefan Hundhammer  <sh@suse.de>
+
+	* V1.7.2-Alpha
+	* Implemented support for all of KDE's IO protocols (ftp, smb, ...)
+	* Fixed PacMan warnings on premature exit
+
