@@ -1,0 +1,10 @@
+Makefile.in
+Makefile
+.deps
+.libs
+*.o
+*.moc.cpp
+kdirstat_meta_unload.cpp
+*.bak
+*.auto
+*~

@@ -1,0 +1,13 @@
+Makefile.in
+configure.in
+configure
+config.log
+Makefile
+config.cache
+libtool
+config.status
+config.h
+stamp-h
+*.bak
+*.auto
+*~
