@@ -5,9 +5,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-29
+ *   Updated:	2002-02-05
  *
- *   $Id: kfeedback.cpp,v 1.3 2002/01/31 15:39:12 harry1701 Exp $
+ *   $Id: kfeedback.cpp,v 1.4 2002/02/05 11:28:54 hundhammer Exp $
  *
  */
 
@@ -83,11 +83,10 @@ KFeedbackForm::KFeedbackForm( const QString &	feedbackMailAddress,
     // Explanation above the question list
     //
     
-    QLabel * label = new QLabel( i18n( "Please answer as any questions as you can.\n"
-				       "\n"
-				       "You will be able to review everything in your mailer "
-				       "before the mail will be sent.\n"
-				       "Nothing will be sent behind your back.\n"
+    QLabel * label = new QLabel( i18n( "<p><b>Please tell us your opinion about this program.</b></p>"
+				       "<p>You will be able to review everything in your mailer "
+				       "before any mail is sent.<br>"
+				       "Nothing will be sent behind your back.</p>"
 				       ), this );
     //
     // Question list
