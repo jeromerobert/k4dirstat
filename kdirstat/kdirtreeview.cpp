@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-10
+ *   Updated:	2002-02-11
  *
- *   $Id: kdirtreeview.cpp,v 1.16 2002/02/11 10:04:33 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.17 2002/02/11 10:51:47 hundhammer Exp $
  *
  */
 
@@ -236,7 +236,7 @@ KDirTreeView::openURL( KURL url )
 	     this,  SLOT  ( selectItem      ( KFileInfo * ) ) );
 
     prepareReading();
-    _tree->startReading( fixedUrl( url.url() ) );
+    _tree->startReading( url );
 
     logActivity( 30 );
 }

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-09
+ *   Updated:	2002-02-11
  *
- *   $Id: kdirtree.cpp,v 1.9 2002/02/11 10:04:33 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.10 2002/02/11 10:51:47 hundhammer Exp $
  *
  */
 
@@ -1417,6 +1417,14 @@ KDirStat::fixedUrl( const QString & dirtyUrl )
     {
 	path = path.left( path.length()-1 );
 	url.setPath( path );
+    }
+
+    if ( url.isLocalFile() )
+    {
+	// Make a relative path an absolute path
+	
+	KDirSaver dir( url.path() );
+	url.setPath( dir.currentDirPath() );
     }
 
     return url;
