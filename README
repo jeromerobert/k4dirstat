@@ -1,7 +1,4 @@
 This is a graphical "du" (disk usage) display.
-To read more about the predecessor, KDirStat-0.86, see
-
-	www.suse.de/~sh/kdirstat
 
 What you see here is a 90% rewrite - GUI, engine, everything.  The one thing it
 can do a whole lot better than the old version is stay on one file system - the
@@ -12,12 +9,12 @@ problems with system buffer thrashing due to too many directories open for
 reading at one time - the new version uses an internal queue and keeps only one
 directory open.
 
-Expect more docs when the program gets more mature. Until then, reat the old
-docs (see URL above) - the principles are the same.
+For more details, see the KDirStat home page at
 
-Stay tuned.
+	http://kdirstat.sourceforge.net/
+
 
 
 Stefan Hundhammer <sh@suse.de>
-2001-11-17
+2002-05-10
 

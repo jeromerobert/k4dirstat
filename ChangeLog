@@ -1,4 +1,18 @@
-2002-05-13  Stefan Hundhammer  <sh@suse.de>
+2002-05-12  Stefan Hundhammer  <sh@suse.de>
+
+	* Initial version of new treemaps
+
+	* Communication between treemap view and tree view
+
+	* Bumped version to 2.3.0-devel
+
+2002-05-10  Stefan Hundhammer  <sh@suse.de>
+
+	* Removed support for old treemaps
+	
+	* Updated build-howto.html
+
+2002-05-09  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.2.0
 	  The KDE3 port proved stable enough to warrant a new stable

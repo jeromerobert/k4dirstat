@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-03
+ *   Updated:	2002-05-10
  *
- *   $Id: kdirtreeiterators.h,v 1.2 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kdirtreeiterators.h,v 1.3 2002/05/12 15:53:51 hundhammer Exp $
  *
  */
 
@@ -168,6 +168,12 @@ namespace KDirStat
 	 **/
 	KDirInfo *	currentDir() { return currentIsDir() ? (KDirInfo *) _current : 0; }
 
+	/**
+	 * Return the number of items that will be processed.
+	 * This is an expensive operation.  
+	 **/
+	int		count();
+
 
     protected:
 
@@ -216,7 +222,7 @@ namespace KDirStat
 	 **/
 	virtual void next();
 
-
+	
     protected:
 
 	/**

@@ -1,6 +1,6 @@
 			    TODO list for KDirStat
 			   ========================
-							Updated: 2002-01-27
+							Updated: 2002-05-10
 
 - misc app configs:
   - pacman animation in tool bar
@@ -10,14 +10,12 @@
 
 - session management
 
-- write English help file 
-
 - German translation for program
 
 - German help file
 
 - make treemaps work again; this will most likely require a rewrite of the
-  treemap related part. 
+  treemap related part.
 
 - make KDirStat a KPart
 
@@ -58,4 +56,6 @@ Postponed until further notice:
   Since the Linux 2.4 kernel is great at caching directory entries,
   this isn't really necessary for Linux - and I am a Linux guy...
   ;-)
+
+
 

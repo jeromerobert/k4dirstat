@@ -1,33 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(kdirstat,2.2.0)
-
-dnl
-dnl stolen from the automake info pages
-dnl
+AM_INIT_AUTOMAKE(kdirstat,2.3.0-devel)
 
 AC_SYS_LARGEFILE
-AC_ARG_ENABLE(treemaps,
-[  --enable-treemaps	add support for for treemap lib],
-[case "${enableval}" in
-  yes)	use_treemaps=1
-	echo "*** treemaps support enabled"
-	echo "Creating symlinks for treemap sources"
-	( cd kdirstat; ln -sf treemaps/*.cpp . ; ln -sf treemaps/*.h . )
-	;;
-  no)	use_treemaps=0
-	echo "Removing symlinks for treemap sources"
-	find ./kdirstat -name "*treemap*.cpp" -o -name "*treemap*.h" -type l -print | xargs rm -f
-	;;
-  *) AC_MSG_ERROR(bad value ${enableval} for -treemaps) ;;
-esac],[use_treemaps=0])
-AC_DEFINE_UNQUOTED(USE_TREEMAPS, $use_treemaps)
-
-if test x$use_treemaps = x1 ; then
-	AC_CHECK_LIB(qtreemap,QTreeMapVersion,,,-lqt)
-	AC_CHECK_HEADER(qtreemap.h, HAVE_QTREEMAP)
-fi
-
-AM_CONDITIONAL(USE_TREEMAPS, test x$use_treemaps = x1)
-
 KDE_CHECK_LONG_LONG

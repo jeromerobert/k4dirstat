@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Building KDirStat for KDE 2.x</title>
+	<title>Building KDirStat for KDE 3.x</title>
 </head>
 
 <body bgcolor=#F0F0F0>
@@ -11,7 +11,7 @@
 <table width=100%>
     <tr>
         <td width=50% align=left>
-	    Last modified: 05 Feb 2002
+	    Last modified: 10 Mai 2002
 	</td>
 	<td width=50% align=right>
 	    Contact: <a href="mailto:sh@suse.de?subject=KDirStat build-howto">Stefan Hundhammer</a>
@@ -20,18 +20,22 @@
 </table>
 
 
-<h1 align=center>Building KDirStat for KDE 2.x</h1>
+<h1 align=center>Building KDirStat for KDE 3.x</h1>
 
-<h2>Note:</h2>
 
-<p>
-If you are using the latest <b>SuSE Linux</b>, you may not have to build it at all;
-there usually is an RPM package you can use at the
+<table width=100% bgcolor=#B0B0F0>
+<tr><td><h2>Note:</h2></td></tr>
+
+<tr><td>
+If you are using the 
+latest 
+<a href="http://www.suse.com/">SuSE Linux</a>
+,  you may not have to build it at all.
+There usually is an RPM package you can use at the
 <a href="http://kdirstat.sourceforge.net/download/">download area</a>.
 See also the <a href="http://kdirstat.sourceforge.net/">KDirStat home page</a>.
-</p>
-
-<h2>Normal Build (no <a href="#treemaps">Treemap</a> support)</h2>
+</td></tr>
+</table>
 
 <ul>
 <li>
@@ -53,14 +57,12 @@ You'll need at least:
 <li>Header files for the system libs
 <li>X11 development environment (libs and header files)
 <li>Qt 2.2 (or later) development environment
-<li>KDE 2.x development environment
+<li>KDE 3.x development environment
 </ul>
 
 <p>
 - maybe more. If you are unsure and you are running SuSE Linux, it might be
-a good idea to install the <em>development system</em> selection. You can also
-install this additionally on top of your running system - use YaST (the older
-text based version).
+a good idea to install the <em>development system</em> selection.
 </p>
 
 <p>
@@ -115,18 +117,18 @@ Watch out for error messages and <b>fix them</b> before reporting
 errors!
 </p>
 
-<p>On SuSE Linux systems, KDE 2.x is installed to <em>/opt/kde2</em> which is a
+<p>On SuSE Linux systems, KDE 3.x is installed to <em>/opt/kde3</em> which is a
 good idea if you want to keep some KDE 1.x programs around. So use that
-<em>/opt/kde2</em> prefix for KDirStat, too - otherwise it will be installed to
+<em>/opt/kde3</em> prefix for KDirStat, too - otherwise it will be installed to
 <em>/opt/kde</em> and clutter up a working KDE 1.x environment.
 <br>
 <pre>
 
-    ./configure --prefix=/opt/kde2
+    ./configure --prefix=/opt/kde3
 
 </pre>
 <p>
-If you don't care about that or if you set up KDE 2.x in <em>/opt/kde</em>
+If you don't care about that or if you set up KDE 3.x in <em>/opt/kde</em>
 anyway, simply type
 </p>
 <pre>
@@ -174,97 +176,6 @@ That's it.
 </p>
 
 
-
-<h2><a name="treemaps">Building with Treemap Support</a></h2>
-
-<p>
-Since June, 2001, KDirStat supports a fancy new way of displaying disk usage:
-Treemaps. This is still work in progress and to be considered experimental -
-use at your own risk.
-</p>
-
-<p>
-Some time in August 2001, 
-<a href="mailto:alexannika@users.sourceforge.net">Alexander Rawass</a>,
-the author of KDirStat's treemap part, decided to move a large part of this out
-to a separate project. He split off a generic part <i>QTreeMap</i> which became
-a separate project at SourceForge.
-</p>
-
-<p>
-The problem with this decision is that from now on you need that separate
-<i>QTreeMap</i> lib (i.e. you need to download it from SourceForge and build
-and install it separately) - and you need versions of <i>QTreeMap</i> and its
-counterpart in KDirStat, <i>KTreeMap</i>, that are compatible with one
-another - which they more often than not are not, causing weird linker errors.
-</p>
-
-<p>
-Because of that, I decided to make this part optional and exclude it by
-default.
-</p>
-
-<p>
-Thus, if you wish to include that part, you need to explicitly request treemap
-support at configure time:
-</p>
-
-<pre>
-    ./configure --enable-treemaps
-</pre>
-<p>
-or (for SuSE Linux systems):
-</p>
-<pre>
-    ./configure --prefix=/opt/kde2 --enable-treemaps
-
-</pre>
-
-<p>
-All the rest is just like described above.
-</p>
-
-<p>
-The <tt>--enable-treemaps</tt> option creates some symbolic links to the 
-<tt>treemaps/</tt> subdirectory, so you will need to remove them if you ever
-choose to build without treemaps. You can either remove those links manually or
-<a name="disabling-treemaps">explicitly configure <i>without</i> treemaps</a>:
-</p>
-
-<pre>
-    ./configure --disable-treemaps
-</pre>
-<p>
-or (for SuSE Linux systems):
-</p>
-<pre>
-    ./configure --prefix=/opt/kde2 --disable-treemaps
-
-</pre>
-
-
-<h2>Troubleshooting</h2>
-
-<p>
-If you get weird linker errors, especially after enabling / disabling treemap
-support, try
-
-<pre>
-
-	cd kdirstat
-	./fix-linker-trouble
-	cd ..
-	make
-
-</pre>
-
-</p>
-
-<p>
-This may or may not work. If it doesn't after enabling treemap support, most
-likely your versions of <i>QTreeMap</i> and KDirStat's <i>KTreeMap</i> are
-incompatible. In this case, <a href="#disabling-treemaps">disable treemap support</a>.
-</p>
 
   </body>
 </html>

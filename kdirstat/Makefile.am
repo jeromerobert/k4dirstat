@@ -16,6 +16,8 @@ kdirstat_SOURCES =				\
 	kdirtreeview.cpp			\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
+	ktreemapview.cpp			\
+	ktreemaptile.cpp			\
 	kcleanup.cpp				\
 	kstdcleanup.cpp 			\
 	kcleanupcollection.cpp			\
@@ -25,24 +27,14 @@ kdirstat_SOURCES =				\
 	kpacman.cpp
 
 
-
-if USE_TREEMAPS
-EXTRA_kdirstat_SOURCES =			\
-	kdirtreemapwindow.cpp			\
-	kdirtreemaparea.cpp			\
-	kdirtreemapwindow.h			\
-	kdirtreemap.h
-else
-EXTRA_kdirstat_SOURCES =
-endif
-
-
 noinst_HEADERS =				\
 	kdirstatapp.h				\
 	kfeedback.h				\
 	kdirtreeview.h				\
 	kdirtreeiterators.h			\
 	kdirtree.h				\
+	ktreemapview.h				\
+	ktreemaptile.h				\
 	kcleanup.h				\
 	kstdcleanup.h				\
 	kcleanupcollection.h			\
@@ -58,20 +50,12 @@ EXTRA_DIST =					\
 	lo32-app-kdirstat.png			\
 	lo16-app-kdirstat.png			\
 	hi32-app-kdirstat.png			\
-	hi16-app-kdirstat.png			\
-	treemaps/kdirtreemap.h			\
-	treemaps/kdirtreemaparea.cpp		\
-	treemaps/kdirtreemapwindow.cpp		\
-	treemaps/kdirtreemapwindow.h
-
-
-if USE_TREEMAPS
-LIB_QTREEMAP = -lqtreemap
-endif
+	hi16-app-kdirstat.png
 
 
 
-kdirstat_LDADD = $(LIB_QTREEMAP) $(LIB_KFILE) -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+
+kdirstat_LDADD = $(LIB_KFILE) -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Utilities/
@@ -123,22 +107,6 @@ messages: rc.cpp
 	 $(XGETTEXT) $$LIST -o $(podir)/kdirstat.pot; \
 	fi
 
-# Override brain-dead warnings about "long long"
-
-#	CXXFLAGS = \
-#	-g  \
-#	-O2 \
-#	-fno-exceptions \
-#	-fno-check-new \
-#	-Wall \
-#	-pedantic \
-#	-Wno-long-long \
-#	-W \
-#	-Wpointer-arith \
-#	-Wmissing-prototypes \
-#	-Wwrite-strings \
-#	-Wnon-virtual-dtor \
-#	-fno-builtin
 
 
 

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-11
+ *   Updated:	2002-05-12
  *
- *   $Id: kdirtreeview.cpp,v 1.18 2002/04/22 09:52:51 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.19 2002/05/12 15:53:51 hundhammer Exp $
  *
  */
 
@@ -28,12 +28,6 @@
 #include "kdirtreeiterators.h"
 #include "kpacman.h"
 
-#if USE_TREEMAPS
-// FIXME: Move this out of here.
-#include "qtreemap.h"
-#include "qtreemapwindow.h"
-#include "kdirtreemapwindow.h"
-#endif
 
 using namespace KDirStat;
 
@@ -42,10 +36,6 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     : KDirTreeViewParentClass( parent )
 {
     _tree		= 0;
-
-#if USE_TREMAPS
-    _treemap_view	= 0;	// FIXME
-#endif
     _updateTimer	= 0;
     _selection		= 0;
     _openLevel		= 1;
@@ -114,15 +104,6 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
    _contextInfo	  = new QPopupMenu;
    _idContextInfo = _contextInfo->insertItem ( "dummy" );
-
-
-#if USE_TREEMAPS
-   // FIXME: Move this out of here. No use opening an empty window at this time -
-   // do it upon some finished() signal.
-   _treemap_view = new KDirStat::KDirTreeMapWindow();
-   _treemap_view->makeWidgets();
-   _treemap_view->setConfig();
-#endif
 }
 
 
@@ -130,15 +111,6 @@ KDirTreeView::~KDirTreeView()
 {
     if ( _tree )
 	delete _tree;
-
-#if USE_TREEMAPS
-    // FIXME: Move this out of here.
-    if ( _treemap_view )
-    {
-	delete _treemap_view;
-    }
-#endif
-
 
     /*
      * Don't delete _updateTimer here, it's already automatically deleted by Qt!
@@ -167,22 +139,6 @@ KDirTreeView::idleDisplay()
 	removeColumn( _readJobsCol );
 	_readJobsCol = -1;
     }
-
-#if USE_TREEMAPS
-    // FIXME: Move this out of here.
-    // This should happen upon receiving a finished() signal.
-    if ( _treemap_view )
-    {
-	//_treemap_view->drawTreeMap(_tree->root());
-	//_treemap_view->getArea()->setTreeMap((KDirInfo *)_tree->root());
-
-
-	if(_tree && _tree->root())
-	{
-	    _treemap_view->getArea()->setTreeMap((Object *)_tree->root());
-	}
-    }
-#endif
 }
 
 
@@ -193,15 +149,6 @@ KDirTreeView::openURL( KURL url )
 
     clear();
     _currentDir = "";
-
-#if USE_TREEMAPS
-    // FIXME: Move this out of here.
-    if ( _treemap_view )
-    {
-	delete _treemap_view;
-	_treemap_view = 0;
-    }
-#endif
 
     if ( _tree )
 	delete _tree;
@@ -370,7 +317,7 @@ KDirTreeView::deleteChild( KFileInfo *child )
 	    nextSelection = clone->next() ? clone->next() : clone->parent();
 	    // kdDebug() << k_funcinfo << " Next selection: " << nextSelection << endl;
 	}
-	
+
 	KDirTreeViewItem *parent = clone->parent();
 	delete clone;
 
@@ -471,6 +418,23 @@ KDirTreeView::locate( KFileInfo *wanted, bool lazy )
 }
 
 
+
+int
+KDirTreeView::openCount()
+{
+    int count = 0;
+    KDirTreeViewItem *child = firstChild();
+
+    while ( child )
+    {
+	count += child->openCount();
+	child  = child->next();
+    }
+
+    return count;
+}
+
+
 void
 KDirTreeView::selectItem( QListViewItem *listViewItem )
 {
@@ -486,8 +450,8 @@ KDirTreeView::selectItem( QListViewItem *listViewItem )
 	// kdDebug() << k_funcinfo << " Clearing selection" << endl;
 	clearSelection();
     }
-	
-    
+
+
     emit selectionChanged( _selection );
     emit selectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
 }
@@ -508,10 +472,15 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
     {
 	_selection = locate( newSelection,
 			     false );	// lazy
-
-	emit selectionChanged( _selection );
-	_selection->openSubtree();
-	setSelected( _selection, true );
+	if ( _selection )
+	{
+	    closeAllExcept( _selection );
+	    ensureItemVisible( _selection );
+	    emit selectionChanged( _selection );
+	    setSelected( _selection, true );
+	}
+	else
+	    kdError() << "Couldn't clone item " << newSelection << endl;
     }
 }
 
@@ -525,6 +494,19 @@ KDirTreeView::clearSelection()
 
     emit selectionChanged( (KDirTreeViewItem *) 0 );
     emit selectionChanged( (KFileInfo *) 0 );
+}
+
+
+void
+KDirTreeView::closeAllExcept( KDirTreeViewItem *except )
+{
+    if ( ! except )
+    {
+	kdError() << k_funcinfo << ": NULL pointer passed" << endl;
+	return;
+    }
+    
+    except->closeAllExceptThis();
 }
 
 
@@ -587,7 +569,7 @@ void
 KDirTreeView::setDefaultFillColors()
 {
     int i;
-    
+
     for ( i=0; i < KDirTreeViewMaxFillColor; i++ )
     {
 	_fillColor[i] = blue;
@@ -595,7 +577,7 @@ KDirTreeView::setDefaultFillColors()
 
     i = 0;
     _usedFillColors = 4;
-   
+
     setFillColor ( i++, QColor ( 0,     0, 255 ) );
     setFillColor ( i++, QColor ( 128,   0, 128 ) );
     setFillColor ( i++, QColor ( 231, 147,  43 ) );
@@ -702,7 +684,7 @@ KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
 				    KFileSize		size )
 {
     QString info = formatSizeLong( size ) + " " + i18n( "Bytes" );
-    
+
     if ( size > 1024 )
     {
 	info += " (" + formatSize( size ) + ")";
@@ -740,9 +722,9 @@ KDirTreeView::readConfig()
     else
     {
 	// Read the rest of the 'Tree Colors' section
-      
+
 	QColor defaultColor( blue );
-   
+
 	for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
 	{
 	    QString name;
@@ -761,7 +743,7 @@ KDirTreeView::saveConfig() const
 {
     KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, "Tree Colors" );
-   
+
     config->writeEntry( "usedFillColors", _usedFillColors );
 
     for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
@@ -824,7 +806,7 @@ KDirTreeView::sendMailToOwner()
     // The hard part with this is how to get this from all that 'autoconf'
     // stuff into 'config.h' or some other include file without hardcoding
     // anything - this is too system dependent.
-    
+
     kapp->invokeMailer( mail );
     logActivity( 10 );
 }
@@ -862,6 +844,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     _orig	= orig;
     _percent	= 0.0;
     _pacMan	= 0;
+    _openCount	= 0;
 
     if ( _orig->isDotEntry() )
     {
@@ -914,6 +897,8 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     {
 	setIcon();
     }
+
+    _openCount = isOpen() ? 1 : 0;
 }
 
 
@@ -1039,15 +1024,20 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
     if ( lazy && ! isOpen() )
     {
 	/*
-	 * When lazy tree cloning is in effect, we don't bother searching all
-	 * the children of this item if they are not visible (i.e. the branch
-	 * is open) anyway. In this case, cloning that branch is deferred until
-	 * the branch is actually opened - which in most cases will never
-	 * happen anyway (most users don't manually open each and every
-	 * subtree). If and when it happens, we'll probably be fast enough
-	 * bringing the view tree in sync with the original tree since opening
-	 * a branch requires manual interaction which is a whole lot slower
-	 * than copying a couple of objects.
+	 * In "lazy" mode, we don't bother searching all the children of this
+	 * item if they are not visible (i.e. the branch is open) anyway. In
+	 * this case, cloning that branch is deferred until the branch is
+	 * actually opened - which in most cases will never happen anyway (most
+	 * users don't manually open each and every subtree). If and when it
+	 * happens, we'll probably be fast enough bringing the view tree in
+	 * sync with the original tree since opening a branch requires manual
+	 * interaction which is a whole lot slower than copying a couple of
+	 * objects.
+	 *
+	 * Note that this mode is _independent_ of lazy cloning in general: The
+	 * caller explicitly specifies if he wants to locate an item at all
+	 * cost, even if that means deferred cloning children whose creation
+	 * has been delayed until now.
 	 */
 	return 0;
     }
@@ -1065,6 +1055,12 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 	// Search all children
 
 	KDirTreeViewItem *child = firstChild();
+
+	if ( ! child && _orig->hasChildren() )
+	{
+	    deferredClone();
+	    child = firstChild();
+	}
 
 	while ( child )
 	{
@@ -1086,7 +1082,7 @@ KDirTreeViewItem::deferredClone()
 {
     if ( ! _orig->hasChildren() )
     {
-	kdDebug() << k_funcinfo << "Oops, no children - sorry for bothering you!" << endl;
+	// kdDebug() << k_funcinfo << "Oops, no children - sorry for bothering you!" << endl;
 	setExpandable( false );
 
 	return;
@@ -1202,13 +1198,33 @@ KDirTreeViewItem::setOpen( bool open )
     if ( open && _view->doLazyClone() )
 	deferredClone();
 
+    if ( isOpen() != open )
+    {
+	openNotify( open );
+    }
+
     QListViewItem::setOpen( open );
     setIcon();
 
     if ( open )
 	updateSummary();
 
+    // kdDebug() << _openCount << " open in " << this << endl;
+    
     _view->logActivity( 1 );
+}
+
+
+void
+KDirTreeViewItem::openNotify( bool open )
+{
+    if ( open )
+	_openCount++;
+    else
+	_openCount--;
+
+    if ( _parent )
+	_parent->openNotify( open );
 }
 
 
@@ -1222,11 +1238,52 @@ KDirTreeViewItem::openSubtree()
 }
 
 
+void
+KDirTreeViewItem::closeSubtree()
+{
+    setOpen( false );
+
+    if ( _openCount > 0 )
+    {
+	KDirTreeViewItem * child = firstChild();
+
+	while ( child )
+	{
+	    child->closeSubtree();
+	    child = child->next();
+	}
+    }
+
+    _openCount = 0;	// just to be sure
+}
+
+
+void
+KDirTreeViewItem::closeAllExceptThis()
+{
+    KDirTreeViewItem *sibling = _parent ?
+	_parent->firstChild() : _view->firstChild();
+
+    while ( sibling )
+    {
+	if ( sibling != this )
+	    sibling->closeSubtree();	// Recurse down
+	
+	sibling = sibling->next();
+    }
+
+    setOpen( true );
+
+    if ( _parent )
+	_parent->closeAllExceptThis();	// Recurse up
+}
+
+
 QString
 KDirTreeViewItem::asciiDump()
 {
     QString dump;
-    
+
     dump.sprintf( "%10s  %s\n",
 		  (const char *) formatSize( _orig->totalSize() ),
 		  (const char *) _orig->debugUrl() );
@@ -1257,7 +1314,7 @@ KDirTreeViewItem::key( int column, bool ascending ) const
 	 column == _view->percentBarCol()   )
     {
 	sortKey = hexKey( KFileSizeMax - _orig->totalSize() );
-	    
+
     } else if ( column == _view->ownSizeCol() )
     {
 	sortKey = hexKey( KFileSizeMax - _orig->size() );
@@ -1302,7 +1359,7 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
     if ( column == _view->percentBarCol() )
     {
 	painter->setBackgroundColor( colorGroup.base() );
-	
+
 	if ( _percent > 0.0 )
 	{
 	    if ( _pacMan )
@@ -1497,7 +1554,7 @@ KDirStat::formatSizeLong( KFileSize size )
     {
 	sizeText = ( ( size % 10 ) + '0' ) + sizeText;
 	size /= 10;
-	
+
 	if ( ++count == 3 && size > 0 )
 	{
 	    sizeText = KGlobal::locale()->thousandsSeparator() + sizeText;
@@ -1517,11 +1574,11 @@ KDirStat::hexKey( KFileSize size )
      * And every now and then the old C hacker breaks through in most of us...
      * ;-)
      **/
-    
+
     static const char hexDigits[] = "0123456789ABCDEF";
     char key[ sizeof( KFileSize ) * 2 + 1 ];	// 2 hex digits per byte required
     char *cptr = key + sizeof( key ) - 1;	// now points to last char of key
-    
+
     memset( key, '0', sizeof( key ) - 1 );	// fill with zeroes
     *cptr-- = 0;				// terminate string
 

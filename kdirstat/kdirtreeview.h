@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-09
+ *   Updated:	2002-05-12
  *
- *   $Id: kdirtreeview.h,v 1.12 2002/02/11 10:04:33 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.13 2002/05/12 15:53:51 hundhammer Exp $
  *
  */
 
@@ -33,13 +33,6 @@
 #include <qpixmap.h>
 #include <klistview.h>
 #include "kdirtree.h"
-
-#if USE_TREEMAPS
-// FIXME: This stuff doesn't belong here. Move it out somewhere else.
-#include "qtreemap.h"
-#include "qtreemapwindow.h"
-#include "kdirtreemapwindow.h"
-#endif
 
 
 // Forward declarations
@@ -126,6 +119,11 @@ namespace KDirStat
 	bool	doPacManAnimation()	const	{ return _doPacManAnimation;	}
 
 	/**
+	 * Returns the number of open items in the entire tree.
+	 **/
+	int	openCount();
+
+	/**
 	 * Return the percentage bar fill color for the specified directory
 	 * level (0..MaxInt). Wraps around every usedFillColors() colors.
 	 **/
@@ -200,6 +198,14 @@ namespace KDirStat
 	void ensureContrast();
 
 
+	/**
+	 * Returns the internal @ref KDirTree this view works on.
+	 * Handle with caution: This might be short-lived information.
+	 * The view might choose to create a new tree shortly after returning
+	 * this, so don't store this pointer internally.
+	 **/
+	KDirTree *tree()			{ return _tree; }
+
 	int	nameCol()		const	{ return _nameCol;		}
 	int	iconCol()		const	{ return _iconCol;		}
 	int	percentBarCol()		const	{ return _percentBarCol;	}
@@ -272,6 +278,11 @@ namespace KDirStat
 	 **/
 	void clearSelection();
 
+	/**
+	 * Close all tree branches except the one specified.
+	 **/
+	void closeAllExcept( KDirTreeViewItem *except );
+	
 	/**
 	 * Send a standardized mail to the owner of the selected branch.
 	 * The user will get a mailer window where he can edit that mail all he
@@ -505,14 +516,6 @@ namespace KDirStat
 	QPixmap _fifoIcon;
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
-
-
-#if USE_TREEMAPS
-	// FIXME: This stuff doesn't belong here. Move it out somewhere else.
-
-	// QTreeMapWindow  *_treemap_view;
-	KDirTreeMapWindow  *_treemap_view;
-#endif
     };
 
 
@@ -615,9 +618,30 @@ namespace KDirStat
 	virtual void setOpen( bool open );
 
 	/**
+	 * Notification that a branch in this subtree has been opened or close
+	 * somewhere. Don't call this if the state hasn't really changed!
+	 **/
+	void openNotify( bool open );
+
+	/**
 	 * Recursively open this subtree and all its ancestors up to the root.
 	 **/
 	void openSubtree();
+
+	/**
+	 * Recursively close all tree branches from here on downwards. 
+	 **/
+	void closeSubtree();
+
+	/**
+	 * Close all tree branches except this one from the root on.
+	 **/
+	void closeAllExceptThis();
+	
+	/**
+	 * Returns the number of open items in this subtree.
+	 **/
+	int openCount()		const	{ return _openCount; }
 
 	/**
 	 * Recursively return an ASCII representation of all open items from
@@ -684,6 +708,7 @@ namespace KDirStat
 	KFileInfo *		_orig;
 	KPacManAnimation *	_pacMan;
 	float			_percent;
+	int			_openCount;
 
     };
 

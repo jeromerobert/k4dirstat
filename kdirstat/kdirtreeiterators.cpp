@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-08-08
+ *   Updated:	2002-05-10
  *
- *   $Id: kdirtreeiterators.cpp,v 1.2 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kdirtreeiterators.cpp,v 1.3 2002/05/12 15:53:51 hundhammer Exp $
  *
  */
 
@@ -122,6 +122,52 @@ void KFileInfoIterator::next()
 	    }
 	}
     }
+}
+
+
+int
+KFileInfoIterator::count()
+{
+    int cnt = 0;
+
+    // Count direct children
+    
+    KFileInfo *child = _parent->firstChild();
+
+    while ( child )
+    {
+	cnt++;
+	child = child->next();
+    }
+
+    
+    // Handle the dot entry
+    
+    switch ( _policy )
+    {
+	case KDotEntryTransparent:	// Count the dot entry's children as well.
+	    if ( _parent->dotEntry() )
+	    {
+		child = _parent->dotEntry()->firstChild();
+
+		while ( child )
+		{	
+		    cnt++;
+		    child = child->next();
+		}
+	    }
+	    break;
+	    
+	case KDotEntryAsSubDir:		// The dot entry counts as one item.
+	    if ( _parent->dotEntry() )
+		cnt++;
+	    break;
+	    
+	case KDotEntryIgnore:		// We're done.
+	    break;
+    }
+
+    return cnt;
 }
 
 
