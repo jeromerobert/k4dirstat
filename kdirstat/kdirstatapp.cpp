@@ -8,7 +8,7 @@
  *
  *   Updated:	2002-02-11
  *
- *   $Id: kdirstatapp.cpp,v 1.11 2002/02/11 10:51:47 hundhammer Exp $
+ *   $Id: kdirstatapp.cpp,v 1.12 2002/02/11 15:27:11 hundhammer Exp $
  *
  */
 
@@ -477,7 +477,6 @@ KDirStatApp::askForFeedback()
 	return;
 
     KConfig * config = kapp->config();
-    config->setGroup( "Feedback" );
     
     switch ( KMessageBox::warningYesNoCancel( this,
 					      i18n( "Now that you know this program for some time,\n"
@@ -496,6 +495,7 @@ KDirStatApp::askForFeedback()
 	    break;
 
 	case KMessageBox::No:	// ...and don't ask again
+	    config->setGroup( "Feedback" );
 	    config->writeEntry( "dontAsk", true );
 	    config->sync();	// make sure this doesn't get lost even if the app is killed or crashes
 	    break;
@@ -504,6 +504,7 @@ KDirStatApp::askForFeedback()
 	    break;
     }
 
+    config->setGroup( "Feedback" );
     int  remindersCount = config->readNumEntry ( "remindersCount", 0 );
     config->writeEntry( "remindersCount", ++remindersCount );
 
