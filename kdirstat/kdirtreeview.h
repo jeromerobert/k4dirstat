@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-08-16
+ *   Updated:	2001-09-01
  *
- *   $Id: kdirtreeview.h,v 1.3 2001/08/16 14:36:08 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.4 2001/09/03 10:06:20 hundhammer Exp $
  *
  */
 
@@ -34,7 +34,7 @@
 #include <klistview.h>
 #include "kdirtree.h"
 
-#if 1
+#if USE_TREEMAPS
 // FIXME: This stuff doesn't belong here. Move it out somewhere else.
 #include "qtreemap.h"
 #include "qtreemapwindow.h"
@@ -350,7 +350,7 @@ namespace KDirStat
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
 
-#if 1
+#if USE_TREEMAPS
 	// FIXME: This stuff doesn't belong here. Move it out somewhere else.
 
 	// QTreeMapWindow  *_treemap_view;

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-08-16
+ *   Updated:	2001-09-01
  *
- *   $Id: kdirtreeview.cpp,v 1.5 2001/08/16 14:36:08 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.6 2001/09/03 10:06:20 hundhammer Exp $
  *
  */
 
@@ -26,7 +26,7 @@
 #include "kdirtreeiterators.h"
 #include "kpacman.h"
 
-#if 1
+#if USE_TREEMAPS
 // FIXME: Move this out of here.
 #include "qtreemap.h"
 #include "qtreemapwindow.h"
@@ -40,7 +40,10 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     : KDirTreeViewParentClass( parent )
 {
     _tree		= 0;
+    
+#if USE_TREMAPS
     _treemap_view	= 0;	// FIXME
+#endif
     _updateTimer	= 0;
     _openLevel		= 1;
     _doLazyClone	= true;
@@ -111,7 +114,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
    connect ( kapp,	SIGNAL	( kdisplayPaletteChanged()	),
 	     this, 	SLOT	( paletteChanged()		) );
 
-#if 1
+#if USE_TREEMAPS
    // FIXME: Move this out of here. No use opening an empty window at this time -
    // do it upon some finished() signal.
    _treemap_view = new KDirStat::KDirTreeMapWindow();
@@ -154,7 +157,7 @@ KDirTreeView::idleDisplay()
 	_readJobsCol = -1;
     }
 
-#if 1
+#if USE_TREEMAPS
     // FIXME: Move this out of here.
     // This should happen upon receiving a finished() signal.
     if ( _treemap_view )

@@ -6,16 +6,26 @@ SUBDIRS		= pics
 
 bin_PROGRAMS 	= kdirstat
 
+
 kdirstat_SOURCES =				\
 	kdirstatmain.cpp			\
 	kdirstatapp.cpp				\
 	kdirtreeview.cpp			\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
-	kdirtreemapwindow.cpp			\
-	kdirtreemaparea.cpp			\
 	kdirsaver.cpp				\
 	kpacman.cpp
+
+
+if USE_TREEMAPS
+EXTRA_kdirstat_SOURCES =			\
+	kdirtreemapwindow.cpp			\
+	kdirtreemaparea.cpp			\
+	kdirtreemapwindow.h			\
+	kdirtreemap.h
+else
+EXTRA_kdirstat_SOURCES =
+endif
 
 
 noinst_HEADERS =				\
@@ -23,8 +33,6 @@ noinst_HEADERS =				\
 	kdirtreeview.h				\
 	kdirtreeiterators.h			\
 	kdirtree.h				\
-	kdirtreemapwindow.h			\
-	kdirtreemap.h				\
 	kdirsaver.h				\
 	kpacman.h
 
@@ -35,7 +43,12 @@ EXTRA_DIST =					\
 	lo32-app-kdirstat.png			\
 	lo16-app-kdirstat.png
 
-kdirstat_LDADD	 = -lqtreemap -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+
+if USE_TREEMAPS
+LIB_QTREEMAP = -lqtreemap
+endif
+
+kdirstat_LDADD = $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/

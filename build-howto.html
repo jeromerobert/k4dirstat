@@ -11,7 +11,7 @@
 <table width=100%>
     <tr>
         <td width=50% align=left>
-	    Last modified: 11 Jun 2001
+	    Last modified: 02 Sep 2001
 	</td>
 	<td width=50% align=right>
 	    Contact: <a href="mailto:sh@suse.de">Stefan Hundhammer</a>
@@ -24,8 +24,10 @@
 
 <ul>
 <li>
-Get the latest tarball from the
-<a href="../download/kdirstat-for-kde2">download area</a>.
+Get the latest sources - either the 
+<a href="../download/kdirstat-for-kde2">tarball from the download area</a>
+or via 
+<a href="http://kdirstat.sourceforge.net/kdirstat">anonymous CVS from SourceForge.</a>
 <p><br></p>
 </li>
 
@@ -51,9 +53,18 @@ text based version).
 </p>
 
 <p>
- Please understand that I cannot and will not fix broken development systems
-any more - this had taken me quite some time with KDirStat 0.8x. Please make
-sure you can compile simple KDE programs like <em>kless</em> or
+As of August 2001, <b>you also need the QTreeMap-Lib</b>.
+<a href="mailto:alexannika@users.sourceforge.net">Alexander Rawass</a>,
+the author of the treemap part of KDirStat, decided to move this part out to a
+separate project. You can get it from SourceForge or simply disable treemaps at
+configure time (<tt>configure --disable-treemaps</tt>).
+</p>
+
+
+<p>
+Please understand that I cannot and will not fix everybody's broken development
+systems any more - this had taken me quite some time with KDirStat 0.8x. Please
+make sure you can compile simple KDE programs like <em>kless</em> or
 <em>kexample</em> before contacting me about build problems.
 </p>
 </ul>
@@ -119,6 +130,23 @@ anyway, simply type
 </pre>
 </li>
 
+<p>
+If you don't have the QTreeMap lib and you don't want to go through all the
+hassle of downloading, compiling and installing it separately, you can disable
+treemap support from KDirStat alltogether (in this case, of course you will not
+get a treemap window): 
+</p>
+
+<pre>
+    ./configure --disable-treemaps
+</pre>
+<p>
+or (for SuSE Linux systems):
+</p>
+<pre>
+    ./configure --prefix=/opt/kde2 --disable-treemaps
+
+</pre>
 
 <li>
 Compile everything:
@@ -151,6 +179,23 @@ and everything it needs:
 
 </ul>
 
+
+<h2>Troubleshooting</h2>
+
+<p>
+If you get weird linker errors (especially after configuring with
+--disable-treemaps), try:
+
+<pre>
+
+	cd kdirstat
+	./fix-linker-trouble
+	cd ..
+	make
+
+</pre>
+
+</p>
 
   </body>
 </html>

@@ -1,0 +1,9 @@
+If you get a linker error about "libqtreemap", download it from SourceForge or
+configure with "--disable-treemaps". See build-howto.html for details.
+
+Yes, this sucks big time. I don't like that one bit. 
+As if setting up a normal KDE build environment weren't bad enough...
+
+
+Stefan Hundhammer
+2001-09-01
