@@ -4,29 +4,33 @@
 
 SUBDIRS		= pics
 
-bin_PROGRAMS 	= kdirstat
+lib_LTLIBRARIES = libkdirstat.la
 
+if USE_TREEMAPS
+EXTRA_libkdirstat_la_SOURCES = \
+	kdirtreemapwindow.cpp			\
+	kdirtreemaparea.cpp			
+else
+EXTRA_libkdirstat_la_SOURCES =
+endif
 
-kdirstat_SOURCES =				\
-	kdirstatmain.cpp			\
-	kdirstatapp.cpp				\
+libkdirstat_la_SOURCES = kdirstat_part.cpp kdirstat_factory.cpp \
 	kdirtreeview.cpp			\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
 	kdirsaver.cpp				\
-	kpacman.cpp
+	kpacman.cpp	\
+	kdirstatapp.cpp \
+	$(EXTRA_libkdirstat_la_SOURCES)
+
+libkdirstat_la_LIBADD = -lqtreemap $(LIB_KFILE) $(LIB_KPARTS)
+libkdirstat_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+
+bin_PROGRAMS 	= kdirstat
 
 
-if USE_TREEMAPS
-EXTRA_kdirstat_SOURCES =			\
-	kdirtreemapwindow.cpp			\
-	kdirtreemaparea.cpp			\
-	kdirtreemapwindow.h			\
-	kdirtreemap.h
-else
-EXTRA_kdirstat_SOURCES =
-endif
-
+kdirstat_SOURCES =				\
+	kdirstatmain.cpp			
 
 noinst_HEADERS =				\
 	kdirstatapp.h				\
@@ -48,7 +52,7 @@ if USE_TREEMAPS
 LIB_QTREEMAP = -lqtreemap
 endif
 
-kdirstat_LDADD = $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+kdirstat_LDADD = -lkdirstat $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
