@@ -16,9 +16,19 @@ about disk/directory usage as a Treemap graphics.
 <p>QTreeMap is written by Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>
 <br><a href="http://www.suse.de/~sh/kdirstat/">KDirStat</a> is written
 by Stefan Hundhammer &lt;<a href="mailto:sh@suse.de">sh@suse.de</a>>
+<p>&nbsp; the ideas behind the algorithms for squarified Treemaps
+<br>&nbsp; have been taken/inspired from the Document <a href="http://www.win.tue.nl/~vanwijk/stm.pdf">stm.pdf</a>,
+<br>&nbsp; "Squarified Treemaps" by Mark Bruls, Kees Huizing and Jarke
+J. van Wijk
+<br>&nbsp; from the SequoiaView Homepage&nbsp; <a href="http://www.win.tue.nl/sequoiaview">http://www.win.tue.nl/sequoiaview/</a>
+<br>&nbsp; Email: {keesh,vanwijk,sequoia}@win.tue.nl
+<p>&nbsp; the ideas behind the Cushion Treemaps
+<br>&nbsp; have been taken/inspired from the Document <a href="http://www.win.tue.nl/~vanwijk/ctm.pdf">ctm.pdf</a>,
+<br>&nbsp; "Cushion Treemaps" by Jarke J. van Wijk and Huub van de Wetering
+<br>&nbsp; from the SequoiaView Homepage&nbsp; <a href="http://www.win.tue.nl/sequoiaview/">http://www.win.tue.nl/sequoiaview/</a>
+<br>&nbsp; Email: {vanwijk,wstahw,sequoia}@win.tue.nl
 <p>QTreeMap is currently in heavy development, expect newer versions any
 time
-<br>&nbsp;
 <br>&nbsp;
 <h4>
 Example screenshots:</h4>
@@ -58,6 +68,12 @@ Shadings (best used with cyclic <a href="#colorscheme">ColorScheme</a>)
 Flat</li>
 
 <br>draws flat rectangles
+<li>
+Image<br>
+like Flat, except: when the corresponding file is an image (like a jpeg
+or png), the image is loaded and displayed in the rectangle<br>
+this is only sensible with <a href="#squarifyTreemaps">squarified Treemaps</a></li>
+
 <li>
 Sinus</li>
 
@@ -186,6 +202,13 @@ Draw Text</li>
 
 <br>draws Text into each rectangle
 <li>
+<a NAME="squarifyTreemaps"></a>squarify Treemaps<br>
+the treemaps are drawn with a different algorithm, which tries to lay out
+the rectangles so that they don't get thin and flat - the result is rectangles
+which have a better aspect<br>
+can be quite confusing, the hierarchy is not as good visible as without</li>
+
+<li>
 dynamic Shading</li>
 
 <br>crashes yet</ul>
@@ -208,41 +231,15 @@ no checkmarks in option menues</li>
 
 <li>
 hierarch. Factor >=50% is nonsense</li>
+
+<li>
+clicking too often on 'ZoomIn' consumes too much memory -> X swaps till
+death</li>
+
+<li>
+warnings about RGB parameters</li>
 </ul>
 
-<h4>
-ChangeLog:</h4>
-
-<p><br>2001-07-03 Alexander Rawass &lt;alexannika@users.sourceforge.net>
-<p>&nbsp;* QTreeMapWindow is now an abstract class
-<br>&nbsp;* KDirTreeMapWindow implements makeTreeMapWidget()
-<br>&nbsp;* experimental hierach. cushion
-<br>&nbsp;* new menu options (experimental &amp; debugging)
-<br>&nbsp;* new way to make a border (border_step)
-<br>&nbsp;* CTM (Cushion Treemap) test routine added (not working yet)
-<br>&nbsp;* new Bug: I'm getting warnings about wrong RGB parameters,
-<br>&nbsp; even in flat mode
-<p>01 Jul 2001
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QTreeMapArea is now a general
-abstract class to display hierarchies of any kind (not connected to KDirStat
-anymore)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KDirTreeMapArea is the implementation
-for KDirStat
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new Bug: signals/slot not
-working correctly
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bug fixed: crashed when
-telling kdirstat to display a directory which does not exist
-<br>patch nr. 10:&nbsp; (24 Jun 2001)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed Zoom Bug
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed DM_FILES Bug
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; faster shading (dirs are
-always drawn flat)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new directory coloring (shades
-of grey)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; options for start direction,
-border width, draw text
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed most compiler warnings
-<br>&nbsp;
 <h4>
 Planned:</h4>
 
@@ -310,6 +307,10 @@ utterly trivial
 <br>I am *fascinated* how great this Treemap idea is and how simple the
 implementation is ;-)))
 <li>
+<a href="http://www.cs.umd.edu/hcil/photomesa/">Photomesa</a>, an Image-Browser
+in Java using Treemaps</li>
+
+<li>
 Documents/Thoughts on Treemaps by <a href="http://www.cs.umd.edu/hcil/treemaps/">Ben
 Shneiderman</a></li>
 
@@ -325,7 +326,7 @@ java treemap component</li>
 
 <hr WIDTH="100%">
 <p>Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Last modification Date: 05 July 2001
+Last modification Date: 11 July 2001
 <br>&nbsp;
 <br>&nbsp;
 </body>

@@ -1,4 +1,10 @@
 2001-07-11 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* new shading: image (sensible only with squarify)
+	  displays pictures, can be used as picture browser
+	* removed most warnings
+
+2001-07-11 Alexander Rawass <alexannika@users.sourceforge.net>
 	
 	* various bugs fixed in squarified treemaps:
 	  correct end of recursion

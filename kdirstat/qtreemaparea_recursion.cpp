@@ -10,6 +10,14 @@
  *
  */
 
+/*
+  the ideas behind the Cushion Treemaps (method CTM and shading PM_CUSHION)
+  have been taken/inspired from the Document ctm.pdf,
+  "Cushion Treemaps" by Jarke J. van Wijk and Huub van de Wetering
+  from the SequoiaView Homepage  http://www.win.tue.nl/sequoiaview/
+  Email: {vanwijk,wstahw,sequoia}@win.tue.nl
+*/
+
 #include <string.h>
 #include <sys/errno.h>
 #include <math.h>

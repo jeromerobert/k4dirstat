@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.7 2001/07/11 19:54:49 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.8 2001/07/12 01:44:17 alexannika Exp $
  *
  */
 
@@ -85,14 +85,14 @@ void QTreeMapArea::setTreeMap(Object *dutree){
 }
 
 QColor&  QTreeMapArea::getBaseColor(QString name){
-  QColor basecolor;
+  QColor bcolor;
 
   if(options->color_scheme==CS_CYCLIC){
-	basecolor=QColor(rotate_colors[color_index]);
+	bcolor=QColor(rotate_colors[color_index]);
 	getNextRotatingColorIndex();
   }
   else if(options->color_scheme==CS_MONO){
-    basecolor=options->mono_color;
+    bcolor=options->mono_color;
   }
   else if(options->color_scheme==CS_REGEXP){
     QRegExp r1("\\.html");
@@ -101,24 +101,24 @@ QColor&  QTreeMapArea::getBaseColor(QString name){
     QRegExp r4("\\.o");
 
     if(r1.match(name)!=-1){
-      basecolor=QColor(255,0,0);
+      bcolor=QColor(255,0,0);
       printf("match %s\n",name.latin1());
     }
     else if(r1.match(name)!=-1){
-      basecolor=QColor(0,255,0);
+      bcolor=QColor(0,255,0);
     }
     else if(r1.match(name)!=-1){
-      basecolor=QColor(255,255,0);
+      bcolor=QColor(255,255,0);
     }
     else if(r1.match(name)!=-1){
-      basecolor=QColor(0,255,255);
+      bcolor=QColor(0,255,255);
     }
     else{
-      basecolor=QColor(255,255,255);
+      bcolor=QColor(255,255,255);
     }
   }
 
-  return basecolor;
+  return bcolor;
 }
 
 Object *QTreeMapArea::findClickedMap(Object *dutree,int x,int y,int findmode){
@@ -381,8 +381,8 @@ QTreeMapOptions::QTreeMapOptions(){
   paint_size_y=600;
   highlight_frame_width=3;
   highlight_frame_col=QColor(255,255,255);
-  dont_draw_xyd=0;
-  dont_descend_xyd=0;
+  dont_draw_xyd=1;
+  dont_descend_xyd=1;
   draw_text=FALSE;
   color_scheme=CS_CYCLIC;
   hc_factor=0.3f;

@@ -10,6 +10,14 @@
  *
  */
 
+/*
+  the ideas behind the algorithms of qtreemaparea_squarify.cpp
+  have been taken/inspired from the Document stm.pdf,
+  "Squarified Treemaps" by Mark Bruls, Kees Huizing and Jarke J. van Wijk
+  from the SequoiaView Homepage  http://www.win.tue.nl/sequoiaview/
+  Email: {keesh,vanwijk,sequoia}@win.tue.nl
+*/
+
 #include <string.h>
 #include <sys/errno.h>
 #include <math.h>
@@ -66,6 +74,8 @@ ObjList *QTreeMapArea::sortedList(Object *dutree){
 
 
 void QTreeMapArea::squarifyTree(Object *dutree,int x0,int y0,int xd0,int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode){
+  NOT_USED(direction);
+
   ObjList *sorted_list = sortedList(dutree);
 
   int len=sorted_list->count();
@@ -111,13 +121,16 @@ void QTreeMapArea::squarifyTree(Object *dutree,int x0,int y0,int xd0,int yd0, bo
 void QTreeMapArea::printList(ObjList *slist,int i1,int i2){
   if(i2>=i1 && i1!=-1 && i2!=-1){
     float forget=sum_list(slist,i1,i2,TRUE);
+    NOT_USED(forget);
   }
 }
 
 
 void QTreeMapArea::squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int y0,int xd0,int yd0, bool bogus_direction, int level,Cushion *cushion,int fx,int fy,int findmode){
   int w;
-  bool direction;
+  bool direction=HORIZONTAL;
+
+  NOT_USED(bogus_direction);
 
   if(xd0<options->dont_draw_xyd || yd0<options->dont_draw_xyd){
     return;
@@ -133,7 +146,7 @@ void QTreeMapArea::squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int 
   }
 #endif
 
-  if(ci==slist->count()-1){
+  if(ci==(int)slist->count()-1){
     layoutRow(slist,sri,ci,x0,y0,xd0,yd0,direction,0,0,level,cushion,fx,fy,findmode);
     return;
   }
@@ -196,6 +209,10 @@ void QTreeMapArea::squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int 
 
 void QTreeMapArea::layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0,int yd0,bool direction, int w,int w2, int level,Cushion *cushion,int fx,int fy,int findmode){
   //  printf("layout: %s\n",fullName((Object *)(slist->at(sri))).latin1());
+
+  NOT_USED(w);
+  NOT_USED(w2);
+
 #ifdef DEBUG_SQR
   printf("layout: [ ");
   printList(slist,sri,ri);
@@ -246,11 +263,6 @@ void QTreeMapArea::layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0
       yd=(float)yd0;
     }
 
-    QColor basecolor=getBaseColor(fullName(child));
-
-    //    paintEntry((int)x,(int)y,(int)xd,(int)yd,fullName(child),direction,0,basecolor,options->paintmode,NULL);
-
-    //squarifyTree(child,(int)x,(int)y,(int)xd,(int)yd,0,level,cushion,fx,fy,findmode);
     drawDuTree(child,(int)x,(int)y,(int)xd,(int)yd,0,level,cushion,fx,fy,findmode);
     
     if(direction==HORIZONTAL){
@@ -270,7 +282,7 @@ float QTreeMapArea::sum_list(ObjList *slist,int i1,int i2,bool print_it){
      float size=(float)totalSize((Object *)(slist->at(i)));
      sum+=size;
        if(print_it){
-	 printf("%d ",(long)size);
+	 printf("%ld ",(long)size);
        }
    }
    return sum;

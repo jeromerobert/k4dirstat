@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.7 2001/07/11 19:54:49 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.8 2001/07/12 01:44:17 alexannika Exp $
  *
  */
 
@@ -77,6 +77,8 @@ namespace KDirStat
 #define PM_HIERARCH_TEST_CUSHION 16
 #define PM_HIERARCH_PYRAMID 17
 #define PM_HIERARCH_DIST_PYRAMID 18
+#define PM_HIERARCH_DIST_SIN_PYRAMID 19
+#define PM_IMAGES 20
 
   // draw modes
 

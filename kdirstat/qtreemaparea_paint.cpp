@@ -61,11 +61,19 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
       painter->setBrush( Qt::NoBrush );
 
     painter->drawRect(x0,y0,xd,yd);
-    //painter->flush();
   }
   else if(pmode==PM_FLAT){
     painter->fillRect(x0,y0,xd,yd,basecolor);
-    //painter->flush();
+  }
+  else if(pmode==PM_IMAGES){
+    painter->fillRect(x0,y0,xd,yd,basecolor);
+    
+    QPixmap *pic=new QPixmap(entry_name);
+    if(pic && !(pic->isNull())){
+      pic->resize(xd,yd);
+      painter->drawPixmap(x0,y0,*pic,0,0);
+    }
+    delete pic;
   }
   else if(pmode==PM_HIERARCH_DIST_PYRAMID){
     for(int w=0;w<xd;w++){
@@ -73,25 +81,64 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
 	int maxdist_x,maxdist_y,dx,dy;
 
 	if(w < c->ncxd){
-	  maxdist_x=c->ncxd;
+	  maxdist_x=(int)c->ncxd;
 	  dx=w;
 	}
 	else{
-	  maxdist_x=xd - c->ncxd;
+	  maxdist_x=xd - (int)c->ncxd;
 	  dx=xd-w;
 	}
 	if(h < c->ncyd){
-	  maxdist_y=c->ncyd;
+	  maxdist_y=(int)c->ncyd;
 	  dy=h;
 	}
 	else{
-	  maxdist_y=yd - c->ncyd;
+	  maxdist_y=yd - (int)c->ncyd;
 	  dy=yd-h;
 	}
 	float ix=((float)dx)/(float)maxdist_x;
 	float iy=((float)dy)/(float)maxdist_y;
-	//float i=(ix+iy)/2.0;
-	float i=sqrt(ix*iy);
+	float i=(ix+iy)/2.0;
+	//float i=sqrt(ix*iy);
+
+	QColor newcol=QColor(check_int((int)(basecolor.red()*i)),
+			     check_int((int)(basecolor.green()*i)),
+			     check_int((int)(basecolor.blue()*i)));
+	mypen.setColor(newcol);
+	mypen.setWidth( 1);
+	painter->setPen( mypen );
+	painter->setBrush( Qt::NoBrush );
+	
+	painter->drawPoint(x0+w,y0+h);
+
+      }
+    }
+  }
+  else if(pmode==PM_HIERARCH_DIST_SIN_PYRAMID){
+    for(int w=0;w<xd;w++){
+      for(int h=0;h<yd;h++){
+	int maxdist_x,maxdist_y,dx,dy;
+
+	if(w < c->ncxd){
+	  maxdist_x=(int)c->ncxd;
+	  dx=w;
+	}
+	else{
+	  maxdist_x=xd - (int)c->ncxd;
+	  dx=xd-w;
+	}
+	if(h < c->ncyd){
+	  maxdist_y=(int)c->ncyd;
+	  dy=h;
+	}
+	else{
+	  maxdist_y=yd - (int)c->ncyd;
+	  dy=yd-h;
+	}
+	float ix=sin(((float)dx)/(float)maxdist_x);
+	float iy=sin(((float)dy)/(float)maxdist_y);
+	float i=(ix+iy)/2.0;
+	//float i=sqrt(ix*iy);
 
 	QColor newcol=QColor(check_int((int)(basecolor.red()*i)),
 			     check_int((int)(basecolor.green()*i)),

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.7 2001/07/11 19:54:49 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.8 2001/07/12 01:44:17 alexannika Exp $
  *
  */
 
@@ -60,6 +60,7 @@ void QTreeMapWindow::makeWidgets(){
 
   menu_paint_mode=new QPopupMenu(this);
   makeRadioPopup(menu_paint_mode,QString("Flat"), SLOT(selectShading(int)),PM_FLAT);
+  makeRadioPopup(menu_paint_mode,QString("Images"), SLOT(selectShading(int)),PM_IMAGES);
   makeRadioPopup(menu_paint_mode,QString("Sinus"), SLOT(selectShading(int)),PM_SIMPLE_CUSHION);
   makeRadioPopup(menu_paint_mode,QString("Sinus 2"), SLOT(selectShading(int)),PM_WAVE_CUSHION);
   makeRadioPopup(menu_paint_mode,QString("fast Bumb"), SLOT(selectShading(int)),PM_SQUARE_CUSHION);
@@ -73,6 +74,7 @@ void QTreeMapWindow::makeWidgets(){
   makeRadioPopup(menu_paint_mode,QString("hierarch. Dist. Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH4_CUSHION);
   makeRadioPopup(menu_paint_mode,QString("hierarch. pyramid"), SLOT(selectShading(int)),PM_HIERARCH_PYRAMID);
   makeRadioPopup(menu_paint_mode,QString("hierarch. dist. pyramid"), SLOT(selectShading(int)),PM_HIERARCH_DIST_PYRAMID);
+  makeRadioPopup(menu_paint_mode,QString("hierarch. dist. sin pyramid"), SLOT(selectShading(int)),PM_HIERARCH_DIST_SIN_PYRAMID);
   makeRadioPopup(menu_paint_mode,QString("hierarch.5 Cushion"), SLOT(selectShading(int)),PM_HIERARCH5_CUSHION);
   makeRadioPopup(menu_paint_mode,QString("hierarch. Debug Cushion"), SLOT(selectShading(int)),PM_HIERARCH_TEST_CUSHION);
   menu_paint_mode->setCheckable(TRUE);
