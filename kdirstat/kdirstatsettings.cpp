@@ -6,7 +6,7 @@
  *
  *   Updated:	2003-01-06
  *
- *   $Id: kdirstatsettings.cpp,v 1.5 2003/01/06 13:37:53 hundhammer Exp $
+ *   $Id: kdirstatsettings.cpp,v 1.6 2003/01/06 14:18:52 hundhammer Exp $
  *
  */
 
@@ -819,16 +819,20 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 
     QLabel * label	= new QLabel( i18n( "Ambient &Light" ), gbox );
     QHBox * hbox	= new QHBox( gbox );
-    _ambientLight	= new QSlider( 0, 250, 10, 40, Horizontal, hbox );	// min, max, pageStep, val
-    _ambientLightSB	= new QSpinBox( 0, 250, 1, hbox );			// min, max, step
+    _ambientLight	= new QSlider ( MinAmbientLight, MaxAmbientLight, 10,	// min, max, pageStep
+					DefaultAmbientLight, Horizontal, hbox );
+    _ambientLightSB	= new QSpinBox( MinAmbientLight, MaxAmbientLight, 1,	// min, max, step
+					hbox );
     _ambientLightSB->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     label->setBuddy( _ambientLightSB );
 
     gbox->addSpace( 7 );
     label		= new QLabel( i18n( "&Height Scale" ), gbox );
     hbox		= new QHBox( gbox );
-    _heightScalePercent = new QSlider( 10, 200, 10, 75, Horizontal, hbox );	// min, max, pageStep, val
-    _heightScalePercentSB = new QSpinBox( 10, 200, 1, hbox );			// min, max, step
+    _heightScalePercent = new QSlider( MinHeightScalePercent, MaxHeightScalePercent, 10,   // min, max, pageStep
+				       DefaultHeightScalePercent, Horizontal, hbox );
+    _heightScalePercentSB = new QSpinBox( MinHeightScalePercent, MaxHeightScalePercent, 1, // min, max, step
+					  hbox );
     _heightScalePercentSB->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
     label->setBuddy( _heightScalePercentSB );
 
@@ -960,11 +964,11 @@ KTreemapPage::revertToDefaults()
     _squarify->setChecked( true );
     _doCushionShading->setChecked( true );
 
-    _ambientLight->setValue( 40 );
-    _heightScalePercent->setValue( 75 );
+    _ambientLight->setValue( DefaultAmbientLight );
+    _heightScalePercent->setValue( DefaultHeightScalePercent );
     _ensureContrast->setChecked( true );
     _forceCushionGrid->setChecked( false );
-    _minTileSize->setValue( 3 );
+    _minTileSize->setValue( DefaultMinTileSize );
     _autoResize->setChecked( true );
 
     _cushionGridColor->setColor ( QColor( 0x80, 0x80, 0x80 ) );
@@ -984,11 +988,11 @@ KTreemapPage::setup()
     _squarify->setChecked		( config->readBoolEntry( "Squarify"		, true	) );
     _doCushionShading->setChecked	( config->readBoolEntry( "CushionShading"	, true	) );
 
-    _ambientLight->setValue		( config->readNumEntry( "AmbientLight"		,  40	) );
-    _heightScalePercent->setValue( 100 *  config->readDoubleNumEntry ( "HeightScaleFactor", 0.75) );
+    _ambientLight->setValue		( config->readNumEntry( "AmbientLight"		  , DefaultAmbientLight       ) );
+    _heightScalePercent->setValue( 100 *  config->readDoubleNumEntry ( "HeightScaleFactor", DefaultHeightScalePercent ) );
     _ensureContrast->setChecked		( config->readBoolEntry( "EnsureContrast"	, true	) );
     _forceCushionGrid->setChecked	( config->readBoolEntry( "ForceCushionGrid"	, false ) );
-    _minTileSize->setValue		( config->readNumEntry ( "MinTileSize"		, 3	) );
+    _minTileSize->setValue		( config->readNumEntry ( "MinTileSize"		, DefaultMinTileSize ) );
     _autoResize->setChecked		( config->readBoolEntry( "AutoResize"		, true	) );
 
     _cushionGridColor->setColor ( readColorEntry( config, "CushionGridColor"	, QColor( 0x80, 0x80, 0x80 ) ) );
@@ -999,7 +1003,7 @@ KTreemapPage::setup()
 
     _ambientLightSB->setValue( _ambientLight->value() );
     _heightScalePercentSB->setValue( _heightScalePercent->value() );
-    
+
     checkEnabledState();
 }
 

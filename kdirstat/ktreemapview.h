@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-04
+ *   Updated:	2003-01-06
  *
- *   $Id: ktreemapview.h,v 1.2 2003/01/05 14:52:29 hundhammer Exp $
+ *   $Id: ktreemapview.h,v 1.3 2003/01/06 14:19:01 hundhammer Exp $
  *
  */
 
@@ -18,6 +18,19 @@
 #ifdef HAVE_CONFIG_H
 #   include <config.h>
 #endif
+
+
+#define MinAmbientLight			0
+#define MaxAmbientLight			200
+#define DefaultAmbientLight		40
+
+#define	MinHeightScalePercent		10
+#define	MaxHeightScalePercent		300
+#define DefaultHeightScalePercent	100
+#define DefaultHeightScaleFactor	( DefaultHeightScalePercent / 100.0 )
+
+#define DefaultMinTileSize		3
+#define CushionHeight			1.0
 
 
 class QMouseEvent;

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-05
+ *   Updated:	2003-01-06
  *
- *   $Id: ktreemapview.cpp,v 1.3 2003/01/05 14:52:29 hundhammer Exp $
+ *   $Id: ktreemapview.cpp,v 1.4 2003/01/06 14:18:56 hundhammer Exp $
  *
  */
 
@@ -89,16 +89,16 @@ KTreemapView::readConfig()
     KConfig * config = kapp->config();
     config->setGroup( "Treemaps" );
 
-    _ambientLight	= config->readNumEntry( "AmbientLight"		,  40	);
+    _ambientLight	= config->readNumEntry( "AmbientLight"		,  DefaultAmbientLight );
     _lightIntensity	= 255 - _ambientLight;
 
-    _heightScaleFactor	= config->readDoubleNumEntry ( "HeightScaleFactor" , 0.75 );
+    _heightScaleFactor	= config->readDoubleNumEntry ( "HeightScaleFactor" , DefaultHeightScaleFactor );
     _autoResize		= config->readBoolEntry( "AutoResize"		, true	);
     _squarify		= config->readBoolEntry( "Squarify"		, true	);
     _doCushionShading	= config->readBoolEntry( "CushionShading"	, true	);
     _ensureContrast	= config->readBoolEntry( "EnsureContrast"	, true	);
     _forceCushionGrid	= config->readBoolEntry( "ForceCushionGrid"	, false	);
-    _minTileSize	= config->readNumEntry ( "MinTileSize"		, 3	);
+    _minTileSize	= config->readNumEntry ( "MinTileSize"		, DefaultMinTileSize );
 
     _highlightColor	= readColorEntry( config, "HighlightColor"	, red			     );
     _cushionGridColor	= readColorEntry( config, "CushionGridColor"	, QColor( 0x80, 0x80, 0x80 ) );

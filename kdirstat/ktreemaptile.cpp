@@ -6,7 +6,7 @@
  *
  *   Updated:	2003-01-06
  *
- *   $Id: ktreemaptile.cpp,v 1.4 2003/01/06 13:38:46 hundhammer Exp $
+ *   $Id: ktreemaptile.cpp,v 1.5 2003/01/06 14:18:55 hundhammer Exp $
  *
  */
 
@@ -144,11 +144,13 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
     double scale   = rect.width() * (double) rect.height() / _orig->totalSize();
     double minSize = _parentView->minTileSize() / scale;
 
+#if 0
     if ( _orig->hasChildren() )
     {
 	_cushionSurface.addRidge( KTreemapHorizontal, _cushionSurface.height(), rect );
 	_cushionSurface.addRidge( KTreemapVertical,   _cushionSurface.height(), rect );
     }
+#endif
 
     KFileInfoSortedBySizeIterator it( _orig, minSize, KDotEntryAsSubDir );
     QRect childrenRect = rect;
@@ -281,7 +283,6 @@ KTreemapTile::layoutRow( const QRect &		rect,
 	    tile->cushionSurface().addRidge( dir,
 					     _cushionSurface.height() * _parentView->heightScaleFactor(),
 					     childRect );
-
 	    offset += childSize;
 	}
 
@@ -505,7 +506,7 @@ KCushionSurface::KCushionSurface()
     _xx1 	= 0.0;
     _yy2 	= 0.0;
     _yy1 	= 0.0;
-    _height	= 0.75;	// DEBUG
+    _height	= CushionHeight;
 }
 
 
