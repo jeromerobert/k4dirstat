@@ -5,6 +5,7 @@ Makefile
 *.o
 *.moc.cpp
 kdirstat_meta_unload.cpp
+kdirstat
 *.bak
 *.auto
 *~
