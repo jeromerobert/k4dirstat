@@ -21,6 +21,7 @@ kdirstat_SOURCES =				\
 	kcleanupcollection.cpp			\
 	kdirstatsettings.cpp			\
 	kdirsaver.cpp				\
+	kactivitytracker.cpp			\
 	kpacman.cpp
 
 
@@ -47,6 +48,7 @@ noinst_HEADERS =				\
 	kcleanupcollection.h			\
 	kdirstatsettings.h			\
 	kdirsaver.h				\
+	kactivitytracker.h			\
 	kpacman.h
 
 

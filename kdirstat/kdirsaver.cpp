@@ -1,13 +1,12 @@
-
 /*
- *   File name:	kdirsaver.h
+ *   File name:	kdirsaver.cpp
  *   Summary:	Utility object to save current working directory
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-02
+ *   Updated:	2002-02-09
  *
- *   $Id: kdirsaver.cpp,v 1.2 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kdirsaver.cpp,v 1.3 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 

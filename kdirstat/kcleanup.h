@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-02-09
  *
- *   $Id: kcleanup.h,v 1.3 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kcleanup.h,v 1.4 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -246,8 +246,20 @@ namespace KDirStat
 	 * Save configuration.
 	 **/
 	void saveConfig() const;
-	
 
+
+    signals:
+
+	/**
+	 * Emitted after the action is executed.
+	 *
+	 * Please note that there intentionally is no reference as to which
+	 * object the action was executed upon since this object very likely
+	 * doesn't exist any more.
+	 **/
+	void executed();
+
+	
     protected slots:
 
         /**

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-27
+ *   Updated:	2002-02-09
  *
- *   $Id: kdirtree.cpp,v 1.8 2002/01/28 14:40:20 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.9 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -66,6 +66,11 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
     _size	 = statInfo->st_size;
     _blocks	 = statInfo->st_blocks;
     _mtime	 = statInfo->st_mtime;
+
+#if 0
+#warning Debug mode: Huge sizes
+    _size <<= 10;
+#endif
 }
 
 

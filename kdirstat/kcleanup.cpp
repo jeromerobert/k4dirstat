@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-27
+ *   Updated:	2002-02-09
  *
- *   $Id: kcleanup.cpp,v 1.4 2002/01/28 14:40:20 hundhammer Exp $
+ *   $Id: kcleanup.cpp,v 1.5 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -203,6 +203,8 @@ KCleanup::execute( KFileInfo *item )
 		break;
 	}
     }
+
+    emit executed();
 }
 
 

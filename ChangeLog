@@ -1,3 +1,16 @@
+2002-02-10  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed double slashes in URLs when opening with file selection box
+	* Bumped version to 1.8.7-rc2
+
+2002-02-09  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed huge numbers overflow in details context popup
+	* Fixed huge numbers sorting
+	* Added new action "continue reading at mount point".
+	  This is essentially the same as "refreshing selected branch",
+	  but it's more intuitive to use.
+
 2002-02-02  Stefan Hundhammer  <sh@suse.de>
 
 	* Initial help documentation

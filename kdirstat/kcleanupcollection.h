@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-03
+ *   Updated:	2002-02-09
  *
- *   $Id: kcleanupcollection.h,v 1.1 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kcleanupcollection.h,v 1.2 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -186,6 +186,21 @@ namespace KDirStat
 	 * Save configuration for all cleanups.
 	 **/
 	void saveConfig();
+
+	/**
+	 * Emitted at user activity, i.e. when the user executes a cleanup.
+	 * This is intended for use together with a @ref KActivityTracker.
+	 **/
+	void userActivity( int points );
+
+
+    protected slots:
+
+        /**
+	 * Connected to each cleanup's @ref executed() signal to track user
+	 * activity. 
+	 **/
+	void cleanupExecuted();
 
 
     protected:

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-10
+ *   Updated:	2002-02-09
  *
- *   $Id: kdirtreeview.h,v 1.11 2002/01/10 16:01:10 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.12 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -299,6 +299,11 @@ namespace KDirStat
 	 **/
 	void saveConfig() const;
 
+	/**
+	 * Emit a @ref userActivity() signal worth 'points' activity points.
+	 **/
+	void logActivity( int points );
+
 
     protected slots:
 
@@ -439,7 +444,16 @@ namespace KDirStat
 	 **/
 	void contextMenu( KDirTreeViewItem *item, const QPoint &pos );
 
+	/**
+	 * Emitted at user activity. Some interactive actions are assigned an
+	 * amount of "activity points" that can be used to judge whether or not
+	 * the user is actually using this program or if it's just idly sitting
+	 * around on the desktop. This is intended for use together with a @ref
+	 * KActivityTracker.
+	 **/
+	void userActivity( int points );
 
+	
     protected:
 
 	KDirTree *		_tree;
@@ -705,6 +719,18 @@ namespace KDirStat
      * etc. rather than huge numbers of digits.
      **/
     QString formatSize ( KFileSize lSize );
+
+    /**
+     * Format a file size with all digits, yet human readable using the current
+     * locale's thousand separator, i.e. 12,345,678 rather than 12345678
+     **/
+    QString formatSizeLong( KFileSize size );
+
+    /**
+     * Format a file size for use within a QListView::key() function:
+     * Right-justify and fill with leading zeroes.
+     **/
+    QString hexKey( KFileSize size );
 
     /**
      * Format a millisecond granularity time human readable.

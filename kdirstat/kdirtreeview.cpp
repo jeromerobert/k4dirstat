@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-05
+ *   Updated:	2002-02-10
  *
- *   $Id: kdirtreeview.cpp,v 1.15 2002/02/05 11:28:54 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.16 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -236,7 +236,9 @@ KDirTreeView::openURL( KURL url )
 	     this,  SLOT  ( selectItem      ( KFileInfo * ) ) );
 
     prepareReading();
-    _tree->startReading( url );
+    _tree->startReading( fixedUrl( url.url() ) );
+
+    logActivity( 30 );
 }
 
 
@@ -295,6 +297,8 @@ KDirTreeView::refreshSelected()
 	prepareReading();
 	_tree->refresh( _selection->orig() );
     }
+
+    logActivity( 10 );
 }
 
 
@@ -409,6 +413,7 @@ KDirTreeView::slotFinished()
 
     idleDisplay();
     updateSummary();
+    logActivity( 30 );
 
     emit finished();
 }
@@ -687,6 +692,8 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
     {
 	popupContextInfo( pos, formatTimeDate( item->orig()->latestMtime() ) );
     }
+
+    logActivity( 2 );
 }
 
 
@@ -694,12 +701,13 @@ void
 KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
 				    KFileSize		size )
 {
-    if ( size < 1024 )	// Small sizes are exactly displayed within the tree.
-	return;
+    QString info = formatSizeLong( size ) + " " + i18n( "Bytes" );
+    
+    if ( size > 1024 )
+    {
+	info += " (" + formatSize( size ) + ")";
+    }
 
-    QString info;
-    info.sprintf( "%ld ", (long) size );
-    info += i18n( "Bytes" );
     popupContextInfo( pos, info );
 }
 
@@ -765,6 +773,12 @@ KDirTreeView::saveConfig() const
 }
 
 
+void
+KDirTreeView::logActivity( int points )
+{
+    emit userActivity( points );
+}
+
 
 void
 KDirTreeView::columnResized( int column, int oldSize, int newSize )
@@ -812,6 +826,7 @@ KDirTreeView::sendMailToOwner()
     // anything - this is too system dependent.
     
     kapp->invokeMailer( mail );
+    logActivity( 10 );
 }
 
 
@@ -1192,6 +1207,8 @@ KDirTreeViewItem::setOpen( bool open )
 
     if ( open )
 	updateSummary();
+
+    _view->logActivity( 1 );
 }
 
 
@@ -1235,22 +1252,15 @@ KDirTreeViewItem::key( int column, bool ascending ) const
     static QString sortKey;
     NOT_USED( ascending );
 
-    if ( column == _view->totalSizeCol() ||
-	 column == _view->percentNumCol()  ||
-	 column == _view->percentBarCol()    )
+    if ( column == _view->totalSizeCol()  ||
+	 column == _view->percentNumCol() ||
+	 column == _view->percentBarCol()   )
     {
-	// Prevent brain-dead compiler warning
-	// "ANSI C does not support the `L' length modifier"
-
-	QString format = "%022Ld";
-	sortKey.sprintf( format, KFileSizeMax - _orig->totalSize() );
+	sortKey = hexKey( KFileSizeMax - _orig->totalSize() );
+	    
     } else if ( column == _view->ownSizeCol() )
     {
-	// Prevent brain-dead compiler warning
-	// "ANSI C does not support the `L' length modifier"
-
-	QString format = "%022Ld";
-	sortKey.sprintf( format, KFileSizeMax - _orig->size() );
+	sortKey = hexKey( KFileSizeMax - _orig->size() );
     } else if ( column == _view->totalItemsCol() )
     {
 	sortKey.sprintf( "%010d", INT_MAX - _orig->totalItems() );
@@ -1478,6 +1488,54 @@ KDirStat::formatSize( KFileSize lSize )
 
 
 QString
+KDirStat::formatSizeLong( KFileSize size )
+{
+    QString sizeText;
+    int count = 0;
+
+    while ( size > 0 )
+    {
+	sizeText = ( ( size % 10 ) + '0' ) + sizeText;
+	size /= 10;
+	
+	if ( ++count == 3 && size > 0 )
+	{
+	    sizeText = KGlobal::locale()->thousandsSeparator() + sizeText;
+	    count = 0;
+	}
+    }
+
+    return sizeText;
+}
+
+
+QString
+KDirStat::hexKey( KFileSize size )
+{
+    /**
+     * This is optimized for performance, not for aesthetics.
+     * And every now and then the old C hacker breaks through in most of us...
+     * ;-)
+     **/
+    
+    static const char hexDigits[] = "0123456789ABCDEF";
+    char key[ sizeof( KFileSize ) * 2 + 1 ];	// 2 hex digits per byte required
+    char *cptr = key + sizeof( key ) - 1;	// now points to last char of key
+    
+    memset( key, '0', sizeof( key ) - 1 );	// fill with zeroes
+    *cptr-- = 0;				// terminate string
+
+    while ( size > 0 )
+    {
+	*cptr-- = hexDigits[ size & 0xF ];	// same as size % 16
+	size >>= 4;				// same as size /= 16
+    }
+
+    return QString( key );
+}
+
+
+QString
 KDirStat::formatTime( long millisec, bool showMilliSeconds )
 {
     QString formattedTime;
@@ -1582,7 +1640,6 @@ KDirStat::formatTimeDate( time_t rawTime )
 
     return timeDateString;
 }
-
 
 
 QString

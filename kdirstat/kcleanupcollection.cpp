@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-02-09
  *
- *   $Id: kcleanupcollection.cpp,v 1.1 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kcleanupcollection.cpp,v 1.2 2002/02/11 10:04:33 hundhammer Exp $
  *
  */
 
@@ -196,11 +196,14 @@ KCleanupCollection::add( KCleanup *newCleanup )
     connect( this,       SIGNAL( selectionChanged( KFileInfo * ) ),
 	     newCleanup, SLOT  ( selectionChanged( KFileInfo * ) ) );
     
-    connect( this,       SIGNAL( readConfig( void ) ),
-	     newCleanup, SLOT  ( readConfig( void ) ) );
+    connect( this,       SIGNAL( readConfig() ),
+	     newCleanup, SLOT  ( readConfig() ) );
     
-    connect( this,       SIGNAL( saveConfig( void ) ),
-	     newCleanup, SLOT  ( saveConfig( void ) ) );
+    connect( this,       SIGNAL( saveConfig() ),
+	     newCleanup, SLOT  ( saveConfig() ) );
+    
+    connect( newCleanup, SIGNAL( executed() ),
+	     this, 	 SLOT  ( cleanupExecuted() ) );
 }
 
 
@@ -263,6 +266,13 @@ void
 KCleanupCollection::slotReadConfig()
 {
     emit readConfig();
+}
+
+
+void
+KCleanupCollection::cleanupExecuted()
+{
+    emit userActivity( 10 );
 }
 
 
