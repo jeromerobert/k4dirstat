@@ -16,7 +16,7 @@ type=DATA
 [Config for BinMakefileAm]
 bin_program=kdirstat
 cxxflags=-O0 -g3 -Wall
-ldadd=-lkfile -lkdeui -lkdecore $(LIB_QT)
+ldadd=$(LIB_KFILE) -lkdeui -lkdecore $(LIB_QT)
 ldflags=
 [General]
 AMChanged=false
@@ -44,7 +44,7 @@ Headers=*.h,*.hh,*.hxx,*.hpp,*.H
 Others=*
 Sources=*.cpp,*.c,*.cc,*.C,*.cxx,*.ec,*.ecpp,*.lxx,*.l++,*.ll,*.l
 Translations=*.po
-User Interface=*.kdevdlg,*.ui,*.rc
+B_KFILEUser Interface=*.kdevdlg,*.ui,*.rc
 groups=Headers,Sources,User Interface,Translations,GNU,Others
 [Makefile.am]
 files=kdirstat.kdevprj,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kdirstat.lsm
