@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2004-11-23
+ *   Updated:	2005-01-07
  */
 
 
@@ -22,7 +22,7 @@
 #include "kio/job.h"
 #include "kio/netaccess.h"
 
-#define HAVE_STUPID_COMPILER 1
+#define HAVE_STUPID_COMPILER 0
 
 
 using namespace KDirStat;
@@ -35,14 +35,15 @@ KFileInfo::KFileInfo( KDirTree   *	tree,
     , _next( 0 )
     , _tree( tree )
 {
-    _isLocalFile = true;
-    _name	 = name ? name : "";
-    _device	 = 0;
-    _mode	 = 0;
-    _links	 = 0;
-    _size	 = 0;
-    _blocks	 = 0;
-    _mtime	 = 0;
+    _isLocalFile	= true;
+    _isSparseFile	= false;
+    _name	 	= name ? name : "";
+    _device	 	= 0;
+    _mode	 	= 0;
+    _links	 	= 0;
+    _size	 	= 0;
+    _blocks	 	= 0;
+    _mtime	 	= 0;
 }
 
 
@@ -66,13 +67,30 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 
     if ( isSpecial() )
     {
-	_size	 = 0;
-	_blocks	 = 0;
+	_size	 	= 0;
+	_blocks	 	= 0;
+	_isSparseFile	= false;
     }
     else
     {
-	_size	 = statInfo->st_size;
-	_blocks	 = statInfo->st_blocks;
+	_size	 	= statInfo->st_size;
+	_blocks	 	= statInfo->st_blocks;
+	_isSparseFile	= isFile() && ( allocatedSize() < _size );
+
+	if ( _isSparseFile )
+	{
+	    kdDebug() << "Found sparse file: " << this 
+		      << "    Byte size: " << formatSize( byteSize() )
+		      << "  Allocated: " << formatSize( allocatedSize() )
+		      << endl;
+	}
+
+#if 0
+	if ( isFile() && _links > 1 )
+	{
+	    kdDebug() << _links << " hard links: " << this << endl;
+	}
+#endif
     }
     
 #if 0
@@ -96,19 +114,30 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
     _device	 = 0;
     _mode	 = fileItem->mode();
     _links	 = 1;
+
     
     if ( isSpecial() )
     {
-	_size	 = 0;
-	_blocks	 = 0;
+	_size	 	= 0;
+	_blocks	 	= 0;
+	_isSparseFile 	= false;
     }
     else
     {
 	_size	 = fileItem->size();
+
+	// Since KFileItem does not return any information about allocated disk
+	// blocks, calculate that information artificially so callers don't
+	// need to bother with special cases depending on how this object was
+	// constructed.
+	
 	_blocks	 = _size / blockSize();
 
 	if ( ( _size % blockSize() ) > 0 )
 	    _blocks++;
+
+	// There is no way to find out via KFileInfo if this is a sparse file.
+	_isSparseFile = false;
     }
 
     _mtime	 = fileItem->time( KIO::UDS_MODIFICATION_TIME );
@@ -130,6 +159,25 @@ KFileInfo::~KFileInfo()
      *
      * This sucks, but it's the C++ standard.
      **/
+}
+
+
+KFileSize
+KFileInfo::allocatedSize() const
+{
+    return blocks() * blockSize();
+}
+
+
+KFileSize
+KFileInfo::size() const
+{
+    KFileSize sz = _isSparseFile ? allocatedSize() : _size;
+
+    if ( _links > 1 )
+	sz /= _links;
+
+    return sz;
 }
 
 

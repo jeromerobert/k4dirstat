@@ -56,10 +56,7 @@ as Authors, publish date, the abstract, and Keywords -->
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
-<year>1999</year>
-<year>2000</year>
-<year>2001</year>
-<year>2002</year>
+<year>1999-2005</year>
 <holder>Stefan Hundhammer</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
@@ -173,6 +170,20 @@ cluttering the display
 
 <listitem><para>
 All numbers displayed human readable - e.g., 34.4 MB instead of 36116381 Bytes
+</para></listitem>
+
+
+<listitem><para>
+Reasonable handling of sparse files - only blocks that are actually allocated
+are added up to the total sums.
+</para></listitem>
+
+
+<listitem><para>
+Reasonable handling of (regular) files with multiple hard links - their size is
+divided by their number of hard links, thus evenly distributing their size over
+the directories they are linked to -- and, more importantly, not adding the same
+file up several times.
 </para></listitem>
 
 
@@ -1442,7 +1453,7 @@ A typical feedback mail looks about like that:
 
 <para>
 <screen width="60">
-<userinput>[kde-feedback] KDirStat-2.0.0 user feedback</userinput>
+<userinput>[kde-feedback] KDirStat-2.4.4 user feedback</userinput>
 
 <userinput>&lt;comment&gt;</userinput>
 <userinput>This is where the personal comments go.</userinput>
@@ -1507,25 +1518,7 @@ from them.
 
 <qandaset id="faqlist">
 
-<qandaentry id="mail_client">
-<question>
-<para>
-I don't want to use KMail every time I send a mail with &kdirstat;.
-How do I tell &kdirstat; to use a different mail client?
-</para>
-</question>
-<answer>
-<para>
-Start <userinput>kcontrol</userinput> or select
-<guibutton>Preferences</guibutton> in the KDE menu, then select
-<guibutton>Network</guibutton> -&gt; <guibutton>Email</guibutton> and enter
-your favourite mail client in the <guibutton>Preferred Email client</guibutton>
-field.
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry>
+<qandaentry id="ftp_server">
 <question>
 <para>
 Can I use &kdirstat; to sum up a directory on an FTP server?
@@ -1553,7 +1546,8 @@ idea of what it looks like.
 </answer>
 </qandaentry>
 
-<qandaentry>
+
+<qandaentry id="exact_byte_size">
 <question>
 <para>
 How do I get the exact byte size of an entry rather than Megabytes or
@@ -1567,7 +1561,8 @@ Right-click the number in the list.
 </answer>
 </qandaentry>
 
-<qandaentry>
+
+<qandaentry id="du_reports_different_total">
 <question>
 <para>
 Why does the "du" command sometimes report different
@@ -1602,8 +1597,236 @@ have subdirectories with a large number of tiny files.
 </answer>
 </qandaentry>
 
-<qandaentry>
-<question id="tree_colors">
+
+<qandaentry id="sparse_files">
+<question>
+<para>
+What does this display mean:
+<userinput>
+6.3 MB (allocated: 1.3 MB)
+</userinput>
+</para>
+</question>
+
+<answer>
+<para>
+This is a so-called "sparse file" (also known as "file with holes").
+This means that the file really is 6.3 MB  large, but only 1.3 MB of that are
+actually allocated - the rest are just zeroes.
+</para>
+<para>
+This is typical for core dumps (memory images of crashed programs written to a
+file named <userinput>core</userinput> or <userinput>core.*</userinput>)
+or binary database files: The kernel writes those files in a way so only real
+data content is allocated on disk and not the large amount of zeroes.
+</para>
+<para>
+Technically, a sparse file is created with the regular open() system call to
+open the file for writing, then using lseek() to extend the file size beyond
+its previous size and then writing at least one byte. The area between the old
+and the new file size becomes a "hole" in the file - it is not actually
+allocated on the disk. Upon reading this area, a value of zero is returned for
+each byte read. When bytes are written to that area, file system blocks are
+actually allocated, possibly creating two smaller holes before and after the
+area written to.
+</para>
+<para>
+Please note that most file utilities do not deal graciously with sparse
+files. Those that support them at all normally need special command line
+arguments. Otherwise they tend to simply reading all bytes (including all the
+zeroes from the holes) and writing them to a new location - which of course
+means that the resulting file is no longer sparse, but really occupies all the
+space its size indicates. This may mean that you can blow up the above 6.3 MB
+core dump file from 1.3 MB disk usage (and 5 MB zeroes in holes) to really
+6.3 MB disk usage.
+</para>
+<para>
+GNU file system utilities like
+<userinput>tar</userinput> and <userinput>rsync</userinput> at least support
+command line options to prevent that.
+GNU <userinput>cp</userinput> is a notable exception - it has a heuristic that
+seems to work very well.
+GUI driven file managers on the other hand tend to simply ignore this - even
+the most modern and cool looking ones.
+</para>
+<para>
+If in doubt, check your favourite file tools. Produce a core dump - they are
+normally sparse files. The more memory a program uses, the more likely it is to
+have large sections of zeroes in its memory image. Try this (in a shell):
+<itemizedlist>
+
+<listitem><para>
+Enable core dumps - they are usually disabled in most Linux distributions:
+</para>
+<para>
+<userinput>ulmit -c 128000</userinput>
+</para>
+<para>
+This sets the limit of core dump files to 128000 blocks (512 bytes each), i.e.,
+to 64 MB. This should be sufficient.
+</para></listitem>
+
+<listitem><para>
+Start a program with considerable memory consumption - in the background:
+</para>
+<para>
+<userinput>xmms &amp;</userinput>
+</para></listitem>
+
+<listitem><para>
+Make the program dump core:
+</para>
+<para>
+<userinput>kill -ABRT %xmms</userinput>
+</para>
+<para>
+This sends the ABORT signal to this process, terminating it with a core dump.
+</para></listitem>
+
+<listitem><para>
+Look at the core dump:
+</para>
+<para>
+<userinput>kdirstat .</userinput>
+</para>
+<para>
+or, for a neutral third-party program (from the Linux coreutils package):
+</para>
+<para>
+<userinput>/usr/bin/stat core*</userinput>
+</para>
+<para>
+(You need to multiply the "blocks" output with 512 to find out allocated disk space)
+</para></listitem>
+
+<listitem><para>
+Copy that core dump (e.g. to another directory) and look at it again. You will
+be surprised how "heavy" all those zeroes suddenly have become. Try that with
+several copy utilities (<userinput>/bin/cp</userinput>, file managers of your
+choice). Remember to always use the sparse original, not any blown-up copies!
+</para>
+<para>
+Moving files should always be safe (unless a file manager is really, really
+stupid), but copying can easily blow up sparse files to huge assemblies of
+meaningless zeroes.
+</para></listitem>
+
+</itemizedlist>
+</para>
+<para>
+Agreed, sparse files are rather uncommon these days, so this is usually not a
+problem. Just remember &kdirstat; knows how to deal with them. ;-)
+</para>
+<para>
+Please note that this special handling is only in effect if &kdirstat;'s
+optimized read methods for local files are used (you can turn this on and off
+in the <guibutton>Settings -&gt; General</guibutton> dialog) - KDE's KIO
+methods do not return this kind of information.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="hard_links">
+<question>
+<para>
+What does this display mean:
+<userinput>
+878.5 KB / 21 Links
+</userinput>
+</para>
+</question>
+<answer>
+<para>
+This means that this file has a number of hard links. &kdirstat; uses only the
+respective portion of its size for its statistics - in the above case, 878.5 KB
+/ 21 = 41.8 KB. When another link to this file is processed, the next 875.5/21
+KB are added to the total - and so on.
+</para>
+<para>
+The rationale is that is makes no sense to count such a file 21 times with its
+full size  - this would greatly distort the statistics. For example, look at
+<userinput>/usr/lib/locale</userinput> on a (SuSE) Linux system - many files
+there have multiple hard links to save disk space. The total sum of that
+directory on a SuSE Linux 9.2-i386 system is 40.5 MB -- as opposed to 205.6 MB
+that the added-up output of <userinput>/bin/ls -lR</userinput> would suggest
+(or &kdirstat; with <guibutton>use optimized local read methods</guibutton>
+turned off in the <guibutton>Settings -&gt; General</guibutton> dialog)
+- sometimes, as in this example, this really makes a difference!
+</para>
+<para>
+Technical background: In Unix/Linux file systems, files primarily have a
+numeric ID, their "i-number", the index of the corresponding "i-node", the file
+system's administrative information. Each directory entry of a file really is
+no more than a link to that i-node. You can have the very same file under
+several distinct names this way - even in different directories. The only
+limitation is that this is restricted to one file system (i.e. to one disk
+partition) because those i-numbers are unique only per file system.
+</para>
+<para>
+Hard links can also introduce a whole new dimenstion of problems with
+applications that create backup copies of working files - they usually only
+rename the original file to a backup name and write their content to a new
+file. Editors usually work that way. This however means that any additional
+hard links to that file now point to the outdated backup copy - which is
+normally not what is desired. Only very few applications handle this
+reasonably. So the bottom line is: Use hard links only if you know very well
+what you are doing.
+</para>
+<para>
+All this is probably why symbolic links have become so much more popular in recent
+years: They can also point to different file systems, even (via NFS) to
+different hosts in the network. On the downside, symlinks can also be stale -
+pointing into nothingness. This cannot happen with hard links: A file is only
+really deleted when the last of its links is deleted (this includes open
+i-nodes in memory - i.e., processes still having an open file handle to that
+i-node).
+</para>
+<para>
+Directories rely completely on hard links (this is also why &kdirstat; does not
+attempt to try anything smart with multiple-hard-link directories - it would
+make no sense): The ".." entries in each directory pointing to its parent is
+nothing else than another hard link to that parent (named ".."), and "." is
+nothing else than a hard link to itself. This is also why even a completely
+empty directory has a link count of 2 - one for "." in its own directory, one
+for its name in its parent directory.
+</para>
+<para>
+Like sparse files above, regular files with multiple hard links are pretty
+uncommon these days - but they are still used, and sometimes they can make a
+difference, and this is why &kdirstat; has special handling for them.
+</para>
+<para>
+Please note that this special handling is only in effect if &kdirstat;'s
+optimized read methods for local files are used (you can turn this on and off
+in the <guibutton>Settings -&gt; General</guibutton> dialog) - KDE's KIO
+methods do not return this kind of information.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="mail_client">
+<question>
+<para>
+I don't want to use KMail every time I send a mail with &kdirstat;.
+How do I tell &kdirstat; to use a different mail client?
+</para>
+</question>
+<answer>
+<para>
+Start <userinput>kcontrol</userinput> or select
+<guibutton>Preferences</guibutton> in the KDE menu, then select
+<guibutton>Network</guibutton> -&gt; <guibutton>Email</guibutton> and enter
+your favourite mail client in the <guibutton>Preferred Email client</guibutton>
+field.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="tree_colors">
+<question>
 <para>
 How do I get rid of those many percentage bar colors? I want them all displayed
 in the same color.
@@ -1694,7 +1917,7 @@ to believe that if it has windows, it has to run on MS Windows...
 </para>
 </listitem>
 
-<listitem><para>KDE 2.x</para></listitem>
+<listitem><para>KDE 3.x</para></listitem>
 
 </itemizedlist>
 

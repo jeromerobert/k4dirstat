@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-08-26
+ *   Updated:	2005-01-07
  */
 
 
@@ -200,9 +200,37 @@ namespace KDirStat
 	/**
 	 * The file size in bytes. This does not take unused space in the last
 	 * disk block (cluster) into account, yet it is the only size all kinds
-	 * of info functions can obtain.
+	 * of info functions can obtain. This is also what most file system
+	 * utilities (like "ls -l") display.
 	 **/
-	KFileSize		size()		const { return _size;	}
+	KFileSize		byteSize()	const { return _size;	}
+
+	/**
+	 * The number of bytes actually allocated on the file system. Usually
+	 * this will be more than @ref byteSize() since the last few bytes of a
+	 * file usually consume an additional cluster on the file system.
+	 *
+	 * In the case of sparse files, however, this might as well be
+	 * considerably less than @ref byteSize() - this means that this file
+	 * has "holes", i.e. large portions filled with zeros. This is typical
+	 * for large core dumps for example. The only way to create such a file
+	 * is to lseek() far ahead of the previous file size and then writing
+	 * data. Most file system utilities will however disregard the fact
+	 * that files are sparse files and simply allocate the holes as well,
+	 * thus greatly increasing the disk space consumption of such a
+	 * file. Only some few file system utilities like "cp", "rsync", "tar"
+	 * have options to handle this more graciously - but usually only when
+	 * specifically requested. See the respective man pages.
+	 **/
+	KFileSize		allocatedSize()	const;
+	
+	/**
+	 * The file size, taking into account multiple links for plain files or
+	 * the true allocated size for sparse files. For plain files with
+	 * multiple links this will be size/no_links, for sparse files it is
+	 * the number of bytes actually allocated.
+	 **/
+	KFileSize		size()		const;
 
 	/**
 	 * The file size in 512 byte blocks.
@@ -224,7 +252,7 @@ namespace KDirStat
 	 * Returns the total size in bytes of this subtree.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual KFileSize	totalSize()	{ return _size;	  }
+	virtual KFileSize	totalSize()	{ return size();  }
 
 	/**
 	 * Returns the total size in blocks of this subtree.
@@ -298,7 +326,7 @@ namespace KDirStat
 	 **/
 	virtual int		pendingReadJobs()	{ return 0;  }
 
-	
+
 	//
 	// Tree management
 	//
@@ -370,7 +398,7 @@ namespace KDirStat
 	 * it's only advisable to do so if a derived class comes up with a
 	 * different method than brute-force search all children.
 	 *
-	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>") 
+	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
 	 * is desired.
 	 **/
 	virtual KFileInfo * locate( QString url, bool findDotEntries = false );
@@ -466,6 +494,19 @@ namespace KDirStat
 	 **/
 	virtual bool isDirInfo() const { return false; }
 
+	/**
+	 * Returns true if this is a sparse file, i.e. if this file has
+	 * actually fewer disk blocks allocated than its byte size would call
+	 * for.
+	 *
+	 * This is a cheap operation since it relies on a cached flag that is
+	 * calculated in the constructor rather than doing repeated
+	 * calculations and comparisons.
+	 *
+	 * Please not that @ref size() already takes this into account.
+	 **/
+	bool isSparseFile() const { return _isSparseFile; }
+
 
 	//
 	// File type / mode convenience methods.
@@ -521,18 +562,19 @@ namespace KDirStat
 	// Keep this short in order to use as little memory as possible -
 	// there will be a _lot_ of entries of this kind!
 
-	QString		_name;		// the file name (without path!)
-	bool		_isLocalFile;	// flag: local or remote file?
-	dev_t		_device;	// device this object resides on
-	mode_t		_mode;		// file permissions + object type
-	nlink_t		_links;		// number of links
-	KFileSize	_size;		// size in bytes
-	KFileSize	_blocks;	// 512 bytes blocks
-	time_t		_mtime;		// modification time
-
-	KDirInfo *	_parent;	// pointer to the parent entry
-	KFileInfo *	_next;		// pointer to the next entry
-	KDirTree  *	_tree;		// pointer to the parent tree
+	QString		_name;			// the file name (without path!)
+	bool		_isLocalFile  :1;	// flag: local or remote file?
+	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
+	dev_t		_device;		// device this object resides on
+	mode_t		_mode;			// file permissions + object type
+	nlink_t		_links;			// number of links
+	KFileSize	_size;			// size in bytes
+	KFileSize	_blocks;		// 512 bytes blocks
+	time_t		_mtime;			// modification time
+						
+	KDirInfo *	_parent;		// pointer to the parent entry
+	KFileInfo *	_next;			// pointer to the next entry
+	KDirTree  *	_tree;			// pointer to the parent tree
     };	// class KFileInfo
 
 
@@ -747,7 +789,7 @@ namespace KDirStat
 	 * subtree.
 	 **/
 	void readJobFinished();
-	
+
 	/**
 	 * Notification of an aborted directory read job somewhere in the
 	 * subtree.
@@ -1135,7 +1177,7 @@ namespace KDirStat
 	 * Notice: This is a very expensive operation since the entire tree is
 	 * searched recursively.
 	 *
-	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>") 
+	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
 	 * is desired.
 	 *
 	 * This is just a convenience method that maps to
@@ -1241,7 +1283,7 @@ namespace KDirStat
 	 **/
 	bool isBusy() { return _isBusy; }
 
-	
+
     signals:
 
 	/**
@@ -1379,7 +1421,7 @@ namespace KDirStat
     /**
      * Human-readable output of a file size in a debug stream.
      **/
-    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileSize lSize )
+    inline kdbgstream & operator<< ( kdbgstream & stream, KFileSize lSize )
     {
 	stream << formatSize( lSize );
 

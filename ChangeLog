@@ -1,3 +1,25 @@
+2005-01-07  Stefan Hundhammer  <sh@suse.de>
+
+	* Improved handling of sparse files: 
+	  Now adding up only allocated size
+
+	* Improved handling of regular files with multiple links:
+	  Now adding up size / no_links per occurence.
+	  This is much closer to what "du" reports.
+
+	* Extended "own size" column context menu to show sparse files
+	  and regular files with multiple links
+
+	* Reordered "own size" column context menu for consistency: xxx MB (yyy Bytes)
+
+	* Removed currently read path from status line while reading:
+	  Much less flicker, no more constant window resizing, improved performance
+
+	* Added explanations for sparse files and multiple links to online help
+	
+	* Bumped version to 2.4.4
+	
+
 2004-12-06  Stefan Hundhammer  <sh@suse.de>
 
 	* Added "Open with" cleanup upon request by Jarl Friis <jarl@softace.dk>
@@ -15,7 +37,6 @@
 	* Fixed lots of KDE libs "deprecated" warnings
 
 	* Reimported admin/ subdir from a recent KDE version (3.3.0)
-
 
 	* Bumped version to 2.4.2
 

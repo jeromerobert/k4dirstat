@@ -1,6 +1,6 @@
 			    TODO list for KDirStat
 			   ========================
-							Updated: 2003-01-04
+							Updated: 2005-01-07
 
 - help text for "treemap" settings
 
@@ -10,19 +10,10 @@
 
 - make KDirStat a KPart
 
-- colorize treemap tiles according to their MIME type / file pattern
-  (e.g., all MP3s yellow, all PNGs blue, etc.)
-
-- German translation for program
-
 
 
 Maybe:
 ======
-
-- let user configure cleanup action keyboard accelerators
-
-- check in to the 'kdenonbeta' CVS - I don't like this part... ;-)
 
 - German help file
 

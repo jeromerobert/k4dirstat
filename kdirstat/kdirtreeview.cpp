@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-08-26
+ *   Updated:	2005-01-07
  */
 
 
@@ -28,6 +28,7 @@
 #include "kpacman.h"
 
 #define SEPARATE_READ_JOBS_COL	0
+#define VERBOSE_PROGRESS_INFO	0
 
 using namespace KDirStat;
 
@@ -196,7 +197,7 @@ KDirTreeView::idleDisplay()
 	setSorting( _percentNumCol );
     }
 #endif
-    
+
     _readJobsCol = -1;
 }
 
@@ -496,9 +497,14 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
 {
     _currentDir = newCurrentDir;
 
+#if VERBOSE_PROGRESS_INFO
     emit progressInfo( i18n( "Elapsed time: %1   reading directory %2" )
 		       .arg( formatTime( _stopWatch.elapsed() ) )
 		       .arg( _currentDir ) );
+#else
+    emit progressInfo( i18n( "Elapsed time: %1" )
+		       .arg( formatTime( _stopWatch.elapsed() ) ) );
+#endif
 }
 
 
@@ -772,7 +778,36 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
     if ( column == _ownSizeCol && ! item->orig()->isDotEntry() )
     {
-	popupContextSizeInfo( pos, item->orig()->size() );
+	KFileInfo * orig = item->orig();
+	
+	if ( orig->isSparseFile() || ( orig->links() > 1 && orig->isFile() ) )
+	{
+	    QString text;
+	    
+	    if ( orig->isSparseFile() )
+	    {
+		text = i18n( "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)" )
+		    .arg( formatSize( orig->byteSize() ) )
+		    .arg( formatSizeLong( orig->byteSize()  ) )
+		    .arg( formatSize( orig->allocatedSize() ) )
+		    .arg( formatSizeLong( orig->allocatedSize() ) );
+	    }
+	    else
+	    {
+		text = i18n( "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)" )
+		    .arg( formatSize( orig->byteSize() ) )
+		    .arg( formatSizeLong( orig->byteSize() ) )
+		    .arg( orig->links() )
+		    .arg( formatSize( orig->size() ) )
+		    .arg( formatSizeLong( orig->size() ) );
+	    }
+
+	    popupContextInfo( pos, text );
+	}
+	else
+	{
+	    popupContextSizeInfo( pos, orig->size() );
+	}
     }
 
     if ( column == _totalSizeCol &&
@@ -797,11 +832,17 @@ void
 KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
 				    KFileSize		size )
 {
-    QString info = formatSizeLong( size ) + " " + i18n( "Bytes" );
+    QString info;
 
-    if ( size > 1024 )
+    if ( size < 1024 )
     {
-	info += " (" + formatSize( size ) + ")";
+	info = formatSizeLong( size ) + " " + i18n( "Bytes" );
+    }
+    else
+    {
+	info = i18n( "%1 (%2 Bytes)" )
+	    .arg( formatSize( size ) )
+	    .arg( formatSizeLong( size ) );
     }
 
     popupContextInfo( pos, info );
@@ -982,7 +1023,39 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 
 	if ( ! _orig->isDevice() )
 	{
-	    setText( view->ownSizeCol(), formatSize( _orig->size() ) );
+	    QString text;
+
+	    if ( _orig->isFile() && ( _orig->links() > 1 ) ) // Regular file with multiple links
+	    {
+		if ( _orig->isSparseFile() )
+		{
+		    text = i18n( "%1 / %2 Links (allocated: %3)" )
+			.arg( formatSize( _orig->byteSize() ) )
+			.arg( formatSize( _orig->links() ) )
+			.arg( formatSize( _orig->allocatedSize() ) );
+		}
+		else
+		{
+		    text = i18n( "%1 / %2 Links" )
+			.arg( formatSize( _orig->byteSize() ) )
+			.arg( _orig->links() );
+		}
+	    }
+	    else // No multiple links or no regular file
+	    {
+		if ( _orig->isSparseFile() )
+		{
+		    text = i18n( "%1 (allocated: %2)" )
+			.arg( formatSize( _orig->byteSize() ) )
+			.arg( formatSize( _orig->allocatedSize() ) );
+		}
+		else
+		{
+		    text = formatSize( _orig->size() );
+		}
+	    }
+
+	    setText( view->ownSizeCol(), text );
 	}
 
 	QListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
@@ -1092,7 +1165,7 @@ KDirTreeViewItem::updateSummary()
 
 	if ( _orig->readState() == KDirAborted )
 	    prefix = " >";
-	
+
 	setText( _view->totalSizeCol(),		prefix + formatSize(  _orig->totalSize()	) );
 	setText( _view->totalItemsCol(),	prefix + formatCount( _orig->totalItems()	) );
 	setText( _view->totalFilesCol(),	prefix + formatCount( _orig->totalFiles()	) );
@@ -1359,7 +1432,7 @@ KDirTreeViewItem::findDotEntry() const
     {
 	if ( child->orig()->isDotEntry() )
 	    return child;
-	
+
 	child = child->next();
     }
 
