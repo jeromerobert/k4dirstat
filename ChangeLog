@@ -1,3 +1,29 @@
+2003-01-07  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.3.4
+
+	* Updated admin subdir to latest KDE autoconf / automake stuff
+
+	* Gcc 3.x fixes
+
+
+2003-01-06  Stefan Hundhammer  <sh@suse.de>
+
+	* Tweaked treemap cushion ridges:
+	  Squarified layout row now gets its own ridge,
+	  no more double /triple ridges for directories
+
+	* Changed treemap cushion light source direction from bottom right
+	  to top left
+
+	* Moved min/max/default for treemap settings to central header file
+
+	* Changed max/default treemap setting values
+
+	* Reduced settings dialogs outer borders:
+	  No more accumulated borders
+
+
 2003-01-04  Stefan Hundhammer  <sh@suse.de>
 
 	* Added "general" settings page; now user configurable:
