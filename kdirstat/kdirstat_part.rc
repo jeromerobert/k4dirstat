@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="KDirStatPart" version="1">
+
+<MenuBar>
+  <Menu name="Edit"><Text>&amp;Edit</Text>
+    <Action name="selectall"/>
+ </Menu>
+</MenuBar>
+
+<StatusBar/>
+
+</kpartgui>
+
