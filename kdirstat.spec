@@ -1,15 +1,17 @@
 #
 # spec file for package kdirstat (Version 2.4.2)
 #
-# Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany.
+# Copyright (c) 2004 SuSE Linux AG, Nuernberg, Germany.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 #
 # Please submit bugfixes or comments via http://www.suse.de/feedback/
 #
 
+# norootforbuild
 # neededforbuild  kde3-devel-packages
-# usedforbuild    aaa_base acl attr bash bind-utils bison bzip2 coreutils cpio cpp cvs cyrus-sasl db devs diffutils e2fsprogs file filesystem fillup findutils flex gawk gdbm-devel glibc glibc-devel glibc-locale gpm grep groff gzip info insserv kbd less libacl libattr libgcc libstdc++ libxcrypt m4 make man mktemp modutils ncurses ncurses-devel net-tools netcfg openldap2-client openssl pam pam-devel pam-modules patch permissions popt ps rcs readline sed sendmail shadow strace syslogd sysvinit tar texinfo timezone unzip util-linux vim zlib zlib-devel XFree86-Mesa XFree86-Mesa-devel XFree86-devel XFree86-libs arts arts-devel autoconf automake binutils cracklib expat fam fam-devel fontconfig fontconfig-devel freeglut freeglut-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext glib2 glib2-devel gnome-filesystem kdelibs3 kdelibs3-devel libart_lgpl libart_lgpl-devel libjpeg liblcms liblcms-devel libmng libmng-devel libpng libpng-devel libstdc++-devel libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel openssl-devel pcre pcre-devel perl qt3 qt3-devel rpm update-desktop-files
+
+BuildRequires: aaa_base acl attr bash bind-utils bison bzip2 coreutils cpio cpp cracklib cvs cyrus-sasl db devs diffutils e2fsprogs file filesystem fillup findutils flex gawk gdbm-devel glibc glibc-devel glibc-locale gpm grep groff gzip info insserv kbd less libacl libattr libgcc libselinux libstdc++ libxcrypt m4 make man mktemp module-init-tools ncurses ncurses-devel net-tools netcfg openldap2-client openssl pam pam-modules patch permissions popt procinfo procps psmisc pwdutils rcs readline sed strace syslogd sysvinit tar tcpd texinfo timezone unzip util-linux vim zlib zlib-devel XFree86-Mesa XFree86-Mesa-devel XFree86-devel XFree86-libs arts arts-devel autoconf automake binutils expat fam fam-devel fontconfig fontconfig-devel freeglut freeglut-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext glib2 glib2-devel gnome-filesystem kdelibs3 kdelibs3-devel libart_lgpl libart_lgpl-devel libidn libidn-devel libjpeg liblcms liblcms-devel libmng libmng-devel libpng libpng-devel libstdc++-devel libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel openssl-devel pcre pcre-devel perl qt3 qt3-devel rpm update-desktop-files
 
 Name:         kdirstat
 URL:          http://kdirstat.sourceforge.net
@@ -43,10 +45,14 @@ update_admin
 make
 
 %install
-make DESTDIR=$RPM_BUILD_ROOT install-strip
+. /etc/opt/kde3/common_options
+make DESTDIR=$RPM_BUILD_ROOT $INSTALL_TARGET
+%suse_update_desktop_file %name Filesystem
+%find_lang %name
 
-%files
-%doc COPYING AUTHORS ChangeLog TODO INSTALL README 
+%files -f %name.lang
+%defattr(-,root,root)
+%doc COPYING AUTHORS ChangeLog TODO README 
 /opt/kde3/bin/kdirstat
 /opt/kde3/share/apps/kdirstat
 /opt/kde3/share/applnk/*/kdirstat*
@@ -72,4 +78,3 @@ make DESTDIR=$RPM_BUILD_ROOT install-strip
 /opt/kde3/share/apps/kconf_update/kdirstat.upd
 /opt/kde3/share/apps/kconf_update/fix_move_to_trash_bin.pl
 
-%changelog -n kdirstat
