@@ -1,23 +1,24 @@
 #
-# spec file for package kdirstat
-# 
-# Copyright  (c)  2002  SuSE GmbH  Nuernberg, Germany.
+# spec file for package kdirstat (Version 2.3.7)
+#
+# Copyright (c) 2003 SuSE Linux AG, Nuernberg, Germany.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
-# 
-# please send bugfixes or comments to feedback@suse.de.
+#
+# Please submit bugfixes or comments via http://www.suse.de/feedback/
 #
 
 # neededforbuild  kde3-devel-packages
-# usedforbuild    aaa_base aaa_dir autoconf automake base bash bindutil binutils bison bzip compress cpio cpp cracklib cyrus-sasl db devs diffutils docbook-dsssl-stylesheets docbook_3 e2fsprogs fam file fileutils findutils flex freetype2 freetype2-devel gawk gcc gdbm gdbm-devel gettext glibc glibc-devel gpm gpp gppshare grep groff gzip iso_ent jade_dsl kbd kdelibs kdelibs-artsd kdelibs-devel less libgpp libjpeg liblcms libmng libmng-devel libpng libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel libz m4 make man mesa mesa-devel mesaglut mesaglut-devel mesasoft mktemp modutils ncurses ncurses-devel net-tools netcfg openssl openssl-devel pam pam-devel patch perl ps qt qt-devel qt-extensions rcs readline rpm sendmail sh-utils shadow sp sp-devel strace syslogd sysvinit texinfo textutils timezone unzip util-linux vim xdevel xf86 xf86glu xf86glu-devel xshared
+# usedforbuild    aaa_base acl attr bash bind9-utils bison coreutils cpio cpp cvs cyrus-sasl2 db devs diffutils e2fsprogs file filesystem fillup findutils flex gawk gdbm-devel glibc glibc-devel glibc-locale gpm grep groff gzip info insserv kbd less libacl libattr libgcc libstdc++ libxcrypt m4 make man mktemp modutils ncurses ncurses-devel net-tools netcfg pam pam-devel pam-modules patch permissions ps rcs readline sed sendmail shadow strace syslogd sysvinit tar texinfo timezone unzip util-linux vim zlib zlib-devel XFree86-devel XFree86-libs arts arts-devel autoconf automake binutils bzip2 cracklib expat fam fam-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext kdelibs3 kdelibs3-devel libart_lgpl libart_lgpl-devel libjpeg liblcms liblcms-devel libmng libmng-devel libpng libpng-devel libstdc++-devel libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel mesa mesa-devel mesaglu mesaglu-devel mesaglut mesaglut-devel mesasoft openssl openssl-devel perl qt3 qt3-devel rpm
 
 Name:         kdirstat
-Copyright:    GPL
-Group:        X11/KDE/Utilities
+License:      GPL
+Group:        Productivity/File utilities
 Summary:      Graphical directory statistics for used disk space
-Version:      2.3.6
-Release:      0
-Source0:      kdirstat-2.3.6.tar.bz2
+Version:      2.3.7
+Release:      35
+BuildRoot:    %{_tmppath}/%{name}-%{version}-build
+Source0:      kdirstat-%{version}.tar.bz2
 
 %description
 KDirStat (for KDE Directory Statistics) is a utility program that sums up
@@ -28,19 +29,18 @@ Authors:
 --------
     Stefan Hundhammer <sh@suse.de>
 
-SuSE series: kde
-
 %prep
-%setup -n kdirstat-2.3.6
+%setup -q
+. /etc/opt/kde3/common_options
+update_admin
 
 %build
-CXXFLAGS="$CXXFLAGS -DNDEBUG -O2 " ./configure \
-  --prefix=/opt/kde3 \
-  --with-qt-dir=/usr/lib/qt3/
+. /etc/opt/kde3/common_options
+./configure $configkde --disable-final
 make
 
 %install
-make install-strip
+make DESTDIR=$RPM_BUILD_ROOT install-strip
 
 %files
 %doc COPYING AUTHORS ChangeLog TODO INSTALL README 
@@ -50,3 +50,4 @@ make install-strip
 /opt/kde3/share/doc/HTML/*/kdirstat/
 /opt/kde3/share/icons/??color/??x??/*/kdirstat*
 /opt/kde3/share/locale/*/LC_MESSAGES/kdirstat.mo
+
