@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.15 2001/08/06 00:06:23 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.16 2001/08/10 03:45:48 alexannika Exp $
  *
  */
 
@@ -23,7 +23,7 @@ class Object;
 #include <limits.h>
 #include <dirent.h>
 #include <qqueue.h>
-#include <kfileitem.h>
+//#include <kfileitem.h>
 #include <qtoolbar.h>
 #include <qstatusbar.h>
 #include <qmenubar.h>
@@ -123,10 +123,18 @@ class Object;
 #define DX HORIZONTAL
 #define DY VERTIKAL
 
+// how to calculate node size
+
+#define CALCNODE_ALWAYS 0
+#define CALCNODE_NEVER 1
+#define CALCNODE_IFEMPTY 2
+
   // helpers
 
 #define MAX(x,y) ( (x>y) ? x : y)
 #define MIN(x,y) ( (x>y) ? y : x)
+
+#define asize float
 
   class QTreeMapArea;
   class QTreeMapOptions;
@@ -193,6 +201,9 @@ public:
     bool draw_pie_lines;
 
     int area_is;
+    bool modify_tree;
+    QString path_separator;
+    int calc_nodesize;
   };
 
   class Cushion {
@@ -242,8 +253,9 @@ public:
   void findMatch(const QString find);
 
     int check_int(int i);
-    int   areaSize(Object *node);
-
+    asize   areaSize(Object *node);
+    asize   calcTotalSize(Object *node);
+    QString findFullName(Object *node);
 
   // pure virtual functions
 
@@ -252,7 +264,7 @@ public:
     virtual QString fullName(Object *node) =0;
     virtual QString shortName(Object *node) =0;
     virtual Object *firstChild(Object *node) =0;
-    virtual int   totalSize(Object *node) =0;
+    virtual asize   totalSize(Object *node) =0;
     virtual int   totalItems(Object *node) =0;
     virtual int   thisDirItems(Object *node)=0;
     virtual bool isLeaf(Object *node)=0;
@@ -260,9 +272,11 @@ public:
     virtual bool isSameLevelChild(Object *node)=0;
     virtual Object *nextChild(Object *node)=0;
     virtual Object *sameLevelChild(Object *node)=0;
-    virtual QString tellUnit(int size)=0;
+    virtual QString tellUnit(asize size)=0;
     virtual Object *parentNode(Object *node)=0;
-  
+
+  protected:
+  QTreeMapOptions *options;
 
   private:
 
@@ -287,7 +301,7 @@ public:
   float worst_aspect(ObjList *sorted_list,int i1,int i2,int width);
   //int sum_list(ObjList *slist,int i1,int i2);
   void printList(ObjList *slist,int i1,int i2);
-  float sum_list(ObjList *slist,int i1,int i2,bool print_it=FALSE);
+  asize sum_list(ObjList *slist,int i1,int i2,bool print_it=FALSE);
 
   // methods for piemaps
 
@@ -313,7 +327,6 @@ public:
     void xmlwalker(QDomElement el,int level);
 
   QPainter *painter;
-  QTreeMapOptions *options;
   QColor default_color;
   QWidget *widget;
   QPen mypen;

@@ -1,3 +1,22 @@
+2001-08-09 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* changed all size-functions from int to asize/float
+	* qxmltreemap: if a node has got an empty attribute 'size',
+	  the size is calculated recursively
+
+	* new files & classes
+	  qlistviewtreemapwindow.cpp
+	  qlistviewtreemapwindow.h
+	  qlistviewtreemaparea.cpp
+	  qlistviewtreemap.h
+	  qxmltreemapviewer.cpp
+
+	* files q*treemap* are built as a library libqtreemap
+	* new qxmltreemapviewer binary:
+	  stand-alone QT/Xml Treemap Viewer
+	* QTreeMap/QListViewTreeMapArea works fine with KProf
+
+	
 2001-08-05 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* compiler warnings removed

@@ -25,9 +25,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <qtimer.h>
-#include <kdebug.h>
-#include <kapp.h>
-#include <klocale.h>
 #include "qtreemap.h"
 #include <qmainwindow.h>
 
@@ -90,7 +87,7 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
 void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode){
   QString node_name=fullName(dutree);
   Object *sub_nodes=firstChild(dutree);
-  int node_totalsize=totalSize(dutree);
+  asize node_totalsize=totalSize(dutree);
   Cushion *c=NULL;
 
   //    printf("QTreeMapArea::drawDuTree(%s,%d,%d,%d,%d,dir=%d,level=%d) %d\n",node_name.latin1(),x0,y0,xd0,yd0,direction,level,node_totalsize);
@@ -185,12 +182,12 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	  if(findmode==FIND_SELECTION){
 	    if(dutree==found_kfileinfo){
 	      if(selected_list->containsRef((Object  **)dutree)){
-				printf("setting selection\n");
+		//				printf("setting selection\n");
 		QColor foundcolor=options->select_color;
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
 	      }
 	      else{
-		printf("clearing selection\n");
+		//		printf("clearing selection\n");
 		QColor foundcolor=getBaseColor(node_name);
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
 	      }
@@ -233,7 +230,7 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	  pmode=options->paintmode;
 
 	  if(selected_list->containsRef((Object **)dutree)){
-	    		printf("setting selection2\n");
+	    //	    		printf("setting selection2\n");
 		QColor fcolor=options->select_color;
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,fcolor,options->paintmode,c);
 	  }
@@ -304,7 +301,7 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	w=( c->r[direction][1] - c->r[direction][0] )/((float)node_totalsize);
       }
       for(Object *subtree=sub_nodes;subtree!=NULL;subtree=nextChild(subtree)){
-	int subnode_size=totalSize(subtree);
+	asize subnode_size=totalSize(subtree);
 	  if(subnode_size==0){
 	    // we do not descend in directories with 0 size
 	  }
@@ -348,7 +345,7 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 
       if( sameLevelChild(dutree)!=NULL ){
 	Object *dotentry=sameLevelChild(dutree);
-	int subnode_size=totalSize(dotentry);
+	asize subnode_size=totalSize(dotentry);
 	    float percent_size=((float)subnode_size)/((float)node_totalsize);
 	    
 	    if(direction==HORIZONTAL){

@@ -17,9 +17,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <qtimer.h>
-#include <kdebug.h>
-#include <kapp.h>
-#include <klocale.h>
 #include "qtreemap.h"
 #include <qmainwindow.h>
 

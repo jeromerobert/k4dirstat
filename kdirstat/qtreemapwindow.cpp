@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.14 2001/08/06 00:06:23 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.15 2001/08/10 03:45:48 alexannika Exp $
  *
  */
 
@@ -16,12 +16,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <qtimer.h>
-#include <kdebug.h>
-#include <kapp.h>
-#include <klocale.h>
-//#include "kdirtree.h"
-//#include "kdirtreeview.h"
-//#include "kdirsaver.h"
+#include <qapplication.h>
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include "qtreemapwindow.h"
@@ -209,8 +204,7 @@ void QTreeMapWindow::makeWidgets(){
 
   QTreeMapArea *qtm_area=(QTreeMapArea *)graph_widget;
 
-  sleep(1);
-  printf("CONNECTS\n");
+
   QObject::connect(find_entry,SIGNAL(returnPressed()), this, SLOT(findMatch()));
 
   QObject::connect(up_button, SIGNAL(clicked()), qtm_area, SLOT(directoryUp()));
@@ -221,7 +215,6 @@ void QTreeMapWindow::makeWidgets(){
   QObject::connect(qtm_area ,SIGNAL(highlighted(Object *)), this, SLOT(setStatusBar(Object *))  );
   QObject::connect(qtm_area ,SIGNAL(changedDirectory(Object *)), this, SLOT(setDirectoryLabel(Object *))  );
 
-  printf("CONNECTSEND\n");
 
   this->resize((options->paint_size_x)+50,(options->paint_size_y)+200);
   this->show();
@@ -263,7 +256,8 @@ void QTreeMapWindow::setStatusBar(Object *found){
   QString mess=QString("");
   while(walk!=NULL){
     QString part;
-    part.sprintf("%s/ %s",graph_widget->shortName(walk).latin1(),
+    part.sprintf("%s%s %s",graph_widget->shortName(walk).latin1(),
+		 options->path_separator.latin1(),
 		 graph_widget->tellUnit(  graph_widget->totalSize(walk)).latin1());
     mess=part+"   "+mess;
     walk=graph_widget->parentNode(walk);

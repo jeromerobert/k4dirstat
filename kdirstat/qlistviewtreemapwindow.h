@@ -1,5 +1,5 @@
 /*
- *   File name:	qxmltreemapwindow.cpp
+ *   File name:	qlistviewtreemapwindow.cpp
  *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef QXmlTreeMapWindow_h
-#define QXmlTreeMapWindow_h
+#ifndef QListViewTreeMapWindow_h
+#define QListViewTreeMapWindow_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -26,7 +26,6 @@
 #include <qstatusbar.h>
 #include <qmenubar.h>
 #include <qmainwindow.h>
-#include "kdirtree.h"
 #include <qpen.h>
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -39,7 +38,7 @@
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 #include "qtreemap.h"
-#include "qxmltreemap.h"
+#include "qlistviewtreemap.h"
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -53,10 +52,10 @@
   class QTreeMapWindow;
 
 
-  class QXmlTreeMapWindow : public QTreeMapWindow {
+  class QListViewTreeMapWindow : public QTreeMapWindow {
   public:
 
-    QXmlTreeMapWindow();
+    QListViewTreeMapWindow(int col_name,int col_size,QWidget *parent=NULL);
 
     QTreeMapArea *makeTreeMapWidget(QWidget *parent);
 int makeBrainMenuOption(QString gname,QString defaultstr);
@@ -64,8 +63,9 @@ int makeBrainMenuOption(QString gname,QString defaultstr);
     void setConfig();
 
   private:
-    
-    KConfig *config;
+    int colname,colsize;
+
+    //    KConfig *config;
   };
 //} // namespace
 

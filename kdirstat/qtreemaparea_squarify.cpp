@@ -25,9 +25,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <qtimer.h>
-#include <kdebug.h>
-#include <kapp.h>
-#include <klocale.h>
 #include "qtreemap.h"
 #include <qmainwindow.h>
 
@@ -47,7 +44,7 @@ ObjList *QTreeMapArea::sortedList(Object *dutree){
   while(child!=NULL){
     //printf("appending %s\n",fullName(child).latin1());
 
-    if(totalSize(child)!=0){
+    if(totalSize(child)!=0.0){
       slist->append((Object **)child);
     }
 
@@ -272,13 +269,13 @@ void QTreeMapArea::layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0
   } //while
 }
 
-float QTreeMapArea::sum_list(ObjList *slist,int i1,int i2,bool print_it){
-   float sum=0;
+asize QTreeMapArea::sum_list(ObjList *slist,int i1,int i2,bool print_it){
+   asize sum=0;
    for(int i=i1;i<=i2;i++){
-     float size=(float)totalSize((Object *)(slist->at(i)));
+     asize size=totalSize((Object *)(slist->at(i)));
      sum+=size;
        if(print_it){
-	 printf("%ld ",(long)size);
+	 printf("%f ",(float)size);
        }
    }
    return sum;
@@ -301,9 +298,9 @@ float QTreeMapArea::worst_aspect(ObjList *sorted_list,int i1,int i2,int width){
   else{
 
 #if 0
-    int s=sum_list(sorted_list,i1,i2);
-    int rp=totalSize((Object *)(sorted_list->at(i1)));
-    int rm=totalSize((Object *)(sorted_list->at(i2)));
+    asize s=sum_list(sorted_list,i1,i2);
+    asize rp=totalSize((Object *)(sorted_list->at(i1)));
+    asize rm=totalSize((Object *)(sorted_list->at(i2)));
     worst=MAX( ((float)(width*width)*rp)/(float)(s*s) , ((float)(s*s)/(float)((width*width)*rm)));
 #endif
 

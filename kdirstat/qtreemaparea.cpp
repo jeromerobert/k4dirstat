@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.15 2001/08/06 00:06:23 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.16 2001/08/10 03:45:48 alexannika Exp $
  *
  */
 
@@ -17,9 +17,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <qtimer.h>
-#include <kdebug.h>
-#include <kapp.h>
-#include <klocale.h>
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include <qfiledialog.h>
@@ -180,7 +177,7 @@ Object *QTreeMapArea::findClickedMap(Object *dutree,int x,int y,int findmode){
 	 x=x+20;
        }
 
-    int size=totalSize(found_kfileinfo);
+    asize size=totalSize(found_kfileinfo);
     //QString text=QString(found_kfileinfo->debugUrl()+" size: "+tellUnit(size));
     
     QString text; //=found_kfileinfo->debugUrl();
@@ -276,7 +273,7 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
       Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
       
       if(found!=NULL){
-    kdDebug() << k_funcinfo << endl;
+	//    kdDebug() << k_funcinfo << endl;
     pop=new QPopupMenu(this); // memory hole!
 	pop->insertTearOffHandle();
 	pop->insertItem(fullName(found));
@@ -525,14 +522,50 @@ QTreeMapArea::~QTreeMapArea()
   // to be filled later...
 }
 
-int QTreeMapArea::areaSize(Object *node){
-  int size=0;
+QString QTreeMapArea::findFullName(Object *node){
+  Object *parent=parentNode(node);
+  QString fullname;
+  if(parent!=NULL){
+    fullname=findFullName(parent)+options->path_separator+shortName(node);
+  }
+  else{
+    fullname=shortName(node);
+  }
+  return fullname;
+}
+
+asize QTreeMapArea::calcTotalSize(Object *node){
+  if(isLeaf(node)){
+    return totalSize(node);
+  }
+
+    Object *child=firstChild(node);
+    bool dotentry_flag=FALSE;
+    asize size=0.0;
+
+    while(child!=NULL){
+      size+=calcTotalSize(child);
+      child=nextChild(child);
+	      if(child==NULL && dotentry_flag==FALSE){
+		dotentry_flag=TRUE;
+		Object *dotentry=sameLevelChild(node);
+		if(dotentry){
+		  child=firstChild(dotentry);
+		}
+	      }
+     }
+
+    return size;
+}
+
+asize QTreeMapArea::areaSize(Object *node){
+  asize size=0.0;
 
   if(options->area_is==AREA_IS_TOTALSIZE){
     size=totalSize(node);
   }
   else if(options->area_is==AREA_IS_TOTALITEMS){
-    size=totalItems(node);
+    size=(asize)totalItems(node);
   }
   else{
     //error
@@ -680,6 +713,9 @@ QTreeMapOptions::QTreeMapOptions(){
   draw_pie_lines=FALSE;
   draw_hyper_lines=TRUE;
   area_is=AREA_IS_TOTALITEMS;
+  modify_tree=FALSE;
+  path_separator=QString("/");
+  calc_nodesize=CALCNODE_IFEMPTY;
 
   select_color=QColor(255,200,200);
   match_color=QColor(100,200,230);

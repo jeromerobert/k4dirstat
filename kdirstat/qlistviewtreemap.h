@@ -1,17 +1,17 @@
 /*
- *   File name:	kdirtreemap.h
- *   Summary:	Support classes for KDirStat
+ *   File name:	qlistviewtreemap.h
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemap.h,v 1.4 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: 
  *
  */
 
-#ifndef KDirTreeMap_h
-#define KDirTreeMap_h
+#ifndef QListViewTreeMap_h
+#define QListViewTreeMap_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -22,12 +22,10 @@
 #include <limits.h>
 #include <dirent.h>
 #include <qqueue.h>
-#include <kfileitem.h>
 #include <qtoolbar.h>
 #include <qstatusbar.h>
 #include <qmenubar.h>
 #include <qmainwindow.h>
-#include "kdirtree.h"
 #include <qpen.h>
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -40,6 +38,7 @@
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 #include "qtreemap.h"
+#include <qlistview.h>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -51,16 +50,21 @@ class Object;
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
-namespace KDirStat
-{
+//namespace KDirStat
+//{
 
-  class KDirTreeMapArea : public QTreeMapArea {
+  class QListViewTreeMapArea : public QTreeMapArea {
     Q_OBJECT
 
   public:
     //KTreeMap(QWidget *parent=0);
-    KDirTreeMapArea(QWidget *parent=0);
+    QListViewTreeMapArea(int col_name,int col_size,QWidget *parent=0);
     //~QTreeMapArea();
+
+    void useColumns(int col_name,int col_size);
+
+    void printXmlInfo(Object *node);
+    //    QDomElement findElement(QDomNode n);
 
     // reimplemented abstract functions
 
@@ -81,6 +85,9 @@ namespace KDirStat
     QString tellUnit(asize size);
     Object *parentNode(Object *node);
 
+  private:
+    int column_name,column_size;
+
     public slots:
 
       void directoryUp();
@@ -96,10 +103,10 @@ namespace KDirStat
 
   };
 
-} // namespace
+//} // namespace
 
 
-#endif // ifndef KDirTreeMap_h
+#endif // ifndef QListViewTreeMap_h
 
 
 // EOF

@@ -16,9 +16,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <qtimer.h>
-#include <kdebug.h>
-#include <kapp.h>
-#include <klocale.h>
 #include "qxmltreemap.h"
 #include <qmainwindow.h>
 #include <qdom.h>
@@ -110,13 +107,31 @@ Object *QXmlTreeMapArea::firstChild(Object *node){
 }
 
 
-
-int QXmlTreeMapArea::totalSize(Object *node){
+asize QXmlTreeMapArea::totalSize(Object *node){
   //printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
-  return kdi_node->attribute("size","0").toInt();
+  QString sizeattr=kdi_node->attribute("size","");
+  asize size;
+  if(sizeattr==""){
+    if(isNode(node)){
+      size=calcTotalSize(node);
+      if(options->modify_tree==TRUE){
+	// modify
+      }
+    }
+    else{
+      printf("ERROR! can't calc. size for leaf!\n");
+      size=0.0;
+    }
+  }
+  else{
+    size=(asize)sizeattr.toFloat();
+  }
+
+  return size;
 }
+
 int QXmlTreeMapArea::totalItems(Object *node){
   NOT_USED(node);
   //  QDomElement *kdi_node=(QDomElement *)node;
@@ -192,10 +207,12 @@ Object *QXmlTreeMapArea::parentNode(Object *node){
 
 }
 
-QString QXmlTreeMapArea::tellUnit(int size){
+QString QXmlTreeMapArea::tellUnit(asize size){
   QString str;
+  str.sprintf("size=%f",(float)size);
+#if 0
   if(size<1024){
-    str.sprintf("%d bytes",size);
+    str.sprintf("%d bytes",(int)size);
   }
   else if(size<(1024*1024)){
     str.sprintf("%.2f kB",((float)size)/(1024.0));
@@ -206,7 +223,7 @@ QString QXmlTreeMapArea::tellUnit(int size){
   else {
     str.sprintf("%.2f GB",((float)size)/(1024*1024*1024));
   }
-
+#endif
   return str;
 }
 

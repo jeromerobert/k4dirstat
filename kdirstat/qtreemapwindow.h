@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.10 2001/08/06 00:06:23 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.11 2001/08/10 03:45:48 alexannika Exp $
  *
  */
 
@@ -22,7 +22,6 @@
 #include <limits.h>
 #include <dirent.h>
 #include <qqueue.h>
-#include <kfileitem.h>
 #include <qtoolbar.h>
 #include <qstatusbar.h>
 #include <qmenubar.h>

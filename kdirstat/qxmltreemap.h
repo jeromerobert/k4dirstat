@@ -22,7 +22,6 @@
 #include <limits.h>
 #include <dirent.h>
 #include <qqueue.h>
-#include <kfileitem.h>
 #include <qtoolbar.h>
 #include <qstatusbar.h>
 #include <qmenubar.h>
@@ -72,7 +71,7 @@ class Object;
     QString shortName(Object *node);
     QString fullName(Object *node);
     Object *firstChild(Object *node);
-    int   totalSize(Object *node);
+    asize   totalSize(Object *node);
     int   totalItems(Object *node);
     int   thisDirItems(Object *node);
     //    int   areaSize(Object *node);
@@ -81,7 +80,7 @@ class Object;
     bool isSameLevelChild(Object *node);
     Object *nextChild(Object *node);
     Object *sameLevelChild(Object *node);
-    QString tellUnit(int size);
+    QString tellUnit(asize size);
     Object *parentNode(Object *node);
 
     public slots:

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemaparea.cpp,v 1.6 2001/08/06 00:06:23 alexannika Exp $
+ *   $Id: kdirtreemaparea.cpp,v 1.7 2001/08/10 03:45:48 alexannika Exp $
  *
  */
 
@@ -77,10 +77,10 @@ Object *KDirTreeMapArea::firstChild(Object *node){
 
 
 
-int KDirTreeMapArea::totalSize(Object *node){
+asize KDirTreeMapArea::totalSize(Object *node){
   KDirInfo *kdi_node=(KDirInfo *)node;
 
-  return kdi_node->totalSize();
+  return (asize)(kdi_node->totalSize());
 }
 int KDirTreeMapArea::totalItems(Object *node){
   KDirInfo *kdi_node=(KDirInfo *)node;
@@ -124,10 +124,10 @@ Object *KDirTreeMapArea::parentNode(Object *node){
   return (Object *)kdi_node->parent();
 }
 
-QString KDirTreeMapArea::tellUnit(int size){
+QString KDirTreeMapArea::tellUnit(asize size){
   QString str;
   if(size<1024){
-    str.sprintf("%d bytes",size);
+    str.sprintf("%d bytes",(int)size);
   }
   else if(size<(1024*1024)){
     str.sprintf("%.2f kB",((float)size)/(1024.0));

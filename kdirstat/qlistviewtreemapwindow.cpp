@@ -1,12 +1,12 @@
 /*
- *   File name:	qxmltreemapwindow.cpp
+ *   File name:	qlistviewtreemapwindow.cpp
  *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
  *   Updated:	2001-06-11
  *
- *   $Id: 
+ *   $Id: qlistviewtreemapwindow.cpp,v 1.1 2001/08/10 03:45:48 alexannika Exp $
  *
  */
 
@@ -19,21 +19,23 @@
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include "qtreemapwindow.h"
-#include "qxmltreemap.h"
-#include "qxmltreemapwindow.h"
+#include "qlistviewtreemap.h"
+#include "qlistviewtreemapwindow.h"
 
 
-QXmlTreeMapWindow::QXmlTreeMapWindow(  )  : QTreeMapWindow() {
+QListViewTreeMapWindow::QListViewTreeMapWindow(int col_name,int col_size,QWidget *parent=NULL)  : QTreeMapWindow() {
   //setConfig();
+  colname=col_name;
+  colsize=col_size;
 }
 
-QTreeMapArea *QXmlTreeMapWindow::makeTreeMapWidget(QWidget *parent){
-  return new QXmlTreeMapArea(parent);
+QTreeMapArea *QListViewTreeMapWindow::makeTreeMapWidget(QWidget *parent){
+  return new QListViewTreeMapArea(colname,colsize,parent);
 }
 
 #if 0
 
-int QXmlTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
+int QListViewTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
   int param;
   QString modestr=config->readEntry(gname,defaultstr);
   param=getBrainParamByName("drawmode",modestr);
@@ -42,7 +44,8 @@ int QXmlTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
   return param;
 }
 
-void QXmlTreeMapWindow::setConfig(){
+void QListViewTreeMapWindow::setConfig(){
+#if 0
   config=KGlobal::config();
 
   config->setGroup("Treemap-Options");
@@ -116,6 +119,8 @@ void QXmlTreeMapWindow::setConfig(){
   //getArea()->setOptions(opt);
 
   //  delete opt;
+#endif
 }
+
 
 #endif
