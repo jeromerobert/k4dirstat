@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-09-01
+ *   Updated:	2001-11-18
  *
- *   $Id: kdirtree.h,v 1.4 2001/09/19 09:31:25 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.5 2001/11/19 13:13:11 hundhammer Exp $
  *
  */
 
@@ -59,6 +59,7 @@ namespace KDirStat
 	KDirQueued,		// Waiting in the directory read queue
 	KDirReading,		// Reading in progress
 	KDirFinished,		// Reading finished and OK
+	KDirOnRequestOnly,	// Will be read upon explicit request only (mount points)
 	KDirAborted,		// Reading aborted upon user request
 	KDirError		// Error while reading
     } KDirReadState;
@@ -246,6 +247,22 @@ namespace KDirStat
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual time_t		latestMtime()	{ return _mtime;  }
+
+	/**
+	 * Returns whether or not this is a mount point.
+	 * Derived classes may want to overwrite this.
+	 **/
+	virtual bool		isMountPoint()	{ return false; }
+
+	/**
+	 * Sets the mount point state, i.e. whether or not this is a mount
+	 * point.
+	 *
+	 * This default implementation silently ignores the value passed and
+	 * does nothing. Derived classes may want to overwrite this.
+	 **/
+	virtual void		setMountPoint( bool isMountPoint = true )
+	    { ((void) isMountPoint); return; }
 
 	/**
 	 * Returns true if this subtree is finished reading.
@@ -584,6 +601,24 @@ namespace KDirStat
 	virtual time_t 		latestMtime();
 
 	/**
+	 * Returns whether or not this is a mount point.
+	 *
+	 * This will return 'false' only if this information can be obtained at
+	 * all, i.e. if local directory reading methods are used.
+	 *
+	 * Reimplemented - inherited from @ref KFileInfo.
+	 **/
+	virtual bool		isMountPoint()	{ return _isMountPoint; }
+	
+	/**
+	 * Sets the mount point state, i.e. whether or not this is a mount
+	 * point.
+	 *
+	 * Reimplemented - inherited from @ref KFileInfo.
+	 **/
+	virtual void		setMountPoint( bool isMountPoint = true );
+
+	/**
 	 * Returns true if this subtree is finished reading.
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
@@ -742,6 +777,7 @@ namespace KDirStat
 
 
 	bool		_isDotEntry;		// Flag: is this entry a "dot entry"?
+	bool		_isMountPoint;		// Flag: is this a mount point?
 	int		_pendingReadJobs;	// number of open directories in this subtree
 
 	// Children management

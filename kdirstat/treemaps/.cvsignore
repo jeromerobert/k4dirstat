@@ -1,0 +1,12 @@
+Makefile.in
+Makefile
+.deps
+.libs
+*.o
+*.moc.cpp
+*_meta_unload.cpp
+kdirstat
+qxmltreemapviewer
+*.bak
+*.auto
+*~

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-09-16
+ *   Updated:	2001-11-18
  *
- *   $Id: kdirtreeview.cpp,v 1.8 2001/10/22 21:17:46 harry1701 Exp $
+ *   $Id: kdirtreeview.cpp,v 1.9 2001/11/19 13:13:11 hundhammer Exp $
  *
  */
 
@@ -15,6 +15,7 @@
 #include <qtimer.h>
 #include <qcolor.h>
 #include <qheader.h>
+#include <qpopupmenu.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -85,12 +86,12 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _openDotEntryIcon	= loadIcon( "folder_orange_open");
     _closedDotEntryIcon	= loadIcon( "folder_orange"	);
     _unreadableDirIcon	= loadIcon( "folder_locked" 	);
+    _mountPointIcon	= loadIcon( "hdd_mount"		);
     _fileIcon		= loadIcon( "mime_empty"	);
     _symLinkIcon	= loadIcon( "symlink"		);	// The KDE standard link icon is ugly!
     _blockDevIcon	= loadIcon( "blockdevice"	);
     _charDevIcon	= loadIcon( "chardevice"	);
     _fifoIcon		= loadIcon( "socket"		);
-    _workingIcon	= loadIcon( "mime_empty"	);
     _readyIcon		= QPixmap();
 
 #undef loadIcon
@@ -117,10 +118,16 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( kapp,	SIGNAL( kdisplayPaletteChanged()	),
 	     this,	SLOT  ( paletteChanged()		) );
 
-    connect( this,	SIGNAL( selectionChanged( QListViewItem * ) ),
-	     this,	SLOT  ( selectItem	( QListViewItem * ) ) );
+    connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
+	     this,	SLOT  ( selectItem		( QListViewItem * ) ) );
 
+   connect ( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
+	     this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
+    
+   _contextInfo	  = new QPopupMenu;
+   _idContextInfo = _contextInfo->insertItem ( "dummy" );
 
+    
 #if USE_TREEMAPS
    // FIXME: Move this out of here. No use opening an empty window at this time -
    // do it upon some finished() signal.
@@ -498,20 +505,93 @@ KDirTreeView::paletteChanged()
 
 
 
+void
+KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
+				const QPoint &	pos,
+				int 		column )
+{
+    kdDebug() << k_funcinfo << endl;
+    
+    KDirTreeViewItem *item = (KDirTreeViewItem *) listViewItem;
+
+    if ( ! item )
+	return;
+
+    if ( column == _nameCol )
+    {
+	// Make the item the context menu is popping up over the current
+	// selection - all user operations refer to the current selection.
+	// Just right-clicking on an item does not make it the current
+	// item!
+	selectItem( item );
+
+	// Let somebody from outside pop up the context menu, if so desired.
+	emit contextMenu( item, pos );
+    }
+
+
+    // If the column is one with a large size in kB/MB/GB, open a
+    // info popup with the exact number.
+   
+    if ( column == _ownSizeCol && ! item->orig()->isDotEntry() )
+    {
+	popupContextSizeInfo( pos, item->orig()->size() );
+    }
+   
+    if ( column == _totalSizeCol &&
+	 ( item->orig()->isDir() || item->orig()->isDotEntry() ) )
+    {
+	popupContextSizeInfo( pos, item->orig()->totalSize() );
+    }
+
+    
+    // Show alternate time / date format in time / date related columns.
+    
+    if ( column == _latestMtimeCol )
+    {
+	popupContextInfo( pos, formatTimeDate( item->orig()->latestMtime() ) );
+    }
+}
+
+
+void
+KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
+				    KFileSize		size )
+{
+    if ( size < 1024 )	// Small sizes are exactly displayed within the tree.
+	return;
+
+    QString info;
+    info.sprintf( "%ld ", (long) size );
+    info += i18n( "Bytes" );
+    popupContextInfo( pos, info );
+}
+
+
+void
+KDirTreeView::popupContextInfo( const QPoint &	pos,
+				const QString & info )
+{
+    _contextInfo->changeItem( info, _idContextInfo );
+    _contextInfo->popup( pos );
+}
 
 
 
-KDirTreeViewItem::KDirTreeViewItem	( KDirTreeView *	view,
-					  KFileInfo *		orig )
+
+
+
+KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
+				    KFileInfo *		orig )
     : QListViewItem( view )
 {
     init( view, 0, orig );
 }
 
 
-KDirTreeViewItem::KDirTreeViewItem	( KDirTreeView *	view,
-					  KDirTreeViewItem *	parent,
-					  KFileInfo *		orig )
+KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
+				    KDirTreeViewItem *	parent,
+				    KFileInfo *		orig )
     : QListViewItem( parent )
 {
     CHECK_PTR( parent );
@@ -520,9 +600,9 @@ KDirTreeViewItem::KDirTreeViewItem	( KDirTreeView *	view,
 
 
 void
-KDirTreeViewItem::init	( KDirTreeView *	view,
-			  KDirTreeViewItem *	parent,
-			  KFileInfo *		orig )
+KDirTreeViewItem::init( KDirTreeView *		view,
+			KDirTreeViewItem *	parent,
+			KFileInfo *		orig )
 {
     _view 	= view;
     _parent	= parent;
@@ -612,7 +692,14 @@ KDirTreeViewItem::setIcon()
 	}
 	else
 	{
-	    icon = isOpen() ? _view->openDirIcon() : _view->closedDirIcon();
+	    if ( _orig->isMountPoint() )
+	    {
+		icon = _view->mountPointIcon();
+	    }
+	    else
+	    {
+		icon = isOpen() ? _view->openDirIcon() : _view->closedDirIcon();
+	    }
 	}
     }
     else if ( _orig->isFile() 		)	icon = _view->fileIcon();
@@ -886,8 +973,10 @@ KDirTreeViewItem::setOpen( bool open )
 }
 
 
+
+
 QString
-KDirTreeViewItem::key ( int column, bool ascending ) const
+KDirTreeViewItem::key( int column, bool ascending ) const
 {
     static QString sortKey;
     NOT_USED( ascending );
@@ -940,11 +1029,11 @@ KDirTreeViewItem::key ( int column, bool ascending ) const
 
 
 void
-KDirTreeViewItem::paintCell ( QPainter *		painter,
-			      const QColorGroup &	colorGroup,
-			      int			column,
-			      int			width,
-			      int			alignment )
+KDirTreeViewItem::paintCell( QPainter *			painter,
+			     const QColorGroup &	colorGroup,
+			     int			column,
+			     int			width,
+			     int			alignment )
 {
     if ( column == _view->percentBarCol() )
     {
@@ -993,12 +1082,12 @@ KDirTreeViewItem::paintCell ( QPainter *		painter,
 
 
 void
-KDirTreeViewItem::paintPercentageBar ( float		percent,
-				       QPainter *	painter,
-				       int		indent,
-				       int		width,
-				       const QColor &	fillColor,
-				       const QColor &	barBackground )
+KDirTreeViewItem::paintPercentageBar( float		percent,
+				      QPainter *	painter,
+				      int		indent,
+				      int		width,
+				      const QColor &	fillColor,
+				      const QColor &	barBackground )
 {
     int penWidth = 2;
     int extraMargin = 3;
@@ -1131,7 +1220,7 @@ KDirStat::formatSize( KFileSize lSize )
 
 
 QString
-KDirStat::formatTime ( long millisec, bool showMilliSeconds )
+KDirStat::formatTime( long millisec, bool showMilliSeconds )
 {
     QString formattedTime;
     int hours;
@@ -1252,8 +1341,8 @@ KDirStat::localeTimeDate( time_t rawTime )
 
 
 QColor
-KDirStat::contrastingColor ( const QColor &desiredColor,
-			     const QColor &contrastColor )
+KDirStat::contrastingColor( const QColor &desiredColor,
+			    const QColor &contrastColor )
 {
     if ( desiredColor != contrastColor )
     {

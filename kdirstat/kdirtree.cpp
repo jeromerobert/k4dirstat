@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-08-08
+ *   Updated:	2001-11-18
  *
- *   $Id: kdirtree.cpp,v 1.2 2001/08/16 14:36:08 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.3 2001/11/19 13:13:11 hundhammer Exp $
  *
  */
 
@@ -284,6 +284,7 @@ KDirInfo::init()
     _totalSubDirs	= 0;
     _totalFiles		= 0;
     _latestMtime	= _mtime;
+    _isMountPoint	= false;
     _summaryDirty	= false;
     _readState		= KDirQueued;
 }
@@ -351,6 +352,13 @@ KDirInfo::recalc()
     }
 
     _summaryDirty = false;
+}
+
+
+void
+KDirInfo::setMountPoint( bool isMountPoint )
+{
+    _isMountPoint = isMountPoint;
 }
 
 
@@ -685,21 +693,26 @@ KLocalDirReadJob::startReading()
 
 			if ( subDir->dotEntry() )
 			    childAdded( subDir->dotEntry() );
-
-			if ( _tree->crossFileSystems() ||
-			     _dir->device() == subDir->device()	)
+			
+			if ( _dir->device() == subDir->device()	)	// normal case
 			{
-			    /*
-			     * Recurse into this sub directory if crossing file
-			     * system boundaries is desired or if this
-			     * subdirectory is on the same file system as its
-			     * parent.
-			     */
 			    _tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
 			}
-			else
+			else	// The subdirectory we just found is a mount point.
 			{
-			    // TODO: mark as mount point
+			    kdDebug() << "Found mount point " << subDir->debugUrl() << endl;
+			    subDir->setMountPoint();
+			    
+			    if ( _tree->crossFileSystems() )
+			    {
+				_tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
+			    }
+			    else
+			    {
+				subDir->setReadState( KDirOnRequestOnly );
+				_tree->sendFinalizeLocal( subDir );
+				subDir->finalizeLocal();
+			    }
 			}
 		    }
 		    else		// non-directory child

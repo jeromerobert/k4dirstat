@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-09-16
+ *   Updated:	2001-11-18
  *
- *   $Id: kdirtreeview.h,v 1.6 2001/10/22 21:17:46 harry1701 Exp $
+ *   $Id: kdirtreeview.h,v 1.7 2001/11/19 13:13:11 hundhammer Exp $
  *
  */
 
@@ -44,6 +44,7 @@
 // Forward declarations
 class QWidget;
 class QTimer;
+class QPopupMenu;
 class KPacManAnimation;
 
 
@@ -187,6 +188,7 @@ namespace KDirStat
 	QPixmap	openDotEntryIcon()	const	{ return _openDotEntryIcon;	}
 	QPixmap	closedDotEntryIcon()	const	{ return _closedDotEntryIcon;	}
 	QPixmap	unreadableDirIcon()	const	{ return _unreadableDirIcon;	}
+	QPixmap mountPointIcon()	const	{ return _mountPointIcon;	}
 	QPixmap	fileIcon()		const	{ return _fileIcon;		}
 	QPixmap	symLinkIcon()		const	{ return _symLinkIcon;		}
 	QPixmap blockDevIcon()		const 	{ return _blockDevIcon;		}
@@ -310,6 +312,25 @@ namespace KDirStat
 	 **/
 	void	idleDisplay();
 
+	/**
+	 * Pop up context menu (i.e. emit the contextMenu() signal) or open a
+	 * small info popup with exact information, depending on 'column'.
+	 **/ 
+	void 	popupContextMenu	( QListViewItem *	listViewItem,
+					  const QPoint &	pos,
+					  int 			column );
+
+	/**
+	 * Pop up info window with exact byte size.
+	 **/
+	void 	popupContextSizeInfo	( const QPoint &	pos,
+					  KFileSize		size );
+
+	/**
+	 * Pop up info window with arbitrary one-line text.
+	 **/
+	void 	popupContextInfo	( const QPoint &	pos,
+					  const QString & 	info );
 
     signals:
 
@@ -341,6 +362,19 @@ namespace KDirStat
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
 	void selectionChanged( KFileInfo *item );
+
+	/**
+	 * Emitted when a context menu for this item should be opened.
+	 * (usually on right click). 'pos' contains the click's mouse
+	 * coordinates.
+	 *
+	 * NOTE:
+	 *
+	 * This is _not_ the same as @ref QListView::rightButtonClicked():
+	 * The context menu may not open on a right click on every column,
+	 * usually only in the nameCol().
+	 **/
+	void contextMenu( KDirTreeViewItem *item, const QPoint &pos );
 	
 
     protected:
@@ -350,6 +384,8 @@ namespace KDirStat
 	QTime			_stopWatch;
 	QString			_currentDir;
 	KDirTreeViewItem *	_selection;
+	QPopupMenu *		_contextInfo;
+	int			_idContextInfo;
 
 	int	_openLevel;
 	bool	_doLazyClone;
@@ -384,6 +420,7 @@ namespace KDirStat
 	QPixmap	_openDotEntryIcon;
 	QPixmap	_closedDotEntryIcon;
 	QPixmap	_unreadableDirIcon;
+	QPixmap _mountPointIcon;
 	QPixmap	_fileIcon;
 	QPixmap	_symLinkIcon;
 	QPixmap _blockDevIcon;
@@ -391,6 +428,7 @@ namespace KDirStat
 	QPixmap _fifoIcon;
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
+	
 
 #if USE_TREEMAPS
 	// FIXME: This stuff doesn't belong here. Move it out somewhere else.

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemaparea.cpp,v 1.7 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: kdirtreemaparea.cpp,v 1.1 2001/11/19 13:13:11 hundhammer Exp $
  *
  */
 
