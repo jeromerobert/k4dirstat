@@ -65,7 +65,7 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
     drawDuTree(dutree,x0,y0,xd0,yd0,options->start_direction,0,cushion);
   }
 
-  printf("END OF RECURSION\n");
+  //  printf("END OF RECURSION\n");
     painter->end();
 
     this->update();

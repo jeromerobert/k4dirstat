@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemaparea.cpp,v 1.2 2001/07/11 02:16:03 alexannika Exp $
+ *   $Id: kdirtreemaparea.cpp,v 1.3 2001/07/11 19:54:49 alexannika Exp $
  *
  */
 
@@ -104,19 +104,19 @@ QString KDirTreeMapArea::tellUnit(int size){
 }
 
 void KDirTreeMapArea::directoryUp(){
-  printf("CALLBACK KDirTreeMapArea\n");
+  //  printf("CALLBACK KDirTreeMapArea\n");
   ((QTreeMapArea *)this)->directoryUp();
 
 }
 
 void KDirTreeMapArea::zoomIn(){
-  printf("CALLBACK KDirTreeMapArea\n");
+  //printf("CALLBACK KDirTreeMapArea\n");
   ((QTreeMapArea *)this)->zoomIn();
 
 }
 
 void KDirTreeMapArea::zoomOut(){
-  printf("CALLBACK KDirTreeMapArea\n");
+  //printf("CALLBACK KDirTreeMapArea\n");
   ((QTreeMapArea *)this)->zoomOut();
 
 }

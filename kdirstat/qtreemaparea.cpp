@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.6 2001/07/11 02:16:03 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.7 2001/07/11 19:54:49 alexannika Exp $
  *
  */
 
@@ -381,8 +381,8 @@ QTreeMapOptions::QTreeMapOptions(){
   paint_size_y=600;
   highlight_frame_width=3;
   highlight_frame_col=QColor(255,255,255);
-  dont_draw_xyd=2;
-  dont_descend_xyd=2;
+  dont_draw_xyd=0;
+  dont_descend_xyd=0;
   draw_text=FALSE;
   color_scheme=CS_CYCLIC;
   hc_factor=0.3f;
@@ -391,7 +391,7 @@ QTreeMapOptions::QTreeMapOptions(){
   mono_color=QColor(255,255,255);
   sequoia_f=0.75;
   sequoia_h=0.5;
-  squarify=TRUE;
+  squarify=FALSE;
   show_inodes=TRUE;
 }
 

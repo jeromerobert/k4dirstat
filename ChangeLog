@@ -1,3 +1,12 @@
+2001-07-11 Alexander Rawass <alexannika@users.sourceforge.net>
+	
+	* various bugs fixed in squarified treemaps:
+	  correct end of recursion
+	  using floats rather than ints to prevent miscalc.
+	  should work now????
+	* new hierarchical shadings
+
+	
 2001-07-10 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* implemented squarified treemaps (experimental, buggy)

@@ -73,16 +73,16 @@ void QTreeMapArea::squarifyTree(Object *dutree,int x0,int y0,int xd0,int yd0, bo
   int yd=yd0;
 
   if(options->show_inodes){
-  int wasted_space=sum_list(sorted_list,0,len-1);
+    float wasted_space=sum_list(sorted_list,0,len-1);
 
-  int total=totalSize(dutree);
-  float percent;
-  if(total==0){
-    percent=1.0;
-  }
-  else{
-    percent=((float)wasted_space)/(float)total;
-  }
+    float total=(float)totalSize(dutree);
+    float percent;
+    if(total==0){
+      percent=1.0;
+    }
+    else{
+      percent=((float)wasted_space)/(float)total;
+    }
 
 
   if(xd0<yd0){
@@ -94,22 +94,23 @@ void QTreeMapArea::squarifyTree(Object *dutree,int x0,int y0,int xd0,int yd0, bo
     xd=(int)(((float)xd0)*percent);
   }
   }
-
+#ifdef DEBUG_SQR
   printf("new list: [ ");
   printList(sorted_list,0,len-1);
   printf(" ]\n");
+#endif
 
   if(len>0){
     int s=options->border_step;
     squarifyList(sorted_list,0,0,-1,x0+s,y0+s,xd-s,yd-s,0,level,cushion,fx,fy,findmode);
   }
-  printf(" end sqr. tree\n");
+  //  printf(" end sqr. tree\n");
 }
 
 
 void QTreeMapArea::printList(ObjList *slist,int i1,int i2){
   if(i2>=i1 && i1!=-1 && i2!=-1){
-    int forget=sum_list(slist,i1,i2,TRUE);
+    float forget=sum_list(slist,i1,i2,TRUE);
   }
 }
 
@@ -162,13 +163,18 @@ void QTreeMapArea::squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int 
 
   float aspect1=worst_aspect(slist,sri,ri,w);
   float aspect2=worst_aspect(slist,sri,ri+1,w);
-
+#if 0
   if( sum_list(slist,sri,slist->count()-1)==0 ){
     printf("abort divzero\n");
     return;
   }
+#endif
+  if(aspect2==-1){
+    printf("ASPECT FAILURE\n");
+    exit(0);
+  }
 
-  if(/* ci<(int)(slist->count()-1)  && */ aspect1>=aspect2){
+  if(/* ci<(int)(slist->count()-1)  && */ aspect1==-1 || aspect1>=aspect2){
     squarifyList(slist,ci+1,sri,ri+1,x0,y0,xd0,yd0,0,level,cushion,fx,fy,findmode);
   }
   else{
@@ -176,12 +182,12 @@ void QTreeMapArea::squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int 
     //    int w2=(sum_list(slist,sri,ri)*w)/sum_list(slist,sri,slist->count()-1);
     //layoutRow(slist,sri,ri,x0,y0,xd0,yd0,direction,w,w2);
     if(direction==VERTIKAL){
-      int w2=(sum_list(slist,sri,ri)*xd0)/sum_list(slist,sri,slist->count()-1);
+      int w2=(int)((sum_list(slist,sri,ri)*xd0)/sum_list(slist,sri,slist->count()-1));
       layoutRow(slist,sri,ri,x0,y0,w2,yd0,direction,w,w2,level,cushion,fx,fy,findmode);
       squarifyList(slist,ci,ci,ci-1,x0+w2,y0,xd0-w2,yd0,0,level,cushion,fx,fy,findmode);
     }
     else{
-      int w2=(sum_list(slist,sri,ri)*yd0)/sum_list(slist,sri,slist->count()-1);
+      int w2=(int)((sum_list(slist,sri,ri)*yd0)/sum_list(slist,sri,slist->count()-1));
       layoutRow(slist,sri,ri,x0,y0,xd0,w2,direction,w,w2,level,cushion,fx,fy,findmode);
       squarifyList(slist,ci,ci,ci-1,x0,y0+w2,xd0,yd0-w2,0,level,cushion,fx,fy,findmode);
     }
@@ -195,7 +201,7 @@ void QTreeMapArea::layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0
   printList(slist,sri,ri);
   printf(" ]\n");
 #endif
-  int total=sum_list(slist,sri,ri);
+  float total=sum_list(slist,sri,ri);
   
   //  direction=!direction;
 
@@ -205,11 +211,13 @@ void QTreeMapArea::layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0
   else{
     direction=VERTIKAL;
   }
-
+#if 0
   if(!findmode){
     paintEntry(x0,y0,xd0,yd0,QString("Blah"),direction,level,QColor(200,0,0),PM_FLAT,NULL);
   }
-#define LW 4
+#endif
+
+#define LW 0
 
   x0+=LW;
   y0+=LW;
@@ -256,13 +264,13 @@ void QTreeMapArea::layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0
   } //while
 }
 
-int QTreeMapArea::sum_list(ObjList *slist,int i1,int i2,bool print_it){
-   int sum=0;
+float QTreeMapArea::sum_list(ObjList *slist,int i1,int i2,bool print_it){
+   float sum=0;
    for(int i=i1;i<=i2;i++){
-     int size=totalSize((Object *)(slist->at(i)));
+     float size=(float)totalSize((Object *)(slist->at(i)));
      sum+=size;
        if(print_it){
-	 printf("%d ",size);
+	 printf("%d ",(long)size);
        }
    }
    return sum;
@@ -280,7 +288,7 @@ float QTreeMapArea::worst_aspect(ObjList *sorted_list,int i1,int i2,int width){
   //if(i2<0 || i1<0 || i2-i1<0){
   if(isEmptyRow(i1,i2)){
     //worst=-1;
-    worst=999999;
+    worst=-1;
   }
   else{
 
@@ -291,23 +299,36 @@ float QTreeMapArea::worst_aspect(ObjList *sorted_list,int i1,int i2,int width){
     worst=MAX( ((float)(width*width)*rp)/(float)(s*s) , ((float)(s*s)/(float)((width*width)*rm)));
 #endif
 
-    int last_size=totalSize((Object *)(sorted_list->at(i2)));
+#define CHECKPOS(a,b) if(b<0){ printf("%s is negative!\n",a); }
 
-    int total_size=sum_list(sorted_list,i1,i2);
-    int whole_size=sum_list(sorted_list,i1,sorted_list->count()-1);
+    float last_size=(float)totalSize((Object *)(sorted_list->at(i2)));
+
+    float total_size=sum_list(sorted_list,i1,i2);
+    float whole_size=sum_list(sorted_list,i1,sorted_list->count()-1);
+
+    CHECKPOS("last",last_size);
+    CHECKPOS("total",total_size);
+    CHECKPOS("whole",whole_size);
+    //    CHECKPOS("last",last_size);
 
     if(total_size==0 || whole_size==0){
       printf("abort divzero\n");
-      return 437865;
+      return -1;
     }
 
     float percent=((float)last_size)/(float)total_size;
 
-    int h=(int)(((float)width)*percent);
+    float h=(((float)width)*percent);
 
-    int w2=(total_size*width)/whole_size;
+    float w2=(total_size*width)/whole_size;
+
+    CHECKPOS("percent",percent);
+    CHECKPOS("h",h);
+    CHECKPOS("w2",w2);
 
     aspect=((float)h)/(float)w2;
+
+    CHECKPOS("aspect",aspect);
 
     aspect2=((float)(last_size*sum_list(sorted_list,i1,sorted_list->count()-1)))/(float)sum_list(sorted_list,i1,i2);
 

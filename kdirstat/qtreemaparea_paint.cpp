@@ -67,6 +67,79 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
     painter->fillRect(x0,y0,xd,yd,basecolor);
     //painter->flush();
   }
+  else if(pmode==PM_HIERARCH_DIST_PYRAMID){
+    for(int w=0;w<xd;w++){
+      for(int h=0;h<yd;h++){
+	int maxdist_x,maxdist_y,dx,dy;
+
+	if(w < c->ncxd){
+	  maxdist_x=c->ncxd;
+	  dx=w;
+	}
+	else{
+	  maxdist_x=xd - c->ncxd;
+	  dx=xd-w;
+	}
+	if(h < c->ncyd){
+	  maxdist_y=c->ncyd;
+	  dy=h;
+	}
+	else{
+	  maxdist_y=yd - c->ncyd;
+	  dy=yd-h;
+	}
+	float ix=((float)dx)/(float)maxdist_x;
+	float iy=((float)dy)/(float)maxdist_y;
+	//float i=(ix+iy)/2.0;
+	float i=sqrt(ix*iy);
+
+	QColor newcol=QColor(check_int((int)(basecolor.red()*i)),
+			     check_int((int)(basecolor.green()*i)),
+			     check_int((int)(basecolor.blue()*i)));
+	mypen.setColor(newcol);
+	mypen.setWidth( 1);
+	painter->setPen( mypen );
+	painter->setBrush( Qt::NoBrush );
+	
+	painter->drawPoint(x0+w,y0+h);
+
+      }
+    }
+  }
+  else if(pmode==PM_HIERARCH_PYRAMID){
+    float steps=16.0;
+    float sxdl=((float)(c->cx0 - x0))/steps;
+    //float sxdr=((float)(x0+xd - c->cx0))/steps;
+    float sxdr=((float)(xd - c->ncxd))/steps;
+    float sydo=((float)(c->cy0 - y0))/steps;
+    float sydu=((float)(y0+yd - c->cy0))/steps;
+
+    for(float s=0;s<=steps;s++){
+      float i=((float)s+5)/(float)steps;
+      QColor newcol=QColor(check_int((int)(basecolor.red()*i)),
+			   check_int((int)(basecolor.green()*i)),
+			   check_int((int)(basecolor.blue()*i)));
+      int l=x0+(int)(sxdl*s);
+      int o=y0+(int)(sydo*s);
+      int r=x0+xd-(int)(sxdr*s);
+      int u=y0+yd-(int)(sydu*s);
+
+      painter->fillRect(l,
+			o,
+			r-l,
+			u-o,
+			newcol);
+
+    }
+#if 0
+    painter->fillRect(c->cx0,c->cy0,5,5,basecolor);
+    painter->drawLine(x0,y0, c->cx0, c->cy0);
+    painter->drawLine(x0+xd,y0, c->cx0, c->cy0);
+    painter->drawLine(x0,y0+yd, c->cx0, c->cy0);
+    painter->drawLine(x0+xd,y0+yd, c->cx0, c->cy0);
+#endif
+    
+  }
   else if(pmode==PM_HIERARCH_CUSHION){
     for(int w=0;w<xd;w++){
       for(int h=0;h<yd;h++){
