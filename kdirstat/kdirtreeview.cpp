@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-18
+ *   Updated:	2001-11-25
  *
- *   $Id: kdirtreeview.cpp,v 1.9 2001/11/19 13:13:11 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.10 2001/11/27 09:40:18 hundhammer Exp $
  *
  */
 
@@ -232,12 +232,23 @@ KDirTreeView::openURL( KURL url )
     connect( _tree, SIGNAL( childAdded( KFileInfo * ) ),
 	     this,  SLOT  ( addChild  ( KFileInfo * ) ) );
 
+    connect( _tree, SIGNAL( deletingChild( KFileInfo * ) ),
+	     this,  SLOT  ( deleteChild  ( KFileInfo * ) ) );
+
     connect( _tree, SIGNAL( finished() ),
 	     this,  SLOT  ( slotFinished() ) );
 
     connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
 	     this,  SLOT  ( finalizeLocal( KDirInfo * ) ) );
 
+    prepareReading();
+    _tree->startReading( url );
+}
+
+
+void
+KDirTreeView::prepareReading()
+{
     
     // Prepare cyclic update
 
@@ -267,7 +278,6 @@ KDirTreeView::openURL( KURL url )
     // Actually do something
 
     _stopWatch.start();
-    _tree->startReading( url );
 }
 
 
@@ -276,9 +286,20 @@ KDirTreeView::refreshAll()
 {
     if ( _tree && _tree->root() )
     {
-	KURL url( _tree->root()->url() );
 	clear();
-	openURL( url );
+	prepareReading();
+	_tree->refresh( 0 );
+    }
+}
+
+
+void
+KDirTreeView::refreshSelected()
+{
+    if ( _tree && _tree->root() && _selection )
+    {
+	prepareReading();
+	_tree->refresh( _selection->orig() );
     }
 }
 
@@ -316,6 +337,22 @@ KDirTreeView::addChild( KFileInfo *newChild )
     {
 	// kdDebug() << "Immediately top level cloning " << newChild->debugUrl() << endl;
 	new KDirTreeViewItem( this, newChild );
+    }
+}
+
+
+void
+KDirTreeView::deleteChild( KFileInfo *child )
+{
+    KDirTreeViewItem *clone = locate( child,
+				      false );	// lazy
+    if ( clone )
+    {
+	KDirTreeViewItem *parent = clone->parent();
+	delete clone;
+
+	if ( parent )
+	    parent->updateSummary();
     }
 }
 
@@ -510,14 +547,14 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 				const QPoint &	pos,
 				int 		column )
 {
-    kdDebug() << k_funcinfo << endl;
-    
     KDirTreeViewItem *item = (KDirTreeViewItem *) listViewItem;
 
     if ( ! item )
 	return;
 
-    if ( column == _nameCol )
+    if ( column == _nameCol 		||
+	 column == _percentBarCol	||
+	 column == _percentNumCol	  )
     {
 	// Make the item the context menu is popping up over the current
 	// selection - all user operations refer to the current selection.

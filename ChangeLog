@@ -1,3 +1,18 @@
+2001-11-25  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 1.8.0-beta
+
+	* Added "Refresh selected" to main + context menu
+
+	* Implemented refreshing a single branch
+
+	* Many internal changes to enable deleting subtrees
+	  (this is a requirement for cleanups)
+
+	* Internal cleanup: Got rid of that statRoot() mess,
+	  clean ??::stat() implementation for all directory readers
+
+	
 2001-11-18  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 1.7.11-devel

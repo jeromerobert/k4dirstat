@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-18
+ *   Updated:	2001-11-25
  *
- *   $Id: kdirtree.h,v 1.5 2001/11/19 13:13:11 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.6 2001/11/27 09:40:18 hundhammer Exp $
  *
  */
 
@@ -70,8 +70,9 @@ namespace KDirStat
      **/
     typedef enum
     {
+	KDirReadUnknown,	// Unknown (yet)
 	KDirReadLocal,		// Use opendir() and lstat()
-	KDirReadKDirLister	// Use KDE 2.x's KIO::KDirLister
+	KDirReadKIO		// Use KDE 2.x's KIO network transparent methods
     } KDirReadMethod;
 
 
@@ -94,8 +95,8 @@ namespace KDirStat
      * sort is required for each of them.
      *
      * This class provides stubs for children management, yet those stubs all
-     * are default implementations that don't really deal with
-     * children. Derived classes need to take care of that.
+     * are default implementations that don't really deal with children.
+     * Derived classes need to take care of that.
      *
      * @short Basic file information (like obtained by the lstat() sys call)
      **/
@@ -123,6 +124,9 @@ namespace KDirStat
 
 	/**
 	 * Destructor.
+	 *
+	 * Don't forget to call @ref KFileInfo::unlinkChild() when deleting
+	 * objects of this class!
 	 **/
 	virtual ~KFileInfo();
 
@@ -149,8 +153,8 @@ namespace KDirStat
 	 * Returns the full URL of this object with full path and protocol
 	 * (unless the protocol is "file:").
 	 *
-	 * This is an expensive operation since it will recurse up to the top
-	 * of the tree.
+	 * This is a (somewhat) expensive operation since it will recurse up
+	 * to the top of the tree.
 	 **/
 	QString			url()			const;
 
@@ -408,8 +412,8 @@ namespace KDirStat
 	 * Returns the tree level (depth) of this item.
 	 * The topmost level is 0.
 	 *
-	 * This is an expensive operation since it will recurse up to the top
-	 * of the tree.
+	 * This is a (somewhat) expensive operation since it will recurse up
+	 * to the top of the tree.
 	 **/
 	int		treeLevel() const;
 
@@ -421,11 +425,23 @@ namespace KDirStat
 	virtual void	childAdded( KFileInfo *newChild ) { NOT_USED( newChild ); }
 
 	/**
-	 * Notification that a child is about to be deleted somewhere in the subtree.
+	 * Remove a child from the children list.
+	 *
+	 * IMPORTANT: This MUST be called just prior to deleting an object of
+	 * this class. Regrettably, this cannot simply be moved to the
+	 * destructor: Important parts of the object might already be destroyed
+	 * (e.g., the virtual table - no more virtual methods).
 	 *
 	 * This default implementation does nothing.
+	 * Derived classes that can handle children should overwrite this.
 	 **/
-	virtual void	childDeleted( KFileInfo *deletedChild ) { NOT_USED( deletedChild ); }
+	virtual void	unlinkChild( KFileInfo *deletedChild ) { NOT_USED( deletedChild ); }
+
+	/**
+	 * Notification that a child is about to be deleted somewhere in the
+	 * subtree.
+	 **/
+	virtual void	deletingChild( KFileInfo *deletedChild ) { NOT_USED( deletedChild ); }
 
 	/**
 	 * Get the current state of the directory reading process:
@@ -609,7 +625,7 @@ namespace KDirStat
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
 	virtual bool		isMountPoint()	{ return _isMountPoint; }
-	
+
 	/**
 	 * Sets the mount point state, i.e. whether or not this is a mount
 	 * point.
@@ -694,12 +710,24 @@ namespace KDirStat
 	virtual void childAdded( KFileInfo *newChild );
 
 	/**
+	 * Remove a child from the children list.
+	 *
+	 * IMPORTANT: This MUST be called just prior to deleting an object of
+	 * this class. Regrettably, this cannot simply be moved to the
+	 * destructor: Important parts of the object might already be destroyed
+	 * (e.g., the virtual table - no more virtual methods).
+	 *
+	 * Reimplemented - inherited from @ref KFileInfo.
+	 **/
+	virtual void	unlinkChild( KFileInfo *deletedChild );
+
+	/**
 	 * Notification that a child is about to be deleted somewhere in the
 	 * subtree.
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual void childDeleted( KFileInfo *deletedChild );
+	virtual void deletingChild( KFileInfo *deletedChild );
 
 	/**
 	 * Notification of a new directory read job somewhere in the subtree.
@@ -795,6 +823,7 @@ namespace KDirStat
 	time_t		_latestMtime;
 
 	bool		_summaryDirty;	// dirty flag for the cached values
+	bool		_beingDestroyed;
 	KDirReadState	_readState;
 
 
@@ -816,8 +845,6 @@ namespace KDirStat
      * the job is queued or executed. When it's done, the data is contained in
      * the corresponding @ref KDirInfo subtree of the corresponding @ref
      * KDirTree.
-     *
-     * An abstract base class that reads one directory.
      *
      * For each entry automatically a @ref KFileInfo or @ref KDirInfo will be
      * created and added to the parent @ref KDirInfo. For each directory a new
@@ -858,6 +885,7 @@ namespace KDirStat
 	 **/
 	virtual KDirInfo * dir() { return _dir; }
 
+
     protected:
 
 	/**
@@ -879,7 +907,7 @@ namespace KDirStat
 	 * Derived classes are not required to handle child deletion at all,
 	 * but if they do, calling this method is required.
 	 **/
-	void childDeleted( KFileInfo *deletedChild );
+	void deletingChild( KFileInfo *deletedChild );
 
 
 	KDirTree *	_tree;
@@ -920,6 +948,15 @@ namespace KDirStat
 	 **/
 	virtual void startReading();
 
+	/**
+	 * Obtain information about the URL specified and create a new @ref
+	 * KFileInfo or a @ref KDirInfo (whatever is appropriate) from that
+	 * information. Use @ref KFileInfo::isDirInfo() to find out which.
+	 * Returns 0 if such information cannot be obtained (i.e. the
+	 * appropriate stat() call fails).
+	 **/
+	static KFileInfo * stat( const KURL & url, KFileInfo * parent = 0 );
+
     protected:
 	DIR * _diskDir;
     };
@@ -958,6 +995,15 @@ namespace KDirStat
 	 * Inherited and reimplemented from @ref KDirReadJob.
 	 **/
 	virtual void startReading();
+
+	/**
+	 * Obtain information about the URL specified and create a new @ref
+	 * KFileInfo or a @ref KDirInfo (whatever is appropriate) from that
+	 * information. Use @ref KFileInfo::isDirInfo() to find out which.
+	 * Returns 0 if such information cannot be obtained (i.e. the
+	 * appropriate stat() call fails).
+	 **/
+	static KFileInfo * stat( const KURL & url, KFileInfo * parent = 0 );
 
 
     protected slots:
@@ -1007,12 +1053,34 @@ namespace KDirStat
 	virtual ~KDirTree();
 
 	/**
+	 * Actually start reading.
 	 *
+	 * It's not very pretty this is required as an extra method, but this
+	 * cannot simply be done in the constructor: We need to give the caller
+	 * a chance to set up Qt signal connections, and for this the
+	 * constructor must return before any signals are sent, i.e. before
+	 * anything is read.
 	 **/
 	void startReading( const KURL &	url );
 
+	
+	/**
+	 * Refresh a subtree, i.e. read its contents from disk again.
+	 *
+	 * The old subtree will be deleted and rebuilt from scratch, i.e. all
+	 * pointers to elements within this subtree will become invalid (a
+	 * @ref subtreeDeleted() signal will be emitted to notify about that
+	 * fact).
+	 *
+	 * When 0 is passed, the entire tree will be refreshed, i.e. from the
+	 * root element on.
+	 **/
+	void refresh( KFileInfo *subtree = 0 );
+	
 	/**
 	 * Returns the root item of this tree.
+	 *
+	 * Currently, there can only be one single root item for each tree.
 	 */
 	KFileInfo *	root() const { return _root; }
 
@@ -1052,7 +1120,7 @@ namespace KDirStat
 	 *
 	 * Notice: This can only be avoided with local directories where the
 	 * device number a file resides on can be obtained.
-	 * Remember, that's what this is all about ;-)
+	 * Remember, that's what this KDirStat business is all about.  ;-)
 	 **/
 	bool	crossFileSystems() const { return _crossFileSystems; }
 
@@ -1073,9 +1141,9 @@ namespace KDirStat
 	 * Notification that a child is about to be deleted.
 	 *
 	 * Directory read jobs are required to call this for each deleted child
-	 * so the tree can emit the corresponding @ref childDeleted() signal.
+	 * so the tree can emit the corresponding @ref deletingChild() signal.
 	 **/
-	virtual void childDeletedNotify( KFileInfo *deletedChild );
+	virtual void deletingChildNotify( KFileInfo *deletedChild );
 
 	/**
 	 * Send a @ref progressInfo() signal to keep the user entertained while
@@ -1101,7 +1169,7 @@ namespace KDirStat
 	/**
 	 * Emitted when a child is about to be deleted.
 	 **/
-	void childDeleted( KFileInfo *deletedChild );
+	void deletingChild( KFileInfo *deletedChild );
 
 	/**
 	 * Emitted when reading this directory tree is finished.
@@ -1142,15 +1210,6 @@ namespace KDirStat
 	 **/
         void timeSlicedRead();
 
-	/**
-	 * Receive the result from a KIO::StatJob for the root entry, create
-	 * that root entry and recursively begin reading the directory tree
-	 * from there.
-	 *
-	 * This is ugly, and it doesn't belong here. :-(
-	 **/
-	void statRoot( KIO::Job * job );
-
 
     protected:
 
@@ -1160,6 +1219,18 @@ namespace KDirStat
 	bool			_crossFileSystems;
 	bool			_enableLocalFileReader;
     };
+
+    
+    //----------------------------------------------------------------------
+    //			       Static Functions
+    //----------------------------------------------------------------------
+
+    /**
+     * Make a valid, fixed and cleaned URL from a (possibly dirty) URL or maybe
+     * a path.
+     **/
+    KURL fixedUrl( const QString & dirtyUrl );
+
 }	// namespace KDirStat
 
 

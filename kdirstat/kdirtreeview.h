@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-18
+ *   Updated:	2001-11-25
  *
- *   $Id: kdirtreeview.h,v 1.7 2001/11/19 13:13:11 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.8 2001/11/27 09:40:18 hundhammer Exp $
  *
  */
 
@@ -211,6 +211,11 @@ namespace KDirStat
 	void refreshAll();
 
 	/**
+	 * Refresh (i.e. re-read from disk) the selected subtree.
+	 **/
+	void refreshSelected();
+
+	/**
 	 * Clear this view's contents.
 	 **/
 	void clear();
@@ -266,6 +271,11 @@ namespace KDirStat
 	void	addChild	( KFileInfo *newChild );
 
 	/**
+	 * Delete a cloned child.
+	 **/
+	void	deleteChild	( KFileInfo *newChild );
+
+	/**
 	 * Recursively update the visual representation of the summary fields.
 	 * This update is as lazy as possible for optimum performance since it
 	 * is called very frequently as a cyclic update.
@@ -299,6 +309,12 @@ namespace KDirStat
 	void	sendProgressInfo();
 #endif
 
+        /**
+	 * Set up everything prior to reading: Cyclic update timer, display
+	 * busy state, default sorting, stopwatch. 
+	 **/
+        void	prepareReading();
+    
 	/**
 	 * Change the tree display to "busy" state, i.e. add a column to
 	 * display the number of pending read jobs for each level.

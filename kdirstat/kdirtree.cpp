@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-18
+ *   Updated:	2001-11-25
  *
- *   $Id: kdirtree.cpp,v 1.3 2001/11/19 13:13:11 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.4 2001/11/27 09:40:18 hundhammer Exp $
  *
  */
 
@@ -21,6 +21,9 @@
 #include "kdirtreeview.h"
 #include "kdirsaver.h"
 #include "kio/job.h"
+#include "kio/netaccess.h"
+
+#define HAVE_STUPID_COMPILER 1
 
 
 using namespace KDirStat;
@@ -87,6 +90,18 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 KFileInfo::~KFileInfo()
 {
     // NOP
+
+    
+    /**
+     * The destructor should also take care about unlinking this object from
+     * its parent's children list, but regrettably that just doesn't work: At
+     * this point (within the destructor) parts of the object are already
+     * destroyed, e.g., the virtual table - virtual methods don't work any
+     * more. Thus, somebody from outside must call deletingChild() just prior
+     * to the actual "delete".
+     *
+     * This sucks, but it's the C++ standard.
+     **/
 }
 
 
@@ -286,13 +301,15 @@ KDirInfo::init()
     _latestMtime	= _mtime;
     _isMountPoint	= false;
     _summaryDirty	= false;
+    _beingDestroyed	= false;
     _readState		= KDirQueued;
 }
 
 
 KDirInfo::~KDirInfo()
 {
-    KFileInfo	*child = _firstChild;
+    _beingDestroyed	= true;
+    KFileInfo	*child	= _firstChild;
 
 
     // Recursively delete all children.
@@ -450,7 +467,7 @@ KDirInfo::insertChild( KFileInfo *newChild )
 
     if ( newChild->isDir() || _dotEntry == 0 || _isDotEntry )
     {
-	/*
+	/**
 	 * Only directories are stored directly in pure directory nodes -
 	 * unless something went terribly wrong, e.g. there is no dot entry to use.
 	 * If this is a dot entry, store everything it gets directly within it.
@@ -464,7 +481,7 @@ KDirInfo::insertChild( KFileInfo *newChild )
 	 * even worse - seeking the correct place for insertion first. This is
 	 * none of our business; the corresponding "view" object for this tree
 	 * will take care of such niceties.
-	 */
+	 **/
 	newChild->setNext( _firstChild );
 	_firstChild = newChild;
 	newChild->setParent( this );	// make sure the parent pointer is correct
@@ -519,9 +536,9 @@ KDirInfo::childAdded( KFileInfo *newChild )
 
 
 void
-KDirInfo::childDeleted( KFileInfo *deletedChild )
+KDirInfo::deletingChild( KFileInfo *deletedChild )
 {
-    /*
+    /**
      * When children are deleted, things go downhill: Marking the summary
      * fields as dirty (i.e. outdated) is the only thing that can be done here.
      *
@@ -531,12 +548,62 @@ KDirInfo::childDeleted( KFileInfo *deletedChild )
      * latest mtime, and figuring out the second-latest cannot easily be
      * done. So we merely mark the summary as dirty and wait until a recalc()
      * will be triggered from outside - which might as well never happen when
-     * nobody wants to know some summary field anyway.	*/
+     * nobody wants to know some summary field anyway.
+     **/
 
     _summaryDirty = true;
 
     if ( _parent )
-	_parent->childDeleted( deletedChild );
+	_parent->deletingChild( deletedChild );
+
+    if ( ! _beingDestroyed && deletedChild->parent() == this )
+    {
+	/**
+	 * Unlink the child from the children's list - but only if this doesn't
+	 * happen recursively in the destructor of this object: No use
+	 * bothering about the validity of the children's list if this will all
+	 * be history in a moment anyway.
+	 **/
+
+	unlinkChild( deletedChild );
+    }
+}
+
+
+void
+KDirInfo::unlinkChild( KFileInfo *deletedChild )
+{
+    if ( deletedChild->parent() != this )
+    {
+	kdError() << deletedChild->debugUrl() << " is not a child of "
+		  << debugUrl() << " - cannot unlink from children list!" << endl;
+	return;
+    }
+
+    if ( deletedChild == _firstChild )
+    {
+	// kdDebug() << "Unlinking first child " << deletedChild->debugUrl() << endl;
+	_firstChild = deletedChild->next();
+	return;
+    }
+	
+    KFileInfo *child = firstChild();
+
+    while ( child )
+    {
+	if ( child->next() == deletedChild )
+	{
+	    // kdDebug() << "Unlinking " << deletedChild->debugUrl() << endl;
+	    child->setNext( deletedChild->next() );
+	    
+	    return;
+	}
+	
+	child = child->next();
+    }
+    
+    kdError() << "Couldn't unlink " << deletedChild->debugUrl()
+	      << " from " << debugUrl() << " children list" << endl;
 }
 
 
@@ -639,9 +706,9 @@ KDirReadJob::childAdded( KFileInfo *newChild )
 
 
 void
-KDirReadJob::childDeleted( KFileInfo *deletedChild )
+KDirReadJob::deletingChild( KFileInfo *deletedChild )
 {
-    _tree->childDeletedNotify( deletedChild );
+    _tree->deletingChildNotify( deletedChild );
 }
 
 
@@ -693,16 +760,16 @@ KLocalDirReadJob::startReading()
 
 			if ( subDir->dotEntry() )
 			    childAdded( subDir->dotEntry() );
-			
+
 			if ( _dir->device() == subDir->device()	)	// normal case
 			{
 			    _tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
 			}
 			else	// The subdirectory we just found is a mount point.
 			{
-			    kdDebug() << "Found mount point " << subDir->debugUrl() << endl;
+			    // kdDebug() << "Found mount point " << subDir->debugUrl() << endl;
 			    subDir->setMountPoint();
-			    
+
 			    if ( _tree->crossFileSystems() )
 			    {
 				_tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
@@ -756,6 +823,26 @@ KLocalDirReadJob::startReading()
     _tree->jobFinishedNotify( this );
     // Don't add anything after _tree->jobFinishedNotify()
     // since this deletes this job!
+}
+
+
+
+KFileInfo *
+KLocalDirReadJob::stat( const KURL & url, KFileInfo * parent )
+{
+    struct stat statInfo;
+
+    if ( lstat( url.path(), &statInfo ) == 0 )		// lstat() OK
+    {
+	QString name = parent ? url.filename() : url.path();
+
+	if ( S_ISDIR( statInfo.st_mode ) )		// directory?
+	    return new KDirInfo( name, &statInfo, parent );
+	else						// no directory
+	    return new KFileInfo( name, &statInfo, parent );
+    }
+    else	// lstat() failed
+	return 0;
 }
 
 
@@ -875,6 +962,36 @@ KAnyDirReadJob::finished( KIO::Job * job )
 
 
 
+KFileInfo *
+KAnyDirReadJob::stat( const KURL & url, KFileInfo * parent )
+{
+    KIO::UDSEntry uds_entry;
+
+    if ( KIO::NetAccess::stat( url, uds_entry ) )	// remote stat() OK?
+    {
+	KFileItem entry( uds_entry, url,
+			 true,		// determine MIME type on demand
+			 false );	// URL specifies parent directory
+
+	return entry.isDir() ? new KDirInfo( &entry, parent ) : new KFileInfo( &entry, parent );
+    }
+    else	// remote stat() failed
+	return 0;
+
+
+#if HAVE_STUPID_COMPILER
+    /**
+     * This is stupid, but GCC 2.95.3 claims that "control reaches end of
+     * non-void function" without this - so let him have this stupid "return".
+     *
+     * Sigh.
+     **/
+    return 0;
+#endif
+}
+
+
+
 
 
 
@@ -884,6 +1001,7 @@ KDirTree::KDirTree()
     _root			= 0;
     _crossFileSystems		= false;
     _enableLocalFileReader	= true;
+    _readMethod			= KDirReadUnknown;
     _jobQueue.setAutoDelete( true );	// Delete queued jobs automatically when destroyed
 }
 
@@ -913,99 +1031,135 @@ KDirTree::startReading( const KURL & url )
     kdDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
 #endif
 
+    if ( _root )
+    {
+	// Clean up leftover stuff
+
+	emit deletingChild( _root );
+
+	// kdDebug() << "Deleting root prior to reading" << endl;
+	delete _root;
+	_root = 0;
+    }
+
     if ( url.isLocalFile() && _enableLocalFileReader )
     {
-	// Local directory - use readdir() / lstat()
-
-	KDirSaver dir( url );			// will restore cwd when going out of scope
-	QString path = dir.currentDirPath();	// resolve relative paths
-	struct stat statInfo;
-	kdDebug() << "Using local directory reader for " << path << endl;
-
-	if ( lstat( url.path(), &statInfo ) == 0 )	// lstat() OK
-	{
-	    if ( S_ISDIR( statInfo.st_mode ) )		// directory?
-	    {
-		KDirInfo * dir = new KDirInfo( path, &statInfo );
-		_root = dir;
-		childAddedNotify( _root );
-
-		addJob( new KLocalDirReadJob( this, dir ) );
-	    }
-	    else	// no directory
-	    {
-		_root = new KFileInfo( path, &statInfo );
-		childAddedNotify( _root );
-	    }
-	}
-	else	// lstat() error
-	{
-	    kdWarning() << "lstat(" << url.path() << ") failed: " << strerror( errno ) << endl;
-	    emit finished();
-	    emit finalizeLocal( 0 );
-	}
-
-	if ( ! _jobQueue.isEmpty() )
-	    QTimer::singleShot( 0, this, SLOT( timeSlicedRead() ) );
+	kdDebug() << "Using local directory reader for " << url.url() << endl;
+	_readMethod	= KDirReadLocal;
+	_root		= KLocalDirReadJob::stat( url );
     }
-    else	// Non-local URL - use KIO methods
+    else
     {
-	kdDebug() << "Using KIO methods" << endl;
-
-	_root = 0;
-	KURL cleanUrl = url;
+	kdDebug() << "Using KIO methods for " << url.url() << endl;
+	KURL cleanUrl( url );
 	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
-	KIO::StatJob * statJob = KIO::stat( cleanUrl,
-					    false );	// showProgressInfo
-
-	connect( statJob, SIGNAL( result  ( KIO::Job * ) ),
-		 this,    SLOT  ( statRoot( KIO::Job * ) ) );
-
-	// The rest is deferred to statRoot().
+	_readMethod	= KDirReadKIO;
+	_root 		= KAnyDirReadJob::stat( cleanUrl );
     }
+
+    if ( _root )
+    {
+	childAddedNotify( _root );
+
+	if ( _root->isDir() )
+	{
+	    KDirInfo *dir = (KDirInfo *) _root;
+
+	    if ( _readMethod == KDirReadLocal )
+		addJob( new KLocalDirReadJob( this, dir ) );
+	    else
+		addJob( new KAnyDirReadJob( this, dir ) );
+	}
+	else
+	{
+	    emit finished();
+	}
+    }
+    else	// stat() failed
+    {
+	kdWarning() << "stat(" << url.url() << ") failed" << endl;
+	emit finished();
+	emit finalizeLocal( 0 );
+    }
+
+    if ( ! _jobQueue.isEmpty() )
+	QTimer::singleShot( 0, this, SLOT( timeSlicedRead() ) );
 }
 
 
 void
-KDirTree::statRoot( KIO::Job * job )
+KDirTree::refresh( KFileInfo *subtree )
 {
-    KIO::StatJob *statJob = (KIO::StatJob *) job;
+    if ( ! _root )
+	return;
 
-    if ( ! job->error() )
+    if ( ! subtree || ! subtree->parent() )	// Refresh all (from root)
     {
-	KFileItem entry( statJob->statResult(),
-			 statJob->url(),
-			 true,		// determineMimeTypeOnDemand
-			 false );	// URL is parent directory
-
-	if ( entry.isDir() )		// Directory?
-	{
-	    // kdDebug() << "Creating root dir " << entry.url().url() << endl;
-
-	    KDirInfo * dir = new KDirInfo( &entry,
-					   0 );	// Parent
-	    _root = dir;
-	    childAddedNotify( _root );
-
-	    addJob( new KAnyDirReadJob( this, dir ) );
-	}
-	else	// No directory
-	{
-	    // kdDebug() << "Creating non-directory root item " << entry.url().url() << endl;
-
-	    _root = new KFileInfo( &entry,
-				   0 );		// Parent
-	    childAddedNotify( _root );
-	}
-
-	if ( ! _jobQueue.isEmpty() )
-	    QTimer::singleShot( 0, this, SLOT( timeSlicedRead() ) );
+	startReading( fixedUrl( _root->url() ) );
     }
-    else	// StatJob returned an Error
+    else	// Refresh subtree
     {
-	kdWarning() << "KIO::stat(" << statJob->url().url() << ") failed " << endl;
-	emit finished();
-	emit finalizeLocal( 0 );
+	// Save some values from the old subtree.
+
+	KURL url		= subtree->url();
+	KFileInfo *parent	= subtree->parent();
+
+
+	// Get rid of the old subtree.
+
+	emit deletingChild( subtree );
+
+	//kdDebug() << "Deleting subtree " << subtree->debugUrl() << endl;
+
+	/**
+	 * This may sound stupid, but the parent must be told to unlink its
+	 * child from the children list. The child cannot simply do this by
+	 * itself in its destructor since at this point important parts of the
+	 * object may already be destroyed, e.g., the virtual table -
+	 * i.e. virtual methods won't work any more.
+	 *
+	 * I just found that out the hard way by several hours of debugging. ;-}
+	 **/
+	parent->deletingChild( subtree );
+	delete subtree;
+
+
+	// Create new subtree root.
+
+	subtree = ( _readMethod == KDirReadLocal ) ?
+	    KLocalDirReadJob::stat( url, parent ) : KAnyDirReadJob::stat( url, parent );
+
+	// kdDebug() << "New subtree: " << subtree->debugUrl() << endl;
+
+	if ( subtree )
+	{
+	    // Insert new subtree root into the tree hierarchy.
+
+	    parent->insertChild( subtree );
+	    childAddedNotify( subtree );
+
+	    if ( subtree->isDir() )
+	    {
+		// Prepare reading this subtree's contents.
+
+		KDirInfo *dir = (KDirInfo *) subtree;
+
+		if ( _readMethod == KDirReadLocal )
+		    addJob( new KLocalDirReadJob( this, dir ) );
+		else
+		    addJob( new KAnyDirReadJob( this, dir ) );
+	    }
+	    else
+	    {
+		emit finished();
+	    }
+
+
+	    // Trigger reading as soon as the event loop continues.
+
+	    if ( ! _jobQueue.isEmpty() )
+		QTimer::singleShot( 0, this, SLOT( timeSlicedRead() ) );
+	}
     }
 }
 
@@ -1053,9 +1207,9 @@ KDirTree::childAddedNotify( KFileInfo *newChild )
 
 
 void
-KDirTree::childDeletedNotify( KFileInfo *deletedChild )
+KDirTree::deletingChildNotify( KFileInfo *deletedChild )
 {
-    emit childDeleted( deletedChild );
+    emit deletingChild( deletedChild );
 }
 
 
@@ -1080,6 +1234,28 @@ KDirTree::sendFinalizeLocal( KDirInfo *dir )
     emit finalizeLocal( dir );
 }
 
+
+
+
+
+
+KURL
+KDirStat::fixedUrl( const QString & dirtyUrl )
+{
+    KURL url = dirtyUrl;
+
+    if ( url.isMalformed() )		// Maybe it's just a path spec?
+    {
+	url = KURL();			// Start over with an empty, but valid URL
+	url.setPath( dirtyUrl );	// and use just the path part.
+    }
+    else
+    {
+	url.cleanPath(); // Resolve relative paths, get rid of multiple '/'
+    }
+
+    return url;
+}
 
 
 
