@@ -17,3 +17,4 @@ subdirs
 *.bak
 *.auto
 *~
+autom4te.cache

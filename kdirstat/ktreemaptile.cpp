@@ -4,18 +4,20 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-06
+ *   Updated:	2003-01-07
  *
- *   $Id: ktreemaptile.cpp,v 1.6 2003/01/06 15:20:45 hundhammer Exp $
+ *   $Id: ktreemaptile.cpp,v 1.7 2003/01/07 09:32:03 hundhammer Exp $
  *
  */
+
+#include <math.h>
+#include <algorithm>
 
 #include <kapp.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <qimage.h>
 #include <qpainter.h>
-#include <minmax.h>
 
 #include "ktreemaptile.h"
 #include "ktreemapview.h"
@@ -37,7 +39,7 @@ KTreemapTile::KTreemapTile( KTreemapView *	parentView,
     , _orig( orig )
 {
     init();
-    
+
     if ( parentTile )
 	_cushionSurface = parentTile->cushionSurface();
 
@@ -58,9 +60,9 @@ KTreemapTile::KTreemapTile( KTreemapView *		parentView,
     , _cushionSurface( cushionSurface )
 {
     init();
-    
+
     // Intentionally not copying the parent's cushion surface!
-    
+
     createChildren( rect, orientation );
 }
 
@@ -126,7 +128,9 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 
     _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
 
-    KFileInfoSortedBySizeIterator it( _orig, _parentView->minTileSize() / scale, KDotEntryAsSubDir );
+    KFileInfoSortedBySizeIterator it( _orig,
+				      (KFileSize) ( _parentView->minTileSize() / scale ),
+				      KDotEntryAsSubDir );
 
     while ( *it )
     {
@@ -168,8 +172,8 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
 	return;
     }
 
-    double scale   = rect.width() * (double) rect.height() / _orig->totalSize();
-    double minSize = _parentView->minTileSize() / scale;
+    double scale	= rect.width() * (double) rect.height() / _orig->totalSize();
+    KFileSize minSize	= (KFileSize) ( _parentView->minTileSize() / scale );
 
 #if 0
     if ( _orig->hasChildren() )
@@ -282,17 +286,17 @@ KTreemapTile::layoutRow( const QRect &		rect,
     if ( secondary < _parentView->minTileSize() )	// We don't want tiles that small.
 	return rect;
 
-    
+
     // Set up a cushion surface for this layout row:
     // Add another ridge perpendicular to the row's direction
     // that optically groups this row's tiles together.
-    
+
     KCushionSurface rowCushionSurface = _cushionSurface;
 
     rowCushionSurface.addRidge( dir == KTreemapHorizontal ? KTreemapVertical : KTreemapHorizontal,
 				_cushionSurface.height() * _parentView->heightScaleFactor(),
 				rect );
-    
+
     int offset = 0;
     int remaining = primary;
     KFileInfoListIterator it( row );
@@ -327,7 +331,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 	++it;
     }
 
-    
+
     // Subtract the layouted area from the rectangle.
 
     QRect newRect;
@@ -352,7 +356,7 @@ KTreemapTile::drawShape( QPainter & painter )
 
     if ( size.height() < 1 || size.width() < 1 )
 	return;
-    
+
 
     if ( _parentView->doCushionShading() )
     {
@@ -387,8 +391,8 @@ KTreemapTile::drawShape( QPainter & painter )
     else	// No cushion shading, use plain tiles
     {
 	painter.setPen( QPen( _parentView->outlineColor(), 1 ) );
-	
-	if ( _orig->isDir() || _orig->isDotEntry() )	
+
+	if ( _orig->isDir() || _orig->isDotEntry() )
 	    painter.setBrush( _parentView->dirFillColor() );
 	else
 	    painter.setBrush( _parentView->fileFillColor() );
@@ -474,7 +478,7 @@ KTreemapTile::ensureContrast( QImage & image )
 
 	int x1 = image.width() - 6;
 	int x2 = image.width() - 1;
-	int interval = max( image.height() / 10, 5 );
+	int interval = std::max( image.height() / 10, 5 );
 	int sameColorCount = 0;
 
 
@@ -504,7 +508,7 @@ KTreemapTile::ensureContrast( QImage & image )
 
 	int y1 = image.height() - 6;
 	int y2 = image.height() - 1;
-	int interval = max( image.width() / 10, 5 );
+	int interval = std::max( image.width() / 10, 5 );
 	int sameColorCount = 0;
 
 	for ( int x = interval; x < image.width(); x += interval )
