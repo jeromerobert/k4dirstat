@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-08
+ *   Updated:	2003-01-28
  */
 
 
@@ -168,7 +168,10 @@ KDirTreeView::openURL( KURL url )
     connect( _tree, SIGNAL( deletingChild( KFileInfo * ) ),
 	     this,  SLOT  ( deleteChild  ( KFileInfo * ) ) );
 
-    connect( _tree, SIGNAL( finished() ),
+    connect( _tree, SIGNAL( startingReading() ),
+	     this,  SLOT  ( prepareReading()  ) );
+
+    connect( _tree, SIGNAL( finished()     ),
 	     this,  SLOT  ( slotFinished() ) );
 
     connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
@@ -180,7 +183,7 @@ KDirTreeView::openURL( KURL url )
     connect( _tree, SIGNAL( selectionChanged( KFileInfo * ) ),
 	     this,  SLOT  ( selectItem      ( KFileInfo * ) ) );
 
-    prepareReading();
+    // Implicitly calling prepareReading() via the tree's startingReading() signal
     _tree->startReading( url );
 
     logActivity( 30 );
@@ -228,7 +231,7 @@ KDirTreeView::refreshAll()
     if ( _tree && _tree->root() )
     {
 	clear();
-	prepareReading();
+	// Implicitly calling prepareReading() via the tree's startingReading() signal
 	_tree->refresh( 0 );
     }
 }
@@ -239,7 +242,7 @@ KDirTreeView::refreshSelected()
 {
     if ( _tree && _tree->root() && _selection )
     {
-	prepareReading();
+	// Implicitly calling prepareReading() via the tree's startingReading() signal
 	_tree->refresh( _selection->orig() );
     }
 
@@ -504,7 +507,7 @@ KDirTreeView::closeAllExcept( KDirTreeViewItem *except )
 	kdError() << k_funcinfo << ": NULL pointer passed" << endl;
 	return;
     }
-    
+
     except->closeAllExceptThis();
 }
 
@@ -1209,7 +1212,7 @@ KDirTreeViewItem::setOpen( bool open )
 	updateSummary();
 
     // kdDebug() << _openCount << " open in " << this << endl;
-    
+
     // _view->logActivity( 1 );
 }
 
@@ -1267,7 +1270,7 @@ KDirTreeViewItem::closeAllExceptThis()
     {
 	if ( sibling != this )
 	    sibling->closeSubtree();	// Recurse down
-	
+
 	sibling = sibling->next();
     }
 

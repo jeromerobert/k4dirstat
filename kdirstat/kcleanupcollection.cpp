@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-28
  */
 
 
@@ -238,6 +238,13 @@ KCleanupCollection::addUserCleanups( int number )
 	KCleanup *cleanup = new KCleanup( id, "", title, _actionCollection );
 	CHECK_PTR( cleanup );
 	cleanup->setEnabled( false );
+
+	if ( i <= 9 )
+	{
+	    // Provide an application-wide keyboard accelerator for cleanup #0..#9
+	    cleanup->setAccel( Qt::CTRL + Qt::Key_0 + i );
+	}
+	
 	add( cleanup );
     }
 }

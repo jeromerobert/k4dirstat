@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-28
  */
 
 
@@ -1262,6 +1262,11 @@ namespace KDirStat
 	 * e.g., when entire subtrees are deleted.
 	 **/
 	void childDeleted();
+
+	/**
+	 * Emitted when reading is started.
+	 **/
+	void startingReading();
 
 	/**
 	 * Emitted when reading this directory tree is finished.

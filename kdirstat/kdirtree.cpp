@@ -1105,6 +1105,8 @@ KDirTree::startReading( const KURL & url )
     kdDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
 #endif
 
+    emit startingReading();
+    
     if ( _root )
     {
 	// Clean up leftover stuff
