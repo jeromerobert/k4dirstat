@@ -6,13 +6,14 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.5 2001/07/05 23:15:37 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.6 2001/07/11 02:16:03 alexannika Exp $
  *
  */
 
 #ifndef QTreeMap_h
 #define QTreeMap_h
 
+class Object;
 
 #ifdef HAVE_CONFIG_H
 #   include <config.h>
@@ -27,7 +28,6 @@
 #include <qstatusbar.h>
 #include <qmenubar.h>
 #include <qmainwindow.h>
-//#include "kdirtree.h"
 #include <qpen.h>
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -39,7 +39,9 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qscrollview.h>
+#include <qlist.h>
 
+#include "kdirtree.h"
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -114,6 +116,14 @@ namespace KDirStat
   class QTreeMapArea;
   class QTreeMapOptions;
   class QTreeMapWindow;
+  class ObjList;
+
+class ObjList : public QList<KDirInfo> {
+public:
+  //int compareItems(Object *o1, Object *o2);
+  int compareItems(QCollection::Item o1, QCollection::Item o2);
+};
+
 
   class QTMcolorScheme {
   public:
@@ -148,6 +158,8 @@ namespace KDirStat
     QColor mono_color;
     float sequoia_h;
     float sequoia_f;
+    bool squarify;
+    bool show_inodes;
   };
 
   class Cushion {
@@ -217,6 +229,15 @@ namespace KDirStat
 
   void appendRectlist(QString node_name,int x,int y,int xd,int yd);
   int getNextRotatingColorIndex();
+
+  ObjList *sortedList(Object *dutree);
+  void squarifyTree(Object *dutree,int x0,int y0,int xd0,int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode);
+  void squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int y0,int xd0,int yd0, bool bogus_direction, int level,Cushion *cushion,int fx,int fy,int findmode);
+  void layoutRow(ObjList *slist,int sri,int ri,int x0,int y0,int xd0,int yd0,bool direction, int w,int w2, int level,Cushion *cushion,int fx,int fy,int findmode);
+  float worst_aspect(ObjList *sorted_list,int i1,int i2,int width);
+  //int sum_list(ObjList *slist,int i1,int i2);
+  void printList(ObjList *slist,int i1,int i2);
+  int sum_list(ObjList *slist,int i1,int i2,bool print_it=FALSE);
 
   QColor& getBaseColor(QString name);
 

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.3 2001/07/05 23:15:37 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.4 2001/07/11 02:16:03 alexannika Exp $
  *
  */
 
@@ -86,6 +86,8 @@ namespace KDirStat
     void selectColorScheme(int id);
     void changeDrawText(int id);
     void changeDynamicShading(int id);
+    void changeSquarifyTreemaps(int id);
+    void changeShowInodeSpace(int id);
     void selectDontDrawOption(int id);
     void selectHFactor(int id);
     void selectSHFactor(int id);

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.5 2001/07/05 23:15:37 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.6 2001/07/11 02:16:03 alexannika Exp $
  *
  */
 
@@ -146,6 +146,8 @@ void QTreeMapWindow::makeWidgets(){
   menu_options->insertItem("Test Cushion Factor f=",menu_sffactor);
   menu_options->insertItem("Color Scheme",menu_colorscheme);
   menu_options->insertItem("Draw &Text",this,SLOT(changeDrawText(int)));
+  menu_options->insertItem("squarify Treemaps",this,SLOT(changeSquarifyTreemaps(int)));
+  menu_options->insertItem("show inode space",this,SLOT(changeShowInodeSpace(int)));
   menu_options->insertItem("dynamic shading",this,SLOT(changeDynamicShading(int)));
 
   menu_file_id=menubar->insertItem("&File",menu_file);
@@ -166,6 +168,7 @@ void QTreeMapWindow::makeWidgets(){
 
   QTreeMapArea *qtm_area=(QTreeMapArea *)graph_widget;
 
+  sleep(1);
   printf("CONNECTS\n");
   QObject::connect(up_button, SIGNAL(clicked()), qtm_area, SLOT(directoryUp()));
   QObject::connect(zoom_in_button, SIGNAL(clicked()), qtm_area, SLOT(zoomIn()));
@@ -249,6 +252,16 @@ void QTreeMapWindow::changeDrawText(int id){
 void QTreeMapWindow::changeDynamicShading(int id){
   NOT_USED(id);
   options->dynamic_shading=!(options->dynamic_shading);
+  redoOptions();
+}
+void QTreeMapWindow::changeSquarifyTreemaps(int id){
+  NOT_USED(id);
+  options->squarify=!(options->squarify);
+  redoOptions();
+}
+void QTreeMapWindow::changeShowInodeSpace(int id){
+  NOT_USED(id);
+  options->show_inodes=!(options->show_inodes);
   redoOptions();
 }
 void QTreeMapWindow::selectHFactor(int id){

@@ -1,3 +1,10 @@
+2001-07-10 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* implemented squarified treemaps (experimental, buggy)
+	* new file added: qtreemaparea_squarify.cpp
+	* Bug: when zooming in too much, the paintarea takes up too much
+	  memory -> X swaps till death
+
 2001-07-05 Alexander Rawass <alexannika@users.sourceforge.net>
 	
 	* more options and exp. shadings

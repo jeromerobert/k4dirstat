@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.5 2001/07/05 23:15:37 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.6 2001/07/11 02:16:03 alexannika Exp $
  *
  */
 
@@ -292,11 +292,6 @@ void QTreeMapArea::directoryUp(){
   }
 }
 
-void QTreeMapArea::cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2){
-  s1=s1+4*h*(x2+x1)/(x2-x1);
-  s2=s2-4*h/(x2-x1);
-}
-
 void QTreeMapArea::setOptions(QTreeMapOptions *opt){
   delete options;
 
@@ -376,24 +371,6 @@ QTreeMapArea::~QTreeMapArea()
   // to be filled later...
 }
 
-Cushion::Cushion(int xd,int yd,float sh,float sf){
-  r[DX][0]=0.0;
-  r[DX][1]=(float)xd;
-  r[DY][0]=0.0;
-  r[DY][1]=(float)yd;
-
-  s[DX][1]=0.0;
-  s[DX][2]=0.0;
-  s[DY][1]=0.0;
-  s[DY][2]=0.0;
-
-  h=sh;
-  f=sf;
-
-  cx0=xd;
-  cy0=yd;
-}
-
 
 QTreeMapOptions::QTreeMapOptions(){
   draw_mode=DM_BOTH;
@@ -401,11 +378,11 @@ QTreeMapOptions::QTreeMapOptions(){
   start_direction=HORIZONTAL;
   step_width=0;
   paint_size_x=800;
-  paint_size_y=500;
+  paint_size_y=600;
   highlight_frame_width=3;
   highlight_frame_col=QColor(255,255,255);
-  dont_draw_xyd=0;
-  dont_descend_xyd=1;
+  dont_draw_xyd=2;
+  dont_descend_xyd=2;
   draw_text=FALSE;
   color_scheme=CS_CYCLIC;
   hc_factor=0.3f;
@@ -414,5 +391,7 @@ QTreeMapOptions::QTreeMapOptions(){
   mono_color=QColor(255,255,255);
   sequoia_f=0.75;
   sequoia_h=0.5;
+  squarify=TRUE;
+  show_inodes=TRUE;
 }
 

@@ -65,6 +65,7 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
     drawDuTree(dutree,x0,y0,xd0,yd0,options->start_direction,0,cushion);
   }
 
+  printf("END OF RECURSION\n");
     painter->end();
 
     this->update();
@@ -89,9 +90,9 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
       found_kfileinfo=dutree;
       if(findmode==FIND_FIRSTDIR && dutree!=root_tree){
 	// we have found the first directory with this coordinates
-	if(options->dynamic_shading==FALSE){
+	//if(options->dynamic_shading==FALSE){
 	  return;
-	}
+	  //}
       }
     }
     else{
@@ -229,7 +230,11 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	//printf("neither file nor dir %s\n",node_name.latin1());
 	// do nothing?
       }
-      
+
+  if(options->squarify==TRUE){
+    squarifyTree(dutree,x0,y0,xd0,yd0,0,level,c,fx,fy,findmode);
+  }
+  else{
       float x=(float)(x0 + options->border_step);
       float y=(float)(y0 + options->border_step);
       float xd=0.0;
@@ -306,9 +311,8 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 
 	    drawDuTree(dotentry,(int)x,(int)y,(int)(xd-sw),(int)(yd-sw),subdirection,level,c,fx,fy,findmode);
       }
-      if(c!=NULL){
-	delete c;
-      }
+  }
+  delete c;
   }
 }
 
@@ -334,7 +338,7 @@ void QTreeMapArea::CTM(Object *tree,bool direction,Cushion *cushion){
     else{
       direction=HORIZONTAL;
     }
-    float w=	w=( c->r[direction][1] - c->r[direction][0] )/((float)totalSize(tree));
+    float w=( c->r[direction][1] - c->r[direction][0] )/((float)totalSize(tree));
     
     Object *child=firstChild(tree);
     bool dotentry_flag=FALSE;
@@ -357,3 +361,29 @@ void QTreeMapArea::CTM(Object *tree,bool direction,Cushion *cushion){
   }
   delete c;
 }
+
+
+void QTreeMapArea::cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2){
+  s1=s1+4*h*(x2+x1)/(x2-x1);
+  s2=s2-4*h/(x2-x1);
+}
+
+
+Cushion::Cushion(int xd,int yd,float sh,float sf){
+  r[HORIZONTAL][0]=0.0;
+  r[HORIZONTAL][1]=(float)xd;
+  r[VERTIKAL][0]=0.0;
+  r[VERTIKAL][1]=(float)yd;
+
+  s[HORIZONTAL][1]=0.0;
+  s[HORIZONTAL][2]=0.0;
+  s[VERTIKAL][1]=0.0;
+  s[VERTIKAL][2]=0.0;
+
+  h=sh;
+  f=sf;
+
+  cx0=xd;
+  cy0=yd;
+}
+

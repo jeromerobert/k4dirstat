@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemaparea.cpp,v 1.1 2001/07/01 17:15:32 alexannika Exp $
+ *   $Id: kdirtreemaparea.cpp,v 1.2 2001/07/11 02:16:03 alexannika Exp $
  *
  */
 
@@ -91,13 +91,13 @@ QString KDirTreeMapArea::tellUnit(int size){
     str.sprintf("%d bytes",size);
   }
   else if(size<(1024*1024)){
-    str.sprintf("%d kB",size/(1024));
+    str.sprintf("%.2f kB",((float)size)/(1024.0));
   }
   else if(size<(1024*1024*1024)){
-    str.sprintf("%d MB",size/(1024*1024));
+    str.sprintf("%.2f MB",((float)size)/(1024*1024));
   }
   else {
-    str.sprintf("%d GB",size/(1024*1024*1024));
+    str.sprintf("%.2f GB",((float)size)/(1024*1024*1024));
   }
 
   return str;

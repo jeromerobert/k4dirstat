@@ -11,6 +11,7 @@ kdirstat_SOURCES = 				\
 	qtreemaparea.cpp			\
 	qtreemaparea_paint.cpp			\
 	qtreemaparea_recursion.cpp		\
+	qtreemaparea_squarify.cpp		\
 	kdirtreemaparea.cpp		\
 	kdirtreemapwindow.cpp			\
 	kdirtree.cpp				\
