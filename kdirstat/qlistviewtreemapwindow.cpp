@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
- *   Updated:	2001-06-11
+ *   Updated:	2001-08-16
  *
- *   $Id: qlistviewtreemapwindow.cpp,v 1.1 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: qlistviewtreemapwindow.cpp,v 1.2 2001/08/16 14:22:05 hundhammer Exp $
  *
  */
 
@@ -23,7 +23,8 @@
 #include "qlistviewtreemapwindow.h"
 
 
-QListViewTreeMapWindow::QListViewTreeMapWindow(int col_name,int col_size,QWidget *parent=NULL)  : QTreeMapWindow() {
+QListViewTreeMapWindow::QListViewTreeMapWindow(int col_name,int col_size,QWidget *parent)  : QTreeMapWindow() {
+  (void) parent;
   //setConfig();
   colname=col_name;
   colsize=col_size;
