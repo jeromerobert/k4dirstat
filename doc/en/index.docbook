@@ -4,12 +4,12 @@
   <!ENTITY kapp "&kdirstat;"><!-- replace |NAMELITTLE| here -->
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
-  
-  
+
+
   <!-- Do not define any other entities; instead, use the entities
        from kde-genent.entities and $LANG/user.entities. -->
 ]>
-<!-- kdoctemplate v0.8 October 1 1999 
+<!-- kdoctemplate v0.8 October 1 1999
      Minor update to "Credits and Licenses" section on August 24, 2000
      Removed "Revision history" section on 22 January 2001   -->
 
@@ -193,7 +193,7 @@ see what object was changed last and when.
 <listitem>
 <para>
 Stays on one file system by default - reads mounted file systems only on
-request. 
+request.
 </para>
 <para>
 You don't care about a mounted /usr file system if the root file
@@ -209,7 +209,7 @@ protocols KDE support.
 </para></listitem>
 
 <listitem><para>
-PacMan animation while directories are being read. 
+PacMan animation while directories are being read.
 OK, this is not exactly essential, but it's fun.
 </para></listitem>
 
@@ -316,11 +316,795 @@ about it.
 
 
 
+<chapter id="basic_usage">
+<title>Basic Usage</title>
+
+<sect1 id="invoking">
+<title>Invoke &kdirstat;</title>
+
+<para>
+Start &kdirstat; from the KDE menu, right-click a directory in a
+Konqueror window or type
+<userinput>kdirstat</userinput> or
+<userinput>kdirstat &lt;directory-name&gt;</userinput> in a shell
+window or at KDE's <guibutton>Run command</guibutton> prompt
+(<keycap>Alt-F2</keycap>).
+</para>
+</sect1>
+
+<sect1 id="select_dir">
+<title>Select a Directory</title>
+
+<para>
+&kdirstat; will prompt for a directory if you didn't specify one when starting
+it. You can specify local directories as well as URLs of remote locations -
+<userinput>kdirstat /usr/lib</userinput> works as well as
+<userinput>kdirstat ftp:/ftp.myserver.org/pub</userinput>.
+</para>
+<para>
+In any case, &kdirstat; will start reading that directory. That might take a
+while, but you can work with the program during all that time.
+</para>
+</sect1>
+
+<sect1 id="find_out_where">
+<title>Find out what Uses up all the Disk Space</title>
+
+<para>
+Look at the "Subtree Total" column or wait until a subtree is finished reading
+and look at the graphical percentage bar display to find out what directory
+subtee takes up how much disk space. Use the open / close icons (plus and minus
+signs or small arrows, depending on how you set up your KDE) or double-click an
+item to open or close it.
+</para>
+<para>
+Notice how files at any directory level are kept apart from subdirectories -
+there is a separate &lt;Files&gt; entry for them. This way, you can easily tell
+how much disk space the files are using up in relation to the subdirectories
+and their respective files.
+</para>
+</sect1>
+
+<sect1 id="do_something">
+<title>Do Something about it</title>
+
+<para>
+Once you found out where all your disk space goes, do something about it - this
+is probably why you are using this program in the first place. You have several
+options:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Go to a computer hardware store and buy a new hard disk.
+This is probably not what you want. ;-)
+</para>
+</listitem>
+
+<listitem>
+<para>Tell the owner of that file or directory to please clean up.
+You can use &kdirstat; for that: Mark that file or directory (i.e., left-click
+on it) and select <guibutton>Send Mail to Owner</guibutton>
+from the context menu (right-click), from the tool bar (the envelope icon) or
+from the <guibutton>Report</guibutton> menu.
+</para>
+<para>
+A precomposed message will open in your
+<link linkend="mail_client">favourite mail client</link>.
+You can edit that text before actually sending it. The recipient of
+the mail is the user who owns the file or directory you marked - but of course
+you can edit that, too in the mail client.
+</para>
+<para>
+The mail will contain those items that are currently displayed open from the
+marked item on. If you want to include more items, open the respective
+directories; if you want less, close them. Of course you can always delete
+lines in the mail client if you find them irrelevant - there is no use
+complaining about some 367 byte files along with others that take several
+megabytes.
+</para>
+
+</listitem>
+
+<listitem>
+<para>
+Invoke a "cleanup" action. There are several predefined ones, and you can
+define your own. Use the context menu, the tool bar or the <guibutton>Clean
+Up</guibutton> menu to find out which are available.
+</para>
+<para>
+For some cleanup actions you will have to wait until the directory
+tree is completely read until you can activate them. If a cleanup action
+doesn't get enabled even then, the type of item you selected is inappropriate
+for that kind of action: Some actions can only performed on directories, while
+others can only be performed on files. Only very few actions work for
+&lt;Files&gt; pseudo entries since they don't have a real counterpart in the
+file system.
+</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="predefined_cleanups">
+<title>Predefined Cleanup Actions</title>
+
+<para>
+&kdirstat; comes with a number of predefined cleanup actions. You can configure
+them all to your personal preference, and you can add your own. Here is what
+the predefined cleanup actions do:
+</para>
+
+<sect1 id="cleanup_open_in_konqueror">
+<title>Open in Konqueror</title>
+
+<para>
+This opens the selected item in a Konqueror window.
+</para>
+<para>
+You can use Konqueror to delete it (but then, you can also do that more easily
+from within &kdirstat;), you can move it to another place or you can examine it
+more closely.
+</para>
+<para>
+If the selected item is a known MIME type, this will open the appropriate
+application. For example, if you invoke
+<guibutton>Open in Konqueror</guibutton> on a PNG image, Konqueror will
+immediately start an image viewer and display that image.
+</para>
+<para>
+This is the Swiss army knife of cleanup actions: You can do a lot of different
+things with it. Thus, &kdirstat; cannot know if and when it makes sense to
+re-read that directory - you will have to do that manually:
+Select <guibutton>Refresh selected</guibutton> from the context menu
+(right-click) or from the <guibutton>File</guibutton> menu.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_open_in_terminal">
+<title>Open in Terminal</title>
+
+<para>
+This opens a terminal window in the directory of the selected item.
+</para>
+
+<para>
+Use this to issue a few shell commands in that directory, then simply close
+that shell window. You can easily open a new one in a different directory if
+you need one, so you might want not to bother to repeatedly type
+<userinput>cd</userinput> with lenghty paths - simply close that shell and open
+a new one at the new location (type <keycap>Ctrl</keycap>-<keysym>T</keysym>.
+</para>
+<para>
+As with the <guibutton>Open in Konqueror</guibutton> cleanup action described
+above, you must manually re-read the directory's contents if you make
+changes. Otherwise they will not be reflected in &kdirstat;'s display.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_compress">
+<title>Compress</title>
+
+<para>
+This compresses the selected directory to a .tar.bz2 archive.
+</para>
+
+<para>
+For example, a subdirectory
+<userinput>/work/home/kilroy/loveletters</userinput> will become a compressed
+archive <userinput>/work/home/kilroy/loveletters.tar.bz2</userinput>.
+The directory is removed once the compressed archive is successfully created
+(but of course not if that failed).
+</para>
+<para>
+Any existing archive of the same name will silently be overwritten.
+</para>
+<para>
+Remember that Konqueror and related utilities can use that kind of archive
+transparently; there is no need to unpack it if you want to read a file in that
+archive. Simply click into the archive in Konqueror.
+</para>
+
+<para>
+If you prefer .tgz archives to .tar.bz2, change the command line in the
+<link linkend="configuring_cleanups">cleanup settings</link>. With .tar.bz2,
+this is
+</para>
+<para>
+<userinput>
+cd ..; tar cjvf &percnt;n.tar.bz2 &percnt;n &amp;&amp; rm -rf &percnt;n
+</userinput>
+</para>
+<para>
+For .tgz archives, change this to
+</para>
+<para>
+<userinput>
+cd ..; tar czvf &percnt;n.tgz &percnt;n &amp;&amp; rm -rf &percnt;n
+</userinput>
+</para>
+<para>
+But you might think twice before doing that: "bzip2" (for .tar.bz2) compresses
+a lot more efficient than ordinary "gzip" (for .tgz or .tar.gz), and most
+systems support that just as well. It's just a matter of getting used to typing
+<userinput>tar cjvf</userinput> rather than <userinput>tar czvf</userinput> for
+creating an archive or <userinput>tar xjvf</userinput> rather than <userinput>tar
+xzvf</userinput> for unpacking it.
+</para>
+
+</sect1>
+
+
+<sect1 id="cleanup_make_clean">
+<title>make clean</title>
+
+<para>
+This issues a <userinput>make clean</userinput> command in the selected
+directory.
+</para>
+<para>
+This is useful if you build software from source frequently. After successfully
+installing the software (<userinput>make install</userinput>), there is no
+need to keep the built binaries around in the source directory any longer. On
+the other hand, people frequently forget to clean up those directories, so you
+can do that from within &kdirstat; with a few mouse clicks.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_clean_trash">
+<title>Delete Trash Files</title>
+
+<para>
+This deletes files that are usually superfluous, such as editor backup files or
+core dumps in the selected directory and in any of its subdirectories.
+</para>
+<para>
+By default, the following types of files are deleted:
+</para>
+<itemizedlist>
+<listitem><para>Object files left over from compiling software: *.o</para></listitem>
+<listitem><para>Editor backup files: *~ *.bak *.auto</para></listitem>
+<listitem><para>Core dump files: core</para></listitem>
+</itemizedlist>
+
+<para>
+Of course, you can <link linkend="configuring_cleanups">configure this</link>
+to suit your personal preferences.
+</para>
+
+</sect1>
+
+
+<sect1 id="cleanup_delete_to_trash_bin">
+<title>Delete (to Trash Bin)</title>
+
+<para>
+This invokes the KDE standard "delete" operation, i.e. the selected file or
+directory is moved to the KDE trash bin.
+</para>
+<para>
+Even though this doesn't help to reclaim disk space right away, it is a safe
+method of deleting. Use this action for anything you want to get rid of and
+then review your actions by looking into the KDE trash bin. If you are really
+sure, select <guibutton>Empty Trash Bin</guibutton> there. Until that point,
+you can always move those items back to where they came from.
+</para>
+<para>
+You might consider not using this cleanup action if you are cleaning up a
+directory on a different file system than your home directory: In that case
+that "moving to trash" involves copying the items (and then deleting them at
+the original location) which might take a while.
+</para>
+<para>
+Notice that when moving an item to trash is not successful, &kdirstat; will
+still falsely display that item as deleted even though it's still there. Use
+<guibutton>Refresh selected</guibutton> from the context menu to update the
+display manually. Read <link linkend="assume_deleted">here</link> why.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_hard_delete">
+<title>Delete (no way to undelete!)</title>
+
+<para>
+This is a real delete, not simply moving something to the trash bin. It's
+quicker, and disk space is reclaimed immediately, but there is no way to
+recover if you made a mistake. You will be prompted for confirmation when you
+invoke this.
+</para>
+<para>
+You can <link linkend="confirmation">change the configuration to not prompt for
+confirmation</link>, but don't blame me if anything goes wrong after you did that.
+</para>
+<para>
+As with <guibutton>Delete (to Trash Bin)</guibutton>, you will need to manually
+re-read a directory if this went wrong (usually due to insufficient permissions)
+- &kdirstat;'s display is out of sync with the hard disk if that happens.
+Read <link linkend="assume_deleted">here</link> why.
+</para>
+</sect1>
+
+
+</chapter>
+
+<chapter id="configuring_cleanups">
+<title>Configuring Cleanup Actions</title>
+
+
+<para>
+Select <guibutton>Configure &kdirstat;...</guibutton> from the
+<guibutton>Settings</guibutton> menu and switch to the
+<guibutton>Cleanups</guibutton> page:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>Configuring cleanup actions</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-config-cleanups.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Configure cleanup actions window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<sect1 id="config_cleanups_reference">
+<title>Reference</title>
+
+<para>
+Select the cleanup action you want to configure from the list at the left
+side. You might need to check <guibutton>Enabled</guibutton> before you can
+make any changes.
+</para>
+
+<para>
+Enter a title in the <guibutton>Title</guibutton> field. You should mark one of
+the characters in the title with an ampersand ('&amp;') to provide a keyboard
+shortcut in the menus.
+</para>
+
+<para>
+Enter a shell command in the <guibutton>Command line</guibutton> field. The
+command will be invoked with <userinput>/bin/sh</userinput>, so you can use
+everything the default shell provides - including pipelines, logical 'and' or
+'or' ('&amp;&amp;' or '||', respectively) or multiple commands separated by
+semicolons. Use '%p' for the full path (or URL) of the currently selected file
+or directory or '%n' for the name without path.
+</para>
+<para>
+&kdirstat;
+will always change directory to the selected item, so there is no need to
+manually add a <userinput>cd</userinput> command to the command line.
+</para>
+<para>
+Commands are started in the background if possible, so don't add an extra
+ampersand '&amp;'.
+</para>
+
+<para>
+Check <guibutton>Recurse into subdirectories</guibutton> if the command should
+be called for each subdirectory of the selected directory. Whether or not this
+is useful depends on the kind of command you entered: A <userinput>make
+clean</userinput> command usually takes care of that internally, while it's a
+lot easier to use <userinput>rm -f *.bak</userinput> and let &kdirstat; handle
+subdirectories rather than using a more complex <userinput>find ... | xargs
+...</userinput> command.
+</para>
+
+<para id="confirmation">
+Check <guibutton>Ask for confirmation</guibutton> if you want to prompt the
+user for confirmation every time he invokes that cleanup action (but not for
+each recursive subdirectory!). But beware: Having to confirm a lot of such
+prompts tends to make users unattentive. They begin to blindly confirm
+everything out of habit. Thus, use confirmations only when really necessary.
+</para>
+
+<para>
+Check the category of objects this cleanup action works for. Not all commands
+make sense for both files and directories. &lt;Files&gt; pseudo entries are a
+very special case: They don't have a real counterpart on the hard disk. You can
+safely check the &lt;Files&gt; category for actions that require changing
+directory to somewhere and then execute a command there, but there is no use
+trying to delete such a &lt;Files&gt; entry.
+</para>
+
+<para>
+Choose between <guibutton>On local machine only ('file:/' protocol)</guibutton>
+and <guibutton>Network transparent (ftp, smb, tar, ...)</guibutton>.
+Most commands run locally only. There are only a few exceptions: For example,
+you can open a remote location in many KDE applications, e.g., Konqueror.
+</para>
+
+<para>
+Select a <guibutton>Refresh Policy</guibutton> to tell &kdirstat; how to update
+its display after the cleanup action has been invoked:
+</para>
+
+<itemizedlist>
+
+<listitem>
+<para>
+<guibutton>No refresh</guibutton>: Don't refresh the display. Either the
+cleanup action doesn't change the directory tree anyway or it is unknown when
+or how - or you don't care.
+</para>
+<para>
+Cleanup actions with this refresh policy are the only ones that can be invoked
+while the respective directory subtree is being read. All others can only be
+started once reading is finished.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<guibutton>Refresh this entry</guibutton>: Refresh the directory branch the
+cleanup action was selected with. This is the most useful refresh policy for
+cleanup actions that delete a number of items from a directory tree, for
+example <guibutton>Delete Trash Files</guibutton>.
+</para>
+<para>
+If this refresh policy is selected, the command is not started in the
+background: &kdirstat; has to wait for it to finish so the directory display
+can be refreshed at the proper time.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<guibutton>Refresh this entry's parent</guibutton>: Similar to
+<guibutton>Refresh this entry</guibutton>, but one level higher up. Useful for
+cleanup actions that delete the selected item but create a new one on the same
+level, for example the <guibutton>Compress</guibutton> standard cleanup: The
+original directory is deleted, but a .tar.bz2 file is created instead.
+</para>
+<para>
+If this refresh policy is selected, the command is not started in the
+background: &kdirstat; has to wait for it to finish so the directory display
+can be refreshed at the proper time.
+</para>
+</listitem>
+
+<listitem>
+<para id="assume_deleted">
+<guibutton>Asume entry has been deleted</guibutton>: Don't really re-read
+anything from disk, but assume the cleanup action deletes the selected
+item, thus simply remove that item from the directory tree's representation in
+&kdirstat;'s internal data structures.
+</para>
+<para>
+This is much faster than any real refresh, but it might cause the internal data
+structures to get out of sync with the hard disk if the cleanup action fails and
+doesn't really delete the selected item. In this case, the user will have to
+manually re-read that directory branch.
+</para>
+</listitem>
+</itemizedlist>
+
+
+</sect1>
+
+<sect1 id="config_cleanups_example">
+<title>Examples</title>
+
+<sect2>
+<title>Open in Emacs</title>
+
+<para>
+This is a trivial example that shows you how to add a new cleanup action that
+opens a file in Emacs (or any other editor of your choice).
+</para>
+
+<para>
+Select one of the unused user-defined cleanup actions from the list. Make sure
+<guibutton>Enabled</guibutton> is checked.
+</para>
+
+<para>
+Enter <userinput>Open in &amp;Emacs</userinput> in the
+<guibutton>Title</guibutton> field. Notice the '&amp;': This marks the letter
+'E' as this cleanup action's keyboard shortcut.
+</para>
+
+<para>
+Enter <userinput>emacs &percnt;p</userinput> in the <guibutton>Command
+line</guibutton> field.
+</para>
+
+<para>
+Leave both <guibutton>Recurse into subdirectories</guibutton> and
+<guibutton>Ask for confirmation</guibutton> unchecked.
+</para>
+
+<para>
+Make sure only <guibutton>Files</guibutton> is checked in the <guibutton>Works
+for...</guibutton> section and <guibutton>Directories</guibutton> and
+<guibutton>&lt;Files&gt; pseudo entries</guibutton> are unchecked. If you like
+Emacs' "dired" mode very much, you can also leave
+<guibutton>Directories</guibutton> checked, but it definitely doesn't make any
+sense trying to open an editor with a &lt;Files&gt; entry.
+</para>
+
+<para>
+Leave <guibutton>On local machine only</guibutton> selected. If you feel like
+experimenting a lot, you can try setting up Emacs so it fetches files from
+remote locations, but even then most likely only the 'ftp' protocol will work.
+</para>
+
+<para>
+Leave the <guibutton>Refresh Policy</guibutton> at
+<guibutton>No refresh</guibutton>. This ensures Emacs is started
+in the background and you can continue working with &kdirstat; while Emacs
+runs. It wouldn't make too much sense to change the command line to
+<userinput>emacs &percnt;p &amp;</userinput> and change the refresh policy to, say,
+<guibutton>Refresh this entry</guibutton>: The refresh would take place
+immediately after Emacs starts, and this is probably not what you want.
+</para>
+
+
+</sect2>
+
+<sect2>
+<title>Compress</title>
+
+<para>
+This example explains the predefined <guibutton>Compress</guibutton> cleanup
+action in more detail. Remember, this cleanup action makes a compressed
+.tar.bz2 archive from a directory.
+</para>
+
+<para>
+The <guibutton>Command line</guibutton> for this cleanup action is:
+</para>
+
+<para>
+<userinput>
+cd ..; tar cjvf &percnt;n.tar.bz2 &percnt;n &amp;&amp; rm -rf &percnt;n
+</userinput>
+</para>
+
+<para>
+<userinput>cd ..</userinput> changes directory one level up. We don't
+want to do something in the selected directory, but one level higher.
+</para>
+
+<para>
+The semicolon <userinput>;</userinput> tells the shell to execute one more
+command - unconditionally, no matter if the previous command succeeded or
+failed.
+</para>
+
+<para>
+<userinput>tar cjvf &percnt;n.tar.bz2 &percnt;n &amp;&amp;</userinput>
+is where the compressed .tar.bz2 archive is created. "c" is the tar command for
+"create", "j" means "use bzip2 compression", "v" is "verbose" (even though this
+is strictly spoken unnecessary here), "f" means use the next argument as the
+target file name rather than some default tape device (which nowadays nobody
+uses any more anyway). "&percnt;n.tar.bz2" will be expanded to the name of the
+selected directory without path plus "tar.bz2", "&percnt;n" will be expanded to
+the name without anything else. For a directory
+<userinput>/usr/lib/something</userinput> all this will result in a command
+</para>
+<para>
+<userinput>tar cjvf something.tar.bz2 something</userinput>
+</para>
+
+<para>
+<userinput>&amp;&amp;</userinput> makes the shell execute the rest only if the
+previous command (the <userinput>tar</userinput> command) is executed
+successfully. This is used here to make sure the directory only is deleted if
+we really have a .tar.bz2 archive with the same contents so we can easily
+restore it when necessary. This is crucial in case there insufficient disk
+space to create the archive or should we have insufficient permissions to
+create the archive.
+</para>
+
+<para>
+<userinput>rm -rf &percnt;n</userinput> recursively deletes the directory
+without asking or complaining.
+</para>
+
+<para>
+<guibutton>Works for...</guibutton> is enabled for directories only. Note it
+wouldn't be a good idea to enable it for &lt;Files&gt; entries, too: The user
+would rightfully expect the .tar.bz2 archive to contain the contents of the
+&lt;Files&gt; entry only, i.e. only the files on that directory level. The
+command would, however, pack the entire directory tree from the parent level on
+into the .tar.bz2 file.
+</para>
+
+<para>
+The <guibutton>Refresh Policy</guibutton> is set to
+<guibutton>Refresh this entry's parent</guibutton> since not only the selected
+item is changed, but its parent also: It loses one child (the directory) but
+gets another one (the .tar.bz2 archive).
+</para>
+
+<para>
+Please note that <guibutton>Recurse into subdirectories</guibutton> is not
+checked here: the <userinput>tar</userinput> command and <userinput>rm
+-rf</userinput> take care of any subdirectories.
+</para>
+
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="feedback_mail">
+<title>Feedback Mail</title>
+
+<sect1 id="feedback_mail_description">
+<title>Description</title>
+
+<para>
+<guibutton>Send Feedback Mail...</guibutton> from the
+<guibutton>Help</guibutton> menu opens this dialog:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>Feedback mail</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="feedback-mail.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Feedback mail window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You answer the questions (at least those marked as required) and add your personal
+comments (in English, if you can, or in the special case of &kdirstat;
+alternatively in German).
+</para>
+
+<para>
+Upon clicking on the <guibutton>Mail this...</guibutton> button, your
+<link linkend="mail_client">mail client</link> opens with a
+<link linkend="mail_example">precomposed mail</link>.
+You can review that mail to make sure it doesn't contain anything you
+don't like. When you are convinced the mail is okay and doesn't contain
+anything you don't like, send it.
+</para>
+
+<para>
+With your opinion and your personal comments, you can make a contribution to
+the Open Source movement - even if you are not a developer, even if you don't
+have a clue how to improve or change the software. Your opinion is important,
+even if you decide you don't like the program and send the mail off with "this
+program is crap" checked.
+</para>
+
+<para>
+Open Source softare lives and breathes with user feedback. If you miss a
+feature, tell us about it. If you consider an existing feature confusing, tell
+us about it. If you find an application overloaded with features so you can't
+find the ones you really need, tell us about it.
+</para>
+
+<para>
+On the other hand, if you like the program the way it is and you wouldn't like
+to see it changed in any way, tell us about that, too. If you simply want to
+thank those who go through the trouble writing all that software, do it. Your
+input is appreciated, be it positive or negative.
+</para>
+
+<para>
+There is nothing more frustrating for an Open Source software author than that
+lingering uncertainty if there is anybody out there who actually uses his
+program. He may not get any response from users - does that mean nobody
+uses the software, or does it mean it simply runs so good nobody has reason to
+complain? You can contribute by telling him he is doing all right and he should
+keep up the good work.
+</para>
+
+<para>
+In the opposite case, why not tell the author of a particular annoying program
+just how annoying it is? This may shake him sober and make him reconsider his
+work. 
+</para>
+
+<para>
+Open Source is one of the world's greatest democracies. Make your vote!
+</para>
+
+</sect1>
 
 
 
+<sect1 id="privacy">
+<title>Privacy</title>
 
-<chapter id="developers">
+<para>
+Your mail sent with <guibutton>Send Feedback Mail...</guibutton> is sent to the
+authors of this program, to nobody else. No company or government institution
+will get your mail address or any personal data. You might have noticed no
+personal data are requested in the feedback form. In particular, you will never
+receive spam e-mail of any kind because of sending feedback mail.
+</para>
+
+<para>
+We, the authors of this program, loathe spam probably even more than the
+average KDE user since we get so much of it - spam robots tend to extract
+e-mail addresses from source code and from web pages, so you can be sure we do
+our best to make life as hard as we can on the spammers and certainly not help
+them in any way.
+</para>
+
+<para>
+The purpose of all this feedback mail is to gather information about average
+user satisfaction, about average opinions about an application's feature set,
+an application's stability and learning curve. It's all about averages, thus no
+specific user's data will ever be made available to the public - only
+statistical averages over a large number of users, if at all.
+</para>
+
+</sect1>
+
+<sect1 id="mail_example">
+<title>Feedback Mail Example</title>
+
+<para>
+A typical feedback mail looks about like that:
+</para>
+
+<para>
+<screen width="60">
+<userinput>[kde-feedback] KDirStat-2.0.0 user feedback</userinput>
+
+<userinput>&lt;comment&gt;</userinput>
+<userinput>This is where the personal comments go.</userinput>
+<userinput>You may enter virtually any number of lines.</userinput>
+<userinput>&lt;/comment&gt;</userinput>
+
+<userinput>general_opinion="5/8_nice_try"</userinput>
+
+<userinput>features_liked="stay_on_one_filesys"</userinput>
+<userinput>features_liked="feedback"</userinput>
+<userinput>features_liked="pacman"</userinput>
+
+<userinput>stability="5/5_keeps_crashing"</userinput>
+<userinput>learning_curve="5/5_still_no_clue"</userinput>
+<userinput>recommend="yes"</userinput>
+</screen>
+</para>
+
+
+<para>
+Notice it's all plain ASCII. There is no attachment, no hidden header fields,
+no information about your machine or yourself - only what you would send to
+anybody else when you send a mail.
+</para>
+
+<para>
+By the way, this is also why we kept the format that simple. Many developers
+today prefer XML for all kinds of data, but the end user (you) should be able
+to read and understand what you send - just so you can make sure you don't send
+any information you'd rather keep to yourself.
+</para>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="developers_guide">
 <title>Developer's Guide to KDirStat</title>
 
 <para>
@@ -338,7 +1122,6 @@ from them.
 
 </chapter>
 
-<!--
 <chapter id="faq">
 <title>Questions and Answers</title>
 
@@ -348,18 +1131,122 @@ from them.
 
 
 <qandaset id="faqlist">
-<qandaentry>
+
+<qandaentry id="mail_client">
 <question>
-<para></para>
+<para>
+I don't want to use KMail every time I send a mail with &kdirstat;.
+How do I tell &kdirstat; to use a different mail client?
+</para>
 </question>
 <answer>
-<para></para>
+<para>
+Start <userinput>kcontrol</userinput> or select
+<guibutton>Preferences</guibutton> in the KDE menu, then select
+<guibutton>Network</guibutton> -&gt; <guibutton>Email</guibutton> and enter
+your favourite mail client in the <guibutton>Preferred Email client</guibutton>
+field.
+</para>
 </answer>
 </qandaentry>
+
+<qandaentry>
+<question>
+<para>
+Can I use &kdirstat; to sum up a directory on an FTP server?
+</para>
+</question>
+<answer>
+<para>
+Yes. Simply specify the URL at the command line or even in &kdirstat;'s
+directory selection box:
+<userinput>kdirstat ftp:/ftp.myserver.org/pub</userinput> (command line) or
+<userinput>ftp:/ftp.myserver.org/pub</userinput> (directory selection box).
+</para>
+<para>
+&kdirstat; supports all protocols that KDE supports. You can even use the "tar"
+protocol (does it make any sense to do that? You decide). The only restriction
+is that the protocol needs to support the "list directory" service - which not
+all protocols do.
+</para>
+<para>
+If you are unsure about the syntax to use, try it in Konqueror first and look
+at Konqueror's URL line. For example, to figure out how to specify a "tar" URL,
+click into a "tar" archive in Konqueror and look at the resulting URL to get an
+idea of what it looks like.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+How do I get the exact byte size of an entry rather than Megabytes or
+Kilobytes?
+</para>
+</question>
+<answer>
+<para>
+Right-click the number in the list.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+Why does the "du" command sometimes report different
+sizes than &kdirstat;?
+</para>
+</question>
+<answer>
+<para>
+There are different kinds of sizes reported by different kinds of system calls
+or KDE services: The byte size and the block size.
+</para>
+<para>
+The byte size is the exact number of bytes of a file or directory. This is what
+&kdirstat; uses.
+</para>
+<para>
+The block size is the number of disk blocks allocated by a file or
+directory. Most "du" commands use that.
+Depending on the type of file system, parts of the last block of a
+file or directory may be unused, yet reserved for it anyway. If such a file system
+uses 1024 byte blocks, a file will at least need those 1024 bytes, no matter if
+it is 1024, 200 or even just one byte large. That depends on the file system type
+and sometimes even on how this is set up - i.e., this is highly system
+specific.
+</para>
+<para>
+&kdirstat; uses the byte size since this the only size that is reliably
+returned by all kinds of system calls and KDE services alike. It only really
+makes a difference in very pathological situations anyway, for example if you
+have subdirectories with a large number of tiny files.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="tree_colors">
+<para>
+How do I get rid of those many percentage bar colors? I want them all displayed
+in the same color.
+</para>
+</question>
+<answer>
+<para>
+Select <guibutton>Configure &kdirstat;...</guibutton> from the
+<guibutton>Settings</guibutton> menu, switch to the <guibutton>Tree
+colors</guibutton> page and drag the slider all the way up.
+</para>
+</answer>
+</qandaentry>
+
+
 </qandaset>
 
 </chapter>
--->
 
 
 <chapter id="credits">
@@ -415,6 +1302,8 @@ Documentation copyright 2002 Stefan Hundhammer <email>sh@suse.de</email>
 
 &kdirstat; can be found on the &kdirstat; home page at 
 <ulink url="http://kdirstat.sourceforge.net/">http://kdirstat.sourceforge.net/</ulink>
+or at the mirror site at
+<ulink url="http://www.suse.de/~sh/kdirstat/">http://www.suse.de/~sh/kdirstat/</ulink>
 .</para>
 </sect1>
 

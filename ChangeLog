@@ -1,3 +1,11 @@
+2002-02-24  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.0.0 - the real release version
+	* Completed help texts
+	* Added "Help" button to feedback dialog
+	* Added "Help" button to settings dialog
+	* Drastically reduced logging to stdout
+
 2002-02-11  Stefan Hundhammer  <sh@suse.de>
 
 	* Prevent crash: Disable cleanups that modify the subtree while it

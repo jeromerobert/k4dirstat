@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-20
+ *   Updated:	2002-02-24
  *
- *   $Id: kfeedback.h,v 1.1 2002/01/21 10:04:52 hundhammer Exp $
+ *   $Id: kfeedback.h,v 1.2 2002/02/25 10:49:07 hundhammer Exp $
  *
  */
 
@@ -48,7 +48,8 @@ public:
     /**
      * Constructor.
      **/
-    KFeedbackDialog( const QString & feedbackMailAddress );
+    KFeedbackDialog( const QString & feedbackMailAddress,
+		     const QString & helpTopic = QString::null );
 
 
     /**

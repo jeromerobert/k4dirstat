@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-11
+ *   Updated:	2002-02-24
  *
- *   $Id: kdirtree.cpp,v 1.10 2002/02/11 10:51:47 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.11 2002/02/25 10:49:07 hundhammer Exp $
  *
  */
 
@@ -823,7 +823,7 @@ KLocalDirReadJob::startReading()
 		}
 		else			// lstat() error
 		{
-		    kdWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
+		    // kdWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
 
 		    /*
 		     * Not much we can do when lstat() didn't work; let's at
@@ -848,7 +848,7 @@ KLocalDirReadJob::startReading()
 	_dir->setReadState( KDirError );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
-	kdWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
+	// kdWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
     }
 
@@ -1145,7 +1145,7 @@ KDirTree::startReading( const KURL & url )
     }
     else	// stat() failed
     {
-	kdWarning() << "stat(" << url.url() << ") failed" << endl;
+	// kdWarning() << "stat(" << url.url() << ") failed" << endl;
 	emit finished();
 	emit finalizeLocal( 0 );
     }

@@ -5,9 +5,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-05
+ *   Updated:	2002-02-24
  *
- *   $Id: kfeedback.cpp,v 1.4 2002/02/05 11:28:54 hundhammer Exp $
+ *   $Id: kfeedback.cpp,v 1.5 2002/02/25 10:49:07 hundhammer Exp $
  *
  */
 
@@ -29,14 +29,19 @@
 #include "kfeedback.h"
 
 
-KFeedbackDialog::KFeedbackDialog( const QString & feedbackMailAddress )
-    : KDialogBase( Plain,			// dialogFace
-		   i18n( "Feedback" ),		// caption
-		   Apply | Cancel,		// buttonMask
-		   Apply )			// defaultButton
+KFeedbackDialog::KFeedbackDialog( const QString & feedbackMailAddress,
+				  const QString & helpTopic		)
+    : KDialogBase( Plain,				// dialogFace
+		   i18n( "Feedback" ),			// caption
+		   Apply | Cancel
+		   | ( helpTopic.isEmpty() ? 0 : Help ),// buttonMask
+		   Apply )				// defaultButton
 {
     QVBoxLayout * layout = new QVBoxLayout( plainPage(), 0, spacingHint() );
     setButtonApplyText( i18n( "&Mail this..." ) );
+
+    if ( ! helpTopic.isEmpty() )
+	setHelp( helpTopic );
 
     _form = new KFeedbackForm( feedbackMailAddress, plainPage() );
     CHECK_PTR( _form );

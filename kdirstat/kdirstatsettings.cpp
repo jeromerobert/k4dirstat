@@ -4,9 +4,9 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-02-24
  *
- *   $Id: kdirstatsettings.cpp,v 1.1 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kdirstatsettings.cpp,v 1.2 2002/02/25 10:49:07 hundhammer Exp $
  *
  */
 
@@ -37,10 +37,7 @@ using namespace KDirStat;
 KSettingsDialog::KSettingsDialog( KDirStatApp *mainWin )
     : KDialogBase( Tabbed,					// dialogFace
 		   i18n( "Settings" ),				// caption
-		   Ok | Apply | Default | Cancel,		// buttonMask
-#if 0
 		   Ok | Apply | Default | Cancel | Help,	// buttonMask
-#endif
 		   Ok,						// defaultButton
 		   0,						// parent
 		   0,						// name
@@ -69,9 +66,11 @@ KSettingsDialog::KSettingsDialog( KDirStatApp *mainWin )
     QWidget * page;
     
     page = addVBoxPage( i18n( "&Cleanups" ) );
+    _cleanupsPageIndex = pageIndex( page );
     new KCleanupPage( this, page, _mainWin );
     
     page = addVBoxPage( i18n( "&Tree Colors" ) );
+    _treeColorsPageIndex = pageIndex( page );
     new KTreeColorsPage( this, page, _mainWin );
 
     // resize( sizeHint() );
@@ -105,6 +104,19 @@ KSettingsDialog::slotDefault()
 	emit defaultClicked();
 	emit applyClicked();
     }
+}
+
+
+void
+KSettingsDialog::slotHelp()
+{
+    QString helpTopic = "";
+    
+    if      ( activePageIndex() == _cleanupsPageIndex )		helpTopic = "configuring_cleanups";
+    else if ( activePageIndex() == _treeColorsPageIndex )	helpTopic = "tree_colors";
+
+    // kdDebug() << "Help topic: " << helpTopic << endl;
+    kapp->invokeHelp( helpTopic );
 }
 
 

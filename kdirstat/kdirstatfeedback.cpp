@@ -5,9 +5,9 @@
  *
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-09
+ *   Updated:	2002-02-24
  *
- *   $Id: kdirstatfeedback.cpp,v 1.3 2002/02/11 10:04:33 hundhammer Exp $
+ *   $Id: kdirstatfeedback.cpp,v 1.4 2002/02/25 10:49:07 hundhammer Exp $
  *
  */
 
@@ -24,7 +24,7 @@ KDirStatApp::sendFeedbackMail()
 {
     if ( ! _feedbackDialog )
     {
-	_feedbackDialog = new KFeedbackDialog( "sh@suse.de" );
+	_feedbackDialog = new KFeedbackDialog( "sh@suse.de", "feedback_mail" );
 	CHECK_PTR( _feedbackDialog );
 
 	connect( _feedbackDialog->form(), SIGNAL( mailSent() ),

@@ -4,9 +4,9 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-19
+ *   Updated:	2002-02-24
  *
- *   $Id: kdirstatsettings.h,v 1.3 2002/01/28 14:40:20 hundhammer Exp $
+ *   $Id: kdirstatsettings.h,v 1.4 2002/02/25 10:49:07 hundhammer Exp $
  *
  */
 
@@ -43,7 +43,6 @@ class KColorButton;
 namespace KDirStat
 {
     class KCleanupListBox;
-    class KCleanupListBoxItem;
     class KCleanupPropertiesPage;
     class KDirTreeView;
 
@@ -101,6 +100,12 @@ namespace KDirStat
 	 **/
         virtual void slotDefault();
 
+        /**
+	 * Reimplemented from @ref KDialogBase to set the appropriate help
+	 * topic prior to invoking online help.
+	 **/
+        virtual void slotHelp();
+
 
     signals:
 
@@ -114,6 +119,8 @@ namespace KDirStat
     protected:
 
 	KDirStatApp *	_mainWin;
+	int		_cleanupsPageIndex;
+	int		_treeColorsPageIndex;
     };
 
 
@@ -168,6 +175,20 @@ namespace KDirStat
 	 * Derived classes need to reimplement this method.
 	 **/
 	virtual void setup() = 0;
+
+
+    public:
+
+	/**
+	 * Returns the page index of this page.
+	 * This seems to be the only way to find out which settings page is in
+	 * the foreground for a @ref KDialogBase page.
+	 **/
+	int pageIndex() { return _pageIndex; }
+
+    protected:
+
+	int _pageIndex;
     };
 
 
