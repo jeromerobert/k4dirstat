@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.3 2001/07/01 17:06:22 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.4 2001/07/04 02:33:05 alexannika Exp $
  *
  */
 
@@ -66,6 +66,7 @@ namespace KDirStat
 #define PM_SQUARE_CUSHION 7
 #define PM_CONE_CUSHION 8
 #define PM_WAVE_CUSHION 9
+#define PM_HIERARCH_CUSHION 10
 
   // draw modes
 
@@ -133,6 +134,8 @@ namespace KDirStat
     int highlight_frame_width;
     QColor highlight_frame_col;
     bool draw_text;
+    float hc_factor;
+    int border_step;
   };
 
   class Cushion {
@@ -144,6 +147,11 @@ namespace KDirStat
     float    h;
     float    f;
     float    s[2][3];
+
+    // hierarch. cushion
+
+    int   cx0,cy0;
+    float ncxd,ncyd;
   };
 
   class QTreeMapArea : public QWidget {
@@ -169,6 +177,8 @@ namespace KDirStat
     void mousePressEvent(QMouseEvent *mouse);
     //  QString  tellUnit(int size);
 
+    int check_int(int i);
+
   // pure virtual functions
 
     virtual QString fullName(Object *node) =0;
@@ -186,6 +196,9 @@ namespace KDirStat
   private:
 
     void drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx=-1,int fy=-1,int find_mode=FIND_NOTHING);
+
+    void CTM(Object *tree,bool direction,Cushion *cushion);
+
     void paintEntry(int x0, int y0, int xd, int yd,QString entry_name,bool direction,int level,const QColor &basecolor,int pmode,Cushion *c);
   
     void initOptions();

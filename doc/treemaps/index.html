@@ -3,18 +3,20 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2 i686) [Netscape]">
+   <meta name="Author" content="Alexander Rawass">
+   <title>Documentation for QTreeMap</title>
 </head>
 <body>
 
 <h1>
-Documentation for KTreeMap</h1>
+Documentation for QTreeMap</h1>
 
-<p><br>KTreeMap is a Qt/KDE widget written for KDirStat that displays information
+<p><br>QTreeMap is a Qt/KDE widget written for KDirStat that displays information
 about disk/directory usage as a Treemap graphics.
-<p>KTreeMap is written by Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>
+<p>QTreeMap is written by Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>
 <br><a href="http://www.suse.de/~sh/kdirstat/">KDirStat</a> is written
 by Stefan Hundhammer &lt;<a href="mailto:sh@suse.de">sh@suse.de</a>>
-<p>KTreeMap is currently in heavy development, expect newer versions any
+<p>QTreeMap is currently in heavy development, expect newer versions any
 time
 <br>&nbsp;
 <p>Example screenshots:
@@ -23,37 +25,45 @@ time
 <br>The right picture shows /usr/X11R6 with 'Simple Cushion' shading
 <br>&nbsp;
 <p>ToDo:
-<ul>
-<li>
-add Labels, Buttons, Toolbar (Up,ZoomIn,ZoomOut,SaveAsBitmap)</li>
-
-<li>
-add Options in Menu, at least for paintmode, drawmode, start_direction</li>
-
-<li>
-get ToolTip working</li>
-
-<li>
-Popupmenu (delete this file, delete this dir, execute command 'xterm' in
-directory, etc.)</li>
-</ul>
-
-<p><br>Bugs:
+<br>&nbsp;
+<p>Bugs:
 <ul>
 <li>
 Cushions a la SequoiaView are not yet working</li>
-
-<li>
-moving ToolTip not working</li>
-
-<li>
-Labels/Button are not appearing correctly above the drawing area</li>
-
-<li>
-drawmode=DM_FILES not working correctly</li>
 </ul>
 
-<p><br>Planned:
+<p><br>ChangeLog:
+<p>2001-07-03 Alexander Rawass &lt;alexannika@users.sourceforge.net>
+<p>&nbsp;* QTreeMapWindow is now an abstract class
+<br>&nbsp;* KDirTreeMapWindow implements makeTreeMapWidget()
+<br>&nbsp;* experimental hierach. cushion
+<br>&nbsp;* new menu options (experimental &amp; debugging)
+<br>&nbsp;* new way to make a border (border_step)
+<br>&nbsp;* CTM (Cushion Treemap) test routine added (not working yet)
+<br>&nbsp;* new Bug: I'm getting warnings about wrong RGB parameters,
+<br>&nbsp; even in flat mode
+<p>01 Jul 2001
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QTreeMapArea is now a general
+abstract class to display hierarchies of any kind (not connected to KDirStat
+anymore)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KDirTreeMapArea is the implementation
+for KDirStat
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new Bug: signals/slot not
+working correctly
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bug fixed: crashed when
+telling kdirstat to display a directory which does not exist
+<br>patch nr. 10:&nbsp; (24 Jun 2001)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed Zoom Bug
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed DM_FILES Bug
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; faster shading (dirs are
+always drawn flat)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new directory coloring (shades
+of grey)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; options for start direction,
+border width, draw text
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed most compiler warnings
+<br>&nbsp;
+<p>Planned:
 <ul>
 <li>
 squarified treemaps</li>
@@ -62,19 +72,19 @@ squarified treemaps</li>
 moving (drag'n'drop) of files into other directories</li>
 
 <li>
-re-writing KTreeMap to be a general abstract Qt/KDE widget for visualization
+re-writing QTreeMap to be a general abstract Qt/KDE widget for visualization
 of general hierarchies</li>
 
-<br>KDirTreeMap will then be an implementation for this abstract KTreeMap
+<br>KDirTreeMap will then be an implementation for this abstract QTreeMap
 that displays disk usage
 <li>
 writing a FileRequester based on Treemaps</li>
 
 <li>
-'selling' KTreeMap to Konqueror or KDE in general</li>
+'selling' QTreeMap to Konqueror or KDE in general</li>
 
 <li>
-re-writing KTreeMap to GtkTreeMap for use with Gtk/Gnome</li>
+re-writing QTreeMap to GtkTreeMap for use with Gtk/Gnome</li>
 
 <li>
 subclassing/extending QListView to have an TreeMap view in _every_ Application
@@ -129,7 +139,7 @@ java treemap component</li>
 
 <hr WIDTH="100%">
 <p>Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Last modification Date: 19 June 2001
+Last modification Date: 03 July 2001
 <br>&nbsp;
 <br>&nbsp;
 </body>

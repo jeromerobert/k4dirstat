@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.1 2001/07/01 17:10:33 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.2 2001/07/04 02:33:05 alexannika Exp $
  *
  */
 
@@ -48,6 +48,8 @@
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
+class Object;
+
 namespace KDirStat
 {
 
@@ -66,16 +68,24 @@ namespace KDirStat
 
     void makeRadioPopup(QPopupMenu *menu,const QString& title, const char *slot,const int param);
 
+    void makeWidgets();
+
+    // pure virtual methods
+
+    virtual  QTreeMapArea *makeTreeMapWidget(QWidget *parent) =0 ;
+
     public slots:
 
-    void setStatusBar(KDirInfo *found);
-    void setDirectoryLabel(KDirInfo *newdir);
+    void setStatusBar(Object *found);
+    void setDirectoryLabel(Object *newdir);
     void selectDrawmode(int id);
     void selectShading(int id);
     void selectBorderWidth(int id);
+    void selectBorderStep(int id);
     void selectStartDirection(int id);
     void changeDrawText(int id);
-
+    void selectDontDrawOption(int id);
+    void selectHFactor(int id);
     void redoOptions();
 
     //void paintEvent(QPaintEvent *event);
@@ -104,7 +114,10 @@ namespace KDirStat
   QPopupMenu *menu_paint_mode;
   QPopupMenu *menu_draw_mode;
   QPopupMenu *menu_border_width;
+  QPopupMenu *menu_border_step;
   QPopupMenu *menu_start_direction;
+  QPopupMenu *menu_dont_draw;
+  QPopupMenu *menu_hfactor;
 
   QPushButton *zoom_out_button;
   QPushButton *zoom_in_button;

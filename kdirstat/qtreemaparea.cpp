@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.3 2001/07/01 17:08:26 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.4 2001/07/04 02:33:05 alexannika Exp $
  *
  */
 
@@ -100,13 +100,16 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
   painter->eraseRect(0,0,options->paint_size_x,options->paint_size_y);
 
   Cushion *cushion=NULL;
-  if(options->paintmode==PM_CUSHION){
+  if(options->paintmode==PM_CUSHION || options->paintmode==PM_HIERARCH_CUSHION){
     cushion=new Cushion(xd0,yd0);
   }
-  else{
-    cushion=NULL;
+
+  if(options->paintmode==PM_CUSHION){
+    CTM(dutree,options->start_direction,cushion);
   }
+  else{
     drawDuTree(dutree,x0,y0,xd0,yd0,options->start_direction,0,cushion);
+  }
 
     painter->end();
 
@@ -115,7 +118,7 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
     //    graph_widget->repaint();
 }
 
-//void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx=-1,int fy=-1,int findmode=FIND_NOTHING){
+
 void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode){
   QString node_name=fullName(dutree);
   Object *sub_nodes=firstChild(dutree);
@@ -124,7 +127,7 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 
   //    printf("QTreeMapArea::drawDuTree(%s,%d,%d,%d,%d,dir=%d,level=%d) %d\n",node_name.latin1(),x0,y0,xd0,yd0,direction,level,node_totalsize);
 
-  if(xd0>=options->dont_draw_xyd && yd0>=options->dont_draw_xyd){
+  if(options->dont_draw_xyd==-1 || (xd0>=options->dont_draw_xyd && yd0>=options->dont_draw_xyd)){
   if(fx>=0 && fy>=0){
     // search mode
     if( ( x0<=fx && fx<=(x0+xd0) ) && ( ( y0<=fy && fy<=(y0+yd0)) ) ){
@@ -150,6 +153,37 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 			 c->h,
 			 c->s[direction][1],
 			 c->s[direction][2]);
+      }
+      if(options->paintmode==PM_HIERARCH_CUSHION){
+	float cxd=xd0/2;
+	float cyd=yd0/2;
+	int cx=(int)(x0+cxd);
+	int cy=(int)(y0+cyd);
+	float ncxd,ncyd;
+
+	if((c->cx0)<=cx){
+	  ncxd=cxd-(cxd*(options->hc_factor));
+	}
+	else{
+	  ncxd=(cxd*(options->hc_factor))+cxd;
+	}
+
+	if((c->cy0)<=cy){
+	  ncyd=cyd-(cyd*(options->hc_factor));
+	}
+	else{
+	  ncyd=(cyd*(options->hc_factor))+cyd;
+	}
+
+	int ncx=(int)(x0+ncxd);
+	int ncy=(int)(y0+ncyd);
+
+	//printf("HC: hc_f=%f, cx=%d,cy=%d, ncx=%d, ncy=%d\n",options->hc_factor,
+	//	       cx,cy,ncx,ncy);
+	c->cx0=ncx;
+	c->cy0=ncy;
+	c->ncxd=ncxd;
+	c->ncyd=ncyd;
       }
     }
     else{
@@ -211,11 +245,13 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	// do nothing?
       }
       
-      float x=(float)x0;
-      float y=(float)y0;
+      float x=(float)(x0 + options->border_step);
+      float y=(float)(y0 + options->border_step);
       float xd=0.0;
       float yd=0.0;
       float w=0.0;
+      float xd0s=xd0 - (options->border_step);
+      float yd0s=yd0 - (options->border_step);
 
       if(c!=NULL){
 	// cushion mode
@@ -231,13 +267,13 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	    
 	    if(direction==HORIZONTAL){
 	      // horizontal
-	      xd=(float)xd0;
-	      yd=(float)(((float)yd0)*percent_size);
+	      xd=(float)xd0s;
+	      yd=(float)(((float)yd0s)*percent_size);
 	    }
 	    else{
 	      // vertikal
-	      xd=(float)(((float)xd0)*percent_size);
-	      yd=(float)yd0;
+	      xd=(float)(((float)xd0s)*percent_size);
+	      yd=(float)yd0s;
 	    }
 	    bool subdirection=!direction;
 	    
@@ -271,13 +307,13 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	    
 	    if(direction==HORIZONTAL){
 	      // horizontal
-	      xd=(float)xd0;
-	      yd=(float)(((float)yd0)*percent_size);
+	      xd=(float)xd0s;
+	      yd=(float)(((float)yd0s)*percent_size);
 	    }
 	    else{
 	      // vertikal
-	      xd=(float)(((float)xd0)*percent_size);
-	      yd=(float)yd0;
+	      xd=(float)(((float)xd0s)*percent_size);
+	      yd=(float)yd0s;
 	    }
 	    bool subdirection=direction;
 	    
@@ -307,15 +343,6 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
     }
   }
 
-#if 0
-      mypen.setColor(QColor(0,255,0));
-      mypen.setWidth( 4);
-      painter->setPen( mypen );
-      painter->setBrush( Qt::NoBrush );
-
-    painter->drawLine(x0,y0,x0+xd,y0+yd);
-#endif
-
   if(pmode==PM_OUTLINE){
     // draw highlighted frames in search mode
     mypen.setColor(basecolor);
@@ -329,6 +356,42 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
   else if(pmode==PM_FLAT){
     painter->fillRect(x0,y0,xd,yd,basecolor);
     //painter->flush();
+  }
+  else if(pmode==PM_HIERARCH_CUSHION){
+    for(int w=0;w<xd;w++){
+      for(int h=0;h<yd;h++){
+	float ix=sin(  ( ( (float)w ) / (float)( 2.0 * c->ncxd) )*3.14f);
+	float iy=sin(  ( ( (float)h ) / (float)( 2.0 * c->ncyd) )*3.14f);
+	float i=(ix+iy)/(2.0); // intensity as a sin in x/y direction
+	if(isnan(i)){
+	  i=0.0;
+	}
+	i=MIN(1.0,i);
+	i=MAX(0.0,i);
+	//printf("i=%f\n",i);
+	QColor newcol=QColor(check_int((int)(basecolor.red()*i)),
+			     check_int((int)(basecolor.green()*i)),
+			     check_int((int)(basecolor.blue()*i)));
+	mypen.setColor(newcol);
+	mypen.setWidth( 1);
+	painter->setPen( mypen );
+	painter->setBrush( Qt::NoBrush );
+	
+	painter->drawPoint(x0+w,y0+h);
+
+      }
+    }
+	mypen.setColor(basecolor);
+	mypen.setWidth( 1);
+	painter->setPen( mypen );
+#if 0
+    painter->fillRect(c->cx0,c->cy0,5,5,basecolor);
+    painter->drawLine(x0,y0, c->cx0, c->cy0);
+    painter->drawLine(x0+xd,y0, c->cx0, c->cy0);
+    painter->drawLine(x0,y0+yd, c->cx0, c->cy0);
+    painter->drawLine(x0+xd,y0+yd, c->cx0, c->cy0);
+#endif
+
   }
   else if(pmode==PM_PYRAMID){
     int step=0;
@@ -477,16 +540,28 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
     float Ly=0.19518;
     float Lz=0.9759;
 
-    //for(float iy=c->r[DY][0] + 0.5 ; iy<=( c->r[DY][1] - 0.5 );iy++){
-    //  for(float ix=c->r[DX][0] + 0.5 ; ix<=( c->r[DX][1] - 0.5 );ix++){
-    for(float iy=y0;iy<=y0+yd;iy++){
-      for(float ix=x0;ix<=x0+xd;ix++){
+    float globmax=0.0;
+
+    printf("x,y,xd,yd: %d,%d,%d,%d\n",x0,y0,xd,yd);
+    printf("r[dy][0],r[dy][1],r[dx][0],r[dx][1]: %f,%f,%f,%f\n",c->r[DY][0],c->r[DY][1],c->r[DX][0],c->r[DX][1]);
+
+    for(float iy=c->r[DY][0] + 0.5 ; iy<=( c->r[DY][1] - 0.5 );iy++){
+      for(float ix=c->r[DX][0] + 0.5 ; ix<=( c->r[DX][1] - 0.5 );ix++){
+
+    //    for(float iy=y0;iy<=y0+yd;iy++){
+    //     for(float ix=x0;ix<=x0+xd;ix++){
 	float nx=-(2*c->s[DX][2]*(ix+0.5) + c->s[DX][1] );
 	float ny=-(2*c->s[DY][2]*(iy+0.5) + c->s[DY][1] );
 	float cosa=(nx*Lx + ny*Ly + Lz )/sqrt(nx*nx + ny*ny +1.0);
 
+	if(isnan(cosa)){
+	  cosa=0.0;
+	}
 	float i=Ia+MAX(0,Is*cosa); // range?
-	i=i/512.0;
+	
+	globmax=MAX(globmax,i);
+
+	i=i/256.0;
 	i=MIN(1.0,i);
 	i=MAX(0.0,i);
 
@@ -502,6 +577,7 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
 	painter->drawPoint((int)ix,(int)iy);
       }
     }
+    printf("globmax: %f\n",globmax);
       
   }
   else{
@@ -792,6 +868,63 @@ void QTreeMapArea::browserWindow(int id){
     system("konqueror "+fullName(dir)+" &"); // this should of course be changed!
 }
 
+void QTreeMapArea::CTM(Object *tree,bool direction,Cushion *cushion){
+  Cushion *c=new Cushion(*cushion);
+  if(parentNode(tree)!=NULL){
+    cushion_AddRidge(c->r[direction][0],
+			 c->r[direction][1],
+			 c->h,
+			 c->s[direction][1],
+			 c->s[direction][2]);
+  }
+  if(isLeaf(tree)){
+    QColor basecolor=QColor(255,0,0);
+    paintEntry(0,0,0,0,fullName(tree),direction,0,basecolor,PM_CUSHION,c);
+  }
+  else{
+    if(direction==HORIZONTAL){
+      direction=VERTIKAL;
+    }
+    else{
+      direction=HORIZONTAL;
+    }
+    float w=	w=( c->r[direction][1] - c->r[direction][0] )/((float)totalSize(tree));
+    
+    Object *child=firstChild(tree);
+    bool dotentry_flag=FALSE;
+    while(child!=NULL){
+      	      c->r[direction][1]=c->r[direction][0] + ( w*((float)totalSize(child)) );
+	      c->h=c->h*c->f;
+	      CTM(child,direction,c);
+	      c->r[direction][0]=c->r[direction][1];
+	      child=nextChild(child);
+#if 1
+	      if(child==NULL && dotentry_flag==FALSE){
+		dotentry_flag=TRUE;
+		Object *dotentry=sameLevelChild(tree);
+		if(dotentry){
+		  child=firstChild(dotentry);
+		}
+	      }
+#endif
+    }
+  }
+  delete c;
+}
+
+int QTreeMapArea::check_int(int i){
+  if(i<0){
+    i=0;
+  }
+  if(i>=256){
+    i=255;
+  }
+  if(isnan(i)){
+    i=0;
+  }
+  return i;
+}
+
 QTreeMapArea::~QTreeMapArea()
 {
   // to be filled later...
@@ -810,6 +943,9 @@ Cushion::Cushion(int xd,int yd){
 
   h=0.5;
   f=0.75;
+
+  cx0=xd;
+  cy0=yd;
 }
 
 
@@ -824,7 +960,9 @@ QTreeMapOptions::QTreeMapOptions(){
   highlight_frame_col=QColor(255,255,255);
   dont_draw_xyd=0;
   dont_descend_xyd=1;
-  draw_text=TRUE;
+  draw_text=FALSE;
   color_scheme=CS_CYCLIC;
+  hc_factor=0.3f;
+  border_step=0;
 }
 

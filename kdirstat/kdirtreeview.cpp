@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-21
  *
- *   $Id: kdirtreeview.cpp,v 1.2 2001/07/01 17:12:47 alexannika Exp $
+ *   $Id: kdirtreeview.cpp,v 1.3 2001/07/04 02:33:05 alexannika Exp $
  *
  */
 
@@ -26,6 +26,7 @@
 #include "kpacman.h"
 #include "qtreemap.h"
 #include "qtreemapwindow.h"
+#include "kdirtreemapwindow.h"
 
 using namespace KDirStat;
 
@@ -104,7 +105,8 @@ KDirTreeView::KDirTreeView( QWidget * parent )
    connect ( kapp,	SIGNAL	( kdisplayPaletteChanged()	),
 	     this, 	SLOT	( paletteChanged()		) );
 	
-   _treemap_view=new KDirStat::QTreeMapWindow();
+   _treemap_view=new KDirStat::KDirTreeMapWindow();
+   _treemap_view->makeWidgets();
 }
 
 

@@ -1,3 +1,15 @@
+2001-07-03 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* QTreeMapWindow is now an abstract class
+	* KDirTreeMapWindow implements makeTreeMapWidget()
+	* experimental hierach. cushion
+	* new menu options (experimental & debugging)
+	* new way to make a border (border_step)
+	* CTM (Cushion Treemap) test routine added (not working yet)
+	* new Bug: I'm getting warnings about wrong RGB parameters,
+		even in flat mode
+	
+
 2001-07-01 Alexander Rawass <alexannika@users.sourceforge.net>
 
         * QTreeMapArea is now a general abstract class to display hierarchies of any kind (not connected to KDirStat anymore) 
