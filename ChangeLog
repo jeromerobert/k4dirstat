@@ -1,3 +1,11 @@
+2003-01-28  Stefan Hundhammer  <sh@suse.de>
+
+	* User cleanups now have an applicaton-wide keyboard shortcut 
+	  (Ctrl-0, Ctrl-1, ...)
+
+	* Prevent some treemap segfaults when re-reading directories
+	
+
 2003-01-14  Stefan Hundhammer  <sh@suse.de>
 
 	* Synchronize treemap selection with dir tree after treemap rebuild
