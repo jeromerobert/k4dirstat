@@ -2,4 +2,5 @@
 Id=kdirstat_2004_11_23_18_29
 File=kdirstatrc
 Group=cleanup_move_to_trash_bin
+Options=overwrite
 Script=fix_move_to_trash_bin.pl,perl
