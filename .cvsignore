@@ -8,6 +8,9 @@ libtool
 config.status
 config.h
 stamp-h
+acinclude.m4
+aclocal.m4
+config.h.in
 *.bak
 *.auto
 *~
