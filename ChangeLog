@@ -1,3 +1,7 @@
+2001-10-22 Harald Fernengel (harry1701@users.sourceforge.net)
+
+	* make it work with Qt 3 / KDE 3
+
 2001-09-26 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* committed Makefile.am from kdirstat-1-7-10-devel
