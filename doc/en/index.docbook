@@ -559,14 +559,12 @@ the clicked file or directory as the root.
 </para></listitem>
 
 <listitem><para>
-A double click with the middle mouse button rebuilds the treemap and makes it
-fit into the available screen space without the need for scrollbars. Note: This
-does not re-read the directories, only the treemap is rebuilt from the existing
-data in &kdirstat;'s internal data structures.
-</para></listitem>
-
-<listitem><para>
-A double click with the right mouse button zooms out after zooming in.
+A double click with the middle mouse button zooms out after zooming in.
+</para>
+<para>
+If the treemap is not zoomed in at all, it is simply rebuilt to fit into the
+available screen space without the need for scrollbars. This is mainly useful
+if automatic treemap resizing (the default) is switched off.
 </para></listitem>
 
 <listitem><para>
