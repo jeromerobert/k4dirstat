@@ -12,7 +12,6 @@ EXTRA_DIST = 					\
 	CREDITS 				\
 	ChangeLog 				\
 	INSTALL 				\
-	KNOWN_BUGS				\
 	README 					\
 	TODO 					\
 	admin 					\
