@@ -1,0 +1,27 @@
+
+Become KDirStat 0.86-compatible again:
+
+- most menu stuff
+- cleanup actions
+- configure cleanups
+- configure tree colors
+
+
+New features:
+
+- continue dir scanning at mount points at user request
+
+
+Advanced stuff:
+
+- tree maps
+- cushioned tree maps
+- squarified cushioned tree maps
+
+
+Mabe if it turns out to be necessary:
+
+- write scanned trees to cache file for later reuse
+- use delayed dir tree scanning for seldom changed sys dirs
+- let user choose (static) dirs to disregard
+

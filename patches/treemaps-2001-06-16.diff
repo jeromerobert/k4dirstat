@@ -1,0 +1,1127 @@
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/Makefile.am kd/Makefile.am
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/Makefile.am	Sun Jun 10 20:22:08 2001
+--- kd/Makefile.am	Thu Jun 14 18:20:08 2001
+***************
+*** 7,12 ****
+--- 7,13 ----
+  bin_PROGRAMS = kdirstat
+  
+  kdirstat_SOURCES = 				\
++ 	ktreemap.cpp				\
+  	kdirtree.cpp				\
+  	kdirtreeview.cpp			\
+  	kdirsaver.cpp				\
+***************
+*** 15,20 ****
+--- 16,22 ----
+  	kdirstatmain.cpp
+  
+  noinst_HEADERS =				\
++ 	ktreemap.h				\
+  	kdirtree.h				\
+  	kdirtreeview.h				\
+  	kdirsaver.h				\
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirstatapp.cpp kd/kdirstatapp.cpp
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirstatapp.cpp	Mon Jun 11 03:16:47 2001
+--- kd/kdirstatapp.cpp	Wed Jun 13 21:27:34 2001
+***************
+*** 25,30 ****
+--- 25,31 ----
+  
+  #include "kdirstatapp.h"
+  #include "kpacman.h"
++ #include "ktreemap.h"
+  
+  #define ID_STATUS_MSG 1
+  
+***************
+*** 56,61 ****
+--- 57,65 ----
+  
+      // disable actions at startup
+      editCopy->setEnabled( false );
++ 
++     //    _treemap_view=new KDirStat::KTreeMap(this);
++     //_treemap_view=new KDirStat::KTreeMap(this);
+  }
+  
+  KDirStatApp::~KDirStatApp()
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirstatapp.h kd/kdirstatapp.h
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirstatapp.h	Mon Jun 11 00:53:16 2001
+--- kd/kdirstatapp.h	Wed Jun 13 18:51:53 2001
+***************
+*** 26,34 ****
+  #include <kaccel.h>
+  #include <kaction.h>
+  #include "kdirtreeview.h"
+  
+  class KPacMan;
+! 
+  
+  /**
+    * The base class for KDirStat application windows. It sets up the main window
+--- 26,35 ----
+  #include <kaccel.h>
+  #include <kaction.h>
+  #include "kdirtreeview.h"
++ #include "ktreemap.h"
+  
+  class KPacMan;
+! //class KDirStat::KTreeMap;
+  
+  /**
+    * The base class for KDirStat application windows. It sets up the main window
+***************
+*** 207,212 ****
+--- 208,215 ----
+      KAction * 			editCopy;
+      KToggleAction * 		viewToolBar;
+      KToggleAction * 		viewStatusBar;
++ 
++     KDirStat::KTreeMap  *_treemap_view;
+  };
+  
+   
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirtreeview.cpp kd/kdirtreeview.cpp
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirtreeview.cpp	Mon Jun 11 03:18:25 2001
+--- kd/kdirtreeview.cpp	Sat Jun 16 03:10:20 2001
+***************
+*** 24,29 ****
+--- 24,30 ----
+  
+  #include "kdirtreeview.h"
+  #include "kpacman.h"
++ #include "ktreemap.h"
+  
+  using namespace KDirStat;
+  
+***************
+*** 101,106 ****
+--- 102,109 ----
+  
+     connect ( kapp,	SIGNAL	( kdisplayPaletteChanged()	),
+  	     this, 	SLOT	( paletteChanged()		) );
++ 	
++    _treemap_view=new KDirStat::KTreeMap();
+  }
+  
+  
+***************
+*** 136,141 ****
+--- 139,147 ----
+  	removeColumn( _readJobsCol );
+  	_readJobsCol = -1;
+      }
++ 
++     //_treemap_view->drawTreeMap(_tree->root());
++     _treemap_view->setTreeMap((KDirInfo *)_tree->root());
+  }
+  
+  
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirtreeview.h kd/kdirtreeview.h
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/kdirtreeview.h	Mon Jun 11 01:01:54 2001
+--- kd/kdirtreeview.h	Wed Jun 13 21:30:30 2001
+***************
+*** 33,39 ****
+  #include <qpixmap.h>
+  #include <klistview.h>
+  #include "kdirtree.h"
+! 
+  
+  // Forward declarations
+  class QWidget;
+--- 33,39 ----
+  #include <qpixmap.h>
+  #include <klistview.h>
+  #include "kdirtree.h"
+! #include "ktreemap.h"
+  
+  // Forward declarations
+  class QWidget;
+***************
+*** 343,348 ****
+--- 343,350 ----
+  	QPixmap _fifoIcon;
+  	QPixmap	_workingIcon;
+  	QPixmap	_readyIcon;
++ 	
++ 	KTreeMap  *_treemap_view;
+      };
+  
+      
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/ktreemap.cpp kd/ktreemap.cpp
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/ktreemap.cpp	Thu Jan  1 01:00:00 1970
+--- kd/ktreemap.cpp	Sat Jun 16 19:39:10 2001
+***************
+*** 0 ****
+--- 1,429 ----
++ /*
++  *   File name:	ktreemap.cpp
++  *   Summary:	Support classes for KDirStat
++  *   License:	LGPL - See file COPYING.LIB for details.
++  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
++  *
++  *   Updated:	2001-06-10
++  *
++  *   $Id: treemaps-2001-06-16.diff,v 1.1 2001/06/29 13:20:18 hundhammer Exp $
++  *
++  */
++ 
++ 
++ #include <string.h>
++ #include <sys/errno.h>
++ #include <math.h>
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <qtimer.h>
++ #include <kdebug.h>
++ #include <kapp.h>
++ #include <klocale.h>
++ #include "kdirtree.h"
++ #include "kdirtreeview.h"
++ #include "kdirsaver.h"
++ #include "ktreemap.h"
++ #include <qmainwindow.h>
++ 
++ using namespace KDirStat;
++ 
++ #define USE_OFFSCREEN 1
++ //#undef USE_OFFSCREEN
++ 
++ KDirStat::KTreeMap::KTreeMap(  )  : QMainWindow() {
++   printf("KTreeMap::KTreeMap\n");
++ 
++   initOptions();
++ 
++   this->show();
++   this->resize(options->paint_size_x,options->paint_size_y);
++ 
++   printf("KTreeMap::KTreeMap2\n");
++ 
++   //painter=new QPainter(this);
++   //painter=new QPainter(widget);
++   default_color=QColor(255,255,255);
++ 
++   offscreen= QPixmap(options->paint_size_x,options->paint_size_y);
++ #ifdef USE_OFFSCREEN
++   painter=new QPainter(&offscreen);
++   win_painter=new QPainter(this);
++ #else
++   painter=new QPainter(this);
++ #endif
++ 
++ 
++   setMouseTracking(TRUE);
++   root_tree=NULL;
++ 
++   color_index=0;
++   
++   rotate_colors[0]=QColor(255,0,0);
++   rotate_colors[1]=QColor(255,255,0);
++   rotate_colors[2]=QColor(255,0,255);
++   rotate_colors[3]=QColor(0,255,0);
++   rotate_colors[4]=QColor(0,0,255);
++   printf("COLORS\n");
++   
++ #define LAST_ROTATING_COL 4
++ 
++   //  tooltip=new DynaTip(this);
++   //QToolTip::add(this,"KTreeMap");
++ 
++   info_box=new QVBox(this);
++   dir_box=new QHBox(info_box);
++ 
++   dir_name_label=new QLabel("toplevel",dir_box);
++   up_button=new QPushButton("Up",dir_box);
++ 
++   info_label=new QLabel("information",info_box);
++ }
++ 
++ int KTreeMap::getNextRotatingColorIndex(){
++   color_index++;
++   if(color_index>LAST_ROTATING_COL){
++     color_index=0;
++   }
++   return color_index;
++ }
++ void KTreeMap::clicked(){
++   printf("clicked()\n");
++ }
++ 
++ void KTreeMap::setTreeMap(KDirInfo *dutree){
++   root_tree=dutree;
++ 
++   drawTreeMap(dutree);
++ }
++ 
++ void KTreeMap::initOptions(){
++ 
++   options=new KTreeMapOptions();
++ 
++   options->draw_mode=DM_BOTH;
++   options->paintmode=PM_FLAT;
++   options->start_direction=1;
++   options->step_width=0;
++   options->paint_size_x=800;
++   options->paint_size_y=500;
++ }
++ 
++ void KTreeMap::drawTreeMap(KDirInfo *dutree){
++ 
++   //  printf("KTreeMap::drawTreeMap\n");
++ 
++ 
++   int x0=0;
++   int y0=0;
++   int xd0=options->paint_size_x;
++   int yd0=options->paint_size_y;
++ 
++   color_index=0;
++ 
++   painter->setWindow(x0,y0,xd0,yd0);
++   painter->setPen(QColor(0,0,0));
++   //painter->setBrush( NoBrush );
++   //painter->setPen( NoPen );
++ 
++     QPen mypen(painter->pen());
++     mypen.setWidth(2);
++     mypen.setColor(QColor(0,255,0));
++     painter->setPen( mypen);
++ 
++     painter->drawLine(0,0,xd0,yd0);
++     painter->drawLine(xd0,0,0,yd0);
++ 
++     drawDuTree(dutree,x0,y0,xd0,yd0,options->start_direction,0);
++ 
++     this->update();
++     this->repaint();
++ }
++ 
++ void KTreeMap::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,int fx=-1,int fy=-1){
++   QString node_name=dutree->debugUrl();
++   KDirInfo *sub_nodes=(KDirInfo *)dutree->firstChild();
++   int node_totalsize=dutree->totalSize();
++   //int node_totalsize=dutree->size();
++ 
++   //    printf("KTreeMap::drawDuTree(%s,%d,%d,%d,%d,dir=%d,level=%d) %d\n",node_name.latin1(),x0,y0,xd0,yd0,direction,level,node_totalsize);
++ 
++   //    if(xd0>=1 && yd0>=1){
++   if(TRUE){
++   if(fx>=0 && fy>=0){
++     // search mode
++     if( ( x0<=fx && fx<=(x0+xd0) ) && ( ( y0<=fy && fy<=(y0+yd0)) ) ){
++       printf("found: %s x=%d,y=%d,xd=%d,yd=%d (%d,%d)\n",node_name.latin1(),
++ 	     x0,y0,xd0,yd0,fx,fy);
++     }
++     else{
++       // don't descend into this part of tree
++       return;
++     }
++   }
++ 
++   else    if((options->draw_mode==DM_FILES || options->draw_mode==DM_BOTH )&& dutree->isFile()){
++ 	QColor basecolor;
++ 	//basecolor=getBaseColor(node_name);
++ 	basecolor=QColor(rotate_colors[color_index]);
++ 	int index=getNextRotatingColorIndex();
++ 
++ 	//printf("drawing file\n");
++ 	paintEntry(x0,y0,xd0,yd0,node_name,direction,level,basecolor);
++       }
++       else if((options->draw_mode==DM_DIRS || options->draw_mode==DM_BOTH) && ( dutree->isDir() || dutree->isDotEntry())) {
++ 	QColor dircolor=QColor(rand()&255,0,0);
++ 	KDirInfo *dirinfo=(KDirInfo *)dutree;
++ 
++ 	paintEntry(x0,y0,xd0,yd0,node_name,direction,level,dircolor);
++       }
++       else{
++ 	//printf("neither file nor dir %s\n",node_name.latin1());
++ 	// error
++       }
++       
++       int x=x0;
++       int y=y0;
++       int xd=0;
++       int yd=0;
++ 
++ 
++       /*
++   for(KDirInfo *files=(KDirInfo *)dutree->dotEntry()->firstChild();files!=NULL;files=(KDirInfo *)files->next()){
++     printf("FILE: %s\n",files->url().latin1());
++   }
++       */
++       for(KDirInfo *subtree=sub_nodes;subtree!=NULL;subtree=(KDirInfo *)subtree->next()){
++ 	int subnode_size=subtree->totalSize();
++ 	//int subnode_size=subtree->size();
++ 	  if(subnode_size==0){
++ 	    // we do not descend in directories with 0 size
++ 	    // printf("KTreeMap: zero subdir %s\n",subtree->url().latin1());
++ 	  }
++ 	  else{
++ 	    float percent_size=((float)subnode_size)/((float)node_totalsize);
++ 	    
++ 	    if(direction==HORIZONTAL){
++ 	      // horizontal
++ 	      xd=xd0;
++ 	      yd=(int)(((float)yd0)*percent_size);
++ 	    }
++ 	    else{
++ 	      // vertikal
++ 	      xd=(int)(((float)xd0)*percent_size);
++ 	      yd=yd0;
++ 	    }
++ 	    bool subdirection=!direction;
++ 	    
++ 	    int sw=options->step_width;
++ 	    
++ 	    drawDuTree(subtree,x,y,xd-sw,yd-sw,subdirection,level+1,fx,fy);
++ 	    
++ 	    if(direction==HORIZONTAL){
++ 	      // horizontal
++ 	      y=y+yd;
++ 	    }
++ 	    else{
++ 	      x=x+xd;
++ 	    }
++ 	  }
++       }
++ 
++       if( dutree->dotEntry()!=NULL ){
++ 	//printf("walking dotentry\n");
++ 	KDirInfo *dotentry=(KDirInfo *)dutree->dotEntry();
++ 	int subnode_size=dotentry->totalSize();
++ 	    float percent_size=((float)subnode_size)/((float)node_totalsize);
++ 	    
++ 	    if(direction==HORIZONTAL){
++ 	      // horizontal
++ 	      xd=xd0;
++ 	      yd=(int)(((float)yd0)*percent_size);
++ 	    }
++ 	    else{
++ 	      // vertikal
++ 	      xd=(int)(((float)xd0)*percent_size);
++ 	      yd=yd0;
++ 	    }
++ 	    bool subdirection=direction;
++ 	    
++ 	    int sw=options->step_width;
++ 
++ 	    drawDuTree(dotentry,x,y,xd-sw,yd-sw,subdirection,level,fx,fy);
++       }
++   }
++ }
++ 
++ 
++ 
++ void KTreeMap::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,bool direction,int level,const QColor &basecolor){
++ 
++   if(options->paintmode==PM_FLAT){
++     painter->fillRect(x0,y0,xd,yd,basecolor);
++     //printf("painting: %d %d %d %d\n",x0,y0,xd,yd);
++     //painter->drawText(x0,y0,entry_name);
++     //painter->fillRect(x0,y0,xd,yd,QColor(0,0,0));
++     painter->flush();
++     //    sleep(1);
++   }
++   else if(options->paintmode==PM_PYRAMID){
++     int step=0;
++     int maxstep;
++ 
++     if(xd>yd){
++       maxstep=yd/2;
++     }
++     else{
++       maxstep=xd/2;
++     }
++ 
++     while(step<maxstep){
++       QColor color=QColor((basecolor.red()/maxstep)*(maxstep-step),
++ 			  (basecolor.green()/maxstep)*(maxstep-step),
++ 			  (basecolor.blue()/maxstep)*(maxstep-step));
++       mypen.setColor(color);
++       mypen.setWidth( 1);
++       painter->setPen( mypen );
++       painter->setBrush( Qt::NoBrush );
++       painter->drawRect(x0+step,y0+step,xd-step-1,yd-step);
++       painter->flush();
++       //      sleep(1);
++       printf("drawing %4d %4d %4d %4d\n",x0+step,y0+step,xd-step,yd-step);
++       step++;
++     }
++     //    sleep(2);
++   }
++   else if(options->paintmode==PM_SIMPLE_CUSHION){
++     //    printf("painting simple cushion\n");
++     for(int w=0;w<xd;w++){
++       for(int h=0;h<yd;h++){
++ 	float ix=sin(((float)w)/((float)xd)*3.14f);
++ 	float iy=sin(((float)h)/((float)yd)*3.14f);
++ 	float i=(ix+iy)/2.0;
++ 	//	printf("w=%d,h=%d,ix=%f,iy=%f,i=%f\n",w,h,ix,iy,i);
++ 	QColor newcol=QColor((int)basecolor.red()*i,
++ 			     (int)basecolor.green()*i,
++ 			     (int)basecolor.blue()*i);
++       mypen.setColor(newcol);
++       mypen.setWidth( 1);
++       painter->setPen( mypen );
++       painter->setBrush( Qt::NoBrush );
++ 	
++       painter->drawPoint(x0+w,y0+h);
++       //painter->flush();
++       }
++     }
++ 
++   }
++   else if(options->paintmode==PM_PYRAMID_NICE_BUG){
++     int step=0;
++     int maxstep;
++ 
++     if(xd>yd){
++       maxstep=yd/2;
++     }
++     else{
++       maxstep=xd/2;
++     }
++ 
++     while(step<maxstep){
++       QColor color=QColor((basecolor.red()/maxstep)*(maxstep-step),
++ 			  (basecolor.green()/maxstep)*(maxstep-step),
++ 			  (basecolor.blue()/maxstep)*(maxstep-step));
++       mypen.setColor(color);
++       painter->setPen( mypen );
++       painter->drawRect(x0+step,y0+step,xd-step,yd-step);
++       step++;
++     }
++   }
++   else if(options->paintmode==PM_BITMAP){
++   }
++   else{
++     printf("KTreeMap::paintEntry no option\n");
++   }
++ }
++ 
++ void KTreeMap::appendRectlist(QString node_name,int x,int y,int xd,int yd){
++ 
++ }
++ 
++ QColor&  getBaseColor(QString name){
++   QColor basecolor;
++ 	/*
++ 	if(isExecutable()){
++ 	  basecolor=NULL;
++ 	}
++ 	else{
++ 	  basecolor=getBaseColorByName(node_name);
++ 	}
++ 	*/
++   basecolor=QColor( rand()&255 , rand()&255, rand()&255 );
++ 
++   return basecolor;
++ }
++ 
++ KDirInfo *KTreeMap::findClickedMap(KDirInfo *dutree,int x,int y){
++   KDirInfo *found;
++ 
++   drawDuTree(dutree,0,0,options->paint_size_x,options->paint_size_y,options->start_direction,0,x,y);
++ 
++   return found;
++ }
++ 
++ void KTreeMap::paintEvent( QPaintEvent *){
++   //  printf("KTreeMap::paintEvent\n");
++   if(root_tree!=NULL){
++ #ifdef USE_OFFSCREEN
++     //bitBlt(win_painter,0,0,painter,0,0,-1,-1);
++     painter->end();
++ 
++     win_painter->drawPixmap(0,0,offscreen,0,0,800,600);
++     win_painter->flush();
++ 
++     painter->begin(this);
++ #else
++     drawTreeMap(root_tree);
++ #endif
++   }
++ }
++ 
++ void KTreeMap::mouseMoveEvent(QMouseEvent *mouse){
++   if(root_tree!=NULL){
++     int x=mouse->x();
++     int y=mouse->y();
++     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
++       printf("Mouse Move %d %d\n",x,y);
++       KDirInfo *found=findClickedMap(root_tree,x,y);
++     }
++   }
++ }
++ 
++ void KTreeMap::cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2){
++   s1=s1+4*h*(x2+x1)/(x2-x1);
++   s2=s2-4*h/(x2-x1);
++ }
++ 
++ KTreeMap::~KTreeMap()
++ {
++ }
++ 
++ KTreeMapOptions::KTreeMapOptions(){
++   // do nothing
++ }
++ 
++ KTreeMapOptions::~KTreeMapOptions(){
++   // do nothing
++ }
++ 
++ 
++ DynaTip::DynaTip(QWidget *parent) : QToolTip(parent)
++ {
++   // no init
++   printf("Dynatip init\n");
++ }
++ 
++ void DynaTip::maybeTip(const QPoint &pos){
++   printf("maybetip\n");
++   QRect rect=QRect(0,0,-1,-1);
++   tip(rect,"blah");
++ }
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/ktreemap.h kd/ktreemap.h
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/ktreemap.h	Thu Jan  1 01:00:00 1970
+--- kd/ktreemap.h	Sat Jun 16 18:04:12 2001
+***************
+*** 0 ****
+--- 1,157 ----
++ /*
++  *   File name:	ktreemap.h
++  *   Summary:	Support classes for KDirStat
++  *   License:	LGPL - See file COPYING.LIB for details.
++  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
++  *
++  *   Updated:	2001-06-11
++  *
++  *   $Id: treemaps-2001-06-16.diff,v 1.1 2001/06/29 13:20:18 hundhammer Exp $
++  *
++  */
++ 
++ #ifndef KTreeMap_h
++ #define KTreeMap_h
++ 
++ 
++ #ifdef HAVE_CONFIG_H
++ #   include <config.h>
++ #endif
++ 
++ #include <sys/types.h>
++ #include <limits.h>
++ #include <dirent.h>
++ #include <qqueue.h>
++ #include <kfileitem.h>
++ #include <qmainwindow.h>
++ #include "kdirtree.h"
++ #include <qpen.h>
++ #include <qtooltip.h>
++ #include <qlabel.h>
++ #include <qbutton.h>
++ #include <qvbox.h>
++ #include <qhbox.h>
++ #include <qpushbutton.h>
++ 
++ #ifndef NOT_USED
++ #    define NOT_USED(PARAM)	( (void) (PARAM) )
++ #endif
++ 
++ // Open a new name space since KDE's name space is pretty much cluttered
++ // already - all names that would even remotely match are already used up,
++ // yet the resprective classes don't quite fit the purposes required here.
++ 
++ namespace KDirStat
++ {
++ 
++ #define PM_FLAT 0
++ #define PM_SIMPLE_CUSHION 1
++ #define PM_PYRAMID 2
++ #define PM_BITMAP 3
++ #define PM_PYRAMID_NICE_BUG 4
++ 
++ #define DM_DIRS 0
++ #define DM_FILES 1
++ #define DM_BOTH 2
++ 
++ #define HORIZONTAL 0
++ #define VERTIKAL 1
++ 
++   class KTreeMapOptions {
++   public:
++     KTreeMapOptions();
++     KTreeMapOptions(int dm,int pm, bool dir,int sw);
++     ~KTreeMapOptions();
++     
++     //    colorScheme=
++     int draw_mode;
++     int paintmode;
++     bool start_direction;
++     int step_width;
++     int paint_size_x;
++     int paint_size_y;
++   };
++ 
++   class KTreeMap : public QMainWindow {
++     Q_OBJECT
++ 
++   public:
++     //KTreeMap(QWidget *parent=0);
++     KTreeMap();
++     ~KTreeMap();
++ 
++     void drawTreeMap(KDirInfo *dutree);
++     void setTreeMap(KDirInfo *dutree);
++     KDirInfo *findClickedMap(KDirInfo *dutree,int x,int y);
++ 
++     void paintEvent(QPaintEvent *);
++     void mouseMoveEvent(QMouseEvent *);
++ 
++   protected:
++ 
++     void drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,int fx=-1,int fy=-1);
++     void paintEntry(int x0, int y0, int xd, int yd,QString entry_name,bool direction,int level,const QColor &basecolor);
++   
++     void initOptions();
++ 
++   void appendRectlist(QString node_name,int x,int y,int xd,int yd);
++   int getNextRotatingColorIndex();
++   
++ 
++   QColor& getBaseColor(QString name);
++ 
++   QPainter *painter;
++   KTreeMapOptions *options;
++   QColor default_color;
++   QWidget *widget;
++   QPen mypen;
++   QPixmap offscreen;
++   QPainter *win_painter;
++ 
++   QColor rotate_colors[20];
++   int color_index;
++ 
++   KDirInfo *root_tree;
++ 
++   QToolTip *tooltip;
++ 
++   QVBox *info_box;
++   QHBox *dir_box;
++ 
++   QLabel *dir_name_label;
++   QLabel *info_label;
++   QPushButton *up_button;
++ 
++   // cushion rendering
++ 
++   void cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2);
++ 
++ #define R_MIN 0
++ #define R_MAX 1
++ 
++   float cushion_rectangle[2][2];
++ 
++ #define D_1 0
++ #define D_2 1
++ 
++   float cushion_surface[1][2];
++ 
++   public slots:
++       void clicked();
++   };
++ 
++   class DynaTip : public QToolTip {
++     //Q_OBJECT
++ 
++   public:
++     DynaTip(QWidget *parent);
++   protected:
++     void maybeTip(const QPoint &);
++   };
++ } // namespace
++ 
++ 
++ #endif // ifndef KTreeMap_h
++ 
++ 
++ // EOF
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/pics/Makefile kd/pics/Makefile
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/pics/Makefile	Thu Jan  1 01:00:00 1970
+--- kd/pics/Makefile	Thu Jun 14 18:14:42 2001
+***************
+*** 0 ****
+--- 1,352 ----
++ # Generated automatically from Makefile.in by configure.
++ # KDE tags expanded automatically by am_edit - $Revision: 1.1 $ 
++ # Makefile.in generated automatically by automake 1.4 from Makefile.am
++ 
++ # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
++ # This Makefile.in is free software; the Free Software Foundation
++ # gives unlimited permission to copy and/or distribute it,
++ # with or without modifications, as long as this notice is preserved.
++ 
++ # This program is distributed in the hope that it will be useful,
++ # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
++ # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
++ # PARTICULAR PURPOSE.
++ 
++ 
++ SHELL = /bin/sh
++ 
++ srcdir = .
++ top_srcdir = ../..
++ prefix = /usr/local/kde
++ exec_prefix = ${prefix}
++ #>- 
++ bindir = ${exec_prefix}/bin
++ #>+ 3
++ DEPDIR = .deps
++ 
++ bindir = ${exec_prefix}/bin
++ sbindir = ${exec_prefix}/sbin
++ libexecdir = ${exec_prefix}/libexec
++ sysconfdir = ${prefix}/etc
++ sharedstatedir = ${prefix}/com
++ localstatedir = ${prefix}/var
++ libdir = ${exec_prefix}/lib
++ infodir = ${prefix}/info
++ mandir = ${prefix}/man
++ includedir = ${prefix}/include
++ oldincludedir = /usr/include
++ 
++ DESTDIR =
++ 
++ pkgdatadir = $(datadir)/kdirstat
++ pkglibdir = $(libdir)/kdirstat
++ pkgincludedir = $(includedir)/kdirstat
++ 
++ top_builddir = ../..
++ 
++ ACLOCAL = aclocal
++ AUTOCONF = autoconf
++ AUTOMAKE = automake
++ AUTOHEADER = autoheader
++ 
++ INSTALL = /usr/bin/ginstall -c -p
++ INSTALL_PROGRAM = ${INSTALL} $(INSTALL_STRIP_FLAG) $(AM_INSTALL_PROGRAM_FLAGS)
++ INSTALL_DATA = ${INSTALL} -m 644
++ INSTALL_SCRIPT = ${INSTALL}
++ transform = s,x,x,
++ 
++ NORMAL_INSTALL = :
++ PRE_INSTALL = :
++ POST_INSTALL = :
++ NORMAL_UNINSTALL = :
++ PRE_UNINSTALL = :
++ POST_UNINSTALL = :
++ build_alias = i686-pc-linux-gnu
++ build_triplet = i686-pc-linux-gnu
++ host_alias = i686-pc-linux-gnu
++ host_triplet = i686-pc-linux-gnu
++ target_alias = i686-pc-linux-gnu
++ target_triplet = i686-pc-linux-gnu
++ ARTSCCONFIG = /usr/bin/artsc-config
++ AS = @AS@
++ AUTODIRS = 
++ CC = gcc-2.96
++ CONF_FILES =  $(top_srcdir)/./admin/configure.in.min $(top_srcdir)/configure.in.in
++ CPP = gcc-2.96 -E
++ CXX = gcc-2.96
++ CXXCPP = gcc-2.96 -E
++ DCOPIDL = /usr/bin/dcopidl
++ DCOPIDL2CPP = /usr/bin/dcopidl2cpp
++ DCOP_DEPENDENCIES = $(DCOPIDL)
++ DLLTOOL = @DLLTOOL@
++ DPMSINC = @DPMSINC@
++ DPMSLIB = @DPMSLIB@
++ EXEEXT = 
++ GCJ = @GCJ@
++ GCJFLAGS = @GCJFLAGS@
++ GLINC = @GLINC@
++ GLLIB = @GLLIB@
++ GMSGFMT = /usr/bin/msgfmt
++ IDL = @IDL@
++ IDL_DEPENDENCIES = @IDL_DEPENDENCIES@
++ KDB2HTML = /usr/bin/kdb2html
++ KDECONFIG = /usr/bin/kde-config
++ KDE_CXXFLAGS = 
++ KDE_EXTRA_RPATH = 
++ KDE_INCLUDES = -I/usr/include
++ KDE_LDFLAGS = -L/usr/lib
++ KDE_PLUGIN = -avoid-version -module -no-undefined
++ KDE_RPATH = -R $(kde_libraries) -R $(x_libraries)
++ KDE_USE_CLOSURE_FALSE = #
++ KDE_USE_CLOSURE_TRUE = 
++ KDE_USE_FINAL_FALSE = 
++ KDE_USE_FINAL_TRUE = #
++ LIBCOMPAT = 
++ LIBCRYPT = -lcrypt
++ LIBDL = -ldl
++ LIBJPEG = -ljpeg
++ LIBMICO = @LIBMICO@
++ LIBOBJS = @LIBOBJS@
++ LIBPNG = -lpng -lz -lm
++ LIBPTHREAD = @LIBPTHREAD@
++ LIBPYTHON = @LIBPYTHON@
++ LIBQIMGIO = @LIBQIMGIO@
++ LIBSM = -lSM -lICE
++ LIBSOCKET = 
++ LIBTIFF = @LIBTIFF@
++ LIBTOOL = $(SHELL) $(top_builddir)/libtool
++ LIBUCB = 
++ LIBZ = -lz
++ LIB_KAB = -lkab
++ LIB_KDECORE = -lkdecore
++ LIB_KDEUI = -lkdeui
++ LIB_KFILE = -lkfile
++ LIB_KFM = 
++ LIB_KFORMULA = -lkformula
++ LIB_KHTML = -lkhtml
++ LIB_KIMGIO = @LIB_KIMGIO@
++ LIB_KIO = -lkio
++ LIB_KPARTS = -lkparts
++ LIB_KSPELL = -lkspell
++ LIB_KSYCOCA = -lksycoca
++ LIB_KWRITE = -lkwrite
++ LIB_QT = -lqt $(LIBPNG) $(LIBJPEG) -lXext $(LIB_X11) $(LIBSM)
++ LIB_SMB = -lsmb
++ LIB_X11 = -lX11 $(LIBSOCKET)
++ LN_S = ln -s
++ MAKEINFO = makeinfo
++ MCOPIDL = /usr/bin/mcopidl
++ MICO_INCLUDES = @MICO_INCLUDES@
++ MICO_LDFLAGS = @MICO_LDFLAGS@
++ MOC = /usr/lib/qt-2.2.4/bin/moc
++ MSGFMT = /usr/bin/msgfmt
++ NOOPT_CXXFLAGS =  -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -Wnon-virtual-dtor -fno-builtin
++ NOREPO = -fno-repo
++ OBJDUMP = @OBJDUMP@
++ OBJEXT = o
++ PACKAGE = kdirstat
++ PAMINC = @PAMINC@
++ PAMLIBPATHS = @PAMLIBPATHS@
++ PAMLIBS = @PAMLIBS@
++ PYTHONINC = @PYTHONINC@
++ PYTHONLIB = @PYTHONLIB@
++ PYTHONMODDIR = @PYTHONMODDIR@
++ QT_INCLUDES = -I/usr/lib/qt-2.2.4/include
++ QT_LDFLAGS = 
++ RANLIB = ranlib
++ REPO = -frepo
++ STRIP = strip
++ TOPSUBDIRS =  kdirstat po
++ UIC = /usr/lib/qt-2.2.4/bin/uic
++ USER_INCLUDES = 
++ USER_LDFLAGS = 
++ USE_EXCEPTIONS = -fexceptions
++ USE_RTTI = -frtti
++ USE_THREADS = @USE_THREADS@
++ VERSION = 1.7.1-alpha
++ XGETTEXT = /usr/bin/xgettext
++ XPMINC = @XPMINC@
++ XPMLIB = @XPMLIB@
++ X_EXTRA_LIBS = 
++ X_INCLUDES = -I/usr/X11R6/include
++ X_LDFLAGS = -L/usr/X11R6/lib
++ X_PRE_LIBS = 
++ all_includes = -I/usr/include -I/usr/lib/qt-2.2.4/include -I/usr/X11R6/include 
++ all_libraries = -L/usr/X11R6/lib -L/usr/lib 
++ idldir = @idldir@
++ kde_appsdir = ${prefix}/share/applnk
++ kde_bindir = ${exec_prefix}/bin
++ kde_confdir = ${prefix}/share/config
++ kde_datadir = ${prefix}/share/apps
++ kde_htmldir = ${prefix}/share/doc/HTML
++ kde_icondir = ${prefix}/share/icons
++ kde_includes = /usr/include
++ kde_libraries = /usr/lib
++ kde_libs_htmldir = /usr/share/doc/HTML
++ kde_libs_prefix = /usr
++ kde_locale = ${prefix}/share/locale
++ kde_mimedir = ${prefix}/share/mimelnk
++ kde_moduledir = ${prefix}/lib/kde2
++ kde_servicesdir = ${prefix}/share/services
++ kde_servicetypesdir = ${prefix}/share/servicetypes
++ kde_sounddir = ${prefix}/share/sounds
++ kde_templatesdir = ${prefix}/share/templates
++ kde_wallpaperdir = ${prefix}/share/wallpapers
++ micodir = @micodir@
++ qt_includes = /usr/lib/qt-2.2.4/include
++ qt_libraries = 
++ x_includes = /usr/X11R6/include
++ x_libraries = /usr/X11R6/lib
++ 
++ datadir = $(kde_datadir)/kdirstat/icons
++ data_ICON = AUTO
++ mkinstalldirs = $(SHELL) $(top_srcdir)/admin/mkinstalldirs
++ CONFIG_HEADER = ../../config.h
++ CONFIG_CLEAN_FILES = 
++ DIST_COMMON =  Makefile.am Makefile.in
++ 
++ 
++ #>- DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
++ #>+ 4
++ KDE_DIST=lo16-action-symlink.png 
++ 
++ DISTFILES= $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST) $(KDE_DIST)
++ 
++ 
++ TAR = gtar
++ GZIP_ENV = --best
++ #>- all: all-redirect
++ #>+ 1
++ all: docs-am  all-redirect
++ .SUFFIXES:
++ $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
++ #>- 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps kdirstat/pics/Makefile
++ #>+ 2
++ 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps kdirstat/pics/Makefile
++ 	cd $(top_srcdir) && perl admin/am_edit kdirstat/pics/Makefile.in
++ 
++ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
++ 	cd $(top_builddir) \
++ 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
++ 
++ tags: TAGS
++ TAGS:
++ 
++ 
++ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
++ 
++ subdir = kdirstat/pics
++ 
++ distdir: $(DISTFILES)
++ 	@for file in $(DISTFILES); do \
++ 	  d=$(srcdir); \
++ 	  if test -d $$d/$$file; then \
++ 	    cp -pr $$d/$$file $(distdir)/$$file; \
++ 	  else \
++ 	    test -f $(distdir)/$$file \
++ 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
++ 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
++ 	  fi; \
++ 	done
++ info-am:
++ info: info-am
++ dvi-am:
++ dvi: dvi-am
++ check-am: all-am
++ check: check-am
++ installcheck-am:
++ installcheck: installcheck-am
++ install-exec-am:
++ install-exec: install-exec-am
++ 
++ #>- install-data-am:
++ #>+ 1
++ install-data-am: install-kde-icons 
++ install-data: install-data-am
++ 
++ install-am: all-am
++ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
++ install: install-am
++ #>- uninstall-am:
++ #>+ 1
++ uninstall-am: uninstall-kde-icons 
++ uninstall: uninstall-am
++ all-am: Makefile
++ all-redirect: all-am
++ install-strip:
++ 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
++ installdirs:
++ 
++ 
++ mostlyclean-generic:
++ 
++ clean-generic:
++ 
++ distclean-generic:
++ 	-rm -f Makefile $(CONFIG_CLEAN_FILES)
++ 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
++ 
++ maintainer-clean-generic:
++ mostlyclean-am:  mostlyclean-generic
++ 
++ mostlyclean: mostlyclean-am
++ 
++ clean-am:  clean-generic mostlyclean-am
++ 
++ #>- clean: clean-am
++ #>+ 1
++ clean: kde-rpo-clean  clean-am
++ 
++ distclean-am:  distclean-generic clean-am
++ 	-rm -f libtool
++ 
++ distclean: distclean-am
++ 
++ maintainer-clean-am:  maintainer-clean-generic distclean-am
++ 	@echo "This command is intended for maintainers to use;"
++ 	@echo "it deletes files that may require special tools to rebuild."
++ 
++ maintainer-clean: maintainer-clean-am
++ 
++ .PHONY: tags distdir info-am info dvi-am dvi check check-am \
++ installcheck-am installcheck install-exec-am install-exec \
++ install-data-am install-data install-am install uninstall-am uninstall \
++ all-redirect all-am all installdirs mostlyclean-generic \
++ distclean-generic clean-generic maintainer-clean-generic clean \
++ mostlyclean distclean maintainer-clean
++ 
++ 
++ # Tell versions [3.59,3.63) of GNU make to not export all variables.
++ # Otherwise a system limit (for SysV at least) may be exceeded.
++ .NOEXPORT:
++ 
++ #>+ 2
++ docs-am:
++ 
++ #>+ 7
++ install-kde-icons:
++ 	$(mkinstalldirs) $(DESTDIR)$(datadir)/locolor/16x16/actions
++ 	$(INSTALL_DATA) $(srcdir)/lo16-action-symlink.png $(DESTDIR)$(datadir)/locolor/16x16/actions/symlink.png
++ 
++ uninstall-kde-icons:
++ 	-rm -f $(DESTDIR)$(datadir)/locolor/16x16/actions/symlink.png
++ 
++ #>+ 5
++ force-reedit:
++ 		cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps kdirstat/pics/Makefile
++ 	cd $(top_srcdir) && perl admin/am_edit kdirstat/pics/Makefile.in
++ 
++ 
++ #>+ 2
++ final:
++ 	$(MAKE) all-am
++ #>+ 2
++ no-final:
++ 	$(MAKE) all-am
++ #>+ 3
++ cvs-clean:
++ 	$(MAKE) -f $(top_srcdir)/admin/Makefile.common cvs-clean
++ 
++ #>+ 3
++ kde-rpo-clean:
++ 	-rm -f *.rpo
+diff -c -r -N /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/pics/Makefile.in kd/pics/Makefile.in
+*** /usr/src/source/new/kdirstat/kdirstat-1.7.1-alpha/kdirstat/pics/Makefile.in	Mon Jun 11 11:06:56 2001
+--- kd/pics/Makefile.in	Thu Jun 14 18:14:41 2001
+***************
+*** 213,219 ****
+  DISTFILES= $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST) $(KDE_DIST)
+  
+  
+! TAR = tar
+  GZIP_ENV = --best
+  #>- all: all-redirect
+  #>+ 1
+--- 213,219 ----
+  DISTFILES= $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST) $(KDE_DIST)
+  
+  
+! TAR = gtar
+  GZIP_ENV = --best
+  #>- all: all-redirect
+  #>+ 1

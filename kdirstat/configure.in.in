@@ -1,0 +1,5 @@
+#MIN_CONFIG
+
+AM_INIT_AUTOMAKE(kdirstat,1.7.6-devel)
+
+KDE_CHECK_LONG_LONG

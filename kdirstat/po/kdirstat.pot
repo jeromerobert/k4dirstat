@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2001-04-15 17:23+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: main.cpp:24 main.cpp:38
+msgid "KDirStat"
+msgstr ""
+
+#: main.cpp:30
+msgid "file to open"
+msgstr ""
+
+#: kdirstat.cpp:68
+msgid "New &Window"
+msgstr ""
+
+#: kdirstat.cpp:83
+msgid "Opens a new application window"
+msgstr ""
+
+#: kdirstat.cpp:84
+msgid "Creates a new document"
+msgstr ""
+
+#: kdirstat.cpp:85
+msgid "Opens an existing document"
+msgstr ""
+
+#: kdirstat.cpp:86
+msgid "Opens a recently used file"
+msgstr ""
+
+#: kdirstat.cpp:87
+msgid "Saves the actual document"
+msgstr ""
+
+#: kdirstat.cpp:88
+msgid "Saves the actual document as..."
+msgstr ""
+
+#: kdirstat.cpp:89
+msgid "Closes the actual document"
+msgstr ""
+
+#: kdirstat.cpp:90
+msgid "Prints out the actual document"
+msgstr ""
+
+#: kdirstat.cpp:91
+msgid "Quits the application"
+msgstr ""
+
+#: kdirstat.cpp:92
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr ""
+
+#: kdirstat.cpp:93
+msgid "Copies the selected section to the clipboard"
+msgstr ""
+
+#: kdirstat.cpp:94
+msgid "Pastes the clipboard contents to actual position"
+msgstr ""
+
+#: kdirstat.cpp:95
+msgid "Enables/disables the toolbar"
+msgstr ""
+
+#: kdirstat.cpp:96
+msgid "Enables/disables the statusbar"
+msgstr ""
+
+#: kdirstat.cpp:109 kdirstat.cpp:137 kdirstat.cpp:258 kdirstat.cpp:276
+#: kdirstat.cpp:299 kdirstat.cpp:316 kdirstat.cpp:325 kdirstat.cpp:341
+#: kdirstat.cpp:350 kdirstat.cpp:363 kdirstat.cpp:383 kdirstat.cpp:390
+#: kdirstat.cpp:397 kdirstat.cpp:404 kdirstat.cpp:421 kdirstat.cpp:438
+msgid "Ready."
+msgstr ""
+
+#: kdirstat.cpp:133 kdirstat.cpp:281 kdirstat.cpp:304
+msgid "Opening file..."
+msgstr ""
+
+#: kdirstat.cpp:253
+msgid "Opening a new application window..."
+msgstr ""
+
+#: kdirstat.cpp:263
+msgid "Creating new document..."
+msgstr ""
+
+#: kdirstat.cpp:291 kdirstat.cpp:333
+msgid "*|All files"
+msgstr ""
+
+#: kdirstat.cpp:291
+msgid "Open File..."
+msgstr ""
+
+#: kdirstat.cpp:321
+msgid "Saving file..."
+msgstr ""
+
+#: kdirstat.cpp:330
+msgid "Saving file with a new filename..."
+msgstr ""
+
+#: kdirstat.cpp:346
+msgid "Closing file..."
+msgstr ""
+
+#: kdirstat.cpp:355
+msgid "Printing..."
+msgstr ""
+
+#: kdirstat.cpp:368
+msgid "Exiting..."
+msgstr ""
+
+#: kdirstat.cpp:388
+msgid "Cutting selection..."
+msgstr ""
+
+#: kdirstat.cpp:395
+msgid "Copying selection to clipboard..."
+msgstr ""
+
+#: kdirstat.cpp:402
+msgid "Inserting clipboard contents..."
+msgstr ""
+
+#: kdirstat.cpp:409
+msgid "Toggling toolbar..."
+msgstr ""
+
+#: kdirstat.cpp:426
+msgid "Toggle the statusbar..."
+msgstr ""
+
+#: kdirstatdoc.cpp:89
+msgid ""
+"The current file has been modified.\n"
+"Do you want to save it?"
+msgstr ""
+
+#: _translatorinfo.cpp:1 _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr ""
+
+#: _translatorinfo.cpp:3 _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""
