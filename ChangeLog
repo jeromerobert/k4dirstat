@@ -1,21 +1,35 @@
+2003-02-03  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.3.6
+	
+	* Fixed crash on startup when no config file present
+
+	
+2003-02-02  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed crash in treemap when deleting subtree with cleanup
+
+	* Improved treemap action enabled/disabled state update
+
+	
 2003-01-30  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.3.5
-	
+
 	* Colorize treemap tiles (by fixed rules, not customizable yet)
-	
+
 	* Added new '%t' cleanup placeholder for the KDE trash directory
 
 	* Read jobs are now displayed in the percentage bar column
-	
-	
+
+
 2003-01-28  Stefan Hundhammer  <sh@suse.de>
 
-	* User cleanups now have an applicaton-wide keyboard shortcut 
+	* User cleanups now have an applicaton-wide keyboard shortcut
 	  (Ctrl-0, Ctrl-1, Ctrl-2, ...)
 
 	* Prevent some treemap segfaults when re-reading directories
-	
+
 
 2003-01-14  Stefan Hundhammer  <sh@suse.de>
 
