@@ -15,7 +15,7 @@ Name:         kdirstat
 Copyright:    GPL
 Group:        X11/KDE/Utilities
 Summary:      Graphical directory statistics for used disk space
-Version:      2.3.3
+Version:      2.3.4
 Release:      0
 Source0:      kdirstat-2.3.4.tar.bz2
 
