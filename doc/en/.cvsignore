@@ -3,5 +3,6 @@ Makefile
 *.bak
 *.auto
 index.cache.bz2
+*.html
 HTML
 *~
