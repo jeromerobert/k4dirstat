@@ -1,3 +1,11 @@
+2001-07-01 Alexander Rawass <alexannika@users.sourceforge.net>
+
+        * QTreeMapArea is now a general abstract class to display hierarchies of any kind (not connected to KDirStat anymore) 
+        * KDirTreeMapArea is the implementation for KDirStat 
+        * new Bug: signals/slot not working correctly 
+        * Bug fixed: crashed when telling kdirstat to display a directory which does not exist 
+	
+
 2001-06-29  Stefan Hundhammer  <sh@suse.de>
 
 	* Moved CVS to SourceForge
