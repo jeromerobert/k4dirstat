@@ -1,0 +1,6 @@
+# Update for KDirStat configuration
+Id=kdirstat_2004_11_23
+File=kdirstatrc
+Group=cleanup_move_to_trash_bin
+Key=command
+script=fix_move_to_trash_bin.pl,perl

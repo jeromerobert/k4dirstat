@@ -53,6 +53,9 @@ EXTRA_DIST =					\
 	hi16-app-kdirstat.png
 
 
+updatedir	= $(kde_datadir)/kconf_update
+update_DATA	= kdirstat.upd
+update_SCRIPTS	= fix_move_to_trash_bin.pl
 
 
 kdirstat_LDADD = $(LIB_KFILE) -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)

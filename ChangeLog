@@ -3,17 +3,21 @@
 	* Migration to KIO slave trash:/ for "move to trash" cleanup
 	  (querying KDE version >= 3.4 at runtime)
 
+	* Added configuration update for safer transition from old-style
+ 	  fixed "*/Trash" paths to "%t" placeholder
+
 	* Fixed lots of KDE libs "deprecated" warnings
 
 	* Reimported admin/ subdir from a recent KDE version (3.3.0)
 
+
 	* Bumped version to 2.4.2
-	
+
 
 2004-03-30  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed KPacMan rendering in toolbar (thanks to Coolo)
-	
+
 
 2004-03-01  Stefan Hundhammer  <sh@suse.de>
 
