@@ -11,7 +11,7 @@
 <table width=100%>
     <tr>
         <td width=50% align=left>
-	    Last modified: 10 Mai 2002
+	    Last modified: 05 Jan 2003
 	</td>
 	<td width=50% align=right>
 	    Contact: <a href="mailto:sh@suse.de?subject=KDirStat build-howto">Stefan Hundhammer</a>
@@ -56,7 +56,7 @@ You'll need at least:
 <li>A C++ compiler
 <li>Header files for the system libs
 <li>X11 development environment (libs and header files)
-<li>Qt 2.2 (or later) development environment
+<li>Qt 3.0 (or later) development environment
 <li>KDE 3.x development environment
 </ul>
 
@@ -78,7 +78,7 @@ make sure you can compile simple KDE programs like <em>kless</em> or
 <br>
 <pre>
 
-    tar xzvf kdirstat-1.8.5-beta.tgz
+    tar xjvf kdirstat-2.3.3.tar.bz2
 
 </pre>
 <p>
@@ -92,7 +92,7 @@ Go to this directory:
 <br>
 <pre>
 
-    cd kdirstat-1.8.5-beta
+    cd kdirstat-2.3.3
 
 </pre>
 </li>
@@ -118,9 +118,9 @@ errors!
 </p>
 
 <p>On SuSE Linux systems, KDE 3.x is installed to <em>/opt/kde3</em> which is a
-good idea if you want to keep some KDE 1.x programs around. So use that
+good idea if you want to keep some KDE 1.x/2.x programs around. So use that
 <em>/opt/kde3</em> prefix for KDirStat, too - otherwise it will be installed to
-<em>/opt/kde</em> and clutter up a working KDE 1.x environment.
+<em>/opt/kde</em> and clutter up a working KDE 1.x/2.x environment.
 <br>
 <pre>
 
