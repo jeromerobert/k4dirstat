@@ -1,2 +1,2 @@
-SUBDIRS = en treemaps
+SUBDIRS = en
 
