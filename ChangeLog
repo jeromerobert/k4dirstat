@@ -1,3 +1,8 @@
+2001-07-14 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* KDirTreeMapWindow reads out configuration with KConfig
+	* Bug: regexps are not working correctly
+
 2001-07-13 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* user can click on rectangles and select/deselect them

@@ -31,8 +31,62 @@
 using namespace KDirStat;
 
 KDirTreeMapWindow::KDirTreeMapWindow(  )  : QTreeMapWindow() {
+  setConfig();
 }
 
 QTreeMapArea *KDirTreeMapWindow::makeTreeMapWidget(QWidget *parent){
   return new KDirTreeMapArea(parent);
 }
+
+#if 1
+
+void KDirTreeMapWindow::setConfig(){
+  KConfig *config=KGlobal::config();
+
+  config->setGroup("Treemap-Options");
+
+  //QTreeMapOptions *opt=new QTreeMapOptions();
+  QTreeMapOptions *opt=options;
+#if 1
+  opt->squarify=config->readBoolEntry("squarify",opt->squarify);
+  opt->paintmode=config->readUnsignedNumEntry("shading",opt->paintmode);
+  opt->draw_mode=config->readUnsignedNumEntry("drawmode",opt->draw_mode);
+  opt->mono_color=config->readColorEntry("monocolor",&opt->mono_color);
+
+  QStringList group_list=config->groupList();
+
+  QRegExp reg=QRegExp("Treemap-Color-");
+
+  options->scheme_list=new QList<QTMcolorScheme>();
+
+  for(int i=0;i<group_list.count();i++){
+      printf("config0: %s\n",group_list[i].latin1());
+    if(reg.match(group_list[i])!=-1){
+      printf("config: %s\n",group_list[i].latin1());
+      config->setGroup(group_list[i]);
+      
+      QTMcolorScheme *scheme=new QTMcolorScheme();
+
+      scheme->schemeName=group_list[i];
+      scheme->type=config->readUnsignedNumEntry("type",CST_REGEXP);
+      scheme->patternlist=config->readListEntry("pattern",',');
+
+      QColor col=QColor(255,0,255);
+      scheme->color=QColor(config->readColorEntry("color",&col));
+
+	    printf("%d %d %d\n",scheme->color.red(),scheme->color.green(),scheme->color.blue());
+
+      scheme->comment=config->readEntry("comment","no comment");
+      
+      options->scheme_list->append(scheme);
+    }
+  }
+
+
+#endif
+  //getArea()->setOptions(opt);
+
+  //  delete opt;
+}
+
+#endif

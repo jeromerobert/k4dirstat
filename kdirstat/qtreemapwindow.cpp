@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.9 2001/07/12 22:39:35 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.10 2001/07/15 02:45:19 alexannika Exp $
  *
  */
 
@@ -30,6 +30,7 @@
 using namespace KDirStat;
 
 QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
+
   options=new QTreeMapOptions();
 
   //makeWidgets();
@@ -171,6 +172,8 @@ void QTreeMapWindow::makeWidgets(){
 
   graph_widget->show();
 
+  graph_widget->setOptions(options);
+
   QTreeMapArea *qtm_area=(QTreeMapArea *)graph_widget;
 
   sleep(1);
@@ -189,6 +192,7 @@ void QTreeMapWindow::makeWidgets(){
 
   this->resize((options->paint_size_x)+50,(options->paint_size_y)+200);
   this->show();
+
 
   desktop=QApplication::desktop();
 }

@@ -39,6 +39,7 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qscrollview.h>
+#include <kconfig.h>
 #include "kdirtreemap.h"
 
 #ifndef NOT_USED
@@ -63,6 +64,11 @@ namespace KDirStat
     KDirTreeMapWindow();
 
     QTreeMapArea *makeTreeMapWidget(QWidget *parent);
+
+    void setConfig();
+
+  private:
+    //    scheme
   };
 } // namespace
 

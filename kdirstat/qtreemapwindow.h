@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.5 2001/07/12 22:39:35 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.6 2001/07/15 02:45:19 alexannika Exp $
  *
  */
 
@@ -98,10 +98,11 @@ namespace KDirStat
 
     //void paintEvent(QPaintEvent *event);
 
+  protected:
+    QTreeMapOptions *options;
 
   private:
 
-    QTreeMapOptions *options;
 
     // toolbar widgets
   QLabel *dir_name_label;

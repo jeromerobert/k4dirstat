@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.10 2001/07/14 02:11:43 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.11 2001/07/15 02:45:19 alexannika Exp $
  *
  */
 
@@ -136,16 +136,18 @@ public:
     QString schemeName;
     QColor  color;
     int  type;
-    QString  regexp;
+    QStringList  patternlist;
     int  permission_mask;
     QString user;
+    QString comment;
   };
 
   class QTreeMapOptions {
   public:
     QTreeMapOptions();
     //~KTreeMapOptions();
-    
+
+    QList<QTMcolorScheme> *scheme_list;
     int   color_scheme;
     int dont_draw_xyd;
     int dont_descend_xyd;
