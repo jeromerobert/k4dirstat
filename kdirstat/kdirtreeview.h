@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-05-12
+ *   Updated:	2003-01-04
  *
- *   $Id: kdirtreeview.h,v 1.13 2002/05/12 15:53:51 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.14 2003/01/05 14:52:29 hundhammer Exp $
  *
  */
 
@@ -112,6 +112,12 @@ namespace KDirStat
 	 **/
 	bool	doLazyClone()		const	{ return _doLazyClone;		}
 
+	/**
+	 * Enable / disable PacMan animation in this tree view during directory
+	 * reading. This is disabled by default since it eats quite some
+	 * performance. 
+	 **/
+	void	enablePacManAnimation( bool enable ) { _doPacManAnimation = enable; }
 	/**
 	 * Returns true if the PacMan animation is to be used during directory
 	 * reading.
@@ -315,6 +321,12 @@ namespace KDirStat
 	 **/
 	void logActivity( int points );
 
+	/**
+	 * Returns the minimum recommended size for this widget.
+	 * Reimplemented from QWidget.
+	 **/
+	virtual QSize minimumSizeHint() const { return QSize( 0, 0 ); }
+	
 
     protected slots:
 
@@ -737,13 +749,6 @@ namespace KDirStat
     //----------------------------------------------------------------------
     //			       Static Functions
     //----------------------------------------------------------------------
-
-
-    /**
-     * Format a file / subtree size human readable, i.e. in "GB" / "MB"
-     * etc. rather than huge numbers of digits.
-     **/
-    QString formatSize ( KFileSize lSize );
 
     /**
      * Format a file size with all digits, yet human readable using the current

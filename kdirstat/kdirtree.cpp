@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-03-01
+ *   Updated:	2003-01-04
  *
- *   $Id: kdirtree.cpp,v 1.12 2002/03/01 14:39:38 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.13 2003/01/05 14:52:28 hundhammer Exp $
  *
  */
 
@@ -16,6 +16,7 @@
 #include <qtimer.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kconfig.h>
 #include "kdirtree.h"
 #include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
@@ -102,7 +103,7 @@ KFileInfo::~KFileInfo()
 {
     // NOP
 
-    
+
     /**
      * The destructor should also take care about unlinking this object from
      * its parent's children list, but regrettably that just doesn't work: At
@@ -368,7 +369,7 @@ void
 KDirInfo::recalc()
 {
     // kdDebug() << k_funcinfo << this << endl;
-    
+
     _totalSize		= _size;
     _totalBlocks	= _blocks;
     _totalItems		= 0;
@@ -618,7 +619,7 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
 	_firstChild = deletedChild->next();
 	return;
     }
-	
+
     KFileInfo *child = firstChild();
 
     while ( child )
@@ -627,13 +628,13 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
 	{
 	    // kdDebug() << "Unlinking " << deletedChild << endl;
 	    child->setNext( deletedChild->next() );
-	    
+
 	    return;
 	}
-	
+
 	child = child->next();
     }
-    
+
     kdError() << "Couldn't unlink " << deletedChild << " from "
 	      << this << " children list" << endl;
 }
@@ -873,10 +874,10 @@ KLocalDirReadJob::stat( const KURL & 	url,
 	if ( S_ISDIR( statInfo.st_mode ) )		// directory?
 	{
 	    KDirInfo * dir = new KDirInfo( name, &statInfo, tree, parent );
-	    
+
 	    if ( dir && parent && dir->device() != parent->device() )
 		dir->setMountPoint();
-	    
+
 	    return dir;
 	}
 	else						// no directory
@@ -1061,11 +1062,10 @@ KDirTree::KDirTree()
 {
     _root			= 0;
     _selection			= 0;
-    _crossFileSystems		= false;
-    _enableLocalFileReader	= true;
     _isFileProtocol		= false;
     _readMethod			= KDirReadUnknown;
     _jobQueue.setAutoDelete( true );	// Delete queued jobs automatically when destroyed
+    readConfig();
 }
 
 
@@ -1078,6 +1078,17 @@ KDirTree::~KDirTree()
 
     if ( _root )
 	delete _root;
+}
+
+
+void
+KDirTree::readConfig()
+{
+    KConfig * config = kapp->config();
+    config->setGroup( "Directory Reading" );
+
+    _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",     false );
+    _enableLocalDirReader	= config->readBoolEntry( "EnableLocalDirReader", true  );
 }
 
 
@@ -1106,11 +1117,13 @@ KDirTree::startReading( const KURL & url )
 	// kdDebug() << "Deleting root prior to reading" << endl;
 	delete _root;
 	_root = 0;
+	emit childDeleted();
     }
 
+    readConfig();
     _isFileProtocol = url.isLocalFile();
-	
-    if ( _isFileProtocol && _enableLocalFileReader )
+
+    if ( _isFileProtocol && _enableLocalDirReader )
     {
 	// kdDebug() << "Using local directory reader for " << url.url() << endl;
 	_readMethod	= KDirReadLocal;
@@ -1174,7 +1187,7 @@ KDirTree::refresh( KFileInfo *subtree )
 
 
 	// Select nothing if the current selection is to be deleted
-	
+
 	if ( _selection && _selection->isInSubtree( subtree ) )
 	    selectItem( 0 );
 
@@ -1286,12 +1299,19 @@ KDirTree::deletingChildNotify( KFileInfo *deletedChild )
 
     // Only now check for selection and root: Give connected objects
     // (i.e. views) a chance to change either while handling the signal.
-    
+
     if ( _selection && _selection->isInSubtree( deletedChild ) )
 	 selectItem( 0 );
 
     if ( deletedChild == _root )
 	_root = 0;
+}
+
+
+void
+KDirTree::childDeletedNotify()
+{
+    emit childDeleted();
 }
 
 
@@ -1318,16 +1338,16 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
 	    // This was the last child of a dot entry
 	{
 	    // Get rid of that now empty and useless dot entry
-	    
+
 	    if ( parent->parent() )
 	    {
 		if ( parent->parent()->isFinished() )
 		{
 		    // kdDebug() << "Removing empty dot entry " << parent << endl;
-		    
+
 		    deletingChildNotify( parent );
 		    parent->parent()->setDotEntry( 0 );
-		    
+
 		    delete parent;
 		}
 	    }
@@ -1344,8 +1364,10 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
 	    }
 	}
     }
-    
+
     delete subtree;
+
+    emit childDeleted();
 }
 
 
@@ -1383,7 +1405,7 @@ KDirTree::selectItem( KFileInfo *newSelection )
     else
 	kdDebug() << k_funcinfo << " selecting nothing" << endl;
 #endif
-    
+
     _selection = newSelection;
     emit selectionChanged( _selection );
 }
@@ -1410,9 +1432,9 @@ KDirStat::fixedUrl( const QString & dirtyUrl )
 
 
     // Strip off the rightmost slash - some kioslaves (e.g. 'tar') can't handle that.
-    
+
     QString path = url.path();
-    
+
     if ( path.length() > 1 && path.right(1) == "/" )
     {
 	path = path.left( path.length()-1 );
@@ -1422,12 +1444,66 @@ KDirStat::fixedUrl( const QString & dirtyUrl )
     if ( url.isLocalFile() )
     {
 	// Make a relative path an absolute path
-	
+
 	KDirSaver dir( url.path() );
 	url.setPath( dir.currentDirPath() );
     }
 
     return url;
+}
+
+
+
+
+
+
+QString
+KDirStat::formatSize( KFileSize lSize )
+{
+   QString	sizeString;
+   double	size;
+   QString	unit;
+
+   if ( lSize < 1024 )
+   {
+      sizeString.setNum( (long) lSize );
+
+      unit = i18n( "Bytes" );
+   }
+   else
+   {
+      size = lSize / 1024.0;		// kB
+
+      if ( size < 1024.0 )
+      {
+	 sizeString.sprintf( "%.1f", size );
+	 unit = i18n( "kB" );
+      }
+      else
+      {
+	 size /= 1024.0;		// MB
+
+	 if ( size < 1024.0 )
+	 {
+	    sizeString.sprintf( "%.1f", size );
+	    unit = i18n ( "MB" );
+	 }
+	 else
+	 {
+	    size /= 1024.0;		// GB - we won't go any further...
+
+	    sizeString.sprintf( "%.2f", size );
+	    unit = i18n ( "GB" );
+	 }
+      }
+   }
+
+   if ( ! unit.isEmpty() )
+   {
+      sizeString += " " + unit;
+   }
+
+   return sizeString;
 }
 
 

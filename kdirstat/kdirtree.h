@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2003-01-04
  *
- *   $Id: kdirtree.h,v 1.9 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.10 2003/01/05 14:52:28 hundhammer Exp $
  *
  */
 
@@ -165,7 +165,7 @@ namespace KDirStat
 	/**
 	 * Very much like @ref KFileInfo::url(), but with "/<Files>" appended
 	 * if this is a dot entry. Useful for debugging.
-	 * You can, however, simply use the @ref kdbgstream operator<< to
+	 * Notice: You can simply use the @ref kdbgstream operator<< to
 	 * output exactly this:
 	 *
 	 * kdDebug() << "Found fileInfo " << info << endl;
@@ -529,7 +529,7 @@ namespace KDirStat
 						 S_ISCHR ( _mode ) ||
 						 S_ISFIFO( _mode ) ||
 						 S_ISSOCK( _mode )   ) ? true : false; }
-	
+
     protected:
 
 	// Data members.
@@ -858,17 +858,6 @@ namespace KDirStat
     };	// class KDirInfo
 
 
-    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileInfo * info )
-    {
-	if ( info )
-	    stream << info->debugUrl();
-	else
-	    stream << "<NULL>";
-	
-	return stream;
-    }
-
-
     /**
      * A directory read job that can be queued. This is mainly to prevent
      * buffer thrashing because of too many directories opened at the same time
@@ -1051,7 +1040,7 @@ namespace KDirStat
 	 **/
 	static QString		owner( KURL url );
 
-	
+
     protected slots:
 	/**
 	 * Receive directory entries from a KIO job.
@@ -1098,9 +1087,9 @@ namespace KDirStat
 	 **/
 	virtual ~KDirTree();
 
-	
+
      public slots:
-     
+
 	/**
 	 * Actually start reading.
 	 *
@@ -1112,7 +1101,7 @@ namespace KDirStat
 	 **/
 	void startReading( const KURL &	url );
 
-	
+
 	/**
 	 * Refresh a subtree, i.e. read its contents from disk again.
 	 *
@@ -1141,9 +1130,9 @@ namespace KDirStat
 	 **/
 	void deleteSubtree( KFileInfo *subtree );
 
-	
+
     public:
-	
+
 	/**
 	 * Returns the root item of this tree.
 	 *
@@ -1227,6 +1216,16 @@ namespace KDirStat
 	virtual void deletingChildNotify( KFileInfo *deletedChild );
 
 	/**
+	 * Notification that one or more children have been deleted.
+	 *
+	 * Directory read jobs are required to call this when one or more
+	 * children are deleted so the tree can emit the corresponding @ref
+	 * deletingChild() signal. For multiple deletions (e.g. entire
+	 * subtrees) this should only happen once at the end.
+	 **/
+	virtual void childDeletedNotify();
+
+	/**
 	 * Send a @ref progressInfo() signal to keep the user entertained while
 	 * directories are being read.
 	 **/
@@ -1245,7 +1244,7 @@ namespace KDirStat
 	 **/
 	bool isFileProtocol()	{ return _isFileProtocol; }
 
-	
+
     signals:
 
 	/**
@@ -1257,6 +1256,15 @@ namespace KDirStat
 	 * Emitted when a child is about to be deleted.
 	 **/
 	void deletingChild( KFileInfo *deletedChild );
+
+	/**
+	 * Emitted after a child is deleted. If you are interested which child
+	 * it was, better use the @ref deletingChild() signal.
+	 * @ref childDeleted() is only useful to rebuild a view etc. completely.
+	 * If possible, this signal is sent only once for multiple deletions -
+	 * e.g., when entire subtrees are deleted.
+	 **/
+	void childDeleted();
 
 	/**
 	 * Emitted when reading this directory tree is finished.
@@ -1306,6 +1314,11 @@ namespace KDirStat
 	 **/
         void timeSlicedRead();
 
+	/**
+	 * Read some parameters from the global @ref KConfig object.
+	 **/
+	void readConfig();
+
 
     protected:
 
@@ -1314,11 +1327,11 @@ namespace KDirStat
 	QQueue<KDirReadJob>	_jobQueue;
 	KDirReadMethod		_readMethod;
 	bool			_crossFileSystems;
-	bool			_enableLocalFileReader;
+	bool			_enableLocalDirReader;
 	bool			_isFileProtocol;
     };
 
-    
+
     //----------------------------------------------------------------------
     //			       Static Functions
     //----------------------------------------------------------------------
@@ -1328,6 +1341,42 @@ namespace KDirStat
      * a path.
      **/
     KURL fixedUrl( const QString & dirtyUrl );
+
+
+    /**
+     * Format a file / subtree size human readable, i.e. in "GB" / "MB"
+     * etc. rather than huge numbers of digits.
+     *
+     * Note: For kdDebug() etc., operator<< is overwritten to do exactly that:
+     *
+     *     kdDebug() << "Size: " << x->totalSize() << endl;
+     **/
+    QString formatSize ( KFileSize lSize );
+
+
+    /**
+     * Print the debugUrl() of a @ref KFileInfo in a debug stream.
+     **/
+    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileInfo * info )
+    {
+	if ( info )
+	    stream << info->debugUrl();
+	else
+	    stream << "<NULL>";
+
+	return stream;
+    }
+
+
+    /**
+     * Human-readable output of a file size in a debug stream.
+     **/
+    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileSize lSize )
+    {
+	stream << formatSize( lSize );
+
+	return stream;
+    }
 
 }	// namespace KDirStat
 

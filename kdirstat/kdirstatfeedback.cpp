@@ -5,9 +5,9 @@
  *
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-24
+ *   Updated:	2003-01-01
  *
- *   $Id: kdirstatfeedback.cpp,v 1.4 2002/02/25 10:49:07 hundhammer Exp $
+ *   $Id: kdirstatfeedback.cpp,v 1.5 2003/01/05 14:52:28 hundhammer Exp $
  *
  */
 
@@ -35,7 +35,7 @@ KDirStatApp::sendFeedbackMail()
 	KFeedbackQuestion * question =
 	    list->addQuestion( i18n( "What is your general opinion about this program?" ), "general_opinion", true, true );
 
-	question->addAnswer( i18n( "It's one of my favourites" 			), 	"1/8_favourite" 		);
+	question->addAnswer( i18n( "It's one of my favourites" 			), 	"1/8_favourite" 	);
 	question->addAnswer( i18n( "I like it" 					), 	"2/8_like_it" 		);
 	question->addAnswer( i18n( "It's sometimes useful"			), 	"3/8_sometimes_useful" 	);
 	question->addAnswer( i18n( "It's average" 				), 	"4/8_average" 		);
@@ -90,7 +90,7 @@ KDirStatApp::sendFeedbackMail()
 	question->addAnswer( i18n( "Learning"					),	"4/5_learning"	);
 	question->addAnswer( i18n( "Newbie"					),	"5/5_newbie"		);
 
-	question = list->addQuestion( i18n( "Did you have trouble figuring out how to work with this program?" ),
+	question = list->addQuestion( i18n( "Did you have trouble figuring out how to work with this program in general?" ),
 				      "learning_curve", true, true );
 	question->addAnswer( i18n( "No problem"					),	"1/5_no_problem"	);
 	question->addAnswer( i18n( "Some"					),	"2/5_some_problems"	);
@@ -125,9 +125,27 @@ KDirStatApp::sendFeedbackMail()
 	question->addAnswer( i18n( "On the internet"				),	"internet"		);
 	question->addAnswer( i18n( "Printed magazine / book"			),	"print_media"		);
 	question->addAnswer( i18n( "Other (please add comment below)"		),	"other"			);
-
+	
 	list->addYesNoQuestion( i18n( "Did you ever get a KDirStat mail report telling you to clean up disk space?" ),
 				"got_mail_report" );
+
+	question = list->addQuestion( i18n( "Could you figure yet out how to work with the treemaps?" ), "learning_treemaps", true );
+	question->addAnswer( i18n( "I became an expert at it"			),	"1/5_expert"		);
+	question->addAnswer( i18n( "I got a fairly good idea of it"		),	"2/5_ok"		);
+	question->addAnswer( i18n( "I'm still learning"				),	"3/5_still_learing"	);
+	question->addAnswer( i18n( "I still don't have a clue what to do"	),	"4/5_no_clue"		);
+	question->addAnswer( i18n( "Treemaps? Huh? What the hell is that?"	),	"5/5_say_what"		);
+
+	question = list->addQuestion( i18n( "What do you think about the treemaps?" ), "treemaps", false );
+	question->addAnswer( i18n( "They are useless" 				), 	"useless" 		);
+	question->addAnswer( i18n( "The display is confusing"			), 	"display_confusing"	);
+	question->addAnswer( i18n( "They look ugly" 				), 	"look_ugly" 		);
+	question->addAnswer( i18n( "They look nice" 				), 	"look_nice" 		);
+	question->addAnswer( i18n( "They help finding large files"		), 	"good_for_large_files"	);
+	question->addAnswer( i18n( "I could do with the treemap view alone"	), 	"treemaps_alone"	);
+	question->addAnswer( i18n( "The combination of tree view and treemaps is great"	), "like_combined_views");
+	question->addAnswer( i18n( "I want more info inside the treemap view"	), 	"more_info"		);
+	question->addAnswer( i18n( "Leave the treemaps as they are right now"	), 	"leave_like_this"	);
 
 	list->addYesNoQuestion( i18n( "Would you recommend this program to a friend?" ), "recommend", true );
     }
@@ -143,6 +161,9 @@ KDirStatApp::addFeatureList( KFeedbackQuestion * question )
     question->addAnswer( i18n( "The directory tree display in general"			),	"tree_view"		);
     question->addAnswer( i18n( "Percentage bars as graphical display of relative sizes" ),	"percentage_bars" 	);
     question->addAnswer( i18n( "Files apart from directories in a separate <Files> item"),	"files_item"		);
+    
+    question->addAnswer( i18n( "Treemaps in general"					),	"treemaps"		);
+    question->addAnswer( i18n( "The cushioned treemap rendering"			),	"treemap_cushions"	);
 
     question->addAnswer( i18n( "Cleanup actions in general"				),	"cleanups_general"	);
     question->addAnswer( i18n( "Predefined cleanup actions"				),	"predefined_cleanups"	);

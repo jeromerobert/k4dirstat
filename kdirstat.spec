@@ -1,5 +1,5 @@
 #
-# spec file for package kdirstat (Version 2.1.0)
+# spec file for package kdirstat
 # 
 # Copyright  (c)  2002  SuSE GmbH  Nuernberg, Germany.
 # This file and all modifications and additions to the pristine
@@ -15,9 +15,9 @@ Name:         kdirstat
 Copyright:    GPL
 Group:        X11/KDE/Utilities
 Summary:      Graphical directory statistics for used disk space
-Version:      2.1.1.beta
+Version:      2.3.3
 Release:      0
-Source0:      kdirstat-2.1.1-beta.tar.bz2
+Source0:      kdirstat-2.3.3.tgz
 
 %description
 KDirStat (for KDE Directory Statistics) is a utility program that sums up
@@ -31,7 +31,7 @@ Authors:
 SuSE series: kde
 
 %prep
-%setup -n kdirstat-2.1.1-beta
+%setup -n kdirstat-2.3.3
 
 %build
 CXXFLAGS="$CXXFLAGS -DNDEBUG -O2 " ./configure \

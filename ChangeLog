@@ -1,3 +1,77 @@
+2003-01-04  Stefan Hundhammer  <sh@suse.de>
+
+	* Added "general" settings page; now user configurable:
+	  - cross file system boundaries
+	  - use local dir read methods
+	  - PacMan animation in toolbar
+	  - PacMan animation ("PacMan armada") in dir tree
+
+	* Added "treemap" settings page: now user configurable:
+	  - plain vs. cushion treemap
+	  - squarified vs. simple treemap
+	  - ambient light
+	  - height scale factor
+	  - force grid
+	  - draw lines upon low contrast
+	  - plain (non-cushioned) treemap colors
+	  - highlight rectangle color
+	  - minimum tile size
+	  - auto-resize treemap
+
+	* Added "open URL" in "file" menu for easier access to remote URLs
+
+	* Bumped version to 2.3.3
+
+2003-01-01  Stefan Hundhammer  <sh@suse.de>
+
+	* Added treemap actions
+	* Added treemap menu
+	* Added treemap context menu
+	* Improved treemap integration into main application
+	* Added online help for treemaps
+
+
+2002-12-31  Stefan Hundhammer  <sh@suse.de>
+
+	* Lots of small fiddling with treemaps
+
+
+2002-12-28  Stefan Hundhammer  <sh@suse.de>
+
+	* Implemented cushion treemaps
+
+	* Bumped version to 2.3.2-devel
+
+	* Changed treemap selection mechanism:
+	  Now using a transparent separate rectangle so even the outline
+	  of entire directories can  clearly be seen.
+
+2002-12-27  Stefan Hundhammer  <sh@suse.de>
+
+	* Added treemap mouse operations:
+	  - select item in tree view (single click left)
+	  - zoom in (double-click left)
+	  - zoom out (double-click right)
+	  - rebuild treemap in visible area (double-click middle)
+
+	* Added visible selection in treemap
+
+	* Select treemap tile when tree item is selected
+
+
+2002-12-26  Stefan Hundhammer  <sh@suse.de>
+
+	* Implemented squarified treemaps.
+	  Now there are no longer lots of elongated, thin rectangles that
+	  are hard to compare against each other and hard to point at.
+
+
+2002-12-23  Stefan Hundhammer  <sh@suse.de>
+
+	* Changed treemap handling completely: Now using QCanvas.
+
+	* Bumped version to 2.3.1-devel
+
 2002-05-12  Stefan Hundhammer  <sh@suse.de>
 
 	* Initial version of new treemaps
@@ -9,14 +83,14 @@
 2002-05-10  Stefan Hundhammer  <sh@suse.de>
 
 	* Removed support for old treemaps
-	
+
 	* Updated build-howto.html
 
 2002-05-09  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.2.0
 	  The KDE3 port proved stable enough to warrant a new stable
-	  version. 
+	  version.
 
 2002-04-23  Stefan Hundhammer  <sh@suse.de>
 
@@ -31,7 +105,7 @@
 
 2002-04-22  Stefan Hundhammer  <sh@suse.de>
 
-	* Applied Asian language support patch by 
+	* Applied Asian language support patch by
 	  Toyohiro Asukai <toyohiro@ksmplus.com>:
 	  Somme missing QString::fromLocal8Bit() issues
 
@@ -57,7 +131,7 @@
 2002-02-11  Stefan Hundhammer  <sh@suse.de>
 
 	* Prevent crash: Disable cleanups that modify the subtree while it
-	  is still being read 
+	  is still being read
 
 2002-02-10  Stefan Hundhammer  <sh@suse.de>
 
@@ -101,7 +175,7 @@
 
 	* Bumped version to 1.8.3-beta
 	  The new KDirStat is now as complete as the old one ever was!
-	
+
 	* Added simple 'mail to owner' report
 	* Implemented cleanup configuration
 	* Added 'ask for confirmation' flag to cleanups
@@ -116,40 +190,40 @@
 	* Updated TODO list - gosh, was this thing outdated!
 	* kdDebug() operator << for KCleanup
 	* kdDebug() operator << for KDirTreeViewItem
-	
+
 
 2002-01-02  Stefan Hundhammer  <sh@suse.de>
 
 	* Implemented 'settings' dialog
 	* Implemented 'tree colors' settings
 
-	
+
 2002-01-01  Stefan Hundhammer  <sh@suse.de>
 
 	* Implemented / completed KCleanupCollection
 	* Fixed some core dumps (oops)
 
-	
+
 2001-12-31  Stefan Hundhammer  <sh@suse.de>
 
 	* kdDebug() operator<< for KFileInfo
 
-	
+
 2001-12-30  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 1.8.2-beta
 	* Cleanups are back!
 
-	
+
 2001-12-26  Stefan Hundhammer  <sh@suse.de>
 
-	* Mount point remains marked as mount point even after 
-	  "refresh selected branch" 
+	* Mount point remains marked as mount point even after
+	  "refresh selected branch"
 
 	* KFileInfo / KDirInfo now have direct access to their
 	  KDirTree (i.e. they now have their own pointer)
 	  => transparent access from outside easier
-	
+
 
 2001-12-08  Stefan Hundhammer  <sh@suse.de>
 
@@ -157,7 +231,7 @@
 
 	* Transparently handle selections in the KDirTree;
 	  all kinds of views should benefit from that.
-	
+
 
 2001-11-25  Stefan Hundhammer  <sh@suse.de>
 
@@ -173,12 +247,12 @@
 	* Internal cleanup: Got rid of that statRoot() mess,
 	  clean ??::stat() implementation for all directory readers
 
-	
+
 2001-11-18  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 1.7.11-devel
 
-	* Improved mount point handling: 
+	* Improved mount point handling:
 	  * Different icon,
 	  * New read status KDirOnRequestOnly
 	  * Prepared for explicit reading of mounted file systems
@@ -186,7 +260,7 @@
 	* Created infrastructure for context menu in tree view
 
 	* Simple context menu (cleanup actions will follow)
-	
+
 
 2001-11-17  Stefan Hundhammer  <sh@suse.de>
 
@@ -197,10 +271,10 @@
 
 	* Changed default from --enable-treemaps to --disable-treemaps
 	  since treemaps don't compile and link for more than 6 weeks now.
-	
+
 	* Updated build-howto.html
 
-	
+
 2001-10-22 Harald Fernengel (harry1701@users.sourceforge.net)
 
 	* make it work with Qt 3 / KDE 3
@@ -210,9 +284,9 @@
 	* committed Makefile.am from kdirstat-1-7-10-devel
 
 2001-09-26 Alexander Rawass <alexannika@users.sourceforge.net>
-	
+
 	* debugging output in kparts
-	
+
 2001-09-25 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* added files kdirstat_{part,factory}.{cpp,h,rc}
@@ -223,7 +297,7 @@
 
 	* modified configure.in.in to test for libqtreemap
 	  test may not work on some/most systems
-	
+
 2001-08-18 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* V1.7.8-devel
@@ -241,7 +315,7 @@
 
 	* QTreeMap can write data files for 'HypView',
 	  a hyperbolic tree browser
-	
+
 2001-08-09 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* changed all size-functions from int to asize/float
@@ -267,14 +341,14 @@
 2001-08-08  Stefan Hundhammer  <sh@suse.de>
 
 	* Implemented iterator classes: KFileInfoIterator and
-	  KFileInfoSortedIterator  
+	  KFileInfoSortedIterator
 	* Added CREDITS file
 
 2001-08-06  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed segfaults due to bad dot entry cleanup (huh? ;-)  ) that
 	  had caused core dumps after finishing reading small trees
-	
+
 2001-08-05 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* compiler warnings removed
@@ -282,9 +356,9 @@
 	* Bug: regexps not working in xml-window
 	       selection not working in xml-window
 	* removed dependencies to KDirStat from QTreeMap
-	
+
 2001-07-29 Alexander Rawass <alexannika@users.sourceforge.net>
-	
+
 	* load XML working (with memory hole)
 
 2001-07-28 Alexander Rawass <alexannika@users.sourceforge.net>
@@ -304,11 +378,11 @@
 	  qxmltreemaparea.cpp
 	  qxmltreemap.h
 	  (don't work yet)
-	
+
 	* new defines for compilation:
 	  HAVE_PIEMAP if you have the piemap source
 	  EXPERIMENTAL if you want to see more options
-	
+
 2001-07-17 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* user can use keywords instead of numbers for options
@@ -333,7 +407,7 @@
 	* user can click on rectangles and select/deselect them
 	* those rectangles are stored in a list and appear
 	  at the bottom of the right-button popupmenu
-	
+
 2001-07-12 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* user can search for regexp, matches get highlighted
@@ -346,14 +420,14 @@
 	* removed most warnings
 
 2001-07-11 Alexander Rawass <alexannika@users.sourceforge.net>
-	
+
 	* various bugs fixed in squarified treemaps:
 	  correct end of recursion
 	  using floats rather than ints to prevent miscalc.
 	  should work now????
 	* new hierarchical shadings
 
-	
+
 2001-07-10 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* implemented squarified treemaps (experimental, buggy)
@@ -362,7 +436,7 @@
 	  memory -> X swaps till death
 
 2001-07-05 Alexander Rawass <alexannika@users.sourceforge.net>
-	
+
 	* more options and exp. shadings
 	* experimental dynamic shading (not working)
 	* user can watch treemap build up
@@ -371,7 +445,7 @@
 	* renamed some of the shadings and
 	* wrote some Documentation how to use Shadings and Options
 
-	
+
 2001-07-03 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* QTreeMapWindow is now an abstract class
@@ -382,15 +456,15 @@
 	* CTM (Cushion Treemap) test routine added (not working yet)
 	* new Bug: I'm getting warnings about wrong RGB parameters,
 		even in flat mode
-	
+
 
 2001-07-01 Alexander Rawass <alexannika@users.sourceforge.net>
 
-        * QTreeMapArea is now a general abstract class to display hierarchies of any kind (not connected to KDirStat anymore) 
-        * KDirTreeMapArea is the implementation for KDirStat 
-        * new Bug: signals/slot not working correctly 
-        * Bug fixed: crashed when telling kdirstat to display a directory which does not exist 
-	
+        * QTreeMapArea is now a general abstract class to display hierarchies of any kind (not connected to KDirStat anymore)
+        * KDirTreeMapArea is the implementation for KDirStat
+        * new Bug: signals/slot not working correctly
+        * Bug fixed: crashed when telling kdirstat to display a directory which does not exist
+
 
 2001-06-29  Stefan Hundhammer  <sh@suse.de>
 
@@ -409,7 +483,7 @@
 2001-06-18  Stefan Hundhammer  <sh@suse.de>
 
 	* V1.7.3-Devel
-	* Applied first treemap patch from 
+	* Applied first treemap patch from
 	  Alexander Rawass <alexannika@users.sourceforge.net>
 	* Added Alexander Rawass to authors list
 	* Improved treemap repaint behaviour (not perfect yet)

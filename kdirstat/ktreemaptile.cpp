@@ -4,146 +4,547 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-05-13
+ *   Updated:	2003-01-04
  *
- *   $Id: ktreemaptile.cpp,v 1.2 2002/05/13 11:46:19 hundhammer Exp $
+ *   $Id: ktreemaptile.cpp,v 1.3 2003/01/05 14:52:29 hundhammer Exp $
  *
  */
 
 #include <kapp.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <qimage.h>
+#include <qpainter.h>
+#include <minmax.h>
 
 #include "ktreemaptile.h"
+#include "ktreemapview.h"
 #include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
 
 
 using namespace KDirStat;
 
-#define MinTileSize	3
 
-
-KTreeMapTile::KTreeMapTile( QWidget * 		parent,
+KTreemapTile::KTreemapTile( KTreemapView *	parentView,
+			    KTreemapTile *	parentTile,
 			    KFileInfo *		orig,
-			    QRect		rect,
-			    Orientation		orientation )
-    : QFrame( parent )
+			    const QRect &	rect,
+			    KOrientation	orientation )
+    : QCanvasRectangle( rect, parentView->canvas() )
+    , _parentView( parentView )
+    , _parentTile( parentTile )
     , _orig( orig )
 {
     if ( orig->totalSize() == 0 )
 	return;
 
-    setGeometry( rect );
-    Orientation dir = orientation;
-    Orientation childDir = orientation;
+    // Set up height (z coordinate) - one level higher than the parent so this
+    // will be closer to the foreground.
+    //
+    // Note that this must happen before any children are created.
+    // I found that out the hard way. ;-)
 
-#if 0
-    kdDebug() << "Creating treemap tile for " << orig
-	      << endl
-	      << "   inside " 
-	      << rect.x() << ", " << rect.y()
-	      << " w: " << rect.width()
-	      << " h: " << rect.height()
-	      << " or: " << ( dir == Hor ? "Hor" : ( dir == Vert ? "Vert" : "Auto" ) )
-	      << endl;
-#endif
+    setZ( parentTile ? ( parentTile->z() + 1.0 ) : 0.0 );
 
-    if ( dir == Auto )
-	dir = rect.width() > rect.height() ? Hor : Vert;
+    if ( parentTile )
+	_cushionSurface = parentTile->cushionSurface();
 
-    if ( orientation == Hor )	childDir = Vert;
-    if ( orientation == Vert )	childDir = Hor;
-    
-    int offset	= dir == Hor ? rect.x() : rect.y();
-    int size	= dir == Hor ? rect.width() : rect.height();
-    int count 	= 0;
+    setBrush( QColor( 0x60, 0x60, 0x60 ) );
+    setPen( NoPen );
 
-    double scale = (double) size / (double) _orig->totalSize();
+    show();	// QCanvasItems are invisible by default!
 
-    KFileInfoIterator it( orig );
+    // kdDebug() << "Creating treemap tile for " << orig << " " << rect << " size " << orig->totalSize() << endl;
 
-    while ( *it )
-    {
-	int childSize = 0;
-	
-	childSize = (int) ( scale * (*it)->totalSize() );
-
-#if 0
-	kdDebug() << "Making tile for child " << (*it)
-		  << endl
-		  << "   parent size: " << formatSize( _orig->totalSize() )
-		  << " child size: " << formatSize( (*it)->totalSize() )
-		  << " (" << ( 100.0 * (*it)->totalSize() ) / _orig->totalSize() << "%)"
-		  << " -> " << childSize << " of " << size
-		  << endl;
-#endif
-
-	if ( childSize >= MinTileSize )
-	{
-#if 0
-	    kdDebug() << "Subdividing " << (*it) << " size " << childSize << endl;
-#endif
-	    QRect childRect;
-
-	    if ( dir == Hor )
-		childRect = QRect( offset, 0, childSize, rect.height() );
-	    else
-		childRect = QRect( 0, offset, rect.width(), childSize );
-
-	    new KTreeMapTile( this, *it, childRect, childDir );
-	    
-	    offset += childSize;
-	}
-	    
-	++count;
-	++it;
-    }
-
-    if ( count == 0 )	// No children at all - this is a leaf
-    {
-	setLineWidth( 2 );
-	setMidLineWidth( 2 );
-	setFrameStyle( QFrame::Panel | QFrame::Raised );
-
-#if 0
-	kdDebug() << "Leaf " << orig
-		  << " at " << rect.x()
-		  << ", " << rect.y() 
-		  << " w: " << rect.width()
-		  << " h: " << rect.height()
-		  << endl;
-#endif
-    }
-
-    connect( this,          SIGNAL( selectionChanged( KFileInfo * ) ),
-	     _orig->tree(), SLOT  ( selectItem      ( KFileInfo * ) ) );
-
-#if 0
-    // TO DO
-    // TO DO
-    // TO DO
-    connect( _orig->tree(), SIGNAL( selectionChanged( KFileInfo * ) ),
-	     this,          SLOT  ( selectItem      ( KFileInfo * ) ) );
-    // TO DO
-    // TO DO
-    // TO DO
-#endif
+    createChildren( rect, orientation );
 }
 
 
-KTreeMapTile::~KTreeMapTile()
+KTreemapTile::~KTreemapTile()
 {
+    // NOP
 }
 
 
 void
-KTreeMapTile::mouseReleaseEvent( QMouseEvent * )
+KTreemapTile::createChildren( const QRect &	rect,
+			      KOrientation	orientation )
 {
-    // kdDebug() << "Selected " << _orig << endl;
-    emit selectionChanged( _orig );
+    if ( _parentView->squarify() )
+	createSquarifiedChildren( rect );
+    else
+	createChildrenSimple( rect, orientation );
 }
 
+
+void
+KTreemapTile::createChildrenSimple( const QRect &	rect,
+				    KOrientation	orientation )
+{
+
+    KOrientation dir      = orientation;
+    KOrientation childDir = orientation;
+
+    if ( dir == KTreemapAuto )
+	dir = rect.width() > rect.height() ? KTreemapHorizontal : KTreemapVertical;
+
+    if ( orientation == KTreemapHorizontal	)	childDir = KTreemapVertical;
+    if ( orientation == KTreemapVertical	)	childDir = KTreemapHorizontal;
+
+    int offset	 = 0;
+    int size	 = dir == KTreemapHorizontal ? rect.width() : rect.height();
+    int count 	 = 0;
+    double scale = (double) size / (double) _orig->totalSize();
+
+    _cushionSurface.addRidge( dir, _cushionSurface.height(), rect );
+
+    KFileInfoSortedBySizeIterator it( _orig, _parentView->minTileSize() / scale, KDotEntryAsSubDir );
+
+    while ( *it )
+    {
+	int childSize = 0;
+
+	childSize = (int) ( scale * (*it)->totalSize() );
+
+	if ( childSize >= _parentView->minTileSize() )
+	{
+	    QRect childRect;
+
+	    if ( dir == KTreemapHorizontal )
+		childRect = QRect( rect.x() + offset, rect.y(), childSize, rect.height() );
+	    else
+		childRect = QRect( rect.x(), rect.y() + offset, rect.width(), childSize );
+
+	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, childDir );
+	    CHECK_PTR( tile );
+
+	    tile->cushionSurface().addRidge( childDir,
+					     _cushionSurface.height() * _parentView->heightScaleFactor(),
+					     childRect );
+
+	    offset += childSize;
+	}
+
+	++count;
+	++it;
+    }
+}
+
+
+void
+KTreemapTile::createSquarifiedChildren( const QRect & rect )
+{
+    if ( _orig->totalSize() == 0 )
+    {
+	kdError() << k_funcinfo << "Zero totalSize()" << endl;
+	return;
+    }
+
+    double scale   = rect.width() * (double) rect.height() / _orig->totalSize();
+    double minSize = _parentView->minTileSize() / scale;
+
+    if ( _orig->hasChildren() )
+    {
+	_cushionSurface.addRidge( KTreemapHorizontal, _cushionSurface.height(), rect );
+	_cushionSurface.addRidge( KTreemapVertical,   _cushionSurface.height(), rect );
+    }
+
+    KFileInfoSortedBySizeIterator it( _orig, minSize, KDotEntryAsSubDir );
+    QRect childrenRect = rect;
+
+    while ( *it )
+    {
+	KFileInfoList row = squarify( childrenRect, scale, it );
+	childrenRect = layoutRow( childrenRect, scale, row );
+    }
+}
+
+
+KFileInfoList
+KTreemapTile::squarify( const QRect & 			rect,
+			double				scale,
+			KFileInfoSortedBySizeIterator & it   )
+{
+    // kdDebug() << "squarify() " << _orig << " " << rect << endl;
+
+    KFileInfoList row;
+    int length = std::max( rect.width(), rect.height() );
+
+    if ( length == 0 )	// Sanity check
+    {
+	kdWarning() << k_funcinfo << "Zero length" << endl;
+
+	if ( *it )	// Prevent endless loop in case of error:
+	    ++it;	// Advance iterator.
+
+	return row;
+    }
+
+
+    bool	improvingAspectRatio 	= true;
+    double	lastWorstAspectRatio	= -1.0;
+    double	sum 			= 0;
+
+    // This is a bit ugly, but doing all calculations in the 'size' dimension
+    // is more efficient here since that requires only one scaling before
+    // doing all other calculations in the loop.
+    const double scaledLengthSquare = length * (double) length / scale;
+
+    while ( *it && improvingAspectRatio )
+    {
+	sum += (*it)->totalSize();
+
+	if ( ! row.isEmpty() && sum != 0 && (*it)->totalSize() != 0 )
+	{
+	    double sumSquare        = sum * sum;
+	    double worstAspectRatio = std::max( scaledLengthSquare * row.first()->totalSize() / sumSquare,
+						sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
+
+	    if ( lastWorstAspectRatio >= 0.0 &&
+		worstAspectRatio > lastWorstAspectRatio )
+	    {
+		improvingAspectRatio = false;
+	    }
+
+	    lastWorstAspectRatio = worstAspectRatio;
+	}
+
+	if ( improvingAspectRatio )
+	{
+	    // kdDebug() << "Adding " << *it << " size " << (*it)->totalSize() << endl;
+	    row.append( *it );
+	    ++it;
+	}
+	else
+	{
+	    // kdDebug() << "Getting worse after adding " << *it << " size " << (*it)->totalSize() << endl;
+	}
+    }
+
+    return row;
+}
+
+
+
+QRect
+KTreemapTile::layoutRow( const QRect &		rect,
+			 double			scale,
+			 KFileInfoList & 	row )
+{
+    if ( row.isEmpty() )
+	return rect;
+
+    // Determine the direction in which to subdivide.
+    // We always use the longer side of the rectangle.
+    KOrientation dir = rect.width() > rect.height() ? KTreemapHorizontal : KTreemapVertical;
+
+    // This row's primary length is the longer one.
+    int primary = std::max( rect.width(), rect.height() );
+
+    // This row's secondary length is determined by the area (the number of
+    // pixels) to be allocated for all of the row's items.
+    KFileSize sum = row.sumTotalSizes();
+    int secondary = (int) ( sum * scale / primary );
+
+    if ( sum == 0 )			// Prevent division by zero.
+	return rect;
+
+    if ( secondary < _parentView->minTileSize() )	// We don't want tiles that small.
+	return rect;
+
+    int offset = 0;
+    int remaining = primary;
+    KFileInfoListIterator it( row );
+
+    while ( *it )
+    {
+	int childSize = (int) ( (*it)->totalSize() / (double) sum * primary + 0.5 );
+
+	if ( childSize > remaining )	// Prevent overflow because of accumulated rounding errors
+	    childSize = remaining;
+
+	remaining -= childSize;
+
+	if ( childSize >= _parentView->minTileSize() )
+	{
+	    QRect childRect;
+
+	    if ( dir == KTreemapHorizontal )
+		childRect = QRect( rect.x() + offset, rect.y(), childSize, secondary );
+	    else
+		childRect = QRect( rect.x(), rect.y() + offset, secondary, childSize );
+
+	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, KTreemapAuto );
+	    CHECK_PTR( tile );
+
+	    tile->cushionSurface().addRidge( dir,
+					     _cushionSurface.height() * _parentView->heightScaleFactor(),
+					     childRect );
+
+	    offset += childSize;
+	}
+
+	++it;
+    }
+
+
+    // Subtract the layouted area from the rectangle.
+
+    QRect newRect;
+
+    if ( dir == KTreemapHorizontal )
+	newRect = QRect( rect.x(), rect.y() + secondary, rect.width(), rect.height() - secondary );
+    else
+	newRect = QRect( rect.x() + secondary, rect.y(), rect.width() - secondary, rect.height() );
+
+    // kdDebug() << "Left over:" << " " << newRect << " " << _orig << endl;
+
+    return newRect;
+}
+
+
+void
+KTreemapTile::drawShape( QPainter & painter )
+{
+    // kdDebug() << k_funcinfo << endl;
+
+    QSize size = rect().size();
+
+    if ( size.height() < 1 || size.width() < 1 )
+	return;
+    
+
+    if ( _parentView->doCushionShading() )
+    {
+	if ( _orig->isDir() || _orig->isDotEntry() )
+	{
+	    QCanvasRectangle::drawShape( painter );
+	}
+	else
+	{
+	    if ( _cushion.isNull() )
+		_cushion = renderCushion();
+
+	    QRect rect = QCanvasRectangle::rect();
+
+	    if ( ! _cushion.isNull() )
+		painter.drawPixmap( rect, _cushion );
+
+	    if ( _parentView->forceCushionGrid() )
+	    {
+		// Draw a clearly visible boundary
+
+		painter.setPen( QPen( _parentView->cushionGridColor(), 1 ) );
+
+		if ( rect.x() > 0 )
+		    painter.drawLine( rect.topLeft(), rect.bottomLeft() + QPoint( 0, 1 ) );
+
+		if ( rect.y() > 0 )
+		    painter.drawLine( rect.topLeft(), rect.topRight() + QPoint( 1, 0 ) );
+	    }
+	}
+    }
+    else	// No cushion shading, use plain tiles
+    {
+	painter.setPen( QPen( _parentView->outlineColor(), 1 ) );
+	
+	if ( _orig->isDir() || _orig->isDotEntry() )	
+	    painter.setBrush( _parentView->dirFillColor() );
+	else
+	    painter.setBrush( _parentView->fileFillColor() );
+
+	QCanvasRectangle::drawShape( painter );
+    }
+}
+
+
+QPixmap
+KTreemapTile::renderCushion()
+{
+    QRect rect = QCanvasRectangle::rect();
+
+    if ( rect.width() < 1 || rect.height() < 1 )
+	return QPixmap();
+
+    // kdDebug() << k_funcinfo << endl;
+
+    double 	nx;
+    double 	ny;
+    double 	cosa;
+    int		x;
+    int		y;
+    int		light;
+
+
+    // Cache some values. They are used for each loop iteration, so let's try
+    // to keep multiple indirect references down.
+
+    int		ambientLight	= parentView()->ambientLight();
+    int		lightIntensity	= parentView()->lightIntensity();
+    double 	lightX		= parentView()->lightX();
+    double 	lightY		= parentView()->lightY();
+    double 	lightZ		= parentView()->lightZ();
+
+    double	xx2		= cushionSurface().xx2();
+    double	xx1		= cushionSurface().xx1();
+    double	yy2		= cushionSurface().yy2();
+    double	yy1		= cushionSurface().yy1();
+
+    int		x0 		= rect.x();
+    int		y0 		= rect.y();
+
+    QImage image( rect.width(), rect.height(), 32 );
+
+    for ( y = 0; y < rect.height(); y++ )
+    {
+	for ( x = 0; x < rect.width(); x++ )
+	{
+	    nx = -( 2.0 * xx2 * (x+x0) + xx1 );
+	    ny = -( 2.0 * yy2 * (y+y0) + yy1 );
+	    cosa  = ( nx * lightX + ny * lightY + lightZ ) / sqrt( nx*nx + ny*ny + 1.0 );
+	    light = (int) ( lightIntensity * cosa + 0.5 );
+
+	    if ( light < 0 )
+		light = 0;
+
+	    light += ambientLight;
+
+	    image.setPixel( x, y, qRgb( light, light, light ) );
+	    // image.setPixel( x, y, qRgb( 0, 0, light ) );
+	}
+    }
+
+    if ( _parentView->ensureContrast() )
+	ensureContrast( image );
+
+    return QPixmap( image );
+}
+
+
+void
+KTreemapTile::ensureContrast( QImage & image )
+{
+    if ( image.width() > 5 )
+    {
+	// Check contrast along the right image boundary:
+	//
+	// Compare samples from the outmost boundary to samples a few pixels to
+	// the inside and count identical pixel values. A number of identical
+	// pixels are tolerated, but not too many.
+
+	int x1 = image.width() - 6;
+	int x2 = image.width() - 1;
+	int interval = max( image.height() / 10, 5 );
+	int sameColorCount = 0;
+
+
+	// Take samples
+
+	for ( int y = interval; y < image.height(); y+= interval )
+	{
+	    if ( image.pixel( x1, y ) == image.pixel( x2, y ) )
+		sameColorCount++;
+	}
+
+	if ( sameColorCount * 10 > image.height() )
+	{
+	    // Add a line at the right boundary
+
+	    QRgb val = contrastingColor( image.pixel( x2, image.height() / 2 ) );
+
+	    for ( int y = 0; y < image.height(); y++ )
+		image.setPixel( x2, y, val );
+	}
+    }
+
+
+    if ( image.height() > 5 )
+    {
+	// Check contrast along the bottom boundary
+
+	int y1 = image.height() - 6;
+	int y2 = image.height() - 1;
+	int interval = max( image.width() / 10, 5 );
+	int sameColorCount = 0;
+
+	for ( int x = interval; x < image.width(); x += interval )
+	{
+	    if ( image.pixel( x, y1 ) == image.pixel( x, y2 ) )
+		sameColorCount++;
+	}
+
+	if ( sameColorCount * 10 > image.height() )
+	{
+	    // Add a grey line at the bottom boundary
+
+	    QRgb val = contrastingColor( image.pixel( image.width() / 2, y2 ) );
+
+	    for ( int x = 0; x < image.width(); x++ )
+		image.setPixel( x, y2, val );
+	}
+    }
+}
+
+
+QRgb
+KTreemapTile::contrastingColor( QRgb col )
+{
+    if ( qGray( col ) < 128 )
+	return qRgb( qRed( col ) * 2, qGreen( col ) * 2, qBlue( col ) * 2 );
+    else
+	return qRgb( qRed( col ) / 2, qGreen( col ) / 2, qBlue( col ) / 2 );
+}
+
+
+
+
+KCushionSurface::KCushionSurface()
+{
+    _xx2 	= 0.0;
+    _xx1 	= 0.0;
+    _yy2 	= 0.0;
+    _yy1 	= 0.0;
+    _height	= 0.75;	// DEBUG
+}
+
+
+void
+KCushionSurface::addRidge( KOrientation dim, double height, const QRect & rect )
+{
+    _height = height;
+
+    if ( dim == KTreemapHorizontal )
+    {
+	_xx2 = squareRidge( _xx2, _height, rect.left(), rect.right() );
+	_xx1 = linearRidge( _xx1, _height, rect.left(), rect.right() );
+    }
+    else
+    {
+	_yy2 = squareRidge( _yy2, _height, rect.top(), rect.bottom() );
+	_yy1 = linearRidge( _yy1, _height, rect.top(), rect.bottom() );
+    }
+}
+
+
+double
+KCushionSurface::squareRidge( double squareCoefficient, double height, int x1, int x2 )
+{
+    if ( x2 != x1 ) // Avoid division by zero
+	squareCoefficient -= 4.0 * height / ( x2 - x1 );
+
+    return squareCoefficient;
+}
+
+
+double
+KCushionSurface::linearRidge( double linearCoefficient, double height, int x1, int x2 )
+{
+    if ( x2 != x1 ) // Avoid division by zero
+	linearCoefficient += 4.0 * height * ( x2 + x1 ) / ( x2 - x1 );
+
+    return linearCoefficient;
+}
 
 
 

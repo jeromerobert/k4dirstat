@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-05-12
+ *   Updated:	2003-01-04
  *
- *   $Id: kdirtreeview.cpp,v 1.19 2002/05/12 15:53:51 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.20 2003/01/05 14:52:28 hundhammer Exp $
  *
  */
 
@@ -475,6 +475,7 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
 	if ( _selection )
 	{
 	    closeAllExcept( _selection );
+	    _selection->setOpen( false );
 	    ensureItemVisible( _selection );
 	    emit selectionChanged( _selection );
 	    setSelected( _selection, true );
@@ -1493,55 +1494,6 @@ KDirTreeViewItem::paintPercentageBar( float		percent,
 
 
 
-
-QString
-KDirStat::formatSize( KFileSize lSize )
-{
-   QString	sizeString;
-   double	size;
-   QString	unit;
-
-   if ( lSize < 1024 )
-   {
-      sizeString.setNum( (long) lSize );
-
-      unit = i18n( "Bytes" );
-   }
-   else
-   {
-      size = lSize / 1024.0;		// kB
-
-      if ( size < 1024.0 )
-      {
-	 sizeString.sprintf( "%.1f", size );
-	 unit = i18n( "kB" );
-      }
-      else
-      {
-	 size /= 1024.0;		// MB
-
-	 if ( size < 1024.0 )
-	 {
-	    sizeString.sprintf( "%.1f", size );
-	    unit = i18n ( "MB" );
-	 }
-	 else
-	 {
-	    size /= 1024.0;		// GB - we won't go any further...
-
-	    sizeString.sprintf( "%.2f", size );
-	    unit = i18n ( "GB" );
-	 }
-      }
-   }
-
-   if ( ! unit.isEmpty() )
-   {
-      sizeString += " " + unit;
-   }
-
-   return sizeString;
-}
 
 
 QString

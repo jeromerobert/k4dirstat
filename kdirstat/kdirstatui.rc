@@ -3,7 +3,7 @@
 <!-- XML GUI description file for KDirStat		-->
 <!--							-->
 <!-- Author:	Stefan Hundhammer (sh@suse.de)		-->
-<!-- Updated:	2002-02-09				-->
+<!-- Updated:	2003-01-04				-->
 
 
 <!DOCTYPE kpartgui>
@@ -20,6 +20,7 @@
 
 	<Menu name="file" noMerge="1"> <text>&amp;File</text>
 	    <Action name="file_open" />
+	    <Action name="file_open_url" />
 	    <Action name="file_open_recent" />
 	    <Action name="file_refresh_all"/>
 	    <Action name="file_refresh_selected"/>
@@ -51,7 +52,20 @@
 	    <Action name="cleanup_user_defined_9"/>
 	</Menu>
 
+	<Menu name="treemap" noMerge="1"> <text>&amp;Treemap</text>
+	    <TearOffHandle/>
+	    <Action name="options_show_treemap"/>
+            <Separator/>
+	    <Action name="treemap_zoom_in"/>
+	    <Action name="treemap_zoom_out"/>
+	    <Action name="treemap_select_parent"/>
+	    <Action name="treemap_rebuild"/>
+            <Separator/>
+	    <Action name="treemap_help"/>
+	</Menu>
+
 	<Menu name="settings" noMerge="1"> <text>&amp;Settings</text>
+            <Action name="options_show_treemap"/>
 	    <Action name="options_show_toolbar"/>
 	    <Action name="options_show_statusbar"/>
 	    <Action name="options_configure"/>
@@ -88,6 +102,9 @@
 	<Action name="cleanup_compress_subtree"		group="cleanup_operations"/>
 	<Action name="cleanup_move_to_trash_bin"	group="cleanup_operations"/>
         <Action name="cleanup_hard_delete"              group="cleanup_operations"/>
+	<Separator/>
+        <Action name="treemap_zoom_in"			group="treemap_operations"/>
+	<Action name="treemap_zoom_out"			group="treemap_operations"/>
     </ToolBar>
 
 
@@ -101,6 +118,39 @@
 	<Action name="file_refresh_all"/>
 	<Action name="file_refresh_selected"/>
 	<Action name="file_continue_reading_at_mount_point"/>
+	<Separator/>
+	<Action name="cleanup_open_in_konqueror"/>
+	<Action name="cleanup_open_in_terminal"/>
+	<Action name="cleanup_compress_subtree"/>
+	<Action name="cleanup_make_clean"/>
+	<Action name="cleanup_delete_trash"/>
+	<Action name="cleanup_move_to_trash_bin"/>
+        <Action name="cleanup_hard_delete"/>
+	<Separator/>
+	<Action name="cleanup_user_defined_0"/>
+	<Action name="cleanup_user_defined_1"/>
+	<Action name="cleanup_user_defined_2"/>
+	<Action name="cleanup_user_defined_3"/>
+	<Action name="cleanup_user_defined_4"/>
+	<Action name="cleanup_user_defined_5"/>
+	<Action name="cleanup_user_defined_6"/>
+	<Action name="cleanup_user_defined_7"/>
+	<Action name="cleanup_user_defined_8"/>
+	<Action name="cleanup_user_defined_9"/>
+    </Menu>
+
+
+    <!-- Context menu for the treemap -->
+
+    <Menu name="treemapContextMenu" noMerge="1">
+	<Action name="treemap_zoom_in" />
+	<Action name="treemap_zoom_out"/>
+	<Action name="treemap_select_parent"/>
+	<Action name="treemap_rebuild"/>
+	<Separator/>
+        <Action name="treemap_help"/>
+	<Separator/>
+	<Action name="file_refresh_all"/>
 	<Separator/>
 	<Action name="cleanup_open_in_konqueror"/>
 	<Action name="cleanup_open_in_terminal"/>

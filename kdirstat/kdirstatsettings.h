@@ -4,9 +4,9 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-24
+ *   Updated:	2003-01-04
  *
- *   $Id: kdirstatsettings.h,v 1.4 2002/02/25 10:49:07 hundhammer Exp $
+ *   $Id: kdirstatsettings.h,v 1.5 2003/01/05 14:52:28 hundhammer Exp $
  *
  */
 
@@ -23,17 +23,20 @@
 #include <kdialogbase.h>
 #include "kcleanup.h"
 #include "kcleanupcollection.h"
+#include "kdirstatapp.h"
 
 
-class QComboBox;
 class QCheckBox;
+class QComboBox;
+class QHGroupBox;
 class QLabel;
 class QLineEdit;
 class QRadioButton;
 class QSlider;
+class QSpinBox;
+class QVGroupBox;
 class QWidget;
 
-class KDirStatApp;
 class KColorButton;
 
 
@@ -45,6 +48,8 @@ namespace KDirStat
     class KCleanupListBox;
     class KCleanupPropertiesPage;
     class KDirTreeView;
+    class KTreemapView;
+
 
     /**
      * Settings dialog for KDirStat
@@ -81,10 +86,10 @@ namespace KDirStat
 	 * QTabDialog used to have 'aboutToShow()' for a good reason, but the
 	 * creators of @ref KDialogBase in their infinite wisdom chose not to
 	 * include anything similar. How is that supposed to work, anyway?
-	 * Everything I saw in any other KDE sources looked like ugly hacks to
-	 * me. Am I really supposed to destroy my settings dialog and create a
-	 * new one every time it pops up? This can certainly not be the way to
-	 * go.
+	 * Everything I saw in any other KDE sources looked to me like ugly
+	 * hacks to work around this. Am I really supposed to destroy my
+	 * settings dialog and create a new one every time it pops up? This can
+	 * certainly not be the way to go.
 	 *
 	 * This overwritten show() method sends that @ref aboutToShow() signal
 	 * before calling the parent class show() method.
@@ -121,7 +126,11 @@ namespace KDirStat
 	KDirStatApp *	_mainWin;
 	int		_cleanupsPageIndex;
 	int		_treeColorsPageIndex;
-    };
+	int		_treemapPageIndex;
+	int		_generalSettingsPageIndex;
+
+    }; // class KSettingsDialog
+
 
 
     /**
@@ -189,7 +198,8 @@ namespace KDirStat
     protected:
 
 	int _pageIndex;
-    };
+
+    }; // class KSettingsPage
 
 
 
@@ -223,7 +233,7 @@ namespace KDirStat
 	/**
 	 * Destructor
 	 **/
-	~KTreeColorsPage();
+	virtual ~KTreeColorsPage();
 
 
     public slots:
@@ -268,7 +278,9 @@ namespace KDirStat
 	QLabel *		_colorLabel  [ KDirStatSettingsMaxColorButton ];
 
 	int			_maxButtons;
-    };
+
+    }; // class KTreeColorsPage
+
 
 
     /**
@@ -299,7 +311,7 @@ namespace KDirStat
 	/**
 	 * Destructor
 	 **/
-	~KCleanupPage();
+	virtual ~KCleanupPage();
 
 	/**
 	 * Insert an entry for a cleanup action. This is the original value
@@ -373,7 +385,9 @@ namespace KDirStat
 
 	KCleanupCollection		_workCleanupCollection;
 	KCleanup *			_currentCleanup;
-    };
+
+    }; // class KCleanupPage
+
 
 
     /**
@@ -449,7 +463,8 @@ namespace KDirStat
     protected:
 
 	KCleanup * _selection;
-    };
+
+    }; // class KCleanupListBox
 
 
 
@@ -484,7 +499,9 @@ namespace KDirStat
 	// Data members
 
 	KCleanup * _cleanup;
-    };
+
+    }; // class KCleanupListBoxItem
+
 
 
     /**
@@ -540,9 +557,187 @@ namespace KDirStat
 	QComboBox *		_refreshPolicy;
 
 	KDirStatApp *		_mainWin;
-    };
+
+    }; // class KCleanupPropertiesPage
+
+
+
+    /**
+     * Settings tab page for general/misc settings.
+     **/
+    class KGeneralSettingsPage: public KSettingsPage
+    {
+	Q_OBJECT
+
+    public:
+
+	/**
+	 * Constructor
+	 **/
+	KGeneralSettingsPage( KSettingsDialog *	dialog,
+			      QWidget *		parent,
+			      KDirStatApp *	mainWin );
+
+	/**
+	 * Destructor
+	 **/
+	virtual ~KGeneralSettingsPage();
+
+
+    public slots:
+
+	/**
+	 * Apply the changes.
+	 *
+	 * Inherited from @ref KSettingsPage.
+	 **/
+        virtual void apply();
+
+	/**
+	 * Revert all values to their defaults.
+	 *
+	 * Inherited from @ref KSettingsPage.
+	 **/
+	virtual void revertToDefaults();
+
+	/**
+	 * Set up all fields prior to displaying the dialog.
+	 *
+	 * Inherited from @ref KSettingsPage.
+	 **/
+	virtual void setup();
+
+	/**
+	 * Check the enabled state of all widgets depending on the value of
+	 * other widgets.
+	 **/
+	void checkEnabledState();
+
+
+    protected:
+
+	// Data members
+
+	KDirStatApp *	_mainWin;
+	KDirTreeView *	_treeView;
+
+	QCheckBox *	_crossFileSystems;
+	QCheckBox *	_enableLocalDirReader;
+
+	QCheckBox *	_enableToolBarAnimation;
+	QCheckBox *	_enableTreeViewAnimation;
+
+    }; // class KGeneralSettingsPage
+
+
+
+    /**
+     * Settings tab page for treemap settings.
+     **/
+    class KTreemapPage: public KSettingsPage
+    {
+	Q_OBJECT
+
+    public:
+
+	/**
+	 * Constructor
+	 **/
+	KTreemapPage( KSettingsDialog *	dialog,
+		      QWidget *		parent,
+		      KDirStatApp *	mainWin );
+
+	/**
+	 * Destructor
+	 **/
+	virtual ~KTreemapPage();
+
+
+    public slots:
+
+	/**
+	 * Apply the changes.
+	 *
+	 * Inherited from @ref KSettingsPage.
+	 **/
+        virtual void apply();
+
+	/**
+	 * Revert all values to their defaults.
+	 *
+	 * Inherited from @ref KSettingsPage.
+	 **/
+	virtual void revertToDefaults();
+
+	/**
+	 * Set up all fields prior to displaying the dialog.
+	 *
+	 * Inherited from @ref KSettingsPage.
+	 **/
+	virtual void setup();
+
+	/**
+	 * Check the enabled state of all widgets depending on the value of
+	 * other widgets.
+	 **/
+	void checkEnabledState();
+
+
+    protected:
+
+	/**
+	 * Returns the main window's current treemap view or 0 if there is
+	 * none. Don't cache this value, it changes frequently!
+	 **/
+	KTreemapView * treemapView() const { return _mainWin->treemapView(); }
+
+	/**
+	 * Convenience method to read a color from 'config'.
+	 **/
+	QColor readColorEntry( KConfig * 	config,
+			       const char * 	entryName,
+			       QColor 		defaultColor );
+
+	// Data members
+
+	KDirStatApp *		_mainWin;
+
+	
+	// Widgets
+	
+	QCheckBox *		_squarify;
+	QCheckBox *		_doCushionShading;
+	QVGroupBox *		_cushionParams;
+	QSlider *		    _ambientLight;
+	QSpinBox *		    _ambientLightSB;
+	QSlider *		    _heightScalePercent;
+	QSpinBox *		    _heightScalePercentSB;
+	QCheckBox *		    _ensureContrast;
+	QCheckBox *		    _forceCushionGrid;
+	KColorButton *		    _cushionGridColor;
+	QLabel *		    _cushionGridColorL;
+	QHGroupBox *		_plainTileParams;
+	KColorButton *		    _fileFillColor;
+	KColorButton *		    _dirFillColor;
+	KColorButton *		    _outlineColor;
+	KColorButton *		_highlightColor;
+	QSpinBox *		_minTileSize;
+	QCheckBox *		_autoResize;
+	
+    }; // class KTreemapPage
 
 }	// namespace KDirStat
+
+
+/**
+ * Add a horizontal stretch widget to take all excess space.
+ **/
+void addHStretch( QWidget * parent );
+
+/**
+ * Add a vertical stretch widget to take all excess space.
+ **/
+void addVStretch( QWidget * parent );
 
 
 

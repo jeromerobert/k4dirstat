@@ -63,7 +63,7 @@ as Authors, publish date, the abstract, and Keywords -->
 <holder>Stefan Hundhammer</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
-<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook
      and in the FDL itself on how to use it. -->
 <legalnotice>&FDLNotice;</legalnotice>
 
@@ -159,6 +159,10 @@ space has gone and tries to help clean it up.
 
 <listitem><para>
 Graphical and numeric display of used disk space
+</para></listitem>
+
+<listitem><para>
+Treemap display of used disk space
 </para></listitem>
 
 <listitem><para>
@@ -428,6 +432,377 @@ file system.
 </sect1>
 
 </chapter>
+
+
+<chapter id="treemaps">
+<title>Treemaps</title>
+
+
+<sect1 id="treemap_intro">
+<title>Quick Introduction to Treemaps</title>
+
+
+<sect2 id="what_are_treemaps">
+<title>What is it?</title>
+
+<para>
+The shaded rectangles you can see in the lower half of the &kdirstat; main
+window are called a "treemap". This is just another way of displaying items in
+a tree that each have a numerical value, such as a file size.
+</para>
+
+<para>
+Each rectangle corresponds to a file or directory on your hard disk. The larger
+the rectangle (or, rather, the larger its area), the larger the file.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="how_to_use_treemaps">
+<title>How to Use Treemaps</title>
+
+<para>
+Look at the largest rectangles. Click on one, and it is selected - both in
+the treemap view and above in the tree view (the list above). You can now see
+what file or directory that is - both in the tree view above and in the status
+line below.
+</para>
+
+<para>
+Find the largest rectangles, identify them, ant decide what to do with them:
+Keep them, delete them, whatever. Use the cleanup actions like in the tree
+view. The right mouse button opens a context menu that contains cleanup actions.
+</para>
+
+<para>
+The shading gives hints about which files belong together in directories. The
+bright spots indicate about where the center of parent directories is.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="treemap_advantages">
+<title>Pros and Cons of Treemaps</title>
+
+<para>
+Treemaps are good for finding single large files, possibly very deeply nested
+in the directory hierarchy. They don't help very much if lots of small files
+clutter up a directory - use the tree view (the list) above the treemap for
+that.
+</para>
+
+<para>
+The treemap by itself view doesn't give away very much information other than
+relative file sizes. It can tell you where large files are, even if they are
+very deeply hidden in subdirectories. You always see all files at once, not
+only the relative sizes of subdirectories against each other like in the tree
+view. Click on a file to see more details in the tree view above.
+</para>
+
+<para>
+Bottom line: Both the treemap and the tree view have their strenghs and
+weaknesses. Use a combination of both to make best use of either's benefits.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="getting_rid_of_treemaps">
+<title>How to Get Rid of it</title>
+
+<para>
+If you need the screen space for the tree view (the list) or if you find it
+takes too long to update the tree view each time you delete a file, you can
+drag the splitter between the tree view and the treemap all the way down. The
+treemap doesn't get rebuilt below a certain minimum size, thus it doesn't eat
+performance any more. Alternatively, uncheck "show treemap" in the "treemap"
+menu or simply hit <keycap>F9</keycap>.
+</para>
+
+</sect2>
+</sect1>
+
+
+
+<sect1 id="treemap_actions">
+<title>Treemap Related Actions</title>
+
+
+<sect2 id="treemap_mouse_actions">
+<title>Mouse Actions in the Treemap</title>
+
+<itemizedlist>
+
+<listitem><para>
+A single click with the left mouse button selects the clicked file or directory
+both in the treemap and in the tree view.
+</para></listitem>
+
+<listitem><para>
+A single click with the middle mouse button selects the parent of the clicked
+file or directory.
+</para></listitem>
+
+<listitem><para>
+A single click with the right mouse button opens the context menu.
+</para></listitem>
+
+<listitem><para>
+A double click with the left mouse button zooms the treemap in at the clicked
+file or directory: The treemap is redisplayed with the near-topmost ancestor of
+the clicked file or directory as the root.
+</para></listitem>
+
+<listitem><para>
+A double click with the middle mouse button rebuilds the treemap and makes it
+fit into the available screen space without the need for scrollbars. Note: This
+does not re-read the directories, only the treemap is rebuilt from the existing
+data in &kdirstat;'s internal data structures.
+</para></listitem>
+
+<listitem><para>
+A double click with the right mouse button zooms out after zooming in.
+</para></listitem>
+
+<listitem><para>
+Dragging the splitter above the treemap not only resizes the treemap subwindow,
+it also rebuilds the treemap and makes it fit into the available space.
+</para></listitem>
+
+<listitem><para>
+You can drag the splitter all the way down to deactivate the treemap
+alltogether. Below a minimum size the treemap will not be updated any more, so
+it doesn't cost any performance.
+</para></listitem>
+
+</itemizedlist>
+
+</sect2>
+
+
+<sect2 id="treemap_menu_actions">
+<title>Treemap Menu Actions</title>
+
+<para>
+Most treemap mouse actions have counterparts in the "treemap" menu.
+</para>
+
+<para>
+In addition to that, "show treemap" in the "treemap" menu toggles display of
+the treemap subwindow. If disabled, the treemap is really inactive and doesn't
+cost any performance.
+</para>
+
+</sect2>
+</sect1>
+
+
+<sect1 id="treemap_in_depth">
+<title>More Information about Treemaps</title>
+
+<sect2 id="simple_treemap_construction">
+<title>How a Simple Treemap is Constructed</title>
+
+<para>
+In its most basic form, construction of a treemap is very easy:
+</para>
+
+<para>
+First, you need a tree where each node has an associated value. Directory trees
+with their accumulated file sizes are a very natural example. However, the tree
+needs to be complete with all accumulated values before anything can be done -
+that's why &kdirstat; doesn't display a treemap while directories are being
+read.
+</para>
+
+<para>
+Decide upon an direcion in which to split the available area initially. Since
+normally the treemap subwindow is wider than it is high, we first split
+horizontally.
+</para>
+
+<para>
+Split the area so each toplevel directory gets an area proportional to its
+accumulated size (i.e., its own size plus the size of all its children,
+grandchildren etc.).
+</para>
+
+<para>
+For each rectangle thus constructed, repeat the process for each directory
+level, but change direction for each level. For example, the second level will
+be split vertically, the third again horizontally etc.
+</para>
+
+<para>
+This basic algorithm as well as the idea of treemaps at all was introduced by
+Ben Shneiderman quite some years ago.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="squarified_treemaps">
+<title>Squarified Treemaps</title>
+
+<para>
+One major drawback of the simple treemap algorithm is that it usually results
+in lots of very thin, elongated rectangles that are hard to point at with the
+mouse and hard to compare visually against each other. This is why &kdirstat;
+uses "squarified" treemaps as described by Mark Bruls, Kees Huizing, and Jarke
+J. van Wijk of the Technical University of Eindhoven in the Netherlands. The
+basic idea is to improve the aspect ratio of the resulting rectangles, thus to
+make them more "square-like". Even though this doesn't always work out
+perfectly, it usually improves things a lot: There are normally very few (if
+any) thin, elongated rectangles in such a squarified treemap.
+</para>
+
+</sect2>
+
+
+<sect2 id="cushioned_treemaps">
+<title>The Shading: Cushioned Treemaps</title>
+
+<para>
+Squarifying a treemap comes at a cost: It makes the structure of the underlying
+tree even less obvious for the user. Where simple treemaps change direction for
+each level of subdivision, sqarified treemaps change direction within each
+level. The result are clusters of more or less square-like rectangles. The only
+hint about the tree structure that is given is that larger rectangles are near
+the left and at the top of each level.
+</para>
+
+<para>
+Thus, &kdirstat; uses a technique described by Jarke J. van Wijk and Huub van
+de Wetering of the TU Eindhoven, NL: "Cushioned" treemaps. This is the 3D-like
+shading you can see in &kdirstat;'s treemaps: It gives each rectangle within
+the treemap (each "tile") a cushion-like impression. This is not just for
+pretty looks, its main purpose is to group files optically together.
+</para>
+
+</sect2>
+
+
+<sect2 id="treemaps_optimizations">
+<title>&kdirstat;'s own Treemap Improvements</title>
+
+<para>
+The squarification algorithm requires items to be sorted by size. A Linux/Unix
+directory tree, however, usually has lots of items; a full-blown Linux
+installation can easily consist of 150,000+ (!) files and directories. The best
+sort algorithms (heap sort, quick sort) still have a cost in the order of
+n*ln(n), i.e. they are proportional to the product of the number of items times
+their logarithm.
+</para>
+
+<para>
+Likewise, the cushion shading algorithm requires relatively expensive
+floating-point arithmetics for each individual pixel of each treemap tile (even
+though, by the way, it is very efficient for a 3D-shading algorithm - no
+expensive sinus/cosinus etc. calculation required).
+</para>
+
+<para>
+On the other hand, most items in large directory trees are so tiny they cannot
+be seen at all. &kdirstat; simply omits everything that will result in treemap
+tiles less than a predefined (3*3 pixels) size - they are pretty useless for
+the purposes of &kdirstat;'s users anyway. Those tiny thingies may end up in
+some featureless grey space in the treemap display.
+</para>
+
+<para>
+So don't wonder if you click on some grey pixels and &kdirstat; insists they
+belong to a rather high-level directory: &kdirstat; simply means to tell you
+that those pixels correspond to some small stuff in that directory. Use the
+tree view (the list) above the treemap for more detailed information.
+</para>
+
+</sect2>
+
+<sect2 id="treemaps_credits">
+<title>Credits and Further Reading about Treemaps</title>
+
+<itemizedlist>
+
+<listitem><para>
+SequoiaView gave the inspiration for treemaps within &kdirstat;. SequoiaView is
+a MS Windows (that's the bad part) program created at the TU Eindhoven, NL. It
+introduced cushion treemaps and later squarified cushion treemaps. Its purpose
+is very close to &kdirstat;'s. If you are looking for a &kdirstat;-like program
+on that "other" ;-) platform, go for SequoiaView:
+
+<ulink url="http://www.win.tue.nl/sequoiaview">
+http://www.win.tue.nl/sequoiaview
+</ulink>.
+
+</para>
+<para>
+Needless to say, &kdirstat; users should easily be able to simply mount their
+MS Windows partitions and use &kdirstat; to clean up those as well. The only
+acceptable excuse ;-) for not doing this might be NTFS partitions (no reliable
+write access from Linux to those yet) or single-OS MS Windows machines.
+</para></listitem>
+
+<listitem><para>
+Ben Shneiderman invented treemaps - a truly intuitive way of visualizing
+numerical contents of a tree. For more information, see
+
+<ulink url="http://www.cs.umd.edu/hcil/treemaps/">
+http://www.cs.umd.edu/hcil/treemaps/
+</ulink>.
+</para></listitem>
+
+<listitem><para>
+Jarke J. van Wijk and Huub van de Wetering from the TU Eindhoven, NL wrote a
+paper called "Cushion Treemaps: Visualization of Hierarchical Information". It
+is available in PDF format at
+
+<ulink url="http://www.win.tue.nl/~vanwijk/">
+http://www.win.tue.nl/~vanwijk/
+</ulink>.
+</para></listitem>
+
+<listitem><para>
+Mark Bruls, Kees Huizing and Jarke J. van Wijk from the TU Eindhoven wrote a
+paper called "Squarified Treemaps". It is also available in PDF format at
+<ulink url="http://www.win.tue.nl/~vanwijk/">
+http://www.win.tue.nl/~vanwijk/
+</ulink>.
+</para></listitem>
+
+<listitem><para>
+Alexander Rawass had written a previous implementation of treemaps for
+&kdirstat;. Even that part has been completely replaced for various reasons
+(performance, integration into the &kdirstat; main application, memory
+consumption, stability, user interface conformance, lack of maintenance), it
+had proven that treemaps are a useful addition for a program like &kdirstat;.
+</para></listitem>
+
+<listitem><para>
+Frederic Vernier and Laurence Nigay from the University of Grenoble, France
+wrote a paper called "Modifiable Treemaps Containing Variable-Shaped Units"
+(URL unknown, sorry). They also wrote a MS Windows programm called "parent"
+that uses a mixture of treemaps and file lists within individual treemap
+tiles.
+</para><para>
+Personally, I don't like that approach very much - I find that display very
+cluttered and confusing (that is why I didn't adopt anything like that for
+&kdirstat;). But this is just my personal opinion that others may or may not
+share.
+</para></listitem>
+
+</itemizedlist>
+
+</sect2>
+</sect1>
+</chapter>
+
+
 
 <chapter id="predefined_cleanups">
 <title>Predefined Cleanup Actions</title>
@@ -1017,7 +1392,7 @@ keep up the good work.
 <para>
 In the opposite case, why not tell the author of a particular annoying program
 just how annoying it is? This may shake him sober and make him reconsider his
-work. 
+work.
 </para>
 
 <para>
@@ -1300,7 +1675,7 @@ Documentation copyright 2002 Stefan Hundhammer <email>sh@suse.de</email>
 &kdirstat; is part of the KDE project
 <ulink url="http://www.kde.org">http://www.kde.org</ulink>.
 
-&kdirstat; can be found on the &kdirstat; home page at 
+&kdirstat; can be found on the &kdirstat; home page at
 <ulink url="http://kdirstat.sourceforge.net/">http://kdirstat.sourceforge.net/</ulink>
 or at the mirror site at
 <ulink url="http://www.suse.de/~sh/kdirstat/">http://www.suse.de/~sh/kdirstat/</ulink>
@@ -1324,7 +1699,7 @@ to believe that if it has windows, it has to run on MS Windows...
 </itemizedlist>
 
 <para>
-All required libraries as well as &kdirstat; itself can be found on 
+All required libraries as well as &kdirstat; itself can be found on
 <ulink url="http://kdirstat.sourceforge.net/">The &kdirstat; home page</ulink>.
 </para>
 </sect1>

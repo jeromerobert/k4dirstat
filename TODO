@@ -1,38 +1,38 @@
 			    TODO list for KDirStat
 			   ========================
-							Updated: 2002-05-10
+							Updated: 2003-01-04
 
-- misc app configs:
-  - pacman animation in tool bar
-  - pacman animation in tree view (for fast machines)
-  - enable/disable local dir reader
-  - enable/disable 'cross file systems'
+- help text for "treemap" settings
 
-- session management
+- help text for "general" settings
 
-- German translation for program
-
-- German help file
-
-- make treemaps work again; this will most likely require a rewrite of the
-  treemap related part.
+- update screen shots in online help (no treemaps yet)
 
 - make KDirStat a KPart
 
-- let user configure cleanup action keyboard accelerators
+- colorize treemap tiles according to their MIME type / file pattern
+  (e.g., all MP3s yellow, all PNGs blue, etc.)
 
-- check in to the 'kdenonbeta' CVS - I don't like this part... ;-)
+- German translation for program
 
 
 
 Maybe:
 ======
 
+- let user configure cleanup action keyboard accelerators
+
+- check in to the 'kdenonbeta' CVS - I don't like this part... ;-)
+
+- German help file
+
 - Animation other than pacman (optional?)
 
 - configure mail report texts (the user gets an editor in the mailer anyway)
 
 - 'kdf' like 'disk free' display for file system of current tree - pie, bar graph?
+  Steal that thing from the SuSE YaST2 package manager UI I wrote?
+  (which, in turn, I stole in large parts from KDirStat)
 
 - Filter on tree view: by user, by mtime, by size
 

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-05-10
+ *   Updated:	2002-12-29
  *
- *   $Id: kdirtreeiterators.h,v 1.3 2002/05/12 15:53:51 hundhammer Exp $
+ *   $Id: kdirtreeiterators.h,v 1.4 2003/01/05 14:52:28 hundhammer Exp $
  *
  */
 
@@ -60,7 +60,7 @@ namespace KDirStat
      *
      *    while ( *it )
      *    {
-     *       kdDebug() << (*it)->debugUrl() << ":\t" << formatSize( (*it)->totalSize() ) << endl;
+     *       kdDebug() << *it << ":\t" << (*it)->totalSize() ) << endl;
      *       ++it;
      *    }
      *
@@ -132,13 +132,13 @@ namespace KDirStat
 	 * Return the current child object or 0 if there is no more.
 	 * Same as @ref operator*() .
 	 **/
-	KFileInfo *	current()	{ return _current; }
+	virtual KFileInfo * current()	{ return _current; }
 
 	/**
 	 * Return the current child object or 0 if there is no more.
 	 * Same as @ref current().
 	 **/
-	KFileInfo *	operator*()	{ return _current; }
+	KFileInfo *	operator*()	{ return current(); }
 
 	/**
 	 * Advance to the next child. Same as @ref operator++().
@@ -153,7 +153,7 @@ namespace KDirStat
 	/**
 	 * Returns 'true' if this iterator is finished and 'false' if not.
 	 **/
-	bool		finished()	{ return _current == 0; }
+	virtual bool	finished()	{ return _current == 0; }
 
 	/**
 	 * Check whether or not the current child is a directory, i.e. can be
@@ -170,7 +170,7 @@ namespace KDirStat
 
 	/**
 	 * Return the number of items that will be processed.
-	 * This is an expensive operation.  
+	 * This is an expensive operation.
 	 **/
 	int		count();
 
@@ -214,16 +214,40 @@ namespace KDirStat
 	virtual ~KFileInfoSortedIterator();
 
 	/**
+	 * Return the current child object or 0 if there is no more.
+	 *
+	 * Inherited from @ref KFileInfoIterator.
+	 * Overwritten to overcome some shortcomings of C++:
+	 * Virtual methods cannot be used in the constructor.
+	 **/
+	virtual KFileInfo * current();
+
+	/**
 	 * Advance to the next child. Same as @ref operator++().
 	 * Sort by name, sub directories first, then the dot entry (if
 	 * desired), then files (if desired).
 	 *
-	 * Inherited from @ref KFileInfoSortedIterator.
+	 * Inherited from @ref KFileInfoIterator.
 	 **/
 	virtual void next();
 
-	
+	/**
+	 * Returns 'true' if this iterator is finished and 'false' if not.
+	 *
+	 * Inherited from @ref KFileInfoIterator.
+	 **/
+	virtual bool finished();
+
+
     protected:
+
+	/**
+	 * Delayed initialization for class parts that rely on availability of
+	 * virtual methods. This is a kludge to overcome a major shortcoming of
+	 * C++: Virtual methods are not available in the constructor yet.
+	 * This is a neverending cause of trouble.
+	 **/
+	void delayedInit();
 
 	/**
 	 * Make a 'default order' children list:
@@ -231,22 +255,78 @@ namespace KDirStat
 	 * then the dot entry (depending on policy),
 	 * then the dot entry's children (depending on policy).
 	 **/
-	void makeDefaultOrderChildrenList();
+	virtual void makeDefaultOrderChildrenList();
+
+	/**
+	 * Make a sorted children list according to the current sort
+	 * criteria - unless KSortByName is requested, in which case
+	 * makeDefaultOrderChildrenList() above is used.
+	 **/
+	virtual void makeChildrenList();
+
+	
+	// Data members
 
 	KFileInfoList *		_childrenList;
 	KFileInfoSortOrder	_sortOrder;
 	bool			_ascending;
+	bool			_initComplete;
 
     };	// class KFileInfoSortedIterator
 
 
 
     /**
-     * Internal helper class for sorting iterators.
-     * Applications are discouraged from directly using this class; use @ref
-     * KFileInfo::firstChild() etc. instead.
+     * Specialized KFileInfo iterator that sorts by (total) size, yet
+     * disregards children below a minimum size. This can considerably improve
+     * performance if the number of children that need to be sorted decreases
+     * dramatically.
+     *
+     * For example, treemaps can only display a limited portion of large
+     * directory trees since the number of available pixels is very
+     * limited. Thus, files (or directories) below a certain size usually don't
+     * get a individual visual representation anyway, so they may as well be
+     * omitted right away - no need for expensive list sorting operations.
      **/
-    class KFileInfoList: public QList<KFileInfo>
+    class KFileInfoSortedBySizeIterator: public KFileInfoSortedIterator
+    {
+    public:
+
+	/**
+	 * Constructor. Children below 'minSize' will be ignored by this iterator.
+	 **/
+	KFileInfoSortedBySizeIterator( KFileInfo *	parent,
+				       KFileSize	minSize		= 0,
+				       KDotEntryPolicy	dotEntryPolicy	= KDotEntryTransparent,
+				       bool		ascending 	= false );
+
+	/**
+	 * Destructor.
+	 **/
+	virtual ~KFileInfoSortedBySizeIterator() {};
+
+
+    protected:
+
+	/**
+	 * Create the (sorted) children list. Disregard children below minSize.
+	 * Reimplemented from KFileInfoSortedIterator.
+	 **/
+	virtual void makeChildrenList();
+
+
+	// Data members
+	
+	KFileSize	_minSize;
+
+    }; // class KFileInfoSortedBySizeIterator
+
+
+
+    /**
+     * Internal helper class for sorting iterators.
+     **/
+    class KFileInfoList: public QPtrList<KFileInfo>
     {
     public:
 
@@ -261,6 +341,12 @@ namespace KDirStat
 	 **/
 	virtual ~KFileInfoList();
 
+	/**
+	 * Returns the sum of all the total sizes in the list.
+	 **/
+	KFileSize sumTotalSizes();
+
+	
     protected:
 	/**
 	 * Comparison function. This is why this class is needed at all.
@@ -270,6 +356,9 @@ namespace KDirStat
 	KFileInfoSortOrder 	_sortOrder;
 	bool			_ascending;
     };
+
+
+    typedef QPtrListIterator<KFileInfo> KFileInfoListIterator;
 
 
 
