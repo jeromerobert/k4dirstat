@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.11 2001/07/15 02:45:19 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.12 2001/07/16 20:50:16 alexannika Exp $
  *
  */
 
@@ -97,6 +97,7 @@ namespace KDirStat
 #define CST_REGEXP 0
 #define CST_PERMISSION 1
 #define CST_USER 2
+#define CST_WILDCARD 3
 
   // find modes
 
@@ -137,6 +138,7 @@ public:
     QColor  color;
     int  type;
     QStringList  patternlist;
+    QList<QRegExp> *regexplist;
     int  permission_mask;
     QString user;
     QString comment;

@@ -71,6 +71,24 @@ void KDirTreeMapWindow::setConfig(){
       scheme->type=config->readUnsignedNumEntry("type",CST_REGEXP);
       scheme->patternlist=config->readListEntry("pattern",',');
 
+      bool use_wildcards=TRUE;
+	if(scheme->type==CST_REGEXP){
+	  use_wildcards=FALSE;
+	}
+
+      scheme->regexplist=new QList<QRegExp>;
+      for(int p=0;p<scheme->patternlist.count();p++){
+#if 0
+	  QString regstr=QString(scheme->patternlist[p]);
+	  regstr=regstr.remove(0,1);
+	  regstr=regstr.remove(regstr.length()-1,1);
+
+	    printf("pattern +%s+ +%s+ on  %d %d %d\n",scheme->patternlist[p].latin1(),regstr.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
+#endif
+	    printf("pattern +%s+\n",scheme->patternlist[p].latin1());
+	QRegExp *regexp=new QRegExp(scheme->patternlist[p],FALSE,use_wildcards);
+	scheme->regexplist->append(regexp);
+      }
       QColor col=QColor(255,0,255);
       scheme->color=QColor(config->readColorEntry("color",&col));
 

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.11 2001/07/15 02:45:19 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.12 2001/07/16 20:50:16 alexannika Exp $
  *
  */
 
@@ -102,23 +102,17 @@ QColor&  QTreeMapArea::getBaseColor(QString name){
 
     if(options->scheme_list!=NULL){
       bool found=FALSE;
-      //      bcolor=QColor(255,255,255);
+            bcolor=options->mono_color;
 
 
       for(int i=0;i<options->scheme_list->count() && found==FALSE;i++){
 	QTMcolorScheme *scheme=options->scheme_list->at(i);
-	QStringList plist=scheme->patternlist;
+	QList<QRegExp> *rlist=scheme->regexplist;
 
-	for(int j=0;j<plist.count() && found==FALSE;j++){
-	  QString regstr=QString(plist[j]);
-	  regstr.remove(0,1);
-	  regstr.remove(regstr.length()-1,1);
-
-	    printf("pattern %s %s on name %s %d %d %d\n",plist[j].latin1(),regstr.latin1(),name.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
-
-	  QRegExp rex=QRegExp(regstr,FALSE,FALSE);
-	  if(rex.match(name)!=-1){
-	    printf("found pattern %s on name %s %d %d %d\n",regstr.latin1(),name.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
+	for(int j=0;j<rlist->count() && found==FALSE;j++){
+	  if(rlist->at(j)->match(name)!=-1){
+	    //	    printf("found pattern %s on name %s %d %d %d\n",rlist->at(j)->pattern().latin1(),name.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
+	    //	    printf("found on name %s %d %d %d\n",name.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
 	    bcolor=QColor(scheme->color);
 	    found=TRUE;
 	  }

@@ -1,3 +1,11 @@
+2001-07-16 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* user can now use regexps or wildcards in config
+	* regexps are now compiled only once at startup
+	* wildcards are working correctly
+	* regexps need 3 /// backslashes in kdirstatrc
+	* Feature: the color list is parsed in alphabetic sort
+
 2001-07-14 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* KDirTreeMapWindow reads out configuration with KConfig
