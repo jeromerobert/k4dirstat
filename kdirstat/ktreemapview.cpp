@@ -4,11 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-06
- *
- *   $Id: ktreemapview.cpp,v 1.4 2003/01/06 14:18:56 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
+
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -92,7 +90,7 @@ KTreemapView::readConfig()
     _ambientLight	= config->readNumEntry( "AmbientLight"		,  DefaultAmbientLight );
     _lightIntensity	= 255 - _ambientLight;
 
-    _heightScaleFactor	= config->readDoubleNumEntry ( "HeightScaleFactor" , DefaultHeightScaleFactor );
+    _heightScaleFactor	= config->readDoubleNumEntry( "HeightScaleFactor" , DefaultHeightScaleFactor );
     _autoResize		= config->readBoolEntry( "AutoResize"		, true	);
     _squarify		= config->readBoolEntry( "Squarify"		, true	);
     _doCushionShading	= config->readBoolEntry( "CushionShading"	, true	);

@@ -4,11 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-04
- *
- *   $Id: kdirtreeview.h,v 1.14 2003/01/05 14:52:29 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
+
 
 #ifndef KDirTreeView_h
 #define KDirTreeView_h

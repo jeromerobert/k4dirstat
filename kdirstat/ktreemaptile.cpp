@@ -5,10 +5,8 @@
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
  *   Updated:	2003-01-07
- *
- *   $Id: ktreemaptile.cpp,v 1.7 2003/01/07 09:32:03 hundhammer Exp $
- *
  */
+
 
 #include <math.h>
 #include <algorithm>

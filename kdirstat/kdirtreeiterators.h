@@ -4,11 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-12-29
- *
- *   $Id: kdirtreeiterators.h,v 1.4 2003/01/05 14:52:28 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
+
 
 #ifndef KDirTreeIterators_h
 #define KDirTreeIterators_h

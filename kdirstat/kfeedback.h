@@ -4,10 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-24
- *
- *   $Id: kfeedback.h,v 1.2 2002/02/25 10:49:07 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 

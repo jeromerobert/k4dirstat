@@ -4,15 +4,12 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-06
- *
- *   $Id: ktreemaptile.h,v 1.3 2003/01/06 15:20:47 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
+
 
 #ifndef KTreemapTile_h
 #define KTreemapTile_h
-
 
 
 #ifdef HAVE_CONFIG_H

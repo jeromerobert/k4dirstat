@@ -4,10 +4,7 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-04
- *
- *   $Id: kdirstatsettings.h,v 1.5 2003/01/05 14:52:28 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 

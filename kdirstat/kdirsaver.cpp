@@ -4,12 +4,8 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-09
- *
- *   $Id: kdirsaver.cpp,v 1.3 2002/02/11 10:04:33 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
-
 
 
 #include <unistd.h>

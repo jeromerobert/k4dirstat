@@ -4,11 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-06
- *
- *   $Id: ktreemapview.h,v 1.4 2003/01/06 15:20:48 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
+
 
 #ifndef KTreemapView_h
 #define KTreemapView_h

@@ -5,10 +5,7 @@
  *
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-01
- *
- *   $Id: kdirstatfeedback.cpp,v 1.5 2003/01/05 14:52:28 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 

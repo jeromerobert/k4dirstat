@@ -4,10 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-11
- *
- *   $Id: kpacman.h,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 

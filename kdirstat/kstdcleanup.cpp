@@ -4,10 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-27
- *
- *   $Id: kstdcleanup.cpp,v 1.2 2002/01/28 14:40:20 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 

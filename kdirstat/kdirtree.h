@@ -4,10 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-04
- *
- *   $Id: kdirtree.h,v 1.10 2003/01/05 14:52:28 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 
