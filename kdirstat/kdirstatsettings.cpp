@@ -4,9 +4,9 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-24
+ *   Updated:	2002-04-23
  *
- *   $Id: kdirstatsettings.cpp,v 1.2 2002/02/25 10:49:07 hundhammer Exp $
+ *   $Id: kdirstatsettings.cpp,v 1.3 2002/04/23 09:59:21 hundhammer Exp $
  *
  */
 
@@ -182,7 +182,7 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
     {
 	QString labelText;
       
-	labelText.sprintf( i18n( "Tree level %d" ), i+1 );
+	labelText=i18n( "Tree level %1" ).arg(i+1);
 	_colorLabel[i] = new QLabel( labelText, this );
 	grid->addWidget( _colorLabel [i], i, 0 );
       

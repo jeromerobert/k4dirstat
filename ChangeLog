@@ -1,7 +1,19 @@
+2002-04-23  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.1.1-beta
+
+	* Added Japanese translation by
+	  Toyohiro Asukai <toyohiro@ksmplus.com>
+
+	* Applied another Asian lang support patch by
+	  Toyohiro Asukai <toyohiro@ksmplus.com>:
+	  QString::sprintf() -> QString::arg()
+
 2002-04-22  Stefan Hundhammer  <sh@suse.de>
 
 	* Applied Asian language support patch by 
-	  Toyohiro Asukai <toyohiro@ksmplus.com>
+	  Toyohiro Asukai <toyohiro@ksmplus.com>:
+	  Somme missing QString::fromLocal8Bit() issues
 
 2002-04-18  Stefan Hundhammer  <sh@suse.de>
 

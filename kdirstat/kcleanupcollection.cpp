@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-09
+ *   Updated:	2002-04-23
  *
- *   $Id: kcleanupcollection.cpp,v 1.2 2002/02/11 10:04:33 hundhammer Exp $
+ *   $Id: kcleanupcollection.cpp,v 1.3 2002/04/23 09:59:21 hundhammer Exp $
  *
  */
 
@@ -231,10 +231,10 @@ KCleanupCollection::addUserCleanups( int number )
 
 	if ( _nextUserCleanupNo <= 9 )
 	    // Provide a keyboard shortcut for cleanup #0..#9
-	    title.sprintf( i18n( "User Defined Cleanup #&%d" ), _nextUserCleanupNo );
+	    title=i18n( "User Defined Cleanup #&%1" ).arg(_nextUserCleanupNo);
 	else
 	    // No keyboard shortcuts for cleanups #10.. - they would be duplicates
-	    title.sprintf( i18n( "User Defined Cleanup #%d" ), _nextUserCleanupNo );
+	    title=i18n( "User Defined Cleanup #%1" ).arg(_nextUserCleanupNo);
 
 	_nextUserCleanupNo++;
 	
