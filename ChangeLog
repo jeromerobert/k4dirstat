@@ -1,3 +1,8 @@
+2002-03-01  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.0.1
+	* Added large file (>2GB) support
+
 2002-02-24  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.0.0 - the real release version

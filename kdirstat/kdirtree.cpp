@@ -4,13 +4,13 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-24
+ *   Updated:	2002-03-01
  *
- *   $Id: kdirtree.cpp,v 1.11 2002/02/25 10:49:07 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.12 2002/03/01 14:39:38 hundhammer Exp $
  *
  */
 
-
+#include "config.h"
 #include <string.h>
 #include <sys/errno.h>
 #include <qtimer.h>

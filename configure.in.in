@@ -1,15 +1,16 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(kdirstat,2.0.0)
+AM_INIT_AUTOMAKE(kdirstat,2.0.1)
 
 dnl
 dnl stolen from the automake info pages
 dnl
 
+AC_SYS_LARGEFILE
 AC_ARG_ENABLE(treemaps,
 [  --enable-treemaps	add support for for treemap lib],
 [case "${enableval}" in
-  yes)	use_treemaps=1 
+  yes)	use_treemaps=1
 	echo "*** treemaps support enabled"
 	echo "Creating symlinks for treemap sources"
 	( cd kdirstat; ln -sf treemaps/*.cpp . ; ln -sf treemaps/*.h . )

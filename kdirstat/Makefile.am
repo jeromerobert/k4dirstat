@@ -125,20 +125,20 @@ messages: rc.cpp
 
 # Override brain-dead warnings about "long long"
 
-CXXFLAGS = \
--g  \
--O2 \
--fno-exceptions \
--fno-check-new \
--Wall \
--pedantic \
--Wno-long-long \
--W \
--Wpointer-arith \
--Wmissing-prototypes \
--Wwrite-strings \
--Wnon-virtual-dtor \
--fno-builtin
+#	CXXFLAGS = \
+#	-g  \
+#	-O2 \
+#	-fno-exceptions \
+#	-fno-check-new \
+#	-Wall \
+#	-pedantic \
+#	-Wno-long-long \
+#	-W \
+#	-Wpointer-arith \
+#	-Wmissing-prototypes \
+#	-Wwrite-strings \
+#	-Wnon-virtual-dtor \
+#	-fno-builtin
 
 
 
