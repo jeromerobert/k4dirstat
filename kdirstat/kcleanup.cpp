@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-01-27
  *
- *   $Id: kcleanup.cpp,v 1.3 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kcleanup.cpp,v 1.4 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 
@@ -282,8 +282,8 @@ KCleanup::expandVariables( const KFileInfo *	item,
 {
     QString expanded = unexpanded;
 
-    expanded.replace ( QRegExp ( "%p"	), item->url()  );
-    expanded.replace ( QRegExp ( "%n"	), item->name() );
+    expanded.replace ( QRegExp ( "%p"	), "\"" + item->url()  + "\"" );
+    expanded.replace ( QRegExp ( "%n"	), "\"" + item->name() + "\"" );
 
     return expanded;
 }

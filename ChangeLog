@@ -1,3 +1,11 @@
+2002-01-27  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed update bug upon "refresh branch" and executing cleanups
+	* Embed cleanup %p / %n parameters in double quotes
+	* Added keyboard accelerators for standard cleanups
+	* (Partial) fix for PacMan animation display error on some KDE themes
+	* Bumped version to 1.8.5-beta
+
 2002-01-19  Stefan Hundhammer  <sh@suse.de>
 
 	* Added feedback mail facility

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-05
+ *   Updated:	2002-01-27
  *
- *   $Id: kdirtree.cpp,v 1.7 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.8 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 
@@ -17,6 +17,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include "kdirtree.h"
+#include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
 #include "kdirsaver.h"
 #include "kio/job.h"
@@ -361,6 +362,8 @@ KDirInfo::~KDirInfo()
 void
 KDirInfo::recalc()
 {
+    // kdDebug() << k_funcinfo << this << endl;
+    
     _totalSize		= _size;
     _totalBlocks	= _blocks;
     _totalItems		= 0;
@@ -368,31 +371,28 @@ KDirInfo::recalc()
     _totalFiles		= 0;
     _latestMtime	= _mtime;
 
-    if ( _dotEntry )
-	( dynamic_cast<KDirInfo *>( _dotEntry ) )->recalc();
+    KFileInfoIterator it( this, KDotEntryAsSubDir );
 
-    KFileInfo * child = _firstChild;
-
-    while ( child )
+    while ( *it )
     {
-	_totalSize	+= child->totalSize();
-	_totalBlocks	+= child->totalBlocks();
-	_totalItems	+= child->totalItems() + 1;
-	_totalSubDirs	+= child->totalSubDirs();
-	_totalFiles	+= child->totalFiles();
+	_totalSize	+= (*it)->totalSize();
+	_totalBlocks	+= (*it)->totalBlocks();
+	_totalItems	+= (*it)->totalItems() + 1;
+	_totalSubDirs	+= (*it)->totalSubDirs();
+	_totalFiles	+= (*it)->totalFiles();
 
-	if ( child->isDir() )
+	if ( (*it)->isDir() )
 	    _totalSubDirs++;
 
-	if ( child->isFile() )
+	if ( (*it)->isFile() )
 	    _totalFiles++;
 
-	time_t childLatestMtime = child->latestMtime();
+	time_t childLatestMtime = (*it)->latestMtime();
 
 	if ( childLatestMtime > _latestMtime )
 	    _latestMtime = childLatestMtime;
 
-	child = child->next();
+	++it;
     }
 
     _summaryDirty = false;
@@ -589,7 +589,7 @@ KDirInfo::deletingChild( KFileInfo *deletedChild )
 	 * Unlink the child from the children's list - but only if this doesn't
 	 * happen recursively in the destructor of this object: No use
 	 * bothering about the validity of the children's list if this will all
-	 * be history in a moment anyway.
+	 * be history anyway in a moment.
 	 **/
 
 	unlinkChild( deletedChild );
@@ -1107,13 +1107,13 @@ KDirTree::startReading( const KURL & url )
 	
     if ( _isFileProtocol && _enableLocalFileReader )
     {
-	kdDebug() << "Using local directory reader for " << url.url() << endl;
+	// kdDebug() << "Using local directory reader for " << url.url() << endl;
 	_readMethod	= KDirReadLocal;
 	_root		= KLocalDirReadJob::stat( url, this );
     }
     else
     {
-	kdDebug() << "Using KIO methods for " << url.url() << endl;
+	// kdDebug() << "Using KIO methods for " << url.url() << endl;
 	KURL cleanUrl( url );
 	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
 	_readMethod	= KDirReadKIO;
@@ -1294,13 +1294,21 @@ void
 KDirTree::deleteSubtree( KFileInfo *subtree )
 {
     // kdDebug() << "Deleting subtree " << subtree << endl;
+    KFileInfo *parent = subtree->parent();
+
+    if ( parent )
+    {
+	// Give the parent of the child to be deleted a chance to unlink the
+	// child from its children list and take care of internal summary
+	// fields
+	parent->deletingChild( subtree );
+    }
+
+    // Send notification to anybody interested (e.g., to attached views)
     deletingChildNotify( subtree );
 
-    if ( subtree->parent() )
+    if ( parent )
     {
-	KFileInfo *parent = subtree->parent();
-	parent->unlinkChild( subtree );
-
 	if ( parent->isDotEntry() && ! parent->hasChildren() )
 	    // This was the last child of a dot entry
 	{
@@ -1310,7 +1318,7 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
 	    {
 		if ( parent->parent()->isFinished() )
 		{
-		    kdDebug() << "Removing empty dot entry " << parent << endl;
+		    // kdDebug() << "Removing empty dot entry " << parent << endl;
 		    
 		    deletingChildNotify( parent );
 		    parent->parent()->setDotEntry( 0 );

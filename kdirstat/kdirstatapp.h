@@ -8,7 +8,7 @@
  *
  *   Updated:	2002-01-19
  *
- *   $Id: kdirstatapp.h,v 1.6 2002/01/21 10:04:51 hundhammer Exp $
+ *   $Id: kdirstatapp.h,v 1.7 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-01-27
  *
- *   $Id: kstdcleanup.cpp,v 1.1 2002/01/07 09:07:05 hundhammer Exp $
+ *   $Id: kstdcleanup.cpp,v 1.2 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 
@@ -32,6 +32,7 @@ KStdCleanup::openInKonqueror( KActionCollection *parent )
     cleanup->setWorksLocalOnly	( false );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
     cleanup->setIcon( "konqueror.png" );
+    cleanup->setAccel( Qt::CTRL + Qt::Key_K );
     
     return cleanup;
 }
@@ -50,6 +51,7 @@ KStdCleanup::openInTerminal( KActionCollection *parent )
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
     cleanup->setIcon( "konsole.png" );
+    cleanup->setAccel( Qt::CTRL + Qt::Key_T );
 
     return cleanup;
 }
@@ -121,6 +123,7 @@ KStdCleanup::moveToTrashBin( KActionCollection *parent )
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
     cleanup->setIcon( "edittrash.png" );
+    cleanup->setAccel( Qt::CTRL + Qt::Key_X );
 
     return cleanup;
 }
@@ -140,6 +143,7 @@ KStdCleanup::hardDelete( KActionCollection *parent )
     cleanup->setAskForConfirmation( true );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
     cleanup->setIcon( "editdelete.png" );
+    cleanup->setAccel( Qt::CTRL + Qt::Key_Delete );
 
     return cleanup;
 }

@@ -5,9 +5,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-19
+ *   Updated:	2002-01-27
  *
- *   $Id: kpacman.cpp,v 1.2 2002/01/21 10:04:52 hundhammer Exp $
+ *   $Id: kpacman.cpp,v 1.3 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 
@@ -281,13 +281,11 @@ KPacMan::setInterval( int intervalMilliSec )
 void
 KPacMan::paintEvent( QPaintEvent *ev )
 {
+    QWidget::paintEvent( ev );
+    
     if ( _active )
     {
 	_pacMan->animate( _painter, QRect( _margin, 0, width() - _margin, height() ) );
-    }
-    else
-    {
-	_painter->eraseRect( ev->rect() );
     }
 }
 

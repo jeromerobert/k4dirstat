@@ -6,7 +6,7 @@
  *
  *   Updated:	2002-01-19
  *
- *   $Id: kdirstatsettings.h,v 1.2 2002/01/21 10:04:52 hundhammer Exp $
+ *   $Id: kdirstatsettings.h,v 1.3 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 

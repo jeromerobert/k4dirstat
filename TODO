@@ -1,6 +1,6 @@
 			    TODO list for KDirStat
 			   ========================
-							Updated: 2002-01-04
+							Updated: 2002-01-27
 
 - misc app configs:
   - pacman animation in tool bar
@@ -20,6 +20,8 @@
   treemap related part. 
 
 - make KDirStat a KPart
+
+- let user configure cleanup action keyboard accelerators
 
 - check in to the 'kdenonbeta' CVS - I don't like this part... ;-)
 

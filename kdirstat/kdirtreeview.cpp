@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-10
+ *   Updated:	2002-01-27
  *
- *   $Id: kdirtreeview.cpp,v 1.13 2002/01/10 16:01:10 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.14 2002/01/28 14:40:20 hundhammer Exp $
  *
  */
 
@@ -342,8 +342,6 @@ KDirTreeView::deleteChild( KFileInfo *child )
 				      false );	// lazy
     KDirTreeViewItem *nextSelection = 0;
 
-    // kdDebug() << "Received deletingChild signal for " << child << endl;
-    
     if ( clone )
     {
 	if ( clone == _selection )
@@ -372,8 +370,11 @@ KDirTreeView::deleteChild( KFileInfo *child )
 	KDirTreeViewItem *parent = clone->parent();
 	delete clone;
 
-	if ( parent )
+	while ( parent )
+	{
 	    parent->updateSummary();
+	    parent = parent->parent();
+	}
 
 	if ( nextSelection )
 	    selectItem( nextSelection );
