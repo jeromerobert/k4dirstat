@@ -68,5 +68,8 @@ make DESTDIR=$RPM_BUILD_ROOT install-strip
 %dir /opt/kde3/share/locale/ja/LC_MESSAGES
 /opt/kde3/share/locale/*/LC_MESSAGES/kdirstat.mo
 
+%dir /opt/kde3/share/apps/kconf_update
+/opt/kde3/share/apps/kconf_update/kdirstat.upd
+/opt/kde3/share/apps/kconf_update/fix_move_to_trash_bin.pl
 
 %changelog -n kdirstat
