@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-11
+ *   Updated:	2001-08-16
  *
- *   $Id: kdirtreeview.h,v 1.2 2001/07/18 03:09:39 alexannika Exp $
+ *   $Id: kdirtreeview.h,v 1.3 2001/08/16 14:36:08 hundhammer Exp $
  *
  */
 
@@ -33,9 +33,13 @@
 #include <qpixmap.h>
 #include <klistview.h>
 #include "kdirtree.h"
+
+#if 1
+// FIXME: This stuff doesn't belong here. Move it out somewhere else.
 #include "qtreemap.h"
 #include "qtreemapwindow.h"
 #include "kdirtreemapwindow.h"
+#endif
 
 // Forward declarations
 class QWidget;
@@ -57,10 +61,10 @@ namespace KDirStat
 #else
 #   define KDirTreeViewParentClass		QListView
 #endif
-    
+
     class KDirTreeViewItem;
 
-    
+
     class KDirTreeView:	public QListView
     // Using
     //		class KDirTreeView: public KDirTreeViewParentClass
@@ -80,7 +84,7 @@ namespace KDirStat
 	virtual ~KDirTreeView();
 
 	/**
-	 * Open a directory URL. Assume "file:" protocol unless otherwise specified. 
+	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
 	 **/
 	void openURL( KURL url );
 
@@ -92,12 +96,12 @@ namespace KDirStat
 	 **/
 	KDirTreeViewItem *	locate( KFileInfo *	wanted,
 					bool		lazy = true );
-	
+
 	/**
 	 * Clear this view's contents.
 	 **/
 	void	clear();
-	
+
 	/**
 	 * Get the first child of this view or 0 if there is none.
 	 * Use the child's next() method to get the next child.
@@ -108,7 +112,7 @@ namespace KDirStat
 
 	/**
 	 * Returns the default level until which items are opened by default
-	 * (unless they are dot entries). 
+	 * (unless they are dot entries).
 	 **/
 	int	openLevel()		const	{ return _openLevel;		}
 
@@ -130,13 +134,13 @@ namespace KDirStat
 	 * level (0..MaxInt). Wraps around every usedFillColors() colors.
 	 **/
 	virtual const QColor &	fillColor( int level ) const;
-	
+
 	/**
 	 * Set the fill color of percentage bars of the specified directory
 	 * level (0..KDirTreeViewMaxFillColor-1).
 	 *
 	 * Calling repaint() after setting all desired colors is the
-	 * caller's responsibility. 
+	 * caller's responsibility.
 	 **/
 	void setFillColor( int level, const QColor &color );
 
@@ -155,7 +159,7 @@ namespace KDirStat
 	 * Set the tree background color.
 	 *
 	 * Calling repaint() after setting all desired colors is the
-	 * caller's responsibility. 
+	 * caller's responsibility.
 	 **/
 	void setTreeBackground( const QColor &color );
 
@@ -169,7 +173,7 @@ namespace KDirStat
 	 **/
 	const QColor &	percentageBarBackground()	const	{ return _percentageBarBackground; }
 
-	
+
 	int	nameCol()		const	{ return _nameCol;		}
 	int	iconCol()		const	{ return _iconCol;		}
 	int	percentBarCol()		const	{ return _percentBarCol;	}
@@ -196,7 +200,7 @@ namespace KDirStat
 	QPixmap	workingIcon()		const	{ return _workingIcon;		}
 	QPixmap	readyIcon()		const	{ return _readyIcon;		}
 
-	
+
     public slots:
 
 	/**
@@ -207,7 +211,7 @@ namespace KDirStat
 	 * borders - like any other widget. But other widgets normally can
 	 * assume their parent widget uses some more neutral color so white and
 	 * black will result in at least some minimal contrast.
-	 * 
+	 *
 	 * This function automagically sets a reasonable default background
 	 * color for the tree display: If the current color scheme's document
 	 * background color (as used for input fields, lists etc.) is white or
@@ -217,7 +221,7 @@ namespace KDirStat
 	 * is used.
 	 **/
 	void ensureContrast();
-   
+
 	/**
 	 * Notification of a change in the KDE palette, i.e. the user selected
 	 * and applied different colors in the KDE control center.
@@ -229,7 +233,7 @@ namespace KDirStat
 
 	/**
 	 * Add a child as a clone of original tree item "newChild" to this view
-	 * tree. 
+	 * tree.
 	 **/
 	void	addChild	( KFileInfo *newChild );
 
@@ -248,10 +252,10 @@ namespace KDirStat
 
 	/**
 	 * Signal end of one read job at this level and finalize display of
-	 * this level. 
+	 * this level.
 	 **/
 	void	finalizeLocal( KDirInfo *dir );
-	
+
 	/**
 	 * Display progress information in the status bar. Automatically adds
 	 * the elapsed time of a directory scan.
@@ -276,10 +280,10 @@ namespace KDirStat
 	 * pending read jobs column.
 	 **/
 	void	idleDisplay();
-	    
+
 
     signals:
-	
+
 	/**
 	 * Single line progress information, emitted when the read status
 	 * changes - typically when a new directory is being read. Connect to a
@@ -297,14 +301,14 @@ namespace KDirStat
 	 **/
 	void finished();
 
-	
+
     protected:
 
 	KDirTree *	_tree;
 	QTimer *	_updateTimer;
 	QTime		_stopWatch;
 	QString		_currentDir;
-	
+
 	int		_openLevel;
 	bool		_doLazyClone;
 	bool		_doPacManAnimation;
@@ -314,9 +318,9 @@ namespace KDirStat
 	QColor		_treeBackground;
 	QColor		_percentageBarBackground;
 
-	
+
 	// The various columns in which to display information
-	
+
 	int		_nameCol;
 	int		_iconCol;
 	int		_percentNumCol;
@@ -330,9 +334,9 @@ namespace KDirStat
 	int		_latestMtimeCol;
 	int		_readJobsCol;
 
-	
+
 	// The various icons
-	
+
 	QPixmap	_openDirIcon;
 	QPixmap	_closedDirIcon;
 	QPixmap	_openDotEntryIcon;
@@ -345,12 +349,16 @@ namespace KDirStat
 	QPixmap _fifoIcon;
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
-	
-	//QTreeMapWindow  *_treemap_view;
+
+#if 1
+	// FIXME: This stuff doesn't belong here. Move it out somewhere else.
+
+	// QTreeMapWindow  *_treemap_view;
 	KDirTreeMapWindow  *_treemap_view;
+#endif
     };
 
-    
+
 
     class KDirTreeViewItem: public QListViewItem
     {
@@ -404,7 +412,7 @@ namespace KDirStat
 	 * Finalize this level - clean up unneeded / undesired dot entries.
 	 **/
 	void			finalizeLocal();
-	    
+
 	/**
 	 * Returns the corresponding view.
 	 **/
@@ -421,7 +429,7 @@ namespace KDirStat
 	 * tree where all the important information resides.
 	 **/
 	KFileInfo *		orig()		{ return _orig;	}
-	
+
 	/**
 	 * Returns the first child of this item or 0 if there is none.
 	 * Use the child's next() method to get the next child.
@@ -440,7 +448,7 @@ namespace KDirStat
 	/**
 	 * Returns the sort key for any column.
 	 * Reimplemented from @ref QListViewItem.
-	 **/ 
+	 **/
 	virtual QString key ( int	column,
 			      bool	ascending ) const;
 	/**
@@ -449,7 +457,7 @@ namespace KDirStat
 	 **/
 	virtual void setOpen( bool open );
 
-	
+
     protected:
 
 	/**
@@ -464,7 +472,7 @@ namespace KDirStat
 	 * subdirectories on this level.
 	 **/
 	void	cleanupDotEntries();
-	
+
 	/**
 	 * Paint method. Reimplemented from @ref QListViewItem so different
 	 * colors can be used - and of course for painting percentage bars.
@@ -488,7 +496,7 @@ namespace KDirStat
 				  int			width,
 				  const QColor &	fillColor,
 				  const QColor &	barBackground	);
-	
+
     private:
 
 	/**
@@ -507,29 +515,29 @@ namespace KDirStat
 	KFileInfo *		_orig;
 	KPacManAnimation *	_pacMan;
 	float			_percent;
-	
+
     };
 
 
-    
+
     //----------------------------------------------------------------------
     //			       Static Functions
     //----------------------------------------------------------------------
 
-    
+
     /**
      * Format a file / subtree size human readable, i.e. in "GB" / "MB"
      * etc. rather than huge numbers of digits.
      **/
     QString formatSize ( KFileSize lSize );
-    
+
     /**
      * Format a millisecond granularity time human readable.
      * Milliseconds will only be inluded if 'showMilliSeconds' is true.
      **/
     QString formatTime ( long	millisec,
 			 bool	showMilliSeconds = false );
-    
+
     /**
      * Format counters of any kind.
      *
@@ -537,7 +545,7 @@ namespace KDirStat
      * 'count' is 0.
      **/
     QString formatCount( int count, bool suppressZero = false );
-    
+
     /**
      * Format percentages.
      **/
@@ -555,7 +563,7 @@ namespace KDirStat
      * really must have that brain-dead ctime() format.
      **/
     QString localeTimeDate( time_t rawTime );
-	
+
     /**
      * Return a color that contrasts to 'contrastColor'.
      **/

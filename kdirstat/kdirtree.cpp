@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-17
+ *   Updated:	2001-08-08
  *
- *   $Id: kdirtree.cpp,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.2 2001/08/16 14:36:08 hundhammer Exp $
  *
  */
 
@@ -580,6 +580,7 @@ KDirInfo::cleanupDotEntries()
     if ( ! _firstChild )
     {
 	// kdDebug() << "Removing solo dot entry " << debugUrl() << endl;
+
 	KFileInfo *child = _dotEntry->firstChild();
 	_firstChild = child;		// Move the entire children chain here.
 	_dotEntry->setFirstChild( 0 );	// _dotEntry will be deleted below.
@@ -601,6 +602,7 @@ KDirInfo::cleanupDotEntries()
 	_dotEntry = 0;
     }
 }
+
 
 
 
@@ -775,7 +777,7 @@ KAnyDirReadJob::startReading()
     {
 	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
-    
+
     _job = KIO::listDir( url,
 			 false );	// showProgressInfo
 
@@ -803,7 +805,7 @@ KAnyDirReadJob::entries ( KIO::Job *			job,
     }
 
     KIO::UDSEntryListConstIterator it = entryList.begin();
-    
+
     while ( it != entryList.end() )
     {
 	KFileItem entry( *it,
@@ -825,7 +827,7 @@ KAnyDirReadJob::entries ( KIO::Job *			job,
 
 		if ( subDir->dotEntry() )
 		    childAdded( subDir->dotEntry() );
-		
+
 		_tree->addJob( new KAnyDirReadJob( _tree, subDir ) );
 	    }
 	    else	// non-directory child
@@ -835,7 +837,7 @@ KAnyDirReadJob::entries ( KIO::Job *			job,
 		childAdded( child );
 	    }
 	}
-	
+
 	++it;
     }
 }
@@ -848,10 +850,11 @@ KAnyDirReadJob::finished( KIO::Job * job )
 	_dir->setReadState( KDirError );
     else
 	_dir->setReadState( KDirFinished );
-    
+
+    _tree->sendFinalizeLocal( _dir );
     _dir->finalizeLocal();
     _job = 0;	// The job deletes itself after this signal!
-    
+
     _tree->jobFinishedNotify( this );
     // Don't add anything after _tree->jobFinishedNotify()
     // since this deletes this job!
@@ -897,14 +900,14 @@ KDirTree::startReading( const KURL & url )
     kdDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
 #endif
 
-    if ( url.isLocalFile() &&  _enableLocalFileReader )
+    if ( url.isLocalFile() && _enableLocalFileReader )
     {
 	// Local directory - use readdir() / lstat()
 
 	KDirSaver dir( url );			// will restore cwd when going out of scope
 	QString path = dir.currentDirPath();	// resolve relative paths
 	struct stat statInfo;
-	// kdDebug() << "Beginning with dir " << path << endl;
+	kdDebug() << "Using local directory reader for " << path << endl;
 
 	if ( lstat( url.path(), &statInfo ) == 0 )	// lstat() OK
 	{
@@ -934,12 +937,14 @@ KDirTree::startReading( const KURL & url )
     }
     else	// Non-local URL - use KIO methods
     {
+	kdDebug() << "Using KIO methods" << endl;
+
 	_root = 0;
 	KURL cleanUrl = url;
 	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
 	KIO::StatJob * statJob = KIO::stat( cleanUrl,
 					    false );	// showProgressInfo
-	
+
 	connect( statJob, SIGNAL( result  ( KIO::Job * ) ),
 		 this,    SLOT  ( statRoot( KIO::Job * ) ) );
 
@@ -952,7 +957,7 @@ void
 KDirTree::statRoot( KIO::Job * job )
 {
     KIO::StatJob *statJob = (KIO::StatJob *) job;
-    
+
     if ( ! job->error() )
     {
 	KFileItem entry( statJob->statResult(),
@@ -962,6 +967,8 @@ KDirTree::statRoot( KIO::Job * job )
 
 	if ( entry.isDir() )		// Directory?
 	{
+	    // kdDebug() << "Creating root dir " << entry.url().url() << endl;
+
 	    KDirInfo * dir = new KDirInfo( &entry,
 					   0 );	// Parent
 	    _root = dir;
@@ -971,6 +978,8 @@ KDirTree::statRoot( KIO::Job * job )
 	}
 	else	// No directory
 	{
+	    // kdDebug() << "Creating non-directory root item " << entry.url().url() << endl;
+
 	    _root = new KFileInfo( &entry,
 				   0 );		// Parent
 	    childAddedNotify( _root );

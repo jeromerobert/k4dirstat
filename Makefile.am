@@ -2,7 +2,7 @@
 
 SUBDIRS = kdirstat po doc
 
-EXTRA_DIST = kdirstat.kdevprj AUTHORS COPYING COPYING.LIB ChangeLog INSTALL README TODO kdirstat.lsm 
+EXTRA_DIST = kdirstat.kdevprj AUTHORS CREDITS COPYING COPYING.LIB ChangeLog INSTALL README TODO kdirstat.lsm 
 
 ####### kdevelop will overwrite this part!!! (end)############
 # not a GNU package. You can remove this line, if 

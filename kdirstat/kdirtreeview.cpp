@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-21
+ *   Updated:	2001-08-16
  *
- *   $Id: kdirtreeview.cpp,v 1.4 2001/07/18 03:09:39 alexannika Exp $
+ *   $Id: kdirtreeview.cpp,v 1.5 2001/08/16 14:36:08 hundhammer Exp $
  *
  */
 
@@ -23,10 +23,15 @@
 #include <kdebug.h>
 
 #include "kdirtreeview.h"
+#include "kdirtreeiterators.h"
 #include "kpacman.h"
+
+#if 1
+// FIXME: Move this out of here.
 #include "qtreemap.h"
 #include "qtreemapwindow.h"
 #include "kdirtreemapwindow.h"
+#endif
 
 using namespace KDirStat;
 
@@ -35,6 +40,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     : KDirTreeViewParentClass( parent )
 {
     _tree		= 0;
+    _treemap_view	= 0;	// FIXME
     _updateTimer	= 0;
     _openLevel		= 1;
     _doLazyClone	= true;
@@ -104,10 +110,14 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
    connect ( kapp,	SIGNAL	( kdisplayPaletteChanged()	),
 	     this, 	SLOT	( paletteChanged()		) );
-	
-   _treemap_view=new KDirStat::KDirTreeMapWindow();
+
+#if 1
+   // FIXME: Move this out of here. No use opening an empty window at this time -
+   // do it upon some finished() signal.
+   _treemap_view = new KDirStat::KDirTreeMapWindow();
    _treemap_view->makeWidgets();
    _treemap_view->setConfig();
+#endif
 }
 
 
@@ -130,7 +140,7 @@ KDirTreeView::busyDisplay()
     {
 	_readJobsCol = header()->count();
 	addColumn( i18n( "Read Jobs" ) );
-	setColumnAlignment ( _readJobsCol, AlignRight );
+	setColumnAlignment( _readJobsCol, AlignRight );
     }
 }
 
@@ -144,13 +154,21 @@ KDirTreeView::idleDisplay()
 	_readJobsCol = -1;
     }
 
-    //_treemap_view->drawTreeMap(_tree->root());
-    //_treemap_view->getArea()->setTreeMap((KDirInfo *)_tree->root());
+#if 1
+    // FIXME: Move this out of here.
+    // This should happen upon receiving a finished() signal.
+    if ( _treemap_view )
+    {
+	//_treemap_view->drawTreeMap(_tree->root());
+	//_treemap_view->getArea()->setTreeMap((KDirInfo *)_tree->root());
 
 
-    if(_tree && _tree->root()){
-           _treemap_view->getArea()->setTreeMap((Object *)_tree->root());
-     }
+	if(_tree && _tree->root())
+	{
+	    _treemap_view->getArea()->setTreeMap((Object *)_tree->root());
+	}
+    }
+#endif
 }
 
 
@@ -205,11 +223,11 @@ KDirTreeView::openURL( KURL url )
 
 
     // Change display to busy state
-    
+
     setSorting( _totalSizeCol );
     busyDisplay();
     emit startingReading();
-    
+
 
     // Actually do something
 
@@ -295,7 +313,6 @@ KDirTreeView::finalizeLocal( KDirInfo *dir )
     {
 	KDirTreeViewItem *clone = locate( dir,
 					  false );	// lazy
-
 	if ( clone )
 	    clone->finalizeLocal();
     }
@@ -486,7 +503,7 @@ KDirTreeViewItem::init	( KDirTreeView *	view,
 	 * item. So let's assume there may be children as long as the directory
 	 * is still being read.
 	 */
-	
+
 	if ( _orig->readState() == KDirQueued ||
 	     _orig->readState() == KDirReading  )
 	{
@@ -674,8 +691,8 @@ KDirTreeViewItem::deferredClone()
 
     // Clone all normal children
 
-    int level		= _orig->treeLevel();
-    bool startingClean	= ! firstChild();
+    int level		 = _orig->treeLevel();
+    bool startingClean	 = ! firstChild();
     KFileInfo *origChild = _orig->firstChild();
 
     while ( origChild )
@@ -748,12 +765,26 @@ KDirTreeViewItem::cleanupDotEntries()
 
 	    child = nextChild;
 	}
+
+	/*
+	 * Immediately delete the (now emptied) dot entry. The algorithm for
+	 * the original tree doesn't quite fit here - there, the dot entry is
+	 * actually deleted in the step below. But the 'no children' check for
+	 * this fails here since the original dot entry still _has_ its
+	 * children - they will be deleted only after all clones have been
+	 * processed.
+	 *
+	 * This had been the cause for a core that took me quite some time to
+	 * track down.
+	 */
+	delete dotEntry;
+	dotEntry = 0;
     }
 
 
     // Delete dot entries without any children
 
-    if ( ! _orig->dotEntry()->firstChild() )
+    if ( ! _orig->dotEntry()->firstChild() && dotEntry )
     {
 	// kdDebug() << "Removing empty dot entry clone " << _orig->debugUrl() << endl;
 	delete dotEntry;
@@ -772,6 +803,21 @@ KDirTreeViewItem::setOpen( bool open )
 
     if ( open )
 	updateSummary();
+
+#if 0
+    // Iterator demo - look at stdout while clicking closed items open
+
+    if ( open )
+    {
+	KFileInfoSortedIterator it( _orig, KDotEntryTransparent, KSortByLatestMtime, false );
+
+	while ( *it )
+	{
+	    kdDebug() << (*it)->debugUrl() << "\t" << formatSize( (*it)->totalSize() ) << endl;
+	    ++it;
+	}
+    }
+#endif
 }
 
 
@@ -814,9 +860,9 @@ KDirTreeViewItem::key ( int column, bool ascending ) const
 	sortKey = formatTimeDate( _orig->latestMtime() );
     } else
     {
-	if ( _orig->isDotEntry() )	// make sure this will be the first
+	if ( _orig->isDotEntry() )	// make sure this will be the last
 	{
-	    sortKey.fill( '\001', 20 );
+	    sortKey.fill( 0xff, 20 );
 	}
 	else
 	{
@@ -844,7 +890,7 @@ KDirTreeViewItem::paintCell ( QPainter *		painter,
 		delete _pacMan;
 		_pacMan = 0;
 	    }
-	    
+
 	    painter->setBackgroundColor( colorGroup.base() );
 	    int level = _orig->treeLevel();
 	    paintPercentageBar ( _percent,
@@ -1055,7 +1101,7 @@ KDirStat::formatCount( int count, bool suppressZero )
 {
     if ( suppressZero && count == 0 )
 	return "";
-    
+
     QString countString;
     countString.setNum( count );
 

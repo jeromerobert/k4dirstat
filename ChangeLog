@@ -21,6 +21,20 @@
 	  stand-alone QT/Xml Treemap Viewer
 	* QTreeMap/QListViewTreeMapArea works fine with KProf
 
+2001-08-09  Stefan Hundhammer  <sh@suse.de>
+
+	* Added "credits" section in about box
+
+2001-08-08  Stefan Hundhammer  <sh@suse.de>
+
+	* Implemented iterator classes: KFileInfoIterator and
+	  KFileInfoSortedIterator  
+	* Added CREDITS file
+
+2001-08-06  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed segfaults due to bad dot entry cleanup (huh? ;-)  ) that
+	  had caused core dumps after finishing reading small trees
 	
 2001-08-05 Alexander Rawass <alexannika@users.sourceforge.net>
 
@@ -56,10 +70,9 @@
 	  HAVE_PIEMAP if you have the piemap source
 	  EXPERIMENTAL if you want to see more options
 	
-	
 2001-07-17 Alexander Rawass <alexannika@users.sourceforge.net>
 
-	* one can use keywords instead of numbers for options
+	* user can use keywords instead of numbers for options
 	* checkmarks start working
 	* yet only with drawmode
 

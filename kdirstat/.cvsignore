@@ -4,8 +4,9 @@ Makefile
 .libs
 *.o
 *.moc.cpp
-kdirstat_meta_unload.cpp
+*_meta_unload.cpp
 kdirstat
+qxmltreemapviewer
 *.bak
 *.auto
 *~

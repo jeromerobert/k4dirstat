@@ -4,18 +4,12 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-21
+ *   Updated:	2001-08-08
  *
- *   $Id: kdirtree.h,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.2 2001/08/16 14:36:08 hundhammer Exp $
  *
  */
 
-/*
- * TODO:
- *
- * KFileItemIterator
- * KFileItemSortedIterator
- */
 
 #ifndef KDirTree_h
 #define KDirTree_h
@@ -69,11 +63,16 @@ namespace KDirStat
 	KDirError		// Error while reading
     } KDirReadState;
 
+
+    /**
+     * Directory read methods.
+     **/
     typedef enum
     {
-	KDirReadLocal,		// use opendir() and lstat()
-	KDirReadKDirLister	// use KDE 2.x's KDirLister
+	KDirReadLocal,		// Use opendir() and lstat()
+	KDirReadKDirLister	// Use KDE 2.x's KIO::KDirLister
     } KDirReadMethod;
+
 
 
     /**
@@ -255,11 +254,11 @@ namespace KDirStat
 	 * derived classes should overwrite this.
 	 **/
 	virtual bool		isFinished() 	{ return true; }
-	
+
 	/**
 	 * Returns true if this subtree is busy, i.e. it is not finished
 	 * reading yet.
-	 * 
+	 *
 	 * This default implementation always returns 'false';
 	 * derived classes should overwrite this.
 	 **/
@@ -271,7 +270,7 @@ namespace KDirStat
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual int		pendingReadJobs()	{ return 0;  }
-	
+
 	/**
 	 * Notification of a new directory read job somewhere in the subtree.
 	 *
@@ -279,7 +278,7 @@ namespace KDirStat
 	 * Derived classes might want to overwrite this.
 	 **/
 	virtual void 		readJobAdded()		{}
-	
+
 	/**
 	 * Notification of a finished directory read job somewhere in the
 	 * subtree.
@@ -333,7 +332,7 @@ namespace KDirStat
 	 **/
 	virtual void	setFirstChild( KFileInfo *newFirstChild )
 	    { NOT_USED( newFirstChild ); }
-	
+
 	/**
 	 * Returns true if this entry has any children.
 	 **/
@@ -418,6 +417,18 @@ namespace KDirStat
 	 * Derived classes should overwrite this.
 	 **/
 	virtual KDirReadState readState() const { return KDirFinished; }
+
+	/**
+	 * Returns true if this is a @ref KDirInfo object.
+	 *
+	 * Don't confuse this with @ref isDir() which tells whether or not this
+	 * is a disk directory! Both should return the same, but you'll never
+	 * know - better be safe than sorry!
+	 *
+	 * This default implementation always returns 'false'. Derived classes
+	 * (in particular, those derived from @ref KDirInfo) should overwrite this.
+	 **/
+	virtual bool isDirInfo() const { return false; }
 
 
 	//
@@ -578,11 +589,11 @@ namespace KDirStat
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
 	virtual bool		isFinished();
-	
+
 	/**
 	 * Returns true if this subtree is busy, i.e. it is not finished
 	 * reading yet.
-	 * 
+	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
 	virtual bool 		isBusy();
@@ -609,7 +620,7 @@ namespace KDirStat
 	 **/
 	virtual void	setFirstChild( KFileInfo *newfirstChild )
 	    { _firstChild = newfirstChild; }
-	
+
 	/**
 	 * Insert a child into the children list.
 	 *
@@ -661,7 +672,7 @@ namespace KDirStat
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
 	virtual void readJobAdded();
-	
+
 	/**
 	 * Notification of a finished directory read job somewhere in the
 	 * subtree.
@@ -698,6 +709,17 @@ namespace KDirStat
 	 **/
 	void setReadState( KDirReadState newReadState )
 	    { _readState = newReadState; }
+
+	/**
+	 * Returns true if this is a @ref KDirInfo object.
+	 *
+	 * Don't confuse this with @ref isDir() which tells whether or not this
+	 * is a disk directory! Both should return the same, but you'll never
+	 * know - better be safe than sorry!
+	 *
+	 * Reimplemented - inherited from @ref KFileInfo.
+	 **/
+	virtual bool isDirInfo() const { return true; }
 
 
     protected:
@@ -745,6 +767,7 @@ namespace KDirStat
 	void init();
 
     };	// class KDirInfo
+
 
 
     /**
@@ -881,7 +904,7 @@ namespace KDirStat
     class KAnyDirReadJob: public QObject, public KDirReadJob
     {
 	Q_OBJECT
-	
+
     public:
 	/**
 	 * Constructor.
@@ -900,7 +923,7 @@ namespace KDirStat
 	 **/
 	virtual void startReading();
 
-	
+
     protected slots:
 	/**
 	 * Receive directory entries from a KIO job.
@@ -912,9 +935,9 @@ namespace KDirStat
 	 * KIO job is finished.
 	 **/
 	void finished( KIO::Job * job );
-	
+
     protected:
-	
+
 	KIO::ListJob *	_job;
     };
 
@@ -1101,7 +1124,6 @@ namespace KDirStat
 	bool			_crossFileSystems;
 	bool			_enableLocalFileReader;
     };
-
 }	// namespace KDirStat
 
 
