@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2004-03-29
  */
 
 
@@ -164,7 +164,8 @@ public:
      **/
     KPacMan( QWidget * 	parent		= 0,
 	     int 	pacManSize	= 16,
-	     bool	randomStart	= false );
+	     bool	randomStart	= false,
+	     const char * widgetName	= 0 );
 
     /**
      * Destructor.

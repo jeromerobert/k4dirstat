@@ -5,7 +5,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2004-03-29
  */
 
 
@@ -202,8 +202,9 @@ KPacManAnimation::animate( QPainter *	painter,
 
 KPacMan::KPacMan( QWidget * 	parent,
 		  int 		pacManSize,
-		  bool		randomStart )
-    : QWidget( parent )
+		  bool		randomStart,
+		  const char *	widgetName )
+    : QWidget( parent, widgetName )
 {
     _pacManSize	= pacManSize;
     _pacMan 	= new KPacManAnimation( this, _pacManSize, randomStart );
