@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-04
+ *   Updated:	2003-01-06
  *
- *   $Id: ktreemaptile.cpp,v 1.3 2003/01/05 14:52:29 hundhammer Exp $
+ *   $Id: ktreemaptile.cpp,v 1.4 2003/01/06 13:38:46 hundhammer Exp $
  *
  */
 
@@ -97,7 +97,7 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
     int count 	 = 0;
     double scale = (double) size / (double) _orig->totalSize();
 
-    _cushionSurface.addRidge( dir, _cushionSurface.height(), rect );
+    _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
 
     KFileInfoSortedBySizeIterator it( _orig, _parentView->minTileSize() / scale, KDotEntryAsSubDir );
 
@@ -119,7 +119,7 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, childDir );
 	    CHECK_PTR( tile );
 
-	    tile->cushionSurface().addRidge( childDir,
+	    tile->cushionSurface().addRidge( dir,
 					     _cushionSurface.height() * _parentView->heightScaleFactor(),
 					     childRect );
 
@@ -400,8 +400,8 @@ KTreemapTile::renderCushion()
     {
 	for ( x = 0; x < rect.width(); x++ )
 	{
-	    nx = -( 2.0 * xx2 * (x+x0) + xx1 );
-	    ny = -( 2.0 * yy2 * (y+y0) + yy1 );
+	    nx = 2.0 * xx2 * (x+x0) + xx1;
+	    ny = 2.0 * yy2 * (y+y0) + yy1;
 	    cosa  = ( nx * lightX + ny * lightY + lightZ ) / sqrt( nx*nx + ny*ny + 1.0 );
 	    light = (int) ( lightIntensity * cosa + 0.5 );
 
