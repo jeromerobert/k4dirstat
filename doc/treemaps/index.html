@@ -13,6 +13,21 @@ Documentation for QTreeMap</h1>
 
 <p><br>QTreeMap is a Qt/KDE widget written for KDirStat that displays information
 about disk/directory usage as a Treemap graphics.
+<p>QTreeMap is a library containing a set of C++/Qt classes that provide
+an easy-to-use Treemap Widget for the Qt Environment.
+<br>Treemaps are a 'new way' of displaying a hierarchy (which elements
+can be associated with a size) in a rectangular painting area.
+<br>Each node of the hierarchy is drawn as a rectangle, with it's subnodes
+drawn recursively into it - the area size of each rectangle is proportional
+to the 'size' of the node, so large elements/node have large rectangles,
+small elements small rectangles.
+<p>QTreeMap is currently used by KDirStat, a disk-usage utility to display
+file system hierarchies as Treemaps - you can display your whole /usr/X11R6
+tree in a 800x600 area, and all dirs and files are visible, so you can
+easily detect at one glance which directories/files use up disk space.
+<br>QTreeMap will also be used with KProf to display profiling data as
+Treemaps.
+<br>&nbsp;
 <p>QTreeMap is written by Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>
 <br><a href="http://kdirstat.sourceforge.net/kdirstat">KDirStat</a> is
 written by Stefan Hundhammer &lt;<a href="mailto:sh@suse.de">sh@suse.de</a>>
@@ -223,8 +238,7 @@ Draw Text</li>
 <br>the treemaps are drawn with a different algorithm, which tries to lay
 out the rectangles so that they don't get thin and flat - the result is
 rectangles which have a better aspect
-<br>can be quite confusing, the hierarchy is not as good visible as without
-<br>&nbsp;</ul>
+<br>can be quite confusing, the hierarchy is not as good visible as without</ul>
 
 <h4>
 ToDo:</h4>
@@ -299,6 +313,18 @@ Navigation help in large Source Code projects, i.e. in kdevelop</li>
 
 <li>
 Profiling Information Display (for use with gprof output)</li>
+
+<li>
+Content/Information Management</li>
+
+<li>
+Web Traffic Analyzer</li>
+
+<li>
+Display of the structure of an organization</li>
+
+<li>
+Image Browser</li>
 </ul>
 
 <h4>
@@ -336,7 +362,7 @@ java treemap component</li>
 
 <hr WIDTH="100%">
 <p>Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Last modification Date: 12 July 2001
+Last modification Date: 10 August 2001
 <br>&nbsp;
 <br>&nbsp;
 </body>

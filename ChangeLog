@@ -1,3 +1,8 @@
+2001-08-11 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* QTreeMap can write data files for 'HypView',
+	  a hyperbolic tree browser
+	
 2001-08-09 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* changed all size-functions from int to asize/float

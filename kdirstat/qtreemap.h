@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.16 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.17 2001/08/11 23:55:35 alexannika Exp $
  *
  */
 
@@ -322,6 +322,7 @@ public:
   QColor getBaseColor(QString name);
 
   void   saveAsXML(QTextStream& file,Object *tree,int level);
+  void   saveAsHypView(QTextStream& file,Object *tree,int level);
   void loadFromXML(QString filename);
 
     void xmlwalker(QDomElement el,int level);
@@ -392,6 +393,8 @@ public:
   void browserWindow(int id);
   void zoomIn();
   void zoomOut();
+  void callHypView();
+  void saveAsHypView();
   void saveAsXML();
   void saveAsBitmap();
   void loadFromXML();

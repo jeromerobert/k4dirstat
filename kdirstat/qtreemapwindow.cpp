@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.15 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.16 2001/08/11 23:55:35 alexannika Exp $
  *
  */
 
@@ -53,6 +53,8 @@ void QTreeMapWindow::makeWidgets(){
   menu_file->insertItem("&Save as Bitmap",this,SLOT(saveAsBitmap()));
   menu_file->insertItem("Save as XML file",this,SLOT(saveAsXML()));
   menu_file->insertItem("Load from XML file",this,SLOT(loadFromXML()));
+  menu_file->insertItem("Save as HypView file",this,SLOT(saveAsHypView()));
+  menu_file->insertItem("Call HypView",this,SLOT(callHypView()));
 
   menu_draw_mode=new QPopupMenu(this);
 
@@ -413,6 +415,16 @@ void QTreeMapWindow::saveAsBitmap(){
 void QTreeMapWindow::saveAsXML(){
   //printf("CALLBACK KDirTreeMapArea\n");
   graph_widget->saveAsXML();
+
+}
+void QTreeMapWindow::callHypView(){
+  //printf("CALLBACK KDirTreeMapArea\n");
+  graph_widget->callHypView();
+
+}
+void QTreeMapWindow::saveAsHypView(){
+  //printf("CALLBACK KDirTreeMapArea\n");
+  graph_widget->saveAsHypView();
 
 }
 

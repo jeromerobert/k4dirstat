@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.16 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.17 2001/08/11 23:55:35 alexannika Exp $
  *
  */
 
@@ -574,6 +574,42 @@ asize QTreeMapArea::areaSize(Object *node){
   return size;
 }
 
+void QTreeMapArea::saveAsHypView(QTextStream& file,Object *tree,int level){
+  //  QTextStream file=*fileptr;
+  //  file << "<node
+
+  QString ident=QString();
+  ident.fill(' ',level);
+
+  file << ident <<  level << " " << fullName(tree) << " 1 ";
+
+  if(isLeaf(tree)){
+    file << " leaf" << endl;// << flush;
+  }
+     else{
+       file << " node" << endl;// << flush;
+
+    Object *child=firstChild(tree);
+    bool dotentry_flag=FALSE;
+    while(child!=NULL){
+      //    printf("XML: %s\n",shortName(child).latin1());
+
+      saveAsHypView(file,child,level+1);
+	      child=nextChild(child);
+
+	      if(child==NULL && dotentry_flag==FALSE){
+		dotentry_flag=TRUE;
+		Object *dotentry=sameLevelChild(tree);
+		if(dotentry){
+		  child=firstChild(dotentry);
+		}
+	      }
+    }
+    //    file << ident << "</node>" << endl;
+     }
+
+}
+
 void QTreeMapArea::saveAsBitmap(){
   QString filename=QFileDialog::getSaveFileName("treemap.png", "Images (*.png *.xpm *.jpg)" , this);
 
@@ -582,6 +618,7 @@ void QTreeMapArea::saveAsBitmap(){
     offscreen.save(filename,"PNG");
   }
 }
+
 void QTreeMapArea::saveAsXML(QTextStream& file,Object *tree,int level){
   //  QTextStream file=*fileptr;
   //  file << "<node
@@ -631,6 +668,41 @@ void QTreeMapArea::saveAsXML(){
   //  printf("filename: %s\n",filename.latin1());
 
   saveAsXML(file,root_tree,0);
+
+  file.device()->flush();
+  file.device()->close();
+
+  //delete file;
+  }
+}
+
+void QTreeMapArea::callHypView(){
+  //  QString filename=QString((char *)mktemp("/tmp/hypview-treemap.lvhistXXXXXX"));
+  QString filename=QString("/tmp/hypview-treemap.lvhist");
+  QFile *f=new QFile(filename);
+  f->open(IO_WriteOnly);
+
+  QTextStream file(f);//,IO_WriteOnly);
+  saveAsHypView(file,root_tree,-1);
+
+  file.device()->flush();
+  file.device()->close();
+
+  system("linux.vktest "+filename+" &");
+}
+
+void QTreeMapArea::saveAsHypView(){
+  QString filename=QFileDialog::getSaveFileName("treemap.lvhist", "HypView data (*.lvhist)" , this);
+
+  if(!filename.isEmpty()){
+  QFile *f=new QFile(filename);
+  f->open(IO_WriteOnly);
+
+  QTextStream file(f);//,IO_WriteOnly);
+
+  //  printf("filename: %s\n",filename.latin1());
+
+  saveAsHypView(file,root_tree,-1);
 
   file.device()->flush();
   file.device()->close();

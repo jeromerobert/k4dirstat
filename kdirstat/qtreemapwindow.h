@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.11 2001/08/10 03:45:48 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.12 2001/08/11 23:55:35 alexannika Exp $
  *
  */
 
@@ -111,6 +111,8 @@ class Object;
     void saveAsBitmap();
     void saveAsXML();
     void loadFromXML();
+    void saveAsHypView();
+    void callHypView();
 
     //void paintEvent(QPaintEvent *event);
 
