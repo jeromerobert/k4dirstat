@@ -1,3 +1,10 @@
+2001-08-17 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* removed files q*{cpp,h} from cvs
+	* removed doc/treemaps from cvs
+	* modified configure.in and kdirstat/Makefile.am
+	* QTreeMap is now in it's own cvs qtreemap.sourceforge.net
+
 2001-08-11 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* QTreeMap can write data files for 'HypView',

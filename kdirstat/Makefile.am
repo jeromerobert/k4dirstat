@@ -4,7 +4,7 @@
 
 SUBDIRS		= pics
 
-bin_PROGRAMS 	= kdirstat qxmltreemapviewer
+bin_PROGRAMS 	= kdirstat
 
 kdirstat_SOURCES =				\
 	kdirstatmain.cpp			\
@@ -29,43 +29,13 @@ noinst_HEADERS =				\
 	kpacman.h
 
 
-LIB_QTREEMAP 	= libqtreemap.a
-
-lib_LIBRARIES 	= $(LIB_QTREEMAP)
-
-libqtreemap_a_SOURCES =				\
-	qtreemapwindow.cpp			\
-	qtreemaparea.cpp			\
-	qtreemaparea_paint.cpp			\
-	qtreemaparea_recursion.cpp		\
-	qtreemaparea_squarify.cpp		\
-	qxmltreemapwindow.cpp			\
-	qxmltreemaparea.cpp			\
-	qlistviewtreemapwindow.cpp		\
-	qlistviewtreemaparea.cpp
-
-
-include_HEADERS =				\
-	qtreemap.h				\
-	qtreemapwindow.h			\
-	qxmltreemapwindow.h			\
-	qxmltreemap.h				\
-	qlistviewtreemapwindow.h		\
-	qlistviewtreemap.h
-
-qxmltreemapviewer_SOURCES	= qxmltreemapviewer.cpp
-qxmltreemapviewer_LDADD		= $(LIB_QTREEMAP) $(LIB_QT) $(LIBSOCKET)
-qxmltreemapviewer_LDFLAGS	= $(all_libraries) $(KDE_RPATH)
-
-
-
 EXTRA_DIST =					\
 	kdirstatui.rc				\
 	kdirstat.desktop			\
 	lo32-app-kdirstat.png			\
 	lo16-app-kdirstat.png
 
-kdirstat_LDADD	 = $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+kdirstat_LDADD	 = -lqtreemap -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
