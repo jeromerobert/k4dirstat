@@ -6,7 +6,7 @@
  *
  *   Updated:	2002-02-11
  *
- *   $Id: kcleanup.cpp,v 1.6 2002/02/11 13:45:12 hundhammer Exp $
+ *   $Id: kcleanup.cpp,v 1.7 2002/04/22 09:52:51 hundhammer Exp $
  *
  */
 
@@ -326,7 +326,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 {
     KProcess	proc;
     KDirSaver	dir( itemDir( item ) );
-    QString	cmd( expandVariables( item, command ) );
+    QString	cmd( QString::fromLocal8Bit(expandVariables( item, command )));
 
 #if VERBOSE_RUN_COMMAND
     printf( "\ncd " );				fflush( stdout );

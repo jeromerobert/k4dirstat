@@ -8,7 +8,7 @@
  *
  *   Updated:	2002-02-11
  *
- *   $Id: kdirstatapp.cpp,v 1.12 2002/02/11 15:27:11 hundhammer Exp $
+ *   $Id: kdirstatapp.cpp,v 1.13 2002/04/22 09:52:51 hundhammer Exp $
  *
  */
 
@@ -400,7 +400,7 @@ void
 KDirStatApp::editCopy()
 {
     if ( _treeView->selection() )
-	kapp->clipboard()->setText( _treeView->selection()->orig()->url() );
+	kapp->clipboard()->setText( QString::fromLocal8Bit(_treeView->selection()->orig()->url()) );
 
 #if 0
 #warning debug
@@ -427,7 +427,7 @@ KDirStatApp::selectionChanged( KFileInfo *selection )
 	else
 	    _fileContinueReadingAtMountPoint->setEnabled( false );
 	
-	statusMsg( selection->url() );
+	statusMsg( QString::fromLocal8Bit(selection->url()) );
     }
     else
     {

@@ -1,9 +1,17 @@
 We would like to thank the following people:
 
+- Alexander Rawass <alexannika@users.sourceforge.net> for implementing the
+  first version of treemaps for KDirStat
+
 - Ben Shneiderman for his ingenious idea of treemaps as an alternative and
   truly intuitive way of visualizing trees.
 
 - All the people at the TU Eindhoven who worked on SequoiaView that gave us the
   inspiration for including treemaps in KDirStat and numerous papers describing
   the algorithms behind it.
+
+- Harald Fernengel (harry1701@users.sourceforge.net) for continued support for
+  integrating KDirStat with new Qt versions
+
+- Toyohiro Asukai <toyohiro@ksmplus.com> for Asian support patches
 

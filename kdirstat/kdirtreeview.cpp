@@ -6,7 +6,7 @@
  *
  *   Updated:	2002-02-11
  *
- *   $Id: kdirtreeview.cpp,v 1.17 2002/02/11 10:51:47 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.18 2002/04/22 09:52:51 hundhammer Exp $
  *
  */
 
@@ -870,7 +870,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     }
     else
     {
-	setText( view->nameCol(), _orig->name() );
+	setText( view->nameCol(), QString::fromLocal8Bit(_orig->name()) );
 
 	if ( ! _orig->isDevice() )
 	{
