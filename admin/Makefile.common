@@ -1,26 +1,24 @@
 
+SHELL=/bin/sh
+
 cvs:
 	@if grep '$$(top_srcdir)/acinclude.m4:' Makefile.am >/dev/null; then \
-	  echo "*** Concatenating configure tests into acinclude.m4" ;\
+	  echo "*** Creating acinclude.m4" ;\
 	  rm -f acinclude.m4 configure.files ;\
 	  $(MAKE) -f Makefile.am top_srcdir=. acinclude.m4 ;\
 	fi
+	@echo "!!! If you get recursion errors from autoconf, it is advisable to set the"
+	@echo "    environment variable M4 to something including \"--nesting-limit=500\""
 	@if test -r configure.in.in; then \
 	  rm -f subdirs configure.in ;\
-	  echo "*** Creating list of subdirectories in subdirs" ;\
+	  echo "*** Creating list of subdirectories" ;\
 	  $(MAKE) -f Makefile.am top_srcdir=. subdirs ;\
-	  echo "*** Searching for subdirectories..." ;\
+	  echo "*** Creating configure.in" ;\
 	  $(MAKE) -f Makefile.am top_srcdir=. configure.in ;\
 	fi
-	@echo "*** Retrieving configure tests needed by configure.in"
+	@echo "*** Creating aclocal.m4"
 	@aclocal
-	@echo "*** Scanning for include statements"
-	@autoheader
-	@echo "*** Building Makefile templates"
-	@automake
-	@echo "*** Scanning for moc files and kde tags"
-	@perl admin/am_edit
-	@echo "*** Building configure"
+	@echo "*** Creating configure"
 	@autoconf
 	@if test -r configure.in.in ; then \
 	  perl -pi -e 'print "if test \"x\$$with_fast_perl\" = \"xyes\" ;\
@@ -29,14 +27,22 @@ cvs:
 	  \n  rm -f \$$CONFIG_STATUS.bak;\nfi\
 	  \n" if /^\s*chmod\s+.*\+x\s+.*CONFIG_STATUS/;' configure ;\
 	fi
-	@echo "*** Creating date/time stamp"
-	@touch stamp-h.in
-	@if egrep "^cvs-local:" Makefile.am >/dev/null; then \
-	  $(MAKE) -f Makefile.am cvs-local ;\
-	fi
 	@if grep '} \$$ac_kw foo' configure >/dev/null 2>&1; then perl -p -i -e "s/ac_kw foo/ac_kw int foo/" configure; fi
 #David's hack for autoconf bug when $INSTALL is set
 	@perl -pi -e 'if (/\[\/\$$\]\*. INSTALL=/) { print $$_ ; $$_ = "\"\") ;;\n"; }' configure
+	@if egrep "^AM_CONFIG_HEADER" configure.in >/dev/null 2>&1; then \
+	  echo "*** Creating config.h template" ;\
+		autoheader ;\
+	fi
+	@echo "*** Creating Makefile templates"
+	@automake
+	@echo "*** Postprocessing Makefile templates"
+	@perl admin/am_edit
+	@if egrep "^cvs-local:" Makefile.am >/dev/null; then \
+	  $(MAKE) -f Makefile.am cvs-local ;\
+	fi
+	@echo "*** Creating date/time stamp"
+	@touch stamp-h.in
 	@echo "*** Finished"
 	@echo "    Don't forget to run ./configure"
 	@echo "    If you haven't done so in a while, run ./configure --help"
@@ -108,7 +114,7 @@ cvs-clean:
 # The Makefiles have to be sorted for slashes, since configure creates
 # only one directory per Makefile not the whole hierarchy
 configure.in: configure.files $(shell test -f configure.files && cat configure.files) subdirs
-	@rm -f configure.in rm -f configure.in.new ;\
+	@rm -f configure.in configure.in.new ;\
 	cat `cat configure.files | egrep -v "^configure.in.bot"` >> configure.in.new ;\
 	echo "KDE_CREATE_SUBDIRSLIST" >> configure.in.new ;\
 	echo "AC_OUTPUT( \\" >> configure.in.new ;\
@@ -128,8 +134,8 @@ configure.in: configure.files $(shell test -f configure.files && cat configure.f
 	  fi ;\
 	  echo "$$i/Makefile \\" >> configure.in.new ;\
 	done ;\
-	egrep '^dnl AC_OUTPUT\(.*\)' `cat configure.files` | sed -e "s#^.*dnl AC_OUTPUT(\(.*\))#\1#" >> configure.in.new ;\
-	echo ")" >> configure.in.new 
+	egrep '^dnl AC_OUTPUT\(.*\)' `cat configure.files` | sed -e "s#^.*dnl AC_OUTPUT(\(.*\))#\1 \\\\#" >> configure.in.new ;\
+	echo ")" >> configure.in.new
 	@modulename= ;\
 	if test -f configure.in.in; then \
 	   if head -2 configure.in.in | egrep "^#MIN_CONFIG$$" > /dev/null; then \
@@ -146,7 +152,7 @@ configure.in: configure.files $(shell test -f configure.files && cat configure.f
 	   modulename=`pwd`; modulename=`basename $$modulename`; \
 	fi ;\
 	if test -z "$$VERSION" || test "$$VERSION" = "@VERSION@"; then \
-	     VERSION="\"2.1 beta 2\"";  \
+	     VERSION="\"2.2.1\"";  \
 	fi ;\
 	sed -e "s#@MODULENAME@#$$modulename#" configure.in.new | \
 		sed -e "s#@VERSION@#$$VERSION#" > configure.in
@@ -167,7 +173,7 @@ configure.files: subdirs
 	for i in $$list; do if test -f $$i && test ! `dirname $$i` = "." ; then \
 	  echo $$i >> configure.files ;\
 	fi; done
-	@if test -f configure.in.mid ; then echo configure.in.mid >> configure.files ; fi 
+	@if test -f configure.in.mid ; then echo configure.in.mid >> configure.files ; fi
 	@if test -f configure.in.bot ; then echo configure.in.bot >> configure.files ; fi
 
 subdirs:
@@ -231,11 +237,14 @@ package-messages:
 	files=`find . -name Makefile.am | xargs egrep -l '^messages:' `; \
 	dirs=`for i in $$files; do echo \`dirname $$i\`; done`; \
 	tmpname="$$PWD/messages.log" ;\
+	if test -z "$$EXTRACTRC"; then EXTRACTRC=extractrc ; fi ;\
+	if test -z "$$PREPARETIPS"; then PREPARETIPS=preparetips ; fi ;\
+	export EXTRACTRC PREPARETIPS ;\
 	for subdir in $$dirs; do \
 	  test -z "$$VERBOSE" || echo "Making messages in $$subdir"; \
 	  (cd $$subdir ;\
 	   if test -n "`grep -e '^messages:.*rc.cpp' Makefile.am`"; then \
-	   	$${EXTRACTRC:-extractrc} *.rc *.ui > rc.cpp ;\
+	   	$$EXTRACTRC *.rc *.ui > rc.cpp ;\
 	   else \
 		candidates=`ls -1 *.rc *.ui 2>/dev/null` ;\
 		if test -n "$$candidates"; then \
@@ -247,7 +256,7 @@ package-messages:
 	   else echo " " > _translatorinfo.cpp ;\
 	   fi; \
 	   perl -e '$$mes=0; while (<STDIN>) { if (/^messages:/) { $$mes=1; print $$_; next; } if ($$mes) { if (/$$\\(XGETTEXT\)/ && / -o/) { s/ -o \$$\(podir\)/ _translatorinfo.cpp -o \$$\(podir\)/ } print $$_; } else { print $$_; } }' < Makefile.am > _transMakefile ;\
-	   $(MAKE) -s -f _transMakefile podir=$$podir \
+	   $(MAKE) -s -f _transMakefile podir=$$podir EXTRACTRC="$$EXTRACTRC" PREPARETIPS="$$PREPARETIPS" \
 	   XGETTEXT="$${XGETTEXT:-xgettext} -C -ki18n \
 	   -kI18N_NOOP -ktranslate -kaliasLocale \
 	   -x $${includedir:-$$KDEDIR/include}/kde.pot" \
@@ -281,6 +290,6 @@ package-messages:
 	@rm -rf po.backup
 
 test:
-	perl -e '$$mes=0; while (<STDIN>) { if (/^messages:/) { $$mes=1; print $$_; next; } if ($$mes) { if (! /^\t/) { exit(0); } if (/$$\\(XGETTEXT\)/ && / -o/) { s/ -o/ _translatorinfo.cpp -o/ } print $$_;  } }' < Makefile.am 
+	perl -e '$$mes=0; while (<STDIN>) { if (/^messages:/) { $$mes=1; print $$_; next; } if ($$mes) { if (! /^\t/) { exit(0); } if (/$$\\(XGETTEXT\)/ && / -o/) { s/ -o/ _translatorinfo.cpp -o/ } print $$_;  } }' < Makefile.am
 
 .SILENT:

@@ -263,7 +263,7 @@ def main():
     for option, param in optlist:
         if option == '--version':
             print "\n"
-            print thisProg + "$Revision: 1.1 $"
+            print thisProg + "$Revision: 1.2 $"
             print "This is really free software, unencumbered by the GPL."
             print "You can do anything you like with it except sueing me."
             print "Copyright 1998 Kalle Dalheimer <kalle\@kde.org>"

@@ -32,10 +32,17 @@ while (<>) {
 #    ends with (excluding) "CONFIG_FILE=..."
 #    in later autoconf (2.14.1) there is no CONFIG_FILES= line,
 #    but instead the (2) directly follow (1)
-        if (/^\s*ac_max_sed_([a-z]+).*=\s*[0-9]+/ ) {
+        if (/^\s*ac_max_sed_([a-z]+).*=\s*([0-9]+)/ ) {
 	    $flag = 1;
 	    if ($1 eq 'lines') {
+                # lets hope its different with 2141, 
+                # wasn't able to verify that
+              if ($2 eq '48') {
+                $ac_version = 250;
+              }
+              else {
 	        $ac_version = 2141;
+              }
 	    } elsif ($1 eq 'cmds') {
 	        $ac_version = 213;
 	    }
@@ -44,18 +51,16 @@ while (<>) {
 	    print;
 	}
     } elsif ($flag == 1) {
-        if (/^\s*CONFIG_FILES=/ ) {
+        if (/^\s*CONFIG_FILES=/ && ($ac_version != 250)) {
 	     print;
 	     $flag = 2;
 	} elsif (/^\s*for\s+ac_file\s+in\s+.*CONFIG_FILES/ ) {
 	     $flag = 3;
-	     if ($ac_version != 2141) {
-	         $ac_version = 2141;
-	     }
 	}
     } elsif ($flag == 2) {
 # 2. begins with: "for ac_file in.*CONFIG_FILES"  (the next 'for' after (1))
 #    end with: "rm -f conftest.s\*"
+# on autoconf 250, it ends with '# CONFIG_HEADER section'
 	if (/^\s*for\s+ac_file\s+in\s+.*CONFIG_FILES/ ) {
 	    $flag = 3;
 	} else {
@@ -72,6 +77,12 @@ while (<>) {
 	    if ($ac_version != 2141) {
 	        print STDERR "hmm, don't know autoconf version\n";
 	    }
+        } elsif (/^\#\s*CONFIG_HEADER section.*/) {
+          $flag = 4;
+          insert_main_loop();
+          if($ac_version != 250) {
+            print STDERR "hmm, something went wrong :-(\n";
+          }
 	} elsif (/VPATH/ ) {
 	    $vpath_seen = 1;
 	}
@@ -80,6 +91,7 @@ while (<>) {
 
 die "wrong input (flag != 4)" unless $flag == 4;
 print STDERR "hmm, don't know autoconf version\n" unless $ac_version;
+die "autoconf 2.50 is currently not supported" if  $ac_version == 250;
 
 sub insert_main_loop {
     print <<EOF;
