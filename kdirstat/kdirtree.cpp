@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-02-02
+ *   Updated:	2003-04-28
  */
 
 
@@ -62,10 +62,19 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
     _device	 = statInfo->st_dev;
     _mode	 = statInfo->st_mode;
     _links	 = statInfo->st_nlink;
-    _size	 = statInfo->st_size;
-    _blocks	 = statInfo->st_blocks;
     _mtime	 = statInfo->st_mtime;
 
+    if ( isSpecial() )
+    {
+	_size	 = 0;
+	_blocks	 = 0;
+    }
+    else
+    {
+	_size	 = statInfo->st_size;
+	_blocks	 = statInfo->st_blocks;
+    }
+    
 #if 0
 #warning Debug mode: Huge sizes
     _size <<= 10;
@@ -87,11 +96,20 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
     _device	 = 0;
     _mode	 = fileItem->mode();
     _links	 = 1;
-    _size	 = fileItem->size();
-    _blocks	 = _size / blockSize();
+    
+    if ( isSpecial() )
+    {
+	_size	 = 0;
+	_blocks	 = 0;
+    }
+    else
+    {
+	_size	 = fileItem->size();
+	_blocks	 = _size / blockSize();
 
-    if ( ( _size % blockSize() ) > 0 )
-	_blocks++;
+	if ( ( _size % blockSize() ) > 0 )
+	    _blocks++;
+    }
 
     _mtime	 = fileItem->time( KIO::UDS_MODIFICATION_TIME );
 }

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-02-02
+ *   Updated:	2003-02-04
  */
 
 
@@ -628,6 +628,7 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( ext == "o"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "lo"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "Po"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == "al"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "moc.cpp"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "moc.cc"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "elc"	)	return QColor( 0xff, 0xa0, 0x00 );

@@ -1,3 +1,10 @@
+2003-04-28  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.3.7
+	
+	* Don't add up special files (char/block devices, sockets, FIFOs)
+	
+
 2003-02-03  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.3.6
