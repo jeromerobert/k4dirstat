@@ -1,3 +1,30 @@
+2001-11-18  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 1.7.11-devel
+
+	* Improved mount point handling: 
+	  * Different icon,
+	  * New read status KDirOnRequestOnly
+	  * Prepared for explicit reading of mounted file systems
+
+	* Created infrastructure for context menu in tree view
+
+	* Simple context menu (cleanup actions will follow)
+	
+
+2001-11-17  Stefan Hundhammer  <sh@suse.de>
+
+	* Moved treemap sources to separate subdirectory to prevent that
+	  too-clever admin/am_edit script from breaking things: It always
+	  uses all available sources rather than just those in
+	  Makefile.am.
+
+	* Changed default from --enable-treemaps to --disable-treemaps
+	  since treemaps don't compile and link for more than 6 weeks now.
+	
+	* Updated build-howto.html
+
+	
 2001-10-22 Harald Fernengel (harry1701@users.sourceforge.net)
 
 	* make it work with Qt 3 / KDE 3
@@ -19,7 +46,7 @@
 2001-08-20 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* modified configure.in.in to test for libqtreemap
-	  test may not working on some/most systems
+	  test may not work on some/most systems
 	
 2001-08-18 Alexander Rawass <alexannika@users.sourceforge.net>
 

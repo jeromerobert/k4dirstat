@@ -7,10 +7,10 @@ What you see here is a 90% rewrite - GUI, engine, everything.  The one thing it
 can do a whole lot better than the old version is stay on one file system - the
 single most most requested feature. Plus, it's way faster for large directory
 trees - scanning an entire Linux file system no longer takes 30+
-minutes. Rather, it's about 2-3 minutes (the old version seemed to have
+minutes. Rather, it's about 2-3 minutes: The old version seemed to have
 problems with system buffer thrashing due to too many directories open for
 reading at one time - the new version uses an internal queue and keeps only one
-directory open).
+directory open.
 
 Expect more docs when the program gets more mature. Until then, reat the old
 docs (see URL above) - the principles are the same.
@@ -19,5 +19,5 @@ Stay tuned.
 
 
 Stefan Hundhammer <sh@suse.de>
-2001-09-01
+2001-11-17
 

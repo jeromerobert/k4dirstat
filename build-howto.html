@@ -11,7 +11,7 @@
 <table width=100%>
     <tr>
         <td width=50% align=left>
-	    Last modified: 02 Sep 2001
+	    Last modified: 17 Nov 2001
 	</td>
 	<td width=50% align=right>
 	    Contact: <a href="mailto:sh@suse.de">Stefan Hundhammer</a>
@@ -22,17 +22,19 @@
 
 <h1 align=center>Building KDirStat for KDE 2.x</h1>
 
+<h2>Normal Build (no <a href="#treemaps">Treemap</a> support)</h2>
+
 <ul>
 <li>
-Get the latest sources - either the 
+Get the latest sources - either the
 <a href="../download/kdirstat-for-kde2">tarball from the download area</a>
-or via 
+or via
 <a href="http://kdirstat.sourceforge.net/kdirstat">anonymous CVS from SourceForge.</a>
 <p><br></p>
 </li>
 
 <li>
-Make sure you have a development system up and running. 
+Make sure you have a development system up and running.
 
 <p>
 You'll need at least:
@@ -53,27 +55,19 @@ text based version).
 </p>
 
 <p>
-As of August 2001, <b>you also need the QTreeMap-Lib</b>.
-<a href="mailto:alexannika@users.sourceforge.net">Alexander Rawass</a>,
-the author of the treemap part of KDirStat, decided to move this part out to a
-separate project. You can get it from SourceForge or simply disable treemaps at
-configure time (<tt>configure --disable-treemaps</tt>).
-</p>
-
-
-<p>
 Please understand that I cannot and will not fix everybody's broken development
 systems any more - this had taken me quite some time with KDirStat 0.8x. Please
 make sure you can compile simple KDE programs like <em>kless</em> or
 <em>kexample</em> before contacting me about build problems.
 </p>
-</ul>
 </li>
+<br>
 
 <li>Unpack the sources:
+<br>
 <pre>
 
-    tar xzvf kdirstat-1.7.1-alpha.tgz
+    tar xzvf kdirstat-1.7.10-alpha.tgz
 
 </pre>
 <p>
@@ -84,9 +78,10 @@ make sure you can compile simple KDE programs like <em>kless</em> or
 
 <li>
 Go to this directory:
+<br>
 <pre>
 
-    cd kdirstat-1.7.1-alpha
+    cd kdirstat-1.7.10-alpha
 
 </pre>
 </li>
@@ -94,6 +89,7 @@ Go to this directory:
 <li>
 Make sure I didn't accidentially include a <em>config.cache</em> file in the
 tarball - remove it to make sure. This is a neverending cause of trouble.
+<br>
 <pre>
 
     rm -f config.cache
@@ -104,7 +100,7 @@ tarball - remove it to make sure. This is a neverending cause of trouble.
 
 <li>
 Let the <em>configure</em> script figure out where everything required is on
-your system. 
+your system.
 <p>
 Watch out for error messages and <b>fix them</b> before reporting
 errors!
@@ -114,6 +110,7 @@ errors!
 good idea if you want to keep some KDE 1.x programs around. So use that
 <em>/opt/kde2</em> prefix for KDirStat, too - otherwise it will be installed to
 <em>/opt/kde</em> and clutter up a working KDE 1.x environment.
+<br>
 <pre>
 
     ./configure --prefix=/opt/kde2
@@ -130,26 +127,9 @@ anyway, simply type
 </pre>
 </li>
 
-<p>
-If you don't have the QTreeMap lib and you don't want to go through all the
-hassle of downloading, compiling and installing it separately, you can disable
-treemap support from KDirStat alltogether (in this case, of course you will not
-get a treemap window): 
-</p>
-
-<pre>
-    ./configure --disable-treemaps
-</pre>
-<p>
-or (for SuSE Linux systems):
-</p>
-<pre>
-    ./configure --prefix=/opt/kde2 --disable-treemaps
-
-</pre>
-
 <li>
 Compile everything:
+<br>
 <pre>
 
     make
@@ -166,6 +146,7 @@ Again, watch out for error messages.
 <li>
 If everything worked out allright, become <em>root</em> and install the program
 and everything it needs:
+<br>
 <pre>
 
     su
@@ -179,12 +160,85 @@ and everything it needs:
 
 </ul>
 
+<p>
+That's it.
+</p>
+
+
+
+<h2><a name="treemaps">Building with Treemap Support</a></h2>
+
+<p>
+Since June, 2001, KDirStat supports a fancy new way of displaying disk usage:
+Treemaps. This is still work in progress and to be considered experimental -
+use at your own risk.
+</p>
+
+<p>
+Some time in August 2001, 
+<a href="mailto:alexannika@users.sourceforge.net">Alexander Rawass</a>,
+the author of KDirStat's treemap part, decided to move a large part of this out
+to a separate project. He split off a generic part <i>QTreeMap</i> which became
+a separate project at SourceForge.
+</p>
+
+<p>
+The problem with this decision is that from now on you need that separate
+<i>QTreeMap</i> lib (i.e. you need to download it from SourceForge and build
+and install it separately) - and you need versions of <i>QTreeMap</i> and its
+counterpart in KDirStat, <i>KTreeMap</i>, that are compatible with one
+another - which they more often than not are not, causing weird linker errors.
+</p>
+
+<p>
+Because of that, I decided to make this part optional and exclude it by
+default.
+</p>
+
+<p>
+Thus, if you wish to include that part, you need to explicitly request treemap
+support at configure time:
+</p>
+
+<pre>
+    ./configure --enable-treemaps
+</pre>
+<p>
+or (for SuSE Linux systems):
+</p>
+<pre>
+    ./configure --prefix=/opt/kde2 --enable-treemaps
+
+</pre>
+
+<p>
+All the rest is just like described above.
+</p>
+
+<p>
+The <tt>--enable-treemaps</tt> option creates some symbolic links to the 
+<tt>treemaps/</tt> subdirectory, so you will need to remove them if you ever
+choose to build without treemaps. You can either remove those links manually or
+<a name="disabling-treemaps">explicitly configure <i>without</i> treemaps</a>:
+</p>
+
+<pre>
+    ./configure --disable-treemaps
+</pre>
+<p>
+or (for SuSE Linux systems):
+</p>
+<pre>
+    ./configure --prefix=/opt/kde2 --disable-treemaps
+
+</pre>
+
 
 <h2>Troubleshooting</h2>
 
 <p>
-If you get weird linker errors (especially after configuring with
---disable-treemaps), try:
+If you get weird linker errors, especially after enabling / disabling treemap
+support, try
 
 <pre>
 
@@ -195,6 +249,12 @@ If you get weird linker errors (especially after configuring with
 
 </pre>
 
+</p>
+
+<p>
+This may or may not work. If it doesn't after enabling treemap support, most
+likely your versions of <i>QTreeMap</i> and KDirStat's <i>KTreeMap</i> are
+incompatible. In this case, <a href="#disabling-treemaps">disable treemap support</a>.
 </p>
 
   </body>
