@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.12 2001/07/16 20:50:16 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.13 2001/07/28 22:56:47 alexannika Exp $
  *
  */
 
@@ -25,6 +25,9 @@
 //#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
+#include <qfiledialog.h>
+#include <qfile.h>
+
 //#include <bits/mathcalls.h>
 
 using namespace KDirStat;
@@ -45,6 +48,9 @@ QTreeMapArea::QTreeMapArea(QWidget *parent) : QWidget(parent) {
 
   setMouseTracking(TRUE);
   root_tree=NULL;
+  flag_middle_button=FALSE;
+  offset_x=0;
+  offset_y=0;
 
   default_color=QColor(255,255,255);
 
@@ -141,8 +147,22 @@ Object *QTreeMapArea::findClickedMap(Object *dutree,int x,int y,int findmode){
 
     // draw outlines on widget, not on offscreen
     painter->begin(this);
-    drawDuTree(dutree,0,0,options->paint_size_x,options->paint_size_y,options->start_direction,0,NULL,x,y,findmode);
 
+    find_x=x; // global values
+    find_y=y;
+    find_mode=findmode;
+
+    if(options->piemap==TRUE){
+#ifdef HAVE_PIEMAP
+      found_kfileinfo=root_tree;
+      Cushion *cushion=new Cushion(options->paint_size_x,options->paint_size_y,options->sequoia_h,options->sequoia_f);
+      drawPieMap(dutree,cushion);
+      delete cushion;
+#endif
+    }
+    else{
+      drawDuTree(dutree,0,0,options->paint_size_x,options->paint_size_y,options->start_direction,0,NULL,x,y,findmode);
+    }
   //printf("FOUND: %s\n",found_kfileinfo->debugUrl().latin1());
 
     int tf=0;
@@ -204,11 +224,11 @@ void QTreeMapArea::toggleSelection(Object *found){
       if(found!=NULL){
 	if(selected_list->containsRef((KDirInfo *)found)){
 	  selected_list->removeRef((KDirInfo *)found);
-	  printf("removed %s\n",fullName(found).latin1());
+	  //	  printf("removed %s\n",fullName(found).latin1());
 	}
 	else{
 	  selected_list->append((KDirInfo *)found);
-	  printf("appended %s\n",fullName(found).latin1());
+	  //printf("appended %s\n",fullName(found).latin1());
 	}
       }
 }
@@ -218,7 +238,13 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
   //   kdDebug() << k_funcinfo << endl;
     int x=mouse->x();
     int y=mouse->y();
-  if(root_tree!=NULL && mouse->button()==LeftButton){
+    if(root_tree!=NULL && mouse->button()==MidButton){
+      //printf("pressed mid\n");
+      flag_middle_button=TRUE;
+      middle_x=x;
+      middle_y=y;
+    }
+  else if(root_tree!=NULL && mouse->button()==LeftButton){
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       // find the first dir (the first coord. matching entry) the mouse points to
       Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
@@ -333,6 +359,32 @@ void QTreeMapArea::mouseMoveEvent(QMouseEvent *mouse){
     int x=mouse->x();
     int y=mouse->y();
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
+      //      if(flag_middle_button==TRUE){
+      if(mouse->state()==MidButton){
+#ifdef HAVE_PIEMAP
+	int dx=-(middle_x-x);
+	int dy=-(middle_y-y);
+	offset_x+=dx;
+	offset_y+=dy;
+       
+	//	printf("dragging m.button offset=%d:%d d=%d:%d\n",offset_x,offset_y,dx,dy);
+	middle_x=x;
+	middle_y=y;
+    painter->begin(&offscreen);
+    painter->eraseRect(0,0,options->paint_size_x,options->paint_size_y);
+
+	Cushion *cushion=new Cushion(options->paint_size_x,options->paint_size_y,options->sequoia_h,options->sequoia_f);
+	find_mode=-1;
+	drawPieMap(root_tree,cushion);
+
+    painter->end();
+
+  win_painter->begin(this);
+  win_painter->drawPixmap(0,0,offscreen,0,0,options->paint_size_x,options->paint_size_y);
+  win_painter->flush();
+  win_painter->end();
+#endif
+      }
       // find the file (the last coord. matching entry) the mouse points to
       Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
       emit highlighted(found);
@@ -439,7 +491,7 @@ void QTreeMapArea::deleteFile(int id){
 }
 
 void QTreeMapArea::deleteFile(Object *convicted){
-  printf("delete File %s\n",fullName(convicted).latin1());
+  printf("delete File %s - not yet implemented\n",fullName(convicted).latin1());
 }
 
 void QTreeMapArea::shellWindow(int id){
@@ -474,6 +526,86 @@ QTreeMapArea::~QTreeMapArea()
   // to be filled later...
 }
 
+int QTreeMapArea::areaSize(Object *node){
+  int size=0;
+
+  if(options->area_is==AREA_IS_TOTALSIZE){
+    size=totalSize(node);
+  }
+  else if(options->area_is==AREA_IS_TOTALITEMS){
+    size=totalItems(node);
+  }
+  else{
+    //error
+    exit(0);
+  }
+  return size;
+}
+
+void QTreeMapArea::saveAsBitmap(){
+  QString filename=QFileDialog::getSaveFileName("treemap.png", "Images (*.png *.xpm *.jpg)" , this);
+
+  if(!filename.isEmpty()){
+    //offscreen.save(filename,QImageIO::imageFormat(filename));
+    offscreen.save(filename,"PNG");
+  }
+}
+void QTreeMapArea::saveAsXML(QTextStream& file,Object *tree,int level){
+  //  QTextStream file=*fileptr;
+  //  file << "<node
+
+  QString ident=QString();
+  ident.fill(' ',level);
+
+  file << ident << "<node name=\"" << shortName(tree) << "\" size=\"" << \
+	totalSize(tree) << "\"" ;
+
+  if(isLeaf(tree)){
+    file << "/>" << endl;// << flush;
+  }
+     else{
+       file << ">" << endl;// << flush;
+
+    Object *child=firstChild(tree);
+    bool dotentry_flag=FALSE;
+    while(child!=NULL){
+      //    printf("XML: %s\n",shortName(child).latin1());
+
+      saveAsXML(file,child,level+1);
+	      child=nextChild(child);
+
+	      if(child==NULL && dotentry_flag==FALSE){
+		dotentry_flag=TRUE;
+		Object *dotentry=sameLevelChild(tree);
+		if(dotentry){
+		  child=firstChild(dotentry);
+		}
+	      }
+    }
+    file << ident << "</node>" << endl;
+     }
+
+}
+
+void QTreeMapArea::saveAsXML(){
+  QString filename=QFileDialog::getSaveFileName("treemap.xml", "XML (*.xml)" , this);
+
+  if(!filename.isEmpty()){
+  QFile *f=new QFile(filename);
+  f->open(IO_WriteOnly);
+
+  QTextStream file(f);//,IO_WriteOnly);
+
+  //  printf("filename: %s\n",filename.latin1());
+
+  saveAsXML(file,root_tree,0);
+
+  file.device()->flush();
+  file.device()->close;
+
+  //delete file;
+  }
+}
 
 QTreeMapOptions::QTreeMapOptions(){
   draw_mode=DM_BOTH;
@@ -496,6 +628,11 @@ QTreeMapOptions::QTreeMapOptions(){
   sequoia_h=0.5;
   squarify=FALSE;
   show_inodes=TRUE;
+  maxlevels=3;
+  piemap=FALSE;
+  draw_pie_lines=FALSE;
+  draw_hyper_lines=TRUE;
+  area_is=AREA_IS_TOTALITEMS;
 
   select_color=QColor(255,200,200);
   match_color=QColor(100,200,230);

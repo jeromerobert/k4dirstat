@@ -1,3 +1,26 @@
+2001-07-28 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* new sort of treemap/drawing mode: piemap
+	  added file qtreemaparea_piemap.cpp
+	  will not get checked in until legal problems solved
+	* checkmarks work also for paintmode
+
+	* new options for piemap mode
+	* bitmap can be saved to a file
+	* tree can be saved as xml file
+
+	* new files & classes
+	  qxmltreemapwindow.cpp
+	  qxmltreemapwindow.h
+	  qxmltreemaparea.cpp
+	  qxmltreemap.h
+	  (don't work yet)
+	
+	* new defines for compilation:
+	  HAVE_PIEMAP if you have the piemap source
+	  EXPERIMENTAL if you want to see more options
+	
+	
 2001-07-17 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* one can use keywords instead of numbers for options

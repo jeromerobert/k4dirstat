@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.12 2001/07/16 20:50:16 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.13 2001/07/28 22:56:47 alexannika Exp $
  *
  */
 
@@ -40,6 +40,7 @@ class Object;
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 #include <qlist.h>
+#include <qtextstream.h>
 
 #include "kdirtree.h"
 
@@ -107,6 +108,19 @@ namespace KDirStat
 #define FIND_MATCH 3
 #define FIND_SELECTION 4
 
+  // the area of rectangle is proportional to
+
+#define AREA_IS_TOTALSIZE 0
+#define AREA_IS_TOTALITEMS 1
+#define AREA_IS_THISDIRITEMS 2
+
+  // ribbonmap
+
+#define RIBBON_DRAWTREE 0
+#define RIBBON_DRAWPIE 1
+#define RIBBON_USE_TOTALITEMS 2
+#define RIBBON_RIBBONMAP 3
+
   // directions
 
 #define HORIZONTAL 0
@@ -172,6 +186,12 @@ public:
     bool show_inodes;
     QColor select_color;
     QColor match_color;
+    int maxlevels;
+    bool piemap;
+    bool draw_hyper_lines;
+    bool draw_pie_lines;
+
+    int area_is;
   };
 
   class Cushion {
@@ -188,6 +208,10 @@ public:
 
     int   cx0,cy0;
     float ncxd,ncyd;
+
+    // piemap/hypermap
+
+    int px,py;
   };
 
   class QTreeMapArea : public QWidget {
@@ -215,6 +239,7 @@ public:
   void findMatch(const QString find);
 
     int check_int(int i);
+    int   areaSize(Object *node);
 
 
   // pure virtual functions
@@ -225,6 +250,8 @@ public:
     virtual QString shortName(Object *node) =0;
     virtual Object *firstChild(Object *node) =0;
     virtual int   totalSize(Object *node) =0;
+    virtual int   totalItems(Object *node) =0;
+    virtual int   thisDirItems(Object *node)=0;
     virtual bool isLeaf(Object *node)=0;
     virtual bool isNode(Object *node)=0;
     virtual bool isSameLevelChild(Object *node)=0;
@@ -259,7 +286,25 @@ public:
   void printList(ObjList *slist,int i1,int i2);
   float sum_list(ObjList *slist,int i1,int i2,bool print_it=FALSE);
 
+  // methods for piemaps
+
+  void drawPieMap(Object *tree,Cushion *cushion);
+  void drawPieMap(Object *tree,float angle0,float maxangle, /* float radius1,float radius2, */ int level,Cushion *cushion,int x0,int y0);
+  void drawPieLines(Object *tree,float angle1,float angle2,int level);
+  QPoint calcPoint(float radius,float angle,int x0,int y0);
+  float getRadiusByLevel(int level);
+  QPoint drawHyperLines(Object *tree,float angle1,float angle2,int level,Cushion *cushion,int xo,int yo);
+
+  void drawRibbonCircle(int x0,int y0,int ox,int oy,int level);
+  QPoint drawRibbonPoint(int level,float angle,int x0,int y0,int ox,int oy);
+  QPoint calcRibbonPoint(int level,float angle,int x0,int y0,int ox,int oy);
+  QPoint calcRibbon2Point(int level,float angle,int x0,int y0,int ox,int oy);
+  QPoint calcRibbon3Point(int level,float angle,int x0,int y0,int ox,int oy);
+  QPoint calcRibbon4Point(int level,float angle,int x0,int y0,int ox,int oy);
+
   QColor& getBaseColor(QString name);
+
+  void   saveAsXML(QTextStream& file,Object *tree,int level);
 
   QPainter *painter;
   QTreeMapOptions *options;
@@ -294,6 +339,13 @@ public:
 
   ObjList *selected_list;
 
+  int find_x,find_y;
+  int find_mode;
+
+  bool flag_middle_button;
+  int middle_x,middle_y;
+  int offset_x,offset_y;
+
   // cushion rendering
 
   void cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2);
@@ -319,6 +371,8 @@ public:
   void browserWindow(int id);
   void zoomIn();
   void zoomOut();
+  void saveAsXML();
+  void saveAsBitmap();
 
   signals:
       void highlighted(Object *high);

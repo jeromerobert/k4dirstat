@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirtreemapwindow.cpp
+ *   File name:	qxmltreemapwindow.cpp
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
@@ -25,22 +25,22 @@
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include "qtreemapwindow.h"
-#include "kdirtreemap.h"
-#include "kdirtreemapwindow.h"
+#include "qxmltreemap.h"
+#include "qxmltreemapwindow.h"
 
 using namespace KDirStat;
 
-KDirTreeMapWindow::KDirTreeMapWindow(  )  : QTreeMapWindow() {
+QXmlTreeMapWindow::QXmlTreeMapWindow(  )  : QTreeMapWindow() {
   //setConfig();
 }
 
-QTreeMapArea *KDirTreeMapWindow::makeTreeMapWidget(QWidget *parent){
-  return new KDirTreeMapArea(parent);
+QTreeMapArea *QXmlTreeMapWindow::makeTreeMapWidget(QWidget *parent){
+  return new QXmlTreeMapArea(parent);
 }
 
 #if 1
 
-int KDirTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
+int QXmlTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
   int param;
   QString modestr=config->readEntry(gname,defaultstr);
   param=getBrainParamByName("drawmode",modestr);
@@ -49,7 +49,7 @@ int KDirTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
   return param;
 }
 
-void KDirTreeMapWindow::setConfig(){
+void QXmlTreeMapWindow::setConfig(){
   config=KGlobal::config();
 
   config->setGroup("Treemap-Options");
@@ -78,7 +78,9 @@ void KDirTreeMapWindow::setConfig(){
   options->scheme_list=new QList<QTMcolorScheme>();
 
   for(int i=0;i<group_list.count();i++){
+      printf("config0: %s\n",group_list[i].latin1());
     if(reg.match(group_list[i])!=-1){
+      printf("config: %s\n",group_list[i].latin1());
       config->setGroup(group_list[i]);
       
       QTMcolorScheme *scheme=new QTMcolorScheme();
@@ -99,13 +101,16 @@ void KDirTreeMapWindow::setConfig(){
 	  regstr=regstr.remove(0,1);
 	  regstr=regstr.remove(regstr.length()-1,1);
 
+	    printf("pattern +%s+ +%s+ on  %d %d %d\n",scheme->patternlist[p].latin1(),regstr.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
 #endif
+	    printf("pattern +%s+\n",scheme->patternlist[p].latin1());
 	QRegExp *regexp=new QRegExp(scheme->patternlist[p],FALSE,use_wildcards);
 	scheme->regexplist->append(regexp);
       }
       QColor col=QColor(255,0,255);
       scheme->color=QColor(config->readColorEntry("color",&col));
 
+	    printf("%d %d %d\n",scheme->color.red(),scheme->color.green(),scheme->color.blue());
 
       scheme->comment=config->readEntry("comment","no comment");
       

@@ -14,8 +14,8 @@ Documentation for QTreeMap</h1>
 <p><br>QTreeMap is a Qt/KDE widget written for KDirStat that displays information
 about disk/directory usage as a Treemap graphics.
 <p>QTreeMap is written by Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>
-<br><a href="http://www.suse.de/~sh/kdirstat/">KDirStat</a> is written
-by Stefan Hundhammer &lt;<a href="mailto:sh@suse.de">sh@suse.de</a>>
+<br><a href="http://kdirstat.sourceforge.net/kdirstat">KDirStat</a> is
+written by Stefan Hundhammer &lt;<a href="mailto:sh@suse.de">sh@suse.de</a>>
 <p>&nbsp; the ideas behind the algorithms for squarified Treemaps
 <br>&nbsp; have been taken/inspired from the Document <a href="http://www.win.tue.nl/~vanwijk/stm.pdf">stm.pdf</a>,
 <br>&nbsp; "Squarified Treemaps" by Mark Bruls, Kees Huizing and Jarke
@@ -32,7 +32,7 @@ time
 <br>&nbsp;
 <h4>
 Example screenshots:</h4>
-<img SRC="screenshots/flat_usr_x11r6_small.png" NOSAVE height=180 width=214><img SRC="screenshots/dist_cushion_mono_usr_x11r6_small.png" NOSAVE height=180 width=214><img SRC="screenshots/sqr_bump_usr_x11r6_small.png" NOSAVE height=180 width=214>
+<a href="screenshots/flat_usr_x11r6.png"><img SRC="screenshots/flat_usr_x11r6_small.png" NOSAVE height=180 width=214></a><a href="screenshots/dist_cushion_mono_usr_x11r6.png"><img SRC="screenshots/dist_cushion_mono_usr_x11r6_small.png" NOSAVE height=180 width=214></a><a href="screenshots/sqr_bump_usr_x11r6.png"><img SRC="screenshots/sqr_bump_usr_x11r6_small.png" NOSAVE height=180 width=214></a>
 <p>The left picture shows my /usr/X11R6 tree drawn with shading 'Flat'
 in cyclic mode
 <br>The middle picture shows /usr/X11R6 with 'Hierarch. Dist Cushion' shading
@@ -65,11 +65,10 @@ which match that regexp will be drawn highlighted</li>
 <br>enter another regexp to highlight more
 <br>enter an empty string (and hit return) and the selection will be cleared
 <li>
-you can select/deselect files by clicking on them<br>
-those selected files will appear in the popupmenu under 'selection' when
-you press the right mouse button<br>
-<BR></li>
-</ul>
+you can select/deselect files by clicking on them</li>
+
+<br>those selected files will appear in the popupmenu under 'selection'
+when you press the right mouse button</ul>
 
 <h4>
 Description of Shadings and Options:</h4>
@@ -225,10 +224,7 @@ Draw Text</li>
 out the rectangles so that they don't get thin and flat - the result is
 rectangles which have a better aspect
 <br>can be quite confusing, the hierarchy is not as good visible as without
-<li>
-dynamic Shading</li>
-
-<br>crashes yet</ul>
+<br>&nbsp;</ul>
 
 <h4>
 ToDo:</h4>

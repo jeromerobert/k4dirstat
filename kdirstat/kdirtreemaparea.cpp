@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemaparea.cpp,v 1.4 2001/07/12 22:39:35 alexannika Exp $
+ *   $Id: kdirtreemaparea.cpp,v 1.5 2001/07/28 22:56:47 alexannika Exp $
  *
  */
 
@@ -43,16 +43,49 @@ QString KDirTreeMapArea::fullName(Object *node){
   return kdi_node->debugUrl();
 }
 
+int KDirTreeMapArea::thisDirItems(Object *node){
+  KDirInfo *kdi_node=(KDirInfo *)node;
+  int count=0;
+  
+  if(isNode(node)){
+    Object *child=firstChild(node);
+    bool dotentry_flag=FALSE;
+
+    while(child!=NULL){
+      count++;
+      child=nextChild(child);
+	      if(child==NULL && dotentry_flag==FALSE){
+		dotentry_flag=TRUE;
+		Object *dotentry=sameLevelChild(node);
+		if(dotentry){
+		  child=firstChild(dotentry);
+		}
+	      }
+     }
+  }
+  else{
+  }
+
+  return count;
+}
+
 Object *KDirTreeMapArea::firstChild(Object *node){
   KDirInfo *kdi_node=(KDirInfo *)node;
 
   return (Object *)(kdi_node->firstChild());
 }
 
+
+
 int KDirTreeMapArea::totalSize(Object *node){
   KDirInfo *kdi_node=(KDirInfo *)node;
 
   return kdi_node->totalSize();
+}
+int KDirTreeMapArea::totalItems(Object *node){
+  KDirInfo *kdi_node=(KDirInfo *)node;
+
+  return kdi_node->totalItems();
 }
 
 bool KDirTreeMapArea::isLeaf(Object *node){
@@ -118,6 +151,18 @@ void KDirTreeMapArea::dirChange(Object *node){
 void KDirTreeMapArea::directoryUp(){
   //  printf("CALLBACK KDirTreeMapArea\n");
   ((QTreeMapArea *)this)->directoryUp();
+
+}
+
+void KDirTreeMapArea::saveAsBitmap(){
+  //printf("CALLBACK KDirTreeMapArea\n");
+  ((QTreeMapArea *)this)->saveAsBitmap();
+
+}
+
+void KDirTreeMapArea::saveAsXML(){
+  //printf("CALLBACK KDirTreeMapArea\n");
+  ((QTreeMapArea *)this)->saveAsXML();
 
 }
 

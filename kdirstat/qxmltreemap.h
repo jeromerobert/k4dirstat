@@ -1,17 +1,17 @@
 /*
- *   File name:	kdirtreemap.h
+ *   File name:	qxmltreemap.h
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemap.h,v 1.3 2001/07/28 22:56:47 alexannika Exp $
+ *   $Id: 
  *
  */
 
-#ifndef KDirTreeMap_h
-#define KDirTreeMap_h
+#ifndef QXmlTreeMap_h
+#define QXmlTreeMap_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -54,12 +54,12 @@ class Object;
 namespace KDirStat
 {
 
-  class KDirTreeMapArea : public QTreeMapArea {
+  class QXmlTreeMapArea : public QTreeMapArea {
     Q_OBJECT
 
   public:
     //KTreeMap(QWidget *parent=0);
-    KDirTreeMapArea(QWidget *parent=0);
+    QXmlTreeMapArea(QWidget *parent=0);
     //~QTreeMapArea();
 
     // reimplemented abstract functions
@@ -99,7 +99,7 @@ namespace KDirStat
 } // namespace
 
 
-#endif // ifndef KDirTreeMap_h
+#endif // ifndef QXmlTreeMap_h
 
 
 // EOF

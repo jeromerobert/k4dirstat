@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.7 2001/07/18 03:09:39 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.8 2001/07/28 22:56:47 alexannika Exp $
  *
  */
 
@@ -107,7 +107,11 @@ namespace KDirStat
     void selectHFactor(int id);
     void selectSHFactor(int id);
     void selectSFFactor(int id);
+    void toggleRibbonOptions(int id);
     void redoOptions();
+
+    void saveAsBitmap();
+    void saveAsXML();
 
     //void paintEvent(QPaintEvent *event);
 
@@ -145,6 +149,7 @@ namespace KDirStat
   QPopupMenu *menu_shfactor;
   QPopupMenu *menu_sffactor;
   QPopupMenu *menu_colorscheme;
+  QPopupMenu *ribbonmap_options;
 
   QPushButton *zoom_out_button;
   QPushButton *zoom_in_button;

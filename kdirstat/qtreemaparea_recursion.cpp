@@ -57,6 +57,9 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
   next_shaded=NULL;
 
   Cushion *cushion=NULL;
+  find_mode=-1;
+  find_x=-1;
+  find_y=-1;
 
   if(TRUE /* options->paintmode==PM_CUSHION || options->paintmode==PM_HIERARCH_CUSHION || options->paintmode==PM_HIERARCH2_CUSHION
      || options->paintmode==PM_HIERARCH3_CUSHION
@@ -68,6 +71,11 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
 
   if(options->paintmode==PM_CUSHION){
     CTM(dutree,options->start_direction,cushion);
+  }
+  else if(options->piemap==TRUE){
+#ifdef HAVE_PIEMAP
+    drawPieMap(dutree,cushion);
+#endif
   }
   else{
     drawDuTree(dutree,x0,y0,xd0,yd0,options->start_direction,0,cushion);
@@ -182,12 +190,12 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	  if(findmode==FIND_SELECTION){
 	    if(dutree==found_kfileinfo){
 	      if(selected_list->containsRef((KDirInfo *)dutree)){
-		printf("setting selection\n");
+		//		printf("setting selection\n");
 		QColor foundcolor=options->select_color;
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
 	      }
 	      else{
-		printf("clearing selection\n");
+		//printf("clearing selection\n");
 		QColor foundcolor=getBaseColor(node_name);
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
 	      }
@@ -229,7 +237,7 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	  // really draw this entry
 	  pmode=options->paintmode;
 	  if(selected_list->containsRef((KDirInfo *)dutree)){
-		printf("setting selection\n");
+	    //		printf("setting selection\n");
 		QColor fcolor=options->select_color;
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,fcolor,options->paintmode,c);
 	  }
@@ -437,5 +445,8 @@ Cushion::Cushion(int xd,int yd,float sh,float sf){
 
   cx0=xd;
   cy0=yd;
+
+  px=xd/2;
+  py=yd/2;
 }
 

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.11 2001/07/18 03:09:39 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.12 2001/07/28 22:56:47 alexannika Exp $
  *
  */
 
@@ -55,15 +55,12 @@ void QTreeMapWindow::makeWidgets(){
 
   QPopupMenu *menu_file=new QPopupMenu(this);
   menu_file->insertTearOffHandle();
-  menu_file->insertItem("&Save as Bitmap");
-
-  menu_draw_mode=new QPopupMenu(this);
-#if 0
-  makeRadioPopup(menu_draw_mode,QString("Files"),SLOT(selectDrawmode(int)),DM_FILES);
-  makeRadioPopup(menu_draw_mode,QString("Dirs"),SLOT(selectDrawmode(int)),DM_DIRS);
-  makeRadioPopup(menu_draw_mode,QString("Files & Dirs"),SLOT(selectDrawmode(int)),DM_BOTH);
-  menu_draw_mode->setCheckable(TRUE);
+  menu_file->insertItem("&Save as Bitmap",this,SLOT(saveAsBitmap()));
+  menu_file->insertItem("Save as XML",this,SLOT(saveAsXML()));
+#ifdef EXPERIMENTAL
+  menu_file->insertItem("Show XML tree");
 #endif
+  menu_draw_mode=new QPopupMenu(this);
 
   makeBrainPopup(menu_draw_mode,QString("Files"),SLOT(selectDrawmode(int)),DM_FILES,"drawmode","files_only");
   makeBrainPopup(menu_draw_mode,QString("Dirs"),SLOT(selectDrawmode(int)),DM_DIRS,"drawmode","dirs_only");
@@ -72,25 +69,26 @@ void QTreeMapWindow::makeWidgets(){
 
 
 
+  QString shading=QString("shading");
   menu_paint_mode=new QPopupMenu(this);
-  makeRadioPopup(menu_paint_mode,QString("Flat"), SLOT(selectShading(int)),PM_FLAT);
-  makeRadioPopup(menu_paint_mode,QString("Images"), SLOT(selectShading(int)),PM_IMAGES);
-  makeRadioPopup(menu_paint_mode,QString("Sinus"), SLOT(selectShading(int)),PM_SIMPLE_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("Sinus 2"), SLOT(selectShading(int)),PM_WAVE_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("fast Bumb"), SLOT(selectShading(int)),PM_SQUARE_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("Cone"), SLOT(selectShading(int)),PM_CONE_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("Outline"), SLOT(selectShading(int)),PM_OUTLINE);
-  makeRadioPopup(menu_paint_mode,QString("wave2 Cushion"), SLOT(selectShading(int)),PM_WAVE2_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("test CTM Cushion"), SLOT(selectShading(int)),PM_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. Sinus Cushion"), SLOT(selectShading(int)),PM_HIERARCH_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. Sinus Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH2_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. Dist. Cushion"), SLOT(selectShading(int)),PM_HIERARCH3_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. Dist. Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH4_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. pyramid"), SLOT(selectShading(int)),PM_HIERARCH_PYRAMID);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. dist. pyramid"), SLOT(selectShading(int)),PM_HIERARCH_DIST_PYRAMID);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. dist. sin pyramid"), SLOT(selectShading(int)),PM_HIERARCH_DIST_SIN_PYRAMID);
-  makeRadioPopup(menu_paint_mode,QString("hierarch.5 Cushion"), SLOT(selectShading(int)),PM_HIERARCH5_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. Debug Cushion"), SLOT(selectShading(int)),PM_HIERARCH_TEST_CUSHION);
+  makeBrainPopup(menu_paint_mode,QString("Flat"), SLOT(selectShading(int)),PM_FLAT,shading,"flat");
+  makeBrainPopup(menu_paint_mode,QString("Images"), SLOT(selectShading(int)),PM_IMAGES,shading,"images");
+  makeBrainPopup(menu_paint_mode,QString("Sinus"), SLOT(selectShading(int)),PM_SIMPLE_CUSHION,shading,"sinus");
+  makeBrainPopup(menu_paint_mode,QString("Sinus 2"), SLOT(selectShading(int)),PM_WAVE_CUSHION,shading,"sinus2");
+  makeBrainPopup(menu_paint_mode,QString("fast Bumb"), SLOT(selectShading(int)),PM_SQUARE_CUSHION,shading,"bump");
+  makeBrainPopup(menu_paint_mode,QString("Cone"), SLOT(selectShading(int)),PM_CONE_CUSHION,shading,"cone");
+  makeBrainPopup(menu_paint_mode,QString("Outline"), SLOT(selectShading(int)),PM_OUTLINE,shading,"outline");
+  makeBrainPopup(menu_paint_mode,QString("wave2 Cushion"), SLOT(selectShading(int)),PM_WAVE2_CUSHION,shading,"wave2");
+  makeBrainPopup(menu_paint_mode,QString("test CTM Cushion"), SLOT(selectShading(int)),PM_CUSHION,shading,"ctm_cushion");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. Sinus Cushion"), SLOT(selectShading(int)),PM_HIERARCH_CUSHION,shading,"hierarch_sinus");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. Sinus Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH2_CUSHION,shading,"hierarch_sinus2");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. Dist. Cushion"), SLOT(selectShading(int)),PM_HIERARCH3_CUSHION,shading,"hierarch_dist");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. Dist. Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH4_CUSHION,shading,"hierarch_dist2");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. pyramid"), SLOT(selectShading(int)),PM_HIERARCH_PYRAMID,shading,"hierarch_pyramid");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. dist. pyramid"), SLOT(selectShading(int)),PM_HIERARCH_DIST_PYRAMID,shading,"hierarch_dist_pyramid");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. dist. sin pyramid"), SLOT(selectShading(int)),PM_HIERARCH_DIST_SIN_PYRAMID,shading,"hierarch_dist_sin_pyramid");
+  makeBrainPopup(menu_paint_mode,QString("hierarch.5 Cushion"), SLOT(selectShading(int)),PM_HIERARCH5_CUSHION,shading,"hierarch5");
+  makeBrainPopup(menu_paint_mode,QString("hierarch. Debug Cushion"), SLOT(selectShading(int)),PM_HIERARCH_TEST_CUSHION,shading,"hierarch_debug");
   menu_paint_mode->setCheckable(TRUE);
 
   menu_border_width=new QPopupMenu(this);
@@ -110,12 +108,22 @@ void QTreeMapWindow::makeWidgets(){
   menu_border_width->setCheckable(TRUE);
 
   menu_dont_draw=new QPopupMenu(this);
+#if 1
   makeRadioPopup(menu_dont_draw,"off",SLOT(selectDontDrawOption(int)),-1);
   for(int i=0; i<=10;i++){
     QString s;
     s.sprintf("%2d",i);
     makeRadioPopup(menu_dont_draw,s, SLOT(selectDontDrawOption(int)),i);
   }
+#else
+
+  makeBrainPopup(menu_dont_draw,"off",SLOT(selectDontDrawOption(int)),-1,"dontdraw","off");
+  for(int i=0; i<=10;i++){
+    QString s;
+    s.sprintf("%2d",i);
+    makeBrainPopup(menu_dont_draw,s, SLOT(selectDontDrawOption(int)),i,"dontdraw",s2);
+  }
+#endif
   menu_dont_draw->setCheckable(TRUE);
 
   menu_hfactor=new QPopupMenu(this);
@@ -151,22 +159,36 @@ void QTreeMapWindow::makeWidgets(){
   makeRadioPopup(menu_colorscheme,QString("regexp"),SLOT(selectColorScheme(int)),CS_REGEXP);
   makeRadioPopup(menu_colorscheme,QString("monochrome"),SLOT(selectColorScheme(int)),CS_MONO);
 
+#ifdef HAVE_PIEMAP
+  ribbonmap_options=new QPopupMenu(this);
+  //  ribbonmap_options->insertItem("Draw RibbonTree",this,SLOT(
+ makeBrainPopup(ribbonmap_options,QString("ribbonmap"), SLOT(toggleRibbonOptions(int)),RIBBON_RIBBONMAP,"ribbonmap","ribbonmap");
+ makeBrainPopup(ribbonmap_options,QString("Draw RibbonTree"), SLOT(toggleRibbonOptions(int)),RIBBON_DRAWTREE,"ribbonmap","drawtree");
+ makeBrainPopup(ribbonmap_options,QString("Draw RibbonPie"), SLOT(toggleRibbonOptions(int)),RIBBON_DRAWPIE,"ribbonmap","drawpie");
+ makeBrainPopup(ribbonmap_options,QString("use totalitems as size"), SLOT(toggleRibbonOptions(int)),RIBBON_USE_TOTALITEMS,"ribbonmap","use_totalitems");
+#endif
+
   menu_options=new QPopupMenu(this);
   menu_options->insertTearOffHandle();
   menu_options->insertItem("&Shadings",menu_paint_mode);
   menu_options->insertItem("&Draw Mode",menu_draw_mode);
-  menu_options->insertItem("Border &Width (any)",menu_border_width);
-  menu_options->insertItem("Border &Step (node)",menu_border_step);
   menu_options->insertItem("Start &Direction",menu_start_direction);
   menu_options->insertItem("Dont Draw if smaller",menu_dont_draw);
+#ifdef EXPERIMENTAL
+  menu_options->insertItem("Border &Width (any)",menu_border_width);
+  menu_options->insertItem("Border &Step (node)",menu_border_step);
   menu_options->insertItem("Hierarch. Cushion Factor",menu_hfactor);
   menu_options->insertItem("Test Cushion Factor h=",menu_shfactor);
   menu_options->insertItem("Test Cushion Factor f=",menu_sffactor);
-  menu_options->insertItem("Color Scheme",menu_colorscheme);
-  menu_options->insertItem("Draw &Text",this,SLOT(changeDrawText(int)));
-  menu_options->insertItem("squarify Treemaps",this,SLOT(changeSquarifyTreemaps(int)));
   menu_options->insertItem("show inode space",this,SLOT(changeShowInodeSpace(int)));
   menu_options->insertItem("dynamic shading",this,SLOT(changeDynamicShading(int)));
+#endif
+  menu_options->insertItem("Draw &Text",this,SLOT(changeDrawText(int)));
+  menu_options->insertItem("Color Scheme",menu_colorscheme);
+  menu_options->insertItem("squarify Treemaps",this,SLOT(changeSquarifyTreemaps(int)));
+#ifdef HAVE_PIEMAP
+  menu_options->insertItem("RibbonMap Options",ribbonmap_options);
+#endif
 
   menu_file_id=menubar->insertItem("&File",menu_file);
   menu_options_id=menubar->insertItem("&Options",menu_options);
@@ -261,6 +283,7 @@ void QTreeMapWindow::selectDrawmode(int id){
 }
 void QTreeMapWindow::selectShading(int id){
   options->paintmode=id;
+  setBrainCheckMark(options,id,"shading");
   redoOptions();
 }
 void QTreeMapWindow::selectBorderWidth(int id){
@@ -318,6 +341,30 @@ void QTreeMapWindow::selectSFFactor(int id){
   options->sequoia_f=((float)id)/100.0;
   redoOptions();
 }
+void QTreeMapWindow::toggleRibbonOptions(int id){
+#ifdef HAVE_PIEMAP
+  NOT_USED(id);
+  if(id==RIBBON_DRAWTREE){
+    options->draw_hyper_lines=!options->draw_hyper_lines;
+  }
+  else if(id==RIBBON_DRAWPIE){
+    options->draw_pie_lines=!options->draw_pie_lines;
+  }
+  else if(id==RIBBON_USE_TOTALITEMS){
+    if(options->area_is==AREA_IS_TOTALSIZE){
+      options->area_is=AREA_IS_TOTALITEMS;
+    }
+    else if(options->area_is==AREA_IS_TOTALITEMS){
+      options->area_is=AREA_IS_TOTALSIZE;
+    }
+  }
+  else if(id==RIBBON_RIBBONMAP){
+    options->piemap=!options->piemap;
+  }
+
+  redoOptions();
+#endif
+}
 
 void QTreeMapWindow::redoOptions(){
   graph_widget->setOptions(options);
@@ -338,7 +385,7 @@ void QTreeMapWindow::setBrainCheckMark(QTreeMapOptions *opt,int param,QString gn
      OptionsBrain *brain=brainlist->at(i);
      if(brain->groupname==gname &&
 	brain->parameter==param){
-       printf("set group %s option %s param %d\n",gname.latin1(),brain->optionname.latin1(),brain->parameter);
+       //       printf("set group %s option %s param %d\n",gname.latin1(),brain->optionname.latin1(),brain->parameter);
 
        brain->popup->setItemChecked(brain->menuid,TRUE);
      }
@@ -352,13 +399,27 @@ void QTreeMapWindow::setBrainCheckMark(QTreeMapOptions *opt,int param,QString gn
    for(int i=0;i<brainlist->count();i++){
      if(brainlist->at(i)->groupname==gname &&
 	brainlist->at(i)->optionname==oname){
-       printf("group %s option %s param %d\n",gname.latin1(),oname.latin1(),brainlist->at(i)->parameter);
+       //printf("group %s option %s param %d\n",gname.latin1(),oname.latin1(),brainlist->at(i)->parameter);
        return brainlist->at(i)->parameter;
      }
    }
+#ifdef EXPERIMENTAL
    printf("REAL BIG BRAIN FAULT! %s %s\n",gname.latin1(),oname.latin1());
+#endif
    return 0; //urks
  }
+
+void QTreeMapWindow::saveAsBitmap(){
+  //printf("CALLBACK KDirTreeMapArea\n");
+  graph_widget->saveAsBitmap();
+
+}
+
+void QTreeMapWindow::saveAsXML(){
+  //printf("CALLBACK KDirTreeMapArea\n");
+  graph_widget->saveAsXML();
+
+}
 
 OptionsBrain::OptionsBrain(QPopupMenu *menu,QString group_name,QString option_name,int group_id,int menu_id,int param){
   popup=menu;

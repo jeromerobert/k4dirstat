@@ -12,6 +12,8 @@ kdirstat_SOURCES = 				\
 	qtreemaparea_paint.cpp			\
 	qtreemaparea_recursion.cpp		\
 	qtreemaparea_squarify.cpp		\
+	  qxmltreemapwindow.cpp		\
+	  qxmltreemaparea.cpp		\
 	kdirtreemaparea.cpp		\
 	kdirtreemapwindow.cpp			\
 	kdirtree.cpp				\
@@ -21,9 +23,13 @@ kdirstat_SOURCES = 				\
 	kdirstatapp.cpp 			\
 	kdirstatmain.cpp
 
+#	qtreemaparea_piemap.cpp		\
+
 noinst_HEADERS =				\
 	qtreemap.h				\
 	qtreemapwindow.h	\
+	  qxmltreemapwindow.h		\
+	  qxmltreemap.h			\
 	kdirtreemap.h		\
 	kdirtreemapwindow.h	\
 	kdirtree.h				\
