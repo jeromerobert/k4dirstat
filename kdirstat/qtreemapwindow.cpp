@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.1 2001/06/29 16:37:50 hundhammer Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.2 2001/06/30 17:08:29 harry1701 Exp $
  *
  */
 
@@ -48,7 +48,7 @@ QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
   menu_file->insertItem("&Save as Bitmap");
   
   menu_draw_mode=new QPopupMenu(this);
-  makeRadioPopup(menu_draw_mode,QString((char *)"Files"),SLOT(selectDrawmode(int)),DM_FILES);
+  makeRadioPopup(menu_draw_mode,QString("Files"),SLOT(selectDrawmode(int)),DM_FILES);
   makeRadioPopup(menu_draw_mode,QString("Dirs"),SLOT(selectDrawmode(int)),DM_DIRS);
   makeRadioPopup(menu_draw_mode,QString("Files & Dirs"),SLOT(selectDrawmode(int)),DM_BOTH);
   menu_draw_mode->setCheckable(TRUE);
@@ -64,9 +64,9 @@ QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
 
   menu_border_width=new QPopupMenu(this);
   for(int i=0; i<=10;i++){
-    QString *str=new QString(); // memory hole!!!
-    str->sprintf("%2d",i);
-    makeRadioPopup(menu_border_width,*str, SLOT(selectBorderWidth(int)),i);
+    QString s;
+    s.sprintf("%2d",i);
+    makeRadioPopup(menu_border_width,s,SLOT(selectBorderWidth(int)),i);
   }
   menu_border_width->setCheckable(TRUE);
 
@@ -111,7 +111,7 @@ QTreeMapArea *QTreeMapWindow::getArea(){
   return graph_widget;
 }
 
-void QTreeMapWindow::makeRadioPopup(QPopupMenu *menu,QString title, char *slot,int param){
+void QTreeMapWindow::makeRadioPopup(QPopupMenu *menu, const QString& title, const char *slot, const int param) {
   int id=menu->insertItem(title,this,slot);
   menu->setItemParameter(id,param);
   

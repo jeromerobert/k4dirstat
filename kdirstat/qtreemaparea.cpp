@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.1 2001/06/29 16:37:50 hundhammer Exp $
+ *   $Id: qtreemaparea.cpp,v 1.2 2001/06/30 17:08:29 harry1701 Exp $
  *
  */
 
@@ -87,9 +87,7 @@ void QTreeMapArea::drawTreeMap(KDirInfo *dutree){
   int xd0=options->paint_size_x;
   int yd0=options->paint_size_y;
 
-  if(offscreenptr!=NULL){
-    delete offscreenptr;
-  }
+  //delete offscreenptr;
   //offscreenptr=new  QPixmap(options->paint_size_x,options->paint_size_y);
   //offscreen=*offscreenptr;
 

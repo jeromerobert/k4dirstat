@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: qtreemap.h,v 1.2 2001/06/30 17:08:29 harry1701 Exp $
  *
  */
 
@@ -112,7 +112,7 @@ namespace KDirStat
 
     QTreeMapArea *getArea();
 
-    void makeRadioPopup(QPopupMenu *menu,QString title, char *slot,int param);
+    void makeRadioPopup(QPopupMenu *menu, const QString& title, const char *slot, const int param);
 
     public slots:
 
