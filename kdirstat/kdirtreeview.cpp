@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-09-01
+ *   Updated:	2001-09-16
  *
- *   $Id: kdirtreeview.cpp,v 1.6 2001/09/03 10:06:20 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.7 2001/09/19 09:31:25 hundhammer Exp $
  *
  */
 
@@ -45,6 +45,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _treemap_view	= 0;	// FIXME
 #endif
     _updateTimer	= 0;
+    _selection		= 0;
     _openLevel		= 1;
     _doLazyClone	= true;
     _doPacManAnimation	= false;
@@ -111,8 +112,12 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     setLineWidth ( 2 );
 #endif
 
-   connect ( kapp,	SIGNAL	( kdisplayPaletteChanged()	),
-	     this, 	SLOT	( paletteChanged()		) );
+    connect( kapp,	SIGNAL( kdisplayPaletteChanged()	),
+	     this,	SLOT  ( paletteChanged()		) );
+
+    connect( this,	SIGNAL( selectionChanged( QListViewItem * ) ),
+	     this,	SLOT  ( selectItem	( QListViewItem * ) ) );
+
 
 #if USE_TREEMAPS
    // FIXME: Move this out of here. No use opening an empty window at this time -
@@ -128,6 +133,15 @@ KDirTreeView::~KDirTreeView()
 {
     if ( _tree )
 	delete _tree;
+
+#if USE_TREEMAPS
+    // FIXME: Move this out of here.
+    if ( _treemap_view )
+    {
+	delete _treemap_view;
+    }
+#endif
+    
 
     /*
      * Don't delete _updateTimer here, it's already automatically deleted by Qt!
@@ -183,6 +197,15 @@ KDirTreeView::openURL( KURL url )
     clear();
     _currentDir = "";
 
+#if USE_TREEMAPS
+    // FIXME: Move this out of here.
+    if ( _treemap_view )
+    {
+	delete _treemap_view;
+	_treemap_view = 0;
+    }
+#endif
+    
     if ( _tree )
 	delete _tree;
 
@@ -206,7 +229,7 @@ KDirTreeView::openURL( KURL url )
     connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
 	     this,  SLOT  ( finalizeLocal( KDirInfo * ) ) );
 
-
+    
     // Prepare cyclic update
 
     if ( _updateTimer )
@@ -240,11 +263,22 @@ KDirTreeView::openURL( KURL url )
 
 
 void
+KDirTreeView::refreshAll()
+{
+    if ( _tree && _tree->root() )
+    {
+	KURL url( _tree->root()->url() );
+	clear();
+	openURL( url );
+    }
+}
+
+
+void
 KDirTreeView::clear()
 {
+    clearSelection();
     KDirTreeViewParentClass::clear();
-
-    // TODO
 }
 
 
@@ -357,6 +391,29 @@ KDirTreeView::locate( KFileInfo *wanted, bool lazy )
 
     return 0;
 }
+
+
+void
+KDirTreeView::selectItem( QListViewItem *listViewItem )
+{
+    _selection = dynamic_cast<KDirTreeViewItem *>( listViewItem );
+    // kdDebug() << "Selecting item " << ( _selection ? (const char *) _selection->orig()->debugUrl() : "<none>" ) << endl;
+    
+    emit selectionChanged( _selection );
+    emit selectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
+}
+
+
+void
+KDirTreeView::clearSelection()
+{
+    // kdDebug() << k_funcinfo << endl;
+    _selection = 0;
+    
+    emit selectionChanged( (KDirTreeViewItem *) 0 );
+    emit selectionChanged( (KFileInfo *) 0 );
+}
+
 
 
 const QColor &
@@ -529,6 +586,9 @@ KDirTreeViewItem::~KDirTreeViewItem()
 {
     if ( _pacMan )
 	delete _pacMan;
+
+    if ( this == _view->selection() )
+	_view->clearSelection();
 }
 
 

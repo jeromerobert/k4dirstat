@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-09-01
  *
- *   $Id: kdirtree.h,v 1.3 2001/09/03 10:06:20 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.4 2001/09/19 09:31:25 hundhammer Exp $
  *
  */
 

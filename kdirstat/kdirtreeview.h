@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-09-01
+ *   Updated:	2001-09-16
  *
- *   $Id: kdirtreeview.h,v 1.4 2001/09/03 10:06:20 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.5 2001/09/19 09:31:25 hundhammer Exp $
  *
  */
 
@@ -84,23 +84,12 @@ namespace KDirStat
 	virtual ~KDirTreeView();
 
 	/**
-	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
-	 **/
-	void openURL( KURL url );
-
-
-	/**
 	 * Locate the counterpart to an original tree item "wanted" somewhere
 	 * within this view tree. Returns 0 on failure.
 	 * When "lazy" is set, only the open part of the tree is searched.
 	 **/
 	KDirTreeViewItem *	locate( KFileInfo *	wanted,
 					bool		lazy = true );
-
-	/**
-	 * Clear this view's contents.
-	 **/
-	void	clear();
 
 	/**
 	 * Get the first child of this view or 0 if there is none.
@@ -110,6 +99,12 @@ namespace KDirStat
 	KDirTreeViewItem *	firstChild() const
 	    { return (KDirTreeViewItem *) KDirTreeViewParentClass::firstChild(); }
 
+	/**
+	 * Return the currently selected item or 0, if none is selected.
+	 **/
+	KDirTreeViewItem *	selection() const { return _selection; }
+
+	
 	/**
 	 * Returns the default level until which items are opened by default
 	 * (unless they are dot entries).
@@ -203,6 +198,37 @@ namespace KDirStat
 
     public slots:
 
+	/**
+	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
+	 **/
+	void openURL( KURL url );
+
+	/**
+	 * Refresh (i.e. re-read from disk) the entire tree.
+	 **/
+	void refreshAll();
+
+	/**
+	 * Clear this view's contents.
+	 **/
+	void clear();
+
+        /**
+	 * Select a (QListViewItem) item. Triggers selectionChanged() signals.
+	 **/
+        void selectItem( QListViewItem *item );
+
+        /**
+	 * Select an item. Triggers selectionChanged() signals.
+	 * Overloaded for convenience.
+	 **/
+        void selectItem( KDirTreeViewItem *item ) { selectItem( (QListViewItem *) item ); }
+
+	/**
+	 * Clear the current selection. Triggers selectionChanged() signals.
+	 **/
+	void clearSelection();
+	
 	/**
 	 * (Try to) ensure good contrast between the tree background and the
 	 * percentage bars' 3D edges - prevent ugly 3D effects which will
@@ -301,38 +327,51 @@ namespace KDirStat
 	 **/
 	void finished();
 
+	/**
+	 * Emitted when the currently selected item changes.
+	 * Caution: 'item' may be 0 when the selection is cleared.
+	 **/
+	void selectionChanged( KDirTreeViewItem *item );
+	
+	/**
+	 * Emitted when the currently selected item changes.
+	 * Caution: 'item' may be 0 when the selection is cleared.
+	 **/
+	void selectionChanged( KFileInfo *item );
+	
 
     protected:
 
-	KDirTree *	_tree;
-	QTimer *	_updateTimer;
-	QTime		_stopWatch;
-	QString		_currentDir;
+	KDirTree *		_tree;
+	QTimer *		_updateTimer;
+	QTime			_stopWatch;
+	QString			_currentDir;
+	KDirTreeViewItem *	_selection;
 
-	int		_openLevel;
-	bool		_doLazyClone;
-	bool		_doPacManAnimation;
-	int		_updateInterval;	// millisec
-	int		_usedFillColors;
-	QColor		_fillColor [ KDirTreeViewMaxFillColor ];
-	QColor		_treeBackground;
-	QColor		_percentageBarBackground;
+	int	_openLevel;
+	bool	_doLazyClone;
+	bool	_doPacManAnimation;
+	int	_updateInterval;	// millisec
+	int	_usedFillColors;
+	QColor	_fillColor [ KDirTreeViewMaxFillColor ];
+	QColor	_treeBackground;
+	QColor	_percentageBarBackground;
 
 
 	// The various columns in which to display information
 
-	int		_nameCol;
-	int		_iconCol;
-	int		_percentNumCol;
-	int		_percentBarCol;
-	int		_totalSizeCol;
-	int		_workingStatusCol;
-	int		_ownSizeCol;
-	int		_totalItemsCol;
-	int		_totalFilesCol;
-	int		_totalSubDirsCol;
-	int		_latestMtimeCol;
-	int		_readJobsCol;
+	int	_nameCol;
+	int	_iconCol;
+	int	_percentNumCol;
+	int	_percentBarCol;
+	int	_totalSizeCol;
+	int	_workingStatusCol;
+	int	_ownSizeCol;
+	int	_totalItemsCol;
+	int	_totalFilesCol;
+	int	_totalSubDirsCol;
+	int	_latestMtimeCol;
+	int	_readJobsCol;
 
 
 	// The various icons

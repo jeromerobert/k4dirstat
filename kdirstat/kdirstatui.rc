@@ -1,8 +1,23 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kdirstat" version="1.1">
 <MenuBar>
-  <Menu name="file"><text>&amp;File</text>
-    <Action name="file_new_window"/>
-  </Menu>
+
+	<Menu name="file" noMerge="1"> <text>&amp;File</text>
+		<Action name="file_open" />
+		<Action name="file_open_recent" />
+    		<Action name="file_refresh_all"/>
+    		<Separator/>
+    		<Action name="file_close"/>
+		<Action name="file_quit"/>
+	</Menu>
+
 </MenuBar>
+
+<ToolBar name="mainToolBar" noMerge="1"> <text>Main Toolbar</text>
+	<Action name="file_open"		group="file_operations" />
+	<Action name="file_refresh_all" 	group="file_operations"/>
+	<Separator/>
+	<Action name="edit_copy"/>
+</ToolBar>
+
 </kpartgui>
