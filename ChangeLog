@@ -1,26 +1,32 @@
+2004-03-01  Stefan Hundhammer  <sh@suse.de>
+
+	* Updated German translation
+
+
 2003-11-13  Stefan Hundhammer  <sh@suse.de>
 
 	* Added Italian translation by Giuliano Colla <colla@copeca.it>
 
+
 2003-10-29  Stefan Hundhammer  <sh@suse.de>
 
 	* Applied i18n patch by Toyohiro Asukai <toyohiro@ksmplus.com>
-	
+
 	* Updated Japanese translation by Toyohiro Asukai <toyohiro@ksmplus.com>
 
 
 2003-10-20  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed some SuSE-internal Autobuild complaints
-	
+
 	* Fixed treemap context menu popup location
-	
+
 	* Bumped version to 2.4.1
 
-	
+
 2003-09-15  Stefan Hundhammer  <sh@suse.de>
 
-	* Added Hungarian translation contributed by 
+	* Added Hungarian translation contributed by
 	  Marcel Hilzinger <hili@suselinux.hu>
 
 2003-08-26  Stefan Hundhammer  <sh@suse.de>
@@ -33,9 +39,9 @@
 
 	* Added "stop reading" action
 
-	* Added German translation contributed by 
+	* Added German translation contributed by
 	  Christoph Eckert <fmchristoph.eckert@t-online.de>
-	
+
 
 2003-05-25  Stefan Hundhammer  <sh@suse.de>
 
