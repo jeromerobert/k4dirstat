@@ -4,9 +4,9 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-05
+ *   Updated:	2003-01-06
  *
- *   $Id: kdirstatsettings.cpp,v 1.4 2003/01/05 14:52:28 hundhammer Exp $
+ *   $Id: kdirstatsettings.cpp,v 1.5 2003/01/06 13:37:53 hundhammer Exp $
  *
  */
 
@@ -290,7 +290,7 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
     // Create layout and widgets.
 
     QHBoxLayout * layout = new QHBoxLayout( this,
-					    5,				// border
+					    0,				// border
 					    dialog->spacingHint() );	// spacing
     _listBox	= new KCleanupListBox( this );
     _props	= new KCleanupPropertiesPage( this, mainWin );
@@ -800,7 +800,7 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 {
     // kdDebug() << k_funcinfo << endl;
 
-    QVBoxLayout * layout = new QVBoxLayout( this, 5, 0 ); // border, spacing
+    QVBoxLayout * layout = new QVBoxLayout( this, 0, 0 ); // parent, border, spacing
 
     QVBox * vbox	= new QVBox( this );
     vbox->setSpacing( dialog->spacingHint() );
