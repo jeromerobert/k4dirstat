@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2003-08-26
  */
 
 
@@ -245,6 +245,7 @@ namespace KDirStat
 	QPixmap blockDevIcon()		const 	{ return _blockDevIcon;		}
 	QPixmap charDevIcon()		const 	{ return _charDevIcon;		}
 	QPixmap fifoIcon()		const 	{ return _fifoIcon;		}
+	QPixmap stopIcon()		const 	{ return _stopIcon;		}
 	QPixmap	workingIcon()		const	{ return _workingIcon;		}
 	QPixmap	readyIcon()		const	{ return _readyIcon;		}
 
@@ -276,6 +277,11 @@ namespace KDirStat
 	 * Refresh (i.e. re-read from disk) the selected subtree.
 	 **/
 	void refreshSelected();
+
+	/**
+	 * Forcefully stop a running read process.
+	 **/
+	void abortReading();
 
 	/**
 	 * Clear this view's contents.
@@ -375,6 +381,12 @@ namespace KDirStat
 	void	slotFinished();
 
 	/**
+	 * Signal abortion of all read jobs, finalize display and terminate pending
+	 * cyclic visual update.
+	 **/
+	void	slotAborted();
+
+	/**
 	 * Signal end of one read job at this level and finalize display of
 	 * this level.
 	 **/
@@ -464,6 +476,11 @@ namespace KDirStat
 	void finished();
 
 	/**
+	 * Emitted when reading this tree has been aborted.
+	 **/
+	void aborted();
+
+	/**
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
@@ -551,6 +568,7 @@ namespace KDirStat
 	QPixmap _blockDevIcon;
 	QPixmap _charDevIcon;
 	QPixmap _fifoIcon;
+	QPixmap _stopIcon;
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
     };

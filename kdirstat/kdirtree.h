@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-02-02
+ *   Updated:	2003-08-26
  */
 
 
@@ -19,7 +19,7 @@
 #include <sys/types.h>
 #include <limits.h>
 #include <dirent.h>
-#include <qqueue.h>
+#include <qptrqueue.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kio/jobclasses.h>
@@ -44,6 +44,7 @@ namespace KDirStat
 #define KFileSizeMax 9223372036854775807LL
 
     // Forward declarations
+    class KDirInfo;
     class KDirTree;
     class KDirReadJob;
     class KDirTreeView;
@@ -105,7 +106,7 @@ namespace KDirStat
 	 * Default constructor.
 	 **/
 	KFileInfo( KDirTree   * tree,
-		   KFileInfo  * parent = 0,
+		   KDirInfo   * parent = 0,
 		   const char *	name   = 0 );
 
 	/**
@@ -114,14 +115,14 @@ namespace KDirStat
 	KFileInfo( const QString &	filenameWithoutPath,
 		   struct stat *	statInfo,
 		   KDirTree    *	tree,
-		   KFileInfo   *	parent = 0 );
+		   KDirInfo    *	parent = 0 );
 
 	/**
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
 	KFileInfo( const KFileItem *	fileItem,
 		   KDirTree  *		tree,
-		   KFileInfo * 		parent = 0 );
+		   KDirInfo * 		parent = 0 );
 
 	/**
 	 * Destructor.
@@ -297,24 +298,7 @@ namespace KDirStat
 	 **/
 	virtual int		pendingReadJobs()	{ return 0;  }
 
-	/**
-	 * Notification of a new directory read job somewhere in the subtree.
-	 *
-	 * This default implementation does nothing.
-	 * Derived classes might want to overwrite this.
-	 **/
-	virtual void 		readJobAdded()		{}
-
-	/**
-	 * Notification of a finished directory read job somewhere in the
-	 * subtree.
-	 *
-	 * This default implementation does nothing.
-	 * Derived classes might want to overwrite this.
-	 **/
-	virtual void 		readJobFinished() {}
-
-
+	
 	//
 	// Tree management
 	//
@@ -328,12 +312,12 @@ namespace KDirStat
 	 * Returns a pointer to this entry's parent entry or 0 if there is
 	 * none.
 	 **/
-	KFileInfo *	parent()		const { return _parent; }
+	KDirInfo *	parent()		const { return _parent; }
 
 	/**
 	 * Set the "parent" pointer.
 	 **/
-	void		setParent( KFileInfo *newParent ) { _parent = newParent; }
+	void		setParent( KDirInfo *newParent ) { _parent = newParent; }
 
 	/**
 	 * Returns a pointer to the next entry on the same level
@@ -546,7 +530,7 @@ namespace KDirStat
 	KFileSize	_blocks;	// 512 bytes blocks
 	time_t		_mtime;		// modification time
 
-	KFileInfo *	_parent;	// pointer to the parent entry
+	KDirInfo *	_parent;	// pointer to the parent entry
 	KFileInfo *	_next;		// pointer to the next entry
 	KDirTree  *	_tree;		// pointer to the parent tree
     };	// class KFileInfo
@@ -572,7 +556,7 @@ namespace KDirStat
 	 * entry"!
 	 **/
 	KDirInfo( KDirTree  *	tree,
-		  KFileInfo *	parent 		= 0,
+		  KDirInfo *	parent 		= 0,
 		  bool		asDotEntry	= false );
 
 	/**
@@ -581,14 +565,14 @@ namespace KDirStat
 	KDirInfo( const QString	& filenameWithoutPath,
 		  struct stat	* statInfo,
 		  KDirTree	* tree,
-		  KFileInfo	* parent	= 0 );
+		  KDirInfo	* parent	= 0 );
 
 	/**
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
 	KDirInfo( const KFileItem	* fileItem,
 		  KDirTree		* tree,
-		  KFileInfo		* parent	= 0 );
+		  KDirInfo		* parent	= 0 );
 
 	/**
 	 * Destructor.
@@ -743,7 +727,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual void	unlinkChild( KFileInfo *deletedChild );
+	virtual void unlinkChild( KFileInfo *deletedChild );
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
@@ -755,18 +739,20 @@ namespace KDirStat
 
 	/**
 	 * Notification of a new directory read job somewhere in the subtree.
-	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual void readJobAdded();
+	void readJobAdded();
 
 	/**
 	 * Notification of a finished directory read job somewhere in the
 	 * subtree.
-	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual void readJobFinished();
+	void readJobFinished();
+	
+	/**
+	 * Notification of an aborted directory read job somewhere in the
+	 * subtree.
+	 **/
+	void readJobAborted();
 
 	/**
 	 * Finalize this directory level after reading it is completed.
@@ -794,8 +780,7 @@ namespace KDirStat
 	 * Set the state of the directory reading process.
 	 * See @ref readState() for details.
 	 **/
-	void setReadState( KDirReadState newReadState )
-	    { _readState = newReadState; }
+	void setReadState( KDirReadState newReadState );
 
 	/**
 	 * Returns true if this is a @ref KDirInfo object.
@@ -980,7 +965,7 @@ namespace KDirStat
 	 **/
 	static KFileInfo * stat( const KURL & 	url,
 				 KDirTree  * 	tree,
-				 KFileInfo * 	parent = 0 );
+				 KDirInfo * 	parent = 0 );
 
     protected:
 	DIR * _diskDir;
@@ -1030,7 +1015,7 @@ namespace KDirStat
 	 **/
 	static KFileInfo * 	stat( const KURL &	url,
 				      KDirTree  * 	tree,
-				      KFileInfo * 	parent = 0 );
+				      KDirInfo * 	parent = 0 );
 
 	/**
 	 * Obtain the owner of the URL specified.
@@ -1101,6 +1086,10 @@ namespace KDirStat
 	 **/
 	void startReading( const KURL &	url );
 
+	/**
+	 * Forcefully stop a running read process.
+	 **/
+	void abortReading();
 
 	/**
 	 * Refresh a subtree, i.e. read its contents from disk again.
@@ -1114,7 +1103,6 @@ namespace KDirStat
 	 * root element on.
 	 **/
 	void refresh( KFileInfo *subtree = 0 );
-
 
 	/**
 	 * Select some other item in this tree. Triggers the @ref
@@ -1248,7 +1236,12 @@ namespace KDirStat
 	 **/
 	bool isFileProtocol()	{ return _isFileProtocol; }
 
+	/**
+	 * Returns 'true' if directory reading is in progress in this tree.
+	 **/
+	bool isBusy() { return _isBusy; }
 
+	
     signals:
 
 	/**
@@ -1279,6 +1272,11 @@ namespace KDirStat
 	 * Emitted when reading this directory tree is finished.
 	 **/
 	void finished();
+
+	/**
+	 * Emitted when reading this directory tree has been aborted.
+	 **/
+	void aborted();
 
 	/**
 	 * Emitted when reading a directory is finished.
@@ -1333,11 +1331,12 @@ namespace KDirStat
 
 	KFileInfo *		_root;
 	KFileInfo *		_selection;
-	QQueue<KDirReadJob>	_jobQueue;
+	QPtrQueue<KDirReadJob>	_jobQueue;
 	KDirReadMethod		_readMethod;
 	bool			_crossFileSystems;
 	bool			_enableLocalDirReader;
 	bool			_isFileProtocol;
+	bool			_isBusy;
     };
 
 

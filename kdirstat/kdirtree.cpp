@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-04-28
+ *   Updated:	2003-08-26
  */
 
 
@@ -29,7 +29,7 @@ using namespace KDirStat;
 
 
 KFileInfo::KFileInfo( KDirTree   *	tree,
-		      KFileInfo  *	parent,
+		      KDirInfo  *	parent,
 		      const char *	name )
     : _parent( parent )
     , _next( 0 )
@@ -49,7 +49,7 @@ KFileInfo::KFileInfo( KDirTree   *	tree,
 KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 		      struct stat *	statInfo,
 		      KDirTree    *	tree,
-		      KFileInfo	  *	parent )
+		      KDirInfo	  *	parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -84,7 +84,7 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 
 KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 		       KDirTree    	* tree,
-		       KFileInfo	* parent )
+		       KDirInfo		* parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -294,8 +294,8 @@ KFileInfo::locate( QString url, bool findDotEntries )
 
 
 
-KDirInfo::KDirInfo( KDirTree  * tree,
-		    KFileInfo * parent,
+KDirInfo::KDirInfo( KDirTree *	tree,
+		    KDirInfo *	parent,
 		    bool	asDotEntry )
     : KFileInfo( tree, parent )
 {
@@ -318,7 +318,7 @@ KDirInfo::KDirInfo( KDirTree  * tree,
 KDirInfo::KDirInfo( const QString &	filenameWithoutPath,
 		    struct stat	*	statInfo,
 		    KDirTree    *	tree,
-		    KFileInfo	*	parent )
+		    KDirInfo	*	parent )
     : KFileInfo( filenameWithoutPath,
 		 statInfo,
 		 tree,
@@ -330,8 +330,8 @@ KDirInfo::KDirInfo( const QString &	filenameWithoutPath,
 
 
 KDirInfo::KDirInfo( const KFileItem	* fileItem,
-		    KDirTree    *	tree,
-		    KFileInfo		* parent )
+		    KDirTree 		* tree,
+		    KDirInfo		* parent )
     : KFileInfo( fileItem,
 		 tree,
 		 parent )
@@ -500,10 +500,21 @@ KDirInfo::isFinished()
 }
 
 
+void KDirInfo::setReadState( KDirReadState newReadState )
+{
+    // "aborted" has higher priority than "finished"
+    
+    if ( _readState == KDirAborted && newReadState == KDirFinished )
+	return;
+
+    _readState = newReadState;
+}
+
+
 bool
 KDirInfo::isBusy()
 {
-    if ( _pendingReadJobs > 0 )
+    if ( _pendingReadJobs > 0 && _readState != KDirAborted )
 	return true;
 
     if ( readState() == KDirReading ||
@@ -678,6 +689,16 @@ KDirInfo::readJobFinished()
 
     if ( _parent )
 	_parent->readJobFinished();
+}
+
+
+void
+KDirInfo::readJobAborted()
+{
+    _readState = KDirAborted;
+
+    if ( _parent )
+	_parent->readJobAborted();
 }
 
 
@@ -884,7 +905,7 @@ KLocalDirReadJob::startReading()
 KFileInfo *
 KLocalDirReadJob::stat( const KURL & 	url,
 			KDirTree  *	tree,
-			KFileInfo * 	parent )
+			KDirInfo * 	parent )
 {
     struct stat statInfo;
 
@@ -1028,7 +1049,7 @@ KAnyDirReadJob::finished( KIO::Job * job )
 KFileInfo *
 KAnyDirReadJob::stat( const KURL & 	url,
 		      KDirTree  * 	tree,
-		      KFileInfo * 	parent )
+		      KDirInfo * 	parent )
 {
     KIO::UDSEntry uds_entry;
 
@@ -1084,6 +1105,7 @@ KDirTree::KDirTree()
     _root			= 0;
     _selection			= 0;
     _isFileProtocol		= false;
+    _isBusy			= false;
     _readMethod			= KDirReadUnknown;
     _jobQueue.setAutoDelete( true );	// Delete queued jobs automatically when destroyed
     readConfig();
@@ -1092,11 +1114,17 @@ KDirTree::KDirTree()
 
 KDirTree::~KDirTree()
 {
-    // Jobs still in the job queue are automatically deleted along with the
-    // queue since autoDelete is set.
-
     selectItem( 0 );
 
+    // Jobs still in the job queue are automatically deleted along with the
+    // queue since autoDelete is set.
+    // 
+    // However, the queue needs to be cleared first before the entire tree is
+    // deleted, otherwise the dir pointers in each read job becomes invalid too
+    // early. 
+
+    _jobQueue.clear();
+    
     if ( _root )
 	delete _root;
 }
@@ -1128,6 +1156,7 @@ KDirTree::startReading( const KURL & url )
     kdDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
 #endif
 
+    _isBusy = true;
     emit startingReading();
 
     if ( _root )
@@ -1176,12 +1205,14 @@ KDirTree::startReading( const KURL & url )
 	}
 	else
 	{
+	    _isBusy = false;
 	    emit finished();
 	}
     }
     else	// stat() failed
     {
 	// kdWarning() << "stat(" << url.url() << ") failed" << endl;
+	_isBusy = false;
 	emit finished();
 	emit finalizeLocal( 0 );
     }
@@ -1206,7 +1237,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	// Save some values from the old subtree.
 
 	KURL url		= subtree->url();
-	KFileInfo *parent	= subtree->parent();
+	KDirInfo * parent	= subtree->parent();
 
 
 	// Select nothing if the current selection is to be deleted
@@ -1261,6 +1292,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	    }
 	    else
 	    {
+		_isBusy = false;
 		emit finished();
 	    }
 
@@ -1274,12 +1306,32 @@ KDirTree::refresh( KFileInfo *subtree )
 }
 
 
+
 void
 KDirTree::timeSlicedRead()
 {
     if ( ! _jobQueue.isEmpty() )
 	_jobQueue.head()->startReading();
 }
+
+
+
+void
+KDirTree::abortReading()
+{
+    if ( _jobQueue.isEmpty() )
+	return;
+    
+    while ( ! _jobQueue.isEmpty() )
+    {
+	_jobQueue.head()->dir()->readJobAborted();
+	_jobQueue.dequeue();
+    }
+
+    _isBusy = false;
+    emit aborted();
+}
+
 
 
 void
@@ -1295,6 +1347,7 @@ KDirTree::jobFinishedNotify( KDirReadJob *job )
 
     if ( _jobQueue.isEmpty() )	// No new job available - we're done.
     {
+	_isBusy = false;
 	emit finished();
     }
     else			// There is a new job
@@ -1343,7 +1396,7 @@ void
 KDirTree::deleteSubtree( KFileInfo *subtree )
 {
     // kdDebug() << "Deleting subtree " << subtree << endl;
-    KFileInfo *parent = subtree->parent();
+    KDirInfo *parent = subtree->parent();
 
     if ( parent )
     {

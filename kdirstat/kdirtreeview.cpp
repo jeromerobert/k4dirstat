@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2003-08-26
  */
 
 
@@ -100,6 +100,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _blockDevIcon	= loadIcon( "blockdevice"	);
     _charDevIcon	= loadIcon( "chardevice"	);
     _fifoIcon		= loadIcon( "socket"		);
+    _stopIcon		= loadIcon( "stop"		);
     _readyIcon		= QPixmap();
 
 #undef loadIcon
@@ -184,7 +185,7 @@ KDirTreeView::idleDisplay()
 	// A pathological case: The user requested sorting by read jobs, and
 	// now that everything is read, the items are still in that sort order.
 	// Not only is that sort order now useless (since all read jobs are
-	// done), it is contrary to the (now changed) semanantics of this
+	// done), it is contrary to the (now changed) semantics of this
 	// column. Calling QListView::sort() might do the trick, but we can
 	// never know just how clever that QListView widget tries to be and
 	// maybe avoid another sorting by the same column - so let's use the
@@ -195,6 +196,7 @@ KDirTreeView::idleDisplay()
 	setSorting( _percentNumCol );
     }
 #endif
+    
     _readJobsCol = -1;
 }
 
@@ -232,6 +234,9 @@ KDirTreeView::openURL( KURL url )
 
     connect( _tree, SIGNAL( finished()     ),
 	     this,  SLOT  ( slotFinished() ) );
+
+    connect( _tree, SIGNAL( aborted()     ),
+	     this,  SLOT  ( slotAborted() ) );
 
     connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
 	     this,  SLOT  ( finalizeLocal( KDirInfo * ) ) );
@@ -306,6 +311,14 @@ KDirTreeView::refreshSelected()
     }
 
     logActivity( 10 );
+}
+
+
+void
+KDirTreeView::abortReading()
+{
+    if ( _tree )
+	_tree->abortReading();
 }
 
 
@@ -442,6 +455,25 @@ KDirTreeView::slotFinished()
 #endif
 
     emit finished();
+}
+
+
+void
+KDirTreeView::slotAborted()
+{
+    emit progressInfo( i18n( "Aborted. Elapsed time: %1" )
+		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
+
+    if ( _updateTimer )
+    {
+	delete _updateTimer;
+	_updateTimer = 0;
+    }
+
+    idleDisplay();
+    updateSummary();
+
+    emit aborted();
 }
 
 
@@ -1016,7 +1048,8 @@ KDirTreeViewItem::setIcon()
     }
     else if ( _orig->isDir() )
     {
-	if ( _orig->readState() == KDirError )
+	if ( _orig->readState() == KDirAborted )	icon = _view->stopIcon();
+	else if ( _orig->readState() == KDirError )
 	{
 	    icon = _view->unreadableDirIcon();
 	    setExpandable( false );
@@ -1055,9 +1088,14 @@ KDirTreeViewItem::updateSummary()
 
     if ( _orig->isDir() || _orig->isDotEntry() )
     {
-	setText( _view->totalSizeCol(),		" " + formatSize(  _orig->totalSize()	) );
-	setText( _view->totalItemsCol(),	" " + formatCount( _orig->totalItems()	) );
-	setText( _view->totalFilesCol(),	" " + formatCount( _orig->totalFiles()	) );
+	QString prefix = " ";
+
+	if ( _orig->readState() == KDirAborted )
+	    prefix = " >";
+	
+	setText( _view->totalSizeCol(),		prefix + formatSize(  _orig->totalSize()	) );
+	setText( _view->totalItemsCol(),	prefix + formatCount( _orig->totalItems()	) );
+	setText( _view->totalFilesCol(),	prefix + formatCount( _orig->totalFiles()	) );
 
 	if ( _view->readJobsCol() >= 0 )
 	{

@@ -3,7 +3,7 @@
 <!-- XML GUI description file for KDirStat		-->
 <!--							-->
 <!-- Author:	Stefan Hundhammer (sh@suse.de)		-->
-<!-- Updated:	2003-01-04				-->
+<!-- Updated:	2003-08-26				-->
 
 
 <!DOCTYPE kpartgui>
@@ -25,6 +25,7 @@
 	    <Action name="file_refresh_all"/>
 	    <Action name="file_refresh_selected"/>
 	    <Action name="file_continue_reading_at_mount_point"/>
+	    <Action name="file_stop_reading"/>
 	    <Separator/>
 	    <Action name="file_close"/>
 	    <Action name="file_quit"/>
@@ -93,6 +94,7 @@
     <ToolBar name="mainToolBar" fullWidth="true" noMerge="1"> <text>Main Toolbar</text>
 	<Action name="file_open"			group="file_operations" />
 	<Action name="file_refresh_all"			group="file_operations" />
+	<Action name="file_stop_reading"		group="file_operations" />
 	<Separator/>
 	<Action name="edit_copy"			group="edit_operations" />
         <Action name="report_mail_to_owner"		group="report_operations"/>
