@@ -16,7 +16,7 @@ License:      GPL
 Group:        Productivity/File utilities
 Summary:      Graphical directory statistics for used disk space
 Version:      2.3.7
-Release:      35
+Release:      0
 BuildRoot:    %{_tmppath}/%{name}-%{version}-build
 Source0:      kdirstat-%{version}.tar.bz2
 
