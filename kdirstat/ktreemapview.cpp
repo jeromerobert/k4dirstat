@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-02-04
+ *   Updated:	2003-10-20
  */
 
 
@@ -218,12 +218,12 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 		    // If a directory (non-leaf tile) is already selected,
 		    // don't override this by
 
-		    emit contextMenu( _selectedTile, event->pos() );
+		    emit contextMenu( _selectedTile, event->globalPos() );
 		}
 		else
 		{
 		    selectTile( tile );
-		    emit contextMenu( tile, event->pos() );
+		    emit contextMenu( tile, event->globalPos() );
 		}
 
 		emit userActivity( 3 );
