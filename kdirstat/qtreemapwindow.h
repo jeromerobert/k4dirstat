@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.4 2001/07/11 02:16:03 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.5 2001/07/12 22:39:35 alexannika Exp $
  *
  */
 
@@ -39,6 +39,7 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qscrollview.h>
+#include <qlineedit.h>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -76,6 +77,7 @@ namespace KDirStat
 
     public slots:
 
+      void findMatch();
     void setStatusBar(Object *found);
     void setDirectoryLabel(Object *newdir);
     void selectDrawmode(int id);
@@ -101,9 +103,11 @@ namespace KDirStat
 
     QTreeMapOptions *options;
 
+    // toolbar widgets
   QLabel *dir_name_label;
   QLabel *info_label;
   QPushButton *up_button;
+  QLineEdit *find_entry;
 
   QTreeMapArea *graph_widget;
 

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemap.h,v 1.1 2001/07/01 17:14:43 alexannika Exp $
+ *   $Id: kdirtreemap.h,v 1.2 2001/07/12 22:39:35 alexannika Exp $
  *
  */
 
@@ -64,6 +64,9 @@ namespace KDirStat
 
     // reimplemented abstract functions
 
+    void dirChange(Object *node);
+
+    QString shortName(Object *node);
     QString fullName(Object *node);
     Object *firstChild(Object *node);
     int   totalSize(Object *node);
@@ -84,6 +87,8 @@ namespace KDirStat
   signals:
 
     void highlighted(Object *high);
+    void changedDirectory(Object *high);
+
   };
 
 } // namespace

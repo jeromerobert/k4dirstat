@@ -32,9 +32,14 @@ time
 <br>&nbsp;
 <h4>
 Example screenshots:</h4>
-<img SRC="screenshots/flat_usr_x11r6_medium.png" NOSAVE height=264 width=404><img SRC="screenshots/simple_cushion_usr_x11r6_medium.png" NOSAVE height=264 width=404>
+<img SRC="screenshots/flat_usr_x11r6_small.png" NOSAVE height=180 width=214><img SRC="screenshots/dist_cushion_mono_usr_x11r6_small.png" NOSAVE height=180 width=214><img SRC="screenshots/sqr_bump_usr_x11r6_small.png" NOSAVE height=180 width=214>
 <p>The left picture shows my /usr/X11R6 tree drawn with shading 'Flat'
-<br>The right picture shows /usr/X11R6 with 'Sinus' shading
+in cyclic mode
+<br>The middle picture shows /usr/X11R6 with 'Hierarch. Dist Cushion' shading
+in monochrome mode,
+<br>&nbsp;&nbsp;&nbsp; the blueish rectangles match the regexp "\.so"
+<br>The right picture shows /usr/X11R6 drawn with squarified Treemaps in
+'Fast Bump' shading.
 <br>&nbsp;
 <br>&nbsp;
 <h4>
@@ -52,7 +57,14 @@ the direction of that file</li>
 click right mouse button and a popmenu will open, displaying the file name
 and size of each subpath</li>
 
-<br>calling konqueror or xterm is broken, no delete yet</ul>
+<br>calling konqueror or xterm is broken, no delete yet
+<li>
+enter a regexp in the text entry field (in the toolbar), and all files
+which match that regexp will be drawn highlighted</li>
+
+<br>enter another regexp to highlight more
+<br>enter an empty string (and hit return) and the selection will be cleared
+<br>&nbsp;</ul>
 
 <h4>
 Description of Shadings and Options:</h4>
@@ -69,11 +81,11 @@ Flat</li>
 
 <br>draws flat rectangles
 <li>
-Image<br>
-like Flat, except: when the corresponding file is an image (like a jpeg
-or png), the image is loaded and displayed in the rectangle<br>
-this is only sensible with <a href="#squarifyTreemaps">squarified Treemaps</a></li>
+Image</li>
 
+<br>like Flat, except: when the corresponding file is an image (like a
+jpeg or png), the image is loaded and displayed in the rectangle
+<br>this is only sensible with <a href="#squarifyTreemaps">squarified Treemaps</a>
 <li>
 Sinus</li>
 
@@ -202,12 +214,12 @@ Draw Text</li>
 
 <br>draws Text into each rectangle
 <li>
-<a NAME="squarifyTreemaps"></a>squarify Treemaps<br>
-the treemaps are drawn with a different algorithm, which tries to lay out
-the rectangles so that they don't get thin and flat - the result is rectangles
-which have a better aspect<br>
-can be quite confusing, the hierarchy is not as good visible as without</li>
+<a NAME="squarifyTreemaps"></a>squarify Treemaps</li>
 
+<br>the treemaps are drawn with a different algorithm, which tries to lay
+out the rectangles so that they don't get thin and flat - the result is
+rectangles which have a better aspect
+<br>can be quite confusing, the hierarchy is not as good visible as without
 <li>
 dynamic Shading</li>
 
@@ -244,9 +256,6 @@ warnings about RGB parameters</li>
 Planned:</h4>
 
 <ul>
-<li>
-squarified treemaps</li>
-
 <li>
 moving (drag'n'drop) of files into other directories</li>
 
@@ -326,7 +335,7 @@ java treemap component</li>
 
 <hr WIDTH="100%">
 <p>Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Last modification Date: 11 July 2001
+Last modification Date: 12 July 2001
 <br>&nbsp;
 <br>&nbsp;
 </body>

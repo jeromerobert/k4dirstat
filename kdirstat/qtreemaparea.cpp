@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.8 2001/07/12 01:44:17 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.9 2001/07/12 22:39:35 alexannika Exp $
  *
  */
 
@@ -79,6 +79,8 @@ void QTreeMapArea::setTreeMap(Object *dutree){
 
   if(root_tree){
     drawTreeMap(dutree);
+
+    dirChange(dutree);
 
     emit changedDirectory(dutree);
   }
@@ -279,6 +281,35 @@ void QTreeMapArea::resizeEvent( QResizeEvent *ev)
   NOT_USED(ev);
 
     update();   // Trigger repaint on resize
+}
+
+void QTreeMapArea::findMatch(const QString find){
+  found_kfileinfo=NULL;
+  find_regexp=QRegExp(find,FALSE,FALSE);
+
+  Object *dutree=root_tree;
+
+    painter->begin(&offscreen);
+
+    Cushion *cushion=new Cushion(options->paint_size_x,options->paint_size_y,options->sequoia_h,options->sequoia_f);
+
+    if(find==""){
+      // redraw clean
+      drawDuTree(dutree,0,0,options->paint_size_x,options->paint_size_y,options->start_direction,0,cushion);
+    }
+    else{
+      drawDuTree(dutree,0,0,options->paint_size_x,options->paint_size_y,options->start_direction,0,cushion,-1,-1,FIND_MATCH);
+    }
+
+    delete cushion;
+
+    painter->end();
+
+  win_painter->begin(this);
+  win_painter->drawPixmap(0,0,offscreen,0,0,options->paint_size_x,options->paint_size_y);
+  win_painter->flush();
+  win_painter->end();
+
 }
 
 void QTreeMapArea::buttonUp(){

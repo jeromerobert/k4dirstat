@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.8 2001/07/12 01:44:17 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.9 2001/07/12 22:39:35 alexannika Exp $
  *
  */
 
@@ -103,6 +103,7 @@ namespace KDirStat
 #define FIND_NOTHING 0
 #define FIND_FILE 1
 #define FIND_FIRSTDIR 2
+#define FIND_MATCH 3
 
   // directions
 
@@ -204,12 +205,17 @@ public:
     void  resizeEvent( QResizeEvent *ev);
     void mousePressEvent(QMouseEvent *mouse);
     //  QString  tellUnit(int size);
+  void findMatch(const QString find);
 
     int check_int(int i);
 
+
   // pure virtual functions
 
+    virtual void dirChange(Object *node) =0;
+
     virtual QString fullName(Object *node) =0;
+    virtual QString shortName(Object *node) =0;
     virtual Object *firstChild(Object *node) =0;
     virtual int   totalSize(Object *node) =0;
     virtual bool isLeaf(Object *node)=0;
@@ -234,6 +240,8 @@ public:
   void appendRectlist(QString node_name,int x,int y,int xd,int yd);
   int getNextRotatingColorIndex();
 
+
+  // for squarified treemaps
   ObjList *sortedList(Object *dutree);
   void squarifyTree(Object *dutree,int x0,int y0,int xd0,int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode);
   void squarifyList(ObjList *slist,int ci,int sri,int ri,int x0,int y0,int xd0,int yd0, bool bogus_direction, int level,Cushion *cushion,int fx,int fy,int findmode);
@@ -265,6 +273,8 @@ public:
   QHBox *dir_box;
 
   Object *found_kfileinfo;
+  QRegExp find_regexp;
+
   QColor tooltipBgColor;
   QColor tooltipFgColor;
   QColor dirBaseColor;

@@ -1,3 +1,8 @@
+2001-07-12 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* user can search for regexp, matches get highlighted
+	* current_dir_display working again
+
 2001-07-11 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* new shading: image (sensible only with squarify)

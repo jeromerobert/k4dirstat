@@ -73,6 +73,8 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
     drawDuTree(dutree,x0,y0,xd0,yd0,options->start_direction,0,cushion);
   }
 
+  delete cushion;
+
   //  printf("END OF RECURSION\n");
     painter->end();
 
@@ -91,7 +93,13 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
   //    printf("QTreeMapArea::drawDuTree(%s,%d,%d,%d,%d,dir=%d,level=%d) %d\n",node_name.latin1(),x0,y0,xd0,yd0,direction,level,node_totalsize);
 
   if(options->dont_draw_xyd==-1 || (xd0>=options->dont_draw_xyd && yd0>=options->dont_draw_xyd)){
-  if(fx>=0 && fy>=0){
+    if(findmode==FIND_MATCH){
+      if(find_regexp.match(node_name)!=-1){
+	found_kfileinfo=dutree;
+	//	printf("found match: %s\n",node_name.latin1());
+      }
+    }
+    /* else */ if((fx>=0 && fy>=0) /* && findmode!=FIND_MATCH */){
     // search mode
     if( ( x0<=fx && fx<=(x0+xd0) ) && ( ( y0<=fy && fy<=(y0+yd0)) ) ){
       // mouse coord are inside this entries coordinates
@@ -110,7 +118,8 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
       }
     }
   }
-  else{
+
+  if(TRUE){
     // not in search mode
     if(cushion!=NULL){
       c=new Cushion(*cushion);
@@ -193,6 +202,12 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	      paintEntry(x0,y0,xd0,yd0,node_name,direction,level,options->highlight_frame_col,pmode,c);
 	  }
 	}
+	else if(findmode==FIND_MATCH){
+	  if(dutree==found_kfileinfo){
+	    QColor foundcolor=QColor(100,200,230);
+	    paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);	    
+	  }
+	}
 	else{
 	  // really draw this entry
 	  pmode=options->paintmode;
@@ -225,6 +240,9 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	  if(dutree==found_kfileinfo){
 	    paintEntry(x0,y0,xd0,yd0,node_name,direction,level,options->highlight_frame_col,pmode,c);
 	  }
+	}
+	else if(findmode==FIND_MATCH){
+	  // leave it
 	}
 	else{
 	  // draw the rectangle

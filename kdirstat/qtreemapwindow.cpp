@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
- *   Updated:	2001-06-11
+ *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.8 2001/07/12 01:44:17 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.9 2001/07/12 22:39:35 alexannika Exp $
  *
  */
 
@@ -41,6 +41,7 @@ void QTreeMapWindow::makeWidgets(){
   up_button=new QPushButton("Up",toolbar);
   zoom_in_button=new QPushButton("ZoomIn",toolbar);
   zoom_out_button=new QPushButton("ZoomOut",toolbar);
+  find_entry=new QLineEdit(toolbar);
   dir_name_label=new QLabel("current dirname", toolbar);
 
   this->addToolBar(toolbar,"High!");
@@ -174,6 +175,8 @@ void QTreeMapWindow::makeWidgets(){
 
   sleep(1);
   printf("CONNECTS\n");
+  QObject::connect(find_entry,SIGNAL(returnPressed()), this, SLOT(findMatch()));
+
   QObject::connect(up_button, SIGNAL(clicked()), qtm_area, SLOT(directoryUp()));
   QObject::connect(zoom_in_button, SIGNAL(clicked()), qtm_area, SLOT(zoomIn()));
   QObject::connect(zoom_out_button, SIGNAL(clicked()), qtm_area , SLOT(zoomOut()));
@@ -201,6 +204,13 @@ void QTreeMapWindow::makeRadioPopup(QPopupMenu *menu,const QString& title, const
   
 }
 
+void QTreeMapWindow::findMatch(){
+  QString find=find_entry->text();
+
+  graph_widget->findMatch(find);
+}
+
+
 void QTreeMapWindow::setStatusBar(Object *found){
   //  statusbar->message(found->debugUrl());
 
@@ -208,7 +218,7 @@ void QTreeMapWindow::setStatusBar(Object *found){
   QString mess=QString("");
   while(walk!=NULL){
     QString part;
-    part.sprintf("%s/ %s",graph_widget->fullName(walk).latin1(),
+    part.sprintf("%s/ %s",graph_widget->shortName(walk).latin1(),
 		 graph_widget->tellUnit(  graph_widget->totalSize(walk)).latin1());
     mess=part+"   "+mess;
     walk=graph_widget->parentNode(walk);
