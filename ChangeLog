@@ -1,4 +1,8 @@
 2001-09-26 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* committed Makefile.am from kdirstat-1-7-10-devel
+
+2001-09-26 Alexander Rawass <alexannika@users.sourceforge.net>
 	
 	* debugging output in kparts
 	
