@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-08
  */
 
 
@@ -674,7 +674,7 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 	popupContextInfo( pos, formatTimeDate( item->orig()->latestMtime() ) );
     }
 
-    logActivity( 2 );
+    logActivity( 3 );
 }
 
 
@@ -1210,7 +1210,7 @@ KDirTreeViewItem::setOpen( bool open )
 
     // kdDebug() << _openCount << " open in " << this << endl;
     
-    _view->logActivity( 1 );
+    // _view->logActivity( 1 );
 }
 
 

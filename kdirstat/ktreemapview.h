@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-08
  */
 
 
@@ -203,8 +203,8 @@ namespace KDirStat
 	bool canSelectParent() const;
 
 	/**
-	 * Returns 'true' if the treemap is automatically resized to fit into the
-	 * available space, 'false' if not.
+	 * Returns 'true' if the treemap is automatically resized to fit into
+	 * the available space, 'false' if not.
 	 **/
 	bool autoResize() const { return _autoResize; }
 
@@ -243,7 +243,7 @@ namespace KDirStat
 	const QColor & cushionGridColor() const { return _cushionGridColor; }
 
 	/**
-	 * Returns the outline (pen) color to use if cushion shading is not used.
+	 * Returns the outline color to use if cushion shading is not used.
 	 **/
 	const QColor & outlineColor() const { return _outlineColor; }
 
@@ -258,7 +258,7 @@ namespace KDirStat
 	 * when cushion shading is not used.
 	 **/
 	const QColor & dirFillColor() const { return _dirFillColor; }
-	
+
 	/**
 	 * Returns the intensity of ambient light for cushion shading.
 	 * ambientLight() + lightIntensity() are in the range [0..255].
@@ -266,24 +266,29 @@ namespace KDirStat
 	int ambientLight() const { return _ambientLight; }
 
 	/**
-	 * Returns the intensity of a directed light source for cushion shading.
+	 * Returns the intensity of a directed light source for cushion
+	 * shading.
+	 *
 	 * ambientLight() + lightIntensity() are in the range [0..255].
 	 **/
 	int lightIntensity() const { return _lightIntensity; }
 
 	/**
-	 * Returns the X coordinate of a directed light source for cushion shading.
+	 * Returns the X coordinate of a directed light source for cushion
+	 * shading.
 	 **/
 
 	double lightX() const { return _lightX; }
 
 	/**
-	 * Returns the Y coordinate of a directed light source for cushion shading.
+	 * Returns the Y coordinate of a directed light source for cushion
+	 * shading.
 	 **/
 	double lightY() const { return _lightY; }
 
 	/**
-	 * Returns the Z coordinate of a directed light source for cushion shading.
+	 * Returns the Z coordinate of a directed light source for cushion
+	 * shading.
 	 **/
 	double lightZ() const { return _lightZ; }
 
@@ -314,6 +319,15 @@ namespace KDirStat
 	 * coordinates.
 	 **/
 	void contextMenu( KTreemapTile * tile, const QPoint & pos );
+
+	/**
+	 * Emitted at user activity. Some interactive actions are assigned an
+	 * amount of "activity points" that can be used to judge whether or not
+	 * the user is actually using this program or if it's just idly sitting
+	 * around on the desktop. This is intended for use together with a @ref
+	 * KActivityTracker.
+	 **/
+	void userActivity( int points );
 
 
     protected:

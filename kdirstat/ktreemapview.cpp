@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-08
  */
 
 
@@ -153,6 +153,7 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
     {
 	case LeftButton:
 	    selectTile( tile );
+	    emit userActivity( 1 );
 	    break;
 
 	case MidButton:
@@ -174,13 +175,28 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 	    // hierarchy (i.e. the topmost directory is highlighted).
 
 	    selectTile( tile );
+	    emit userActivity( 1 );
 	    break;
 
 	case RightButton:
+
 	    if ( tile )
 	    {
-		selectTile( tile );
-		emit contextMenu( tile, event->pos() );
+		if ( _selectedTile &&
+		     _selectedTile->rect().contains( event->pos() ) )
+		{
+		    // If a directory (non-leaf tile) is already selected,
+		    // don't override this by 
+		    
+		    emit contextMenu( _selectedTile, event->pos() );
+		}
+		else
+		{
+		    selectTile( tile );
+		    emit contextMenu( tile, event->pos() );
+		}
+
+		emit userActivity( 3 );
 	    }
 	    break;
     }
@@ -201,18 +217,26 @@ KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 	    {
 		selectTile( tile );
 		zoomIn();
+		emit userActivity( 5 );
 	    }
 	    break;
 
 	case MidButton:
-	    if ( _rootTile )
-		rebuildTreemap( _rootTile->orig() );
-	    else if ( _tree && _tree->root() )
-		rebuildTreemap( _tree->root() );
+	    zoomOut();
+	    emit userActivity( 5 );
 	    break;
 
 	case RightButton:
-	    zoomOut();
+	    // Double-clicking the right mouse button is pretty useless - the
+	    // first click opens the context menu: Single clicks are always
+	    // delivered first. Even if that would be caught by using timers,
+	    // it would still be very awkward to use: Click too slow, and
+	    // you'll get the context menu rather than what you really wanted -
+	    // then you'd have to get rid of the context menu first.
+	    break;
+
+	default:
+	    // Prevent compiler complaints about missing enum values in switch
 	    break;
     }
 }
