@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-25
+ *   Updated:	2001-12-01
  *
- *   $Id: kdirtree.h,v 1.6 2001/11/27 09:40:18 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.7 2001/12/03 10:19:21 hundhammer Exp $
  *
  */
 
@@ -1052,6 +1052,9 @@ namespace KDirStat
 	 **/
 	virtual ~KDirTree();
 
+	
+     public slots:
+     
 	/**
 	 * Actually start reading.
 	 *
@@ -1076,6 +1079,9 @@ namespace KDirStat
 	 * root element on.
 	 **/
 	void refresh( KFileInfo *subtree = 0 );
+
+	
+    public:
 	
 	/**
 	 * Returns the root item of this tree.
