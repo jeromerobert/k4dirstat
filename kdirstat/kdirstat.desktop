@@ -1,20 +1,20 @@
 # KDE Config File
 [Desktop Entry]
 Type=Application
+MimeType=inode/directory
 Exec=kdirstat -caption "%c" %i %m
 Icon=kdirstat.png
 MiniIcon=kdirstat.png
 DocPath=kdirstat/index.html
 Encoding=UTF-8
+Terminal=0
+Name=KDirStat
+GenericName=Directory Statistics
+GenericName[de]=Verzeichnisstatistik
+GenericName[hu]=könyvtárstatisztika
 Comment=Directory statistics and disk usage
 Comment[de]=Verzeichnisstatistik und Platzverbrauch
 Comment[hu]=Könyvtárstatisztikák és szabad hely
-Terminal=0
-Name=KDirStat - Directory Statistics
-Name[de]=KDirStat - Verzeichnisstatistik
-Name[hu]=KDirStat könyvtárstatisztika
-
-MimeType=inode/directory
 
 
 
