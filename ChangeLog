@@ -1,3 +1,9 @@
+2001-08-18 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* V1.7.8-devel
+	* added kdirstat.spec (to build rpms)
+	* released kdirstat-1.7.8-1.i386.rpm
+
 2001-08-17 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* removed files q*{cpp,h} from cvs
