@@ -24,7 +24,7 @@ EXTRA_DIST = 					\
 # if have all needed files a GNU package needs.
 AUTOMAKE_OPTIONS = foreign
 
-CLEANFILES = $(wildcard autom4te.cache/*)
+CLEANFILES = autom4te.cache
 
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in ;

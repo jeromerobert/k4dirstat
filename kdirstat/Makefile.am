@@ -58,26 +58,12 @@ update_DATA	= kdirstat.upd
 update_SCRIPTS	= fix_move_to_trash_bin.pl
 
 
-kdirstat_LDADD = $(LIB_KFILE) -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
+kdirstat_LDADD = $(LIB_KFILE)
 
-install-data-local:
-	$(mkinstalldirs) $(kde_appsdir)/Utilities/
-	$(INSTALL_DATA) $(srcdir)/kdirstat.desktop $(kde_appsdir)/Utilities/kdirstat.desktop
-	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
-	$(INSTALL_DATA) $(srcdir)/lo32-app-kdirstat.png $(kde_icondir)/locolor/32x32/apps/kdirstat.png
-	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
-	$(INSTALL_DATA) $(srcdir)/lo16-app-kdirstat.png $(kde_icondir)/locolor/16x16/apps/kdirstat.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
-	$(INSTALL_DATA) $(srcdir)/hi32-app-kdirstat.png $(kde_icondir)/hicolor/32x32/apps/kdirstat.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
-	$(INSTALL_DATA) $(srcdir)/hi16-app-kdirstat.png $(kde_icondir)/hicolor/16x16/apps/kdirstat.png
+KDE_ICON = kdirstat
 
-uninstall-local:
-	-rm -f $(kde_appsdir)/Applications/kdirstat.desktop
-	-rm -f $(kde_icondir)/locolor/32x32/apps/kdirstat.png
-	-rm -f $(kde_icondir)/locolor/16x16/apps/kdirstat.png
-	-rm -f $(kde_icondir)/hicolor/32x32/apps/kdirstat.png
-	-rm -f $(kde_icondir)/hicolor/16x16/apps/kdirstat.png
+applnkdir = $(kde_appsdir)/Utilities
+applnk_DATA = kdirstat.desktop
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
@@ -109,8 +95,4 @@ messages: rc.cpp
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) $$LIST -o $(podir)/kdirstat.pot; \
 	fi
-
-
-
-
 
