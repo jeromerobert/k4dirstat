@@ -9,21 +9,24 @@
 #
 
 # neededforbuild  kde3-devel-packages
-# usedforbuild    aaa_base acl attr bash bind9-utils bison coreutils cpio cpp cvs cyrus-sasl2 db devs diffutils e2fsprogs file filesystem fillup findutils flex gawk gdbm-devel glibc glibc-devel glibc-locale gpm grep groff gzip info insserv kbd less libacl libattr libgcc libstdc++ libxcrypt m4 make man mktemp modutils ncurses ncurses-devel net-tools netcfg pam pam-devel pam-modules patch permissions ps rcs readline sed sendmail shadow strace syslogd sysvinit tar texinfo timezone unzip util-linux vim zlib zlib-devel XFree86-devel XFree86-libs arts arts-devel autoconf automake binutils bzip2 cracklib expat fam fam-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext kdelibs3 kdelibs3-devel libart_lgpl libart_lgpl-devel libjpeg liblcms liblcms-devel libmng libmng-devel libpng libpng-devel libstdc++-devel libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel mesa mesa-devel mesaglu mesaglu-devel mesaglut mesaglut-devel mesasoft openssl openssl-devel perl qt3 qt3-devel rpm
+# usedforbuild    aaa_base acl attr bash bind-utils bison bzip2 coreutils cpio cpp cvs cyrus-sasl db devs diffutils e2fsprogs file filesystem fillup findutils flex gawk gdbm-devel glibc glibc-devel glibc-locale gpm grep groff gzip info insserv kbd less libacl libattr libgcc libstdc++ libxcrypt m4 make man mktemp modutils ncurses ncurses-devel net-tools netcfg openldap2-client openssl pam pam-devel pam-modules patch permissions popt ps rcs readline sed sendmail shadow strace syslogd sysvinit tar texinfo timezone unzip util-linux vim zlib zlib-devel XFree86-Mesa XFree86-Mesa-devel XFree86-devel XFree86-libs arts arts-devel autoconf automake binutils cracklib expat fam fam-devel fontconfig fontconfig-devel freeglut freeglut-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext glib2 glib2-devel gnome-filesystem kdelibs3 kdelibs3-devel libart_lgpl libart_lgpl-devel libjpeg liblcms liblcms-devel libmng libmng-devel libpng libpng-devel libstdc++-devel libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel openssl-devel pcre pcre-devel perl qt3 qt3-devel rpm update-desktop-files
 
 Name:         kdirstat
+URL:          http://kdirstat.sourceforge.net
 License:      GPL
 Group:        Productivity/File utilities
-Summary:      Graphical directory statistics for used disk space
+Summary:      Graphical Directory Statistics for Used Disk Space
 Version:      2.4.1
 Release:      0
 BuildRoot:    %{_tmppath}/%{name}-%{version}-build
 Source0:      kdirstat-%{version}.tar.bz2
 
 %description
-KDirStat (for KDE Directory Statistics) is a utility program that sums up
-disk usage for direcory trees - very much like the Unix 'du' command.
-It also can help you clean up used space.
+KDirStat (KDE Directory Statistics) is a utility program that sums up
+disk usage for directory trees - very much like the Unix 'du' command.
+It can also help you clean up used space.
+
+
 
 Authors:
 --------
@@ -48,6 +51,22 @@ make DESTDIR=$RPM_BUILD_ROOT install-strip
 /opt/kde3/share/apps/kdirstat
 /opt/kde3/share/applnk/*/kdirstat*
 /opt/kde3/share/doc/HTML/*/kdirstat/
+%dir /opt/kde3/share/icons/hicolor/16x16
+%dir /opt/kde3/share/icons/hicolor/16x16/apps
+%dir /opt/kde3/share/icons/hicolor/32x32
+%dir /opt/kde3/share/icons/hicolor/32x32/apps
+%dir /opt/kde3/share/icons/locolor/16x16/apps
+%dir /opt/kde3/share/icons/locolor/32x32/apps
 /opt/kde3/share/icons/??color/??x??/*/kdirstat*
+%dir /opt/kde3/share/locale/de
+%dir /opt/kde3/share/locale/de/LC_MESSAGES
+%dir /opt/kde3/share/locale/fr
+%dir /opt/kde3/share/locale/fr/LC_MESSAGES
+%dir /opt/kde3/share/locale/hu
+%dir /opt/kde3/share/locale/hu/LC_MESSAGES
+%dir /opt/kde3/share/locale/ja
+%dir /opt/kde3/share/locale/ja/LC_MESSAGES
 /opt/kde3/share/locale/*/LC_MESSAGES/kdirstat.mo
 
+
+%changelog -n kdirstat
