@@ -628,6 +628,7 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( ext == "o"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "lo"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "Po"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == ".moc.cpp"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == ".moc.cc"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == ".elc"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "la"	)	return QColor( 0xff, 0xa0, 0x00 );
