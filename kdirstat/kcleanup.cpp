@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2003-10-29
  */
 
 
@@ -311,26 +311,31 @@ KCleanup::expandVariables( const KFileInfo *	item,
 {
     QString expanded = unexpanded;
 
-    expanded.replace ( QRegExp ( "%p"	), "\"" + item->url()  + "\"" );
-    expanded.replace ( QRegExp ( "%n"	), "\"" + item->name() + "\"" );
-    expanded.replace ( QRegExp ( "%t"	), KGlobalSettings::trashPath() );
+    expanded.replace ( QRegExp ( "%p" ),
+		       "\"" + QString::fromLocal8Bit(item->url())  + "\"" );
+    expanded.replace ( QRegExp ( "%n" ),
+		       "\"" + QString::fromLocal8Bit(item->name()) + "\"" );
+    expanded.replace ( QRegExp ( "%t" ), KGlobalSettings::trashPath() );
 
     return expanded;
 }
 
-
+#include <qtextcodec.h>
 void
 KCleanup::runCommand ( const KFileInfo *	item,
 		       const QString &		command ) const
 {
     KProcess	proc;
     KDirSaver	dir( itemDir( item ) );
-    QString	cmd( QString::fromLocal8Bit(expandVariables( item, command )));
+    QString	cmd( expandVariables( item, command ));
 
 #if VERBOSE_RUN_COMMAND
-    printf( "\ncd " );				fflush( stdout );
+    printf( "\ncd " );
+    fflush( stdout );
     system( "pwd" );
-    printf( "%s\n", (const char *) cmd );	fflush( stdout );
+    QTextCodec * codec = QTextCodec::codecForLocale();
+    printf( "%s\n", (const char *) codec->fromUnicode( cmd ) );
+    fflush( stdout );
 #endif
 
 #if ! SIMULATE_COMMAND

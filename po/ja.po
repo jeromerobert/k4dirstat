@@ -1,20 +1,51 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# translation of ja.po to 
+# translation of ja.po to
+# translation of ja.po to
+# translation of ja.po to
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# Toyohiro Asukai <toyohiro@ksmplus.com>, 2003
+#, no-wrap
 msgid ""
 msgstr ""
-"Project-Id-Version: kdirstat 2.1.0 beta\n"
-"POT-Creation-Date: 2002-04-19 13:38+0900\n"
-"PO-Revision-Date: 2002-04-23 11:43+0900\n"
+"Project-Id-Version: ja\n"
+"POT-Creation-Date: 2003-10-27 14:56+0900\n"
+"PO-Revision-Date: 2003-10-29 17:08+0900\n"
 "Last-Translator: Toyohiro Asukai <toyohiro@ksmplus.com>\n"
-"Language-Team: Japanese <Kdeveloper@kde.gr.jp>\n"
+"Language-Team:  <Kdeveloper@kde.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 3.1.2\n"
 
-#: kcleanup.cpp:171
+#: kstdcleanup.cpp:23
+msgid "Open in &Konqueror"
+msgstr "Konquerorで開く(&K)"
+
+#: kstdcleanup.cpp:43
+msgid "Open in &Terminal"
+msgstr "ターミナルで開く(&T)"
+
+#: kstdcleanup.cpp:62
+msgid "&Compress"
+msgstr "圧縮(&C)"
+
+#: kstdcleanup.cpp:80
+msgid "&make clean"
+msgstr "&make clean"
+
+#: kstdcleanup.cpp:97
+msgid "Delete T&rash Files"
+msgstr "ゴミ箱を空に(&r)"
+
+#: kstdcleanup.cpp:115
+msgid "Delete (to Trash &Bin)"
+msgstr "ゴミ箱へ(&B)"
+
+#: kstdcleanup.cpp:134
+msgid "&Delete (no way to undelete!)"
+msgstr "削除(復元できない)(&D)"
+
+#: kcleanup.cpp:169
 msgid ""
 "%1\n"
 "in directory %2"
@@ -22,7 +53,7 @@ msgstr ""
 "%1\n"
 "ディレクトリー %2"
 
-#: kcleanup.cpp:175
+#: kcleanup.cpp:173
 msgid ""
 "%1\n"
 "for file %2"
@@ -30,266 +61,516 @@ msgstr ""
 "%1\n"
 "ファイル %2"
 
-#: kcleanup.cpp:180 kdirstatsettings.cpp:100
-msgid "Please confirm"
+#: kcleanup.cpp:178 kdirstatsettings.cpp:106
+msgid "Please Confirm"
 msgstr "確認してください"
 
-#: kcleanup.cpp:181
+#: kcleanup.cpp:179
 msgid "Confirm"
 msgstr "確認"
 
-#: kdirstatapp.cpp:126
-msgid "Refresh &All"
-msgstr "再表示(&A)"
+#: kfeedback.cpp:32
+msgid "Feedback"
+msgstr "フィードバック"
 
-#: kdirstatapp.cpp:130
-msgid "Refresh &Selected"
-msgstr "選択した項目を再表示(&S)"
+#: kfeedback.cpp:38
+msgid "&Mail this..."
+msgstr "これをメール(&M)..."
 
-#: kdirstatapp.cpp:134
-msgid "Continue Reading at &Mount Point"
-msgstr "マウントポイントで読込みます(&M)"
-
-#: kdirstatapp.cpp:144
-msgid "Send &Mail to Owner"
-msgstr "所有者にメールを送ります(&M)"
-
-#: kdirstatapp.cpp:148
-msgid "Send &Feedback Mail..."
-msgstr "フィードバックメールを送ります(&F)"
-
-#: kdirstatapp.cpp:153
-msgid "Opens a directory"
-msgstr "ディレクトリを開く"
-
-#: kdirstatapp.cpp:154
-msgid "Opens a recently used directory"
-msgstr "以前使用したディレクトリを開く"
-
-#: kdirstatapp.cpp:155
-msgid "Closes the current directory"
-msgstr "現在のディレクトリを閉じる"
-
-#: kdirstatapp.cpp:156
-msgid "Re-reads the entire directory tree"
-msgstr "全てのディレクトリツリーの再読込み"
-
-#: kdirstatapp.cpp:157
-msgid "Re-reads the selected subtree"
-msgstr "選択したサブツリーの再読込み"
-
-#: kdirstatapp.cpp:158
-msgid "Scan mounted file systems"
-msgstr "マウントしたファイルシステムを調査"
-
-#: kdirstatapp.cpp:159
-msgid "Quits the application"
-msgstr "アプリケーションを終了"
-
-#: kdirstatapp.cpp:160
-msgid "Copies the URL of the selected item to the clipboard"
-msgstr "選択した項目のURLをクリップボードにコピー"
-
-#: kdirstatapp.cpp:161
-msgid "Enables/disables the toolbar"
-msgstr "有効/無効 ツールバー"
-
-#: kdirstatapp.cpp:162
-msgid "Enables/disables the statusbar"
-msgstr "有効/無効 ステータスバー"
-
-#: kdirstatapp.cpp:163
-msgid "Opens the preferences dialog"
-msgstr "初期設定ダイアログを開く"
-
-#: kdirstatapp.cpp:164
-msgid "Sends a mail to the owner of the selected subtree"
-msgstr "選択したサブツリーの所有者にメールを送る"
-
-#: kdirstatapp.cpp:216 kdirstatapp.cpp:250 kdirstatapp.cpp:349
-#: kdirstatapp.cpp:361 kdirstatapp.cpp:374 kdirstatapp.cpp:383
-#: kdirstatapp.cpp:395
-msgid "Ready."
-msgstr "準備"
-
-#: kdirstatapp.cpp:243 kdirstatapp.cpp:342 kdirstatapp.cpp:356
-msgid "Opening directory..."
-msgstr "ディレクトリを開いてます"
-
-#: kdirstatapp.cpp:344
-msgid "Open Directory..."
-msgstr "ディレクトリを開きました"
-
-#: kdirstatapp.cpp:368
-msgid "Closing directory..."
-msgstr "ディレクトリを閉じています"
-
-#: kdirstatapp.cpp:381
-msgid "Refreshing directory tree..."
-msgstr "ディレクトリツリーの再表示中"
-
-#: kdirstatapp.cpp:393
-msgid "Refreshing selected subtree..."
-msgstr "選択したサブツリーを再表示中"
-
-#: kdirstatapp.cpp:482
+#: kfeedback.cpp:88
 msgid ""
-"Now that you know this program for some time,\n"
-"wouldn't you like to tell the authors your opinion about it?\n"
-"\n"
-"Open Source software depends on user feedback.\n"
-"Your opinion can help us make the software better."
+"<p><b>Please tell us your opinion about this program.</b></p><p>You will be "
+"able to review everything in your mailer before any mail is sent.<br>Nothing "
+"will be sent behind your back.</p>"
 msgstr ""
-"今 時々、このプログラムをしる貴方は\n"
-"著者に貴方の意見を伝えたくありませんか?\n"
-"\n"
-"Open Sourceソフトウェアは、ユーザー・フィードバックに依存する。\n"
-"あなたの意見は、我々がよりよいソフトウェアの作成に手伝うことができる。"
+"<p><b>我々にこのプログラムに関するあなたの意見を聞かせてください</b></p><p>"
+"メールを送信する前に、あなたのメーラーですべてをチェックすることができます<br> "
+"何も、あなたに黙って送信されません</p>"
 
-#: kdirstatapp.cpp:487
-msgid "Please tell us your opinion!"
-msgstr "貴方の意見を聞かせてください! "
+#: kfeedback.cpp:113
+msgid "Questions marked with "
+msgstr "質問で、次の印"
 
-#: kdirstatapp.cpp:488
-msgid "Open &Feedback Form..."
-msgstr "フィードバックを開く(&F)"
+#: kfeedback.cpp:122
+msgid " must be answered before a mail can be sent."
+msgstr "は、メールを送信する前に、答えていなければいけません"
 
-#: kdirstatapp.cpp:489
-msgid "&No, and don't ask again!"
-msgstr "いいえ、再度尋ねるな! (&N)"
+#: kfeedback.cpp:133
+msgid "&Additional Comments:"
+msgstr "追加コメント(&A):"
 
-#: kdirtreeview.cpp:59
+#: kfeedback.cpp:311
+msgid "yes"
+msgstr "はい"
+
+#: kfeedback.cpp:312
+msgid "no"
+msgstr "いいえ"
+
+#: kdirtreeview.cpp:62
 msgid "Name"
 msgstr "名前"
 
-#: kdirtreeview.cpp:61
+#: kdirtreeview.cpp:64
 msgid "Subtree Percentage"
 msgstr "サブツリー・バーセンテージ"
 
-#: kdirtreeview.cpp:62
+#: kdirtreeview.cpp:65
 msgid "Percentage"
 msgstr "パーセンテージ"
 
-#: kdirtreeview.cpp:63
+#: kdirtreeview.cpp:66
 msgid "Subtree Total"
 msgstr "サブツリー合計"
 
-#: kdirtreeview.cpp:65
+#: kdirtreeview.cpp:68
 msgid "Own Size"
 msgstr "サイズ"
 
-#: kdirtreeview.cpp:66
+#: kdirtreeview.cpp:69
 msgid "Items"
 msgstr "アイテム数"
 
-#: kdirtreeview.cpp:67
+#: kdirtreeview.cpp:70
 msgid "Files"
 msgstr "ファイル数"
 
-#: kdirtreeview.cpp:68
+#: kdirtreeview.cpp:71
 msgid "Subdirs"
 msgstr "サブディレクトリ数"
 
-#: kdirtreeview.cpp:69
+#: kdirtreeview.cpp:72
 msgid "Last Change"
 msgstr "最終更新日"
 
-#: kdirtreeview.cpp:156
+#: kdirtreeview.cpp:165
 msgid "Read Jobs"
 msgstr "読取りジョブ"
 
-#: kdirtreeview.cpp:405
+#: kdirtreeview.cpp:434
 #, c-format
 msgid "Finished. Elapsed time: %1"
 msgstr "終了. 経過時間 : %1"
 
-#: kdirtreeview.cpp:440
+#: kdirtreeview.cpp:464
+#, c-format
+msgid "Aborted. Elapsed time: %1"
+msgstr "中断. 経過時間 : %1"
+
+#: kdirtreeview.cpp:499
 msgid "Elapsed time: %1   reading directory %2"
-msgstr "経過時間: %1 ディレクトリ読込み中 %2"
+msgstr "経過時間: %1   ディレクトリ読込み中 %2"
 
-#: kdirtreeview.cpp:704 kdirtreeview.cpp:1451
+#: kdirtree.cpp:1548 kdirtreeview.cpp:800
 msgid "Bytes"
-msgstr "Bytes"
+msgstr "バイト"
 
-#: kdirtreeview.cpp:803
-msgid "Disk usage"
+#: kdirtreeview.cpp:907
+msgid "Disk Usage"
 msgstr "ディスク使用状況"
 
-#: kdirtreeview.cpp:805
+#: kdirtreeview.cpp:909
 msgid "Please check your disk usage and clean up if you can. Thank you."
 msgstr "ディスク使用状況を確認してください、もし可能なら不要ファイルを削除してください"
 
-#: kdirtreeview.cpp:809
+#: kdirtreeview.cpp:913
 msgid "Disk usage report generated by KDirStat"
 msgstr "KDirStatによってディスク使用状況レポートを作成しました"
 
-#: kdirtreeview.cpp:868
+#: kdirtreeview.cpp:976
 msgid "<Files>"
 msgstr "<ファイル>"
 
-#: kdirtreeview.cpp:1460
-msgid "kB"
-msgstr "kB"
+#: kdirtreeview.cpp:1109
+msgid "[%1 Read Jobs]"
+msgstr "[%1 読込みジョブ]"
 
-#: kdirtreeview.cpp:1469
-msgid "MB"
-msgstr "MB"
+#: kdirstatfeedback.cpp:33
+msgid "What is your general opinion about this program?"
+msgstr "このプログラムに関するあなたの一般的な意見は、何ですか？"
 
-#: kdirtreeview.cpp:1476
-msgid "GB"
-msgstr "GB"
+#: kdirstatfeedback.cpp:35
+msgid "It's one of my favourites"
+msgstr "私のお気に入りの１つです"
 
-#: kstdcleanup.cpp:26
-msgid "Open in &Konqueror"
-msgstr "Konquerorで開く(&K)"
+#: kdirstatfeedback.cpp:36
+msgid "I like it"
+msgstr "好きです"
 
-#: kstdcleanup.cpp:46
-msgid "Open in &Terminal"
-msgstr "ターミナルで開く(&T)"
+#: kdirstatfeedback.cpp:37
+msgid "It's sometimes useful"
+msgstr "時々役に立ちます"
 
-#: kstdcleanup.cpp:65
-msgid "&Compress"
-msgstr "圧縮(&C)"
+#: kdirstatfeedback.cpp:38
+msgid "It's average"
+msgstr "普通です"
 
-#: kstdcleanup.cpp:83
-msgid "&make clean"
-msgstr "&make clean"
+#: kdirstatfeedback.cpp:39
+msgid "Nice try, but this could be done better"
+msgstr "素晴らしいです、しかしより良くすることができます"
 
-#: kstdcleanup.cpp:100
-msgid "Delete T&rash Files"
-msgstr "ゴミ箱ファイル削除 (&r)"
+#: kdirstatfeedback.cpp:40
+msgid "It's poor"
+msgstr "貧弱です"
 
-#: kstdcleanup.cpp:118
-msgid "Delete (to Trash &Bin)"
-msgstr "削除(to Trash &Bin)"
+#: kdirstatfeedback.cpp:41
+msgid "It's useless"
+msgstr "役に立ちません"
 
-#: kstdcleanup.cpp:137
-msgid "&Delete (no way to undelete!)"
-msgstr "削除(復活できない!)(&D)"
+#: kdirstatfeedback.cpp:42
+msgid "It's crap"
+msgstr "ナンセンスです"
 
-#: kcleanupcollection.cpp:234
-#, c-format
-msgid "User Defined Cleanup #&%1"
-msgstr "ユーザクリーンアップ定義 #&%1"
+#: kdirstatfeedback.cpp:44
+msgid "Which features of this program do you like?"
+msgstr "あなたは、このプログラムのどの機能が好きか？"
 
-#: kcleanupcollection.cpp:237
-#, c-format
-msgid "User Defined Cleanup #%1"
-msgstr "ユーザクリーンアップ定義 #%1"
+#: kdirstatfeedback.cpp:47
+msgid "Which features don't you like?"
+msgstr "あなたは、どの機能が嫌いですか？"
 
-#: kdirstatsettings.cpp:39
+#: kdirstatfeedback.cpp:50
+msgid "Which features do you never use?"
+msgstr "あなたは、どの機能を使用しませんか？"
+
+#: kdirstatfeedback.cpp:53
+msgid "What is your favourite feature?"
+msgstr "あなたの大好きな機能は、何ですか?"
+
+#: kdirstatfeedback.cpp:56
+msgid "Are there features you are missing?"
+msgstr "あなたが見逃している機能が、ありますか?"
+
+#: kdirstatfeedback.cpp:57
+msgid "Yes, a lot! (please add comment below)"
+msgstr "はい,たくさん！(コメントを下で記述)"
+
+#: kdirstatfeedback.cpp:58
+msgid "Some (please add comment below)"
+msgstr "いくつか（コメントを下で記述）"
+
+#: kdirstatfeedback.cpp:59
+msgid "None"
+msgstr "なし"
+
+#: kdirstatfeedback.cpp:60
+msgid "It has too many features already!"
+msgstr "すでにあまりに多くの機能を持つ！"
+
+#: kdirstatfeedback.cpp:62
+msgid "How do you rate the stability of this program?"
+msgstr "どのように、あなたはこのプログラムの安定度の評価を得ますか?"
+
+#: kdirstatfeedback.cpp:63
+msgid "Rock solid"
+msgstr "信頼できる"
+
+#: kdirstatfeedback.cpp:64 kdirstatfeedback.cpp:71
+msgid "Good"
+msgstr "良い"
+
+#: kdirstatfeedback.cpp:65 kdirstatfeedback.cpp:72 kdirstatfeedback.cpp:79
+#: kdirstatfeedback.cpp:86
+msgid "Average"
+msgstr "普通"
+
+#: kdirstatfeedback.cpp:66 kdirstatfeedback.cpp:73
+msgid "Poor"
+msgstr "貧弱"
+
+#: kdirstatfeedback.cpp:67
+msgid "It keeps crashing all the time"
+msgstr "ずっと、クラッシュし続ける"
+
+#: kdirstatfeedback.cpp:69
+msgid "How do you rate the performance of this program?"
+msgstr "どのように、このプログラムのパフォーマンスの評価を得ますか？"
+
+#: kdirstatfeedback.cpp:70
+msgid "Great"
+msgstr "とても良い"
+
+#: kdirstatfeedback.cpp:74
+msgid "It's so slow it drives me nuts"
+msgstr "とても遅い"
+
+#: kdirstatfeedback.cpp:76
+msgid "What is your experience with computers in general?"
+msgstr "コンピュータによるあなたの経験は？"
+
+#: kdirstatfeedback.cpp:77 kdirstatfeedback.cpp:84
+msgid "Expert"
+msgstr "専門家"
+
+#: kdirstatfeedback.cpp:78 kdirstatfeedback.cpp:85
+msgid "Fair"
+msgstr "一応(そこそこ)"
+
+#: kdirstatfeedback.cpp:80 kdirstatfeedback.cpp:87
+msgid "Learning"
+msgstr "学習中"
+
+#: kdirstatfeedback.cpp:81 kdirstatfeedback.cpp:88
+msgid "Newbie"
+msgstr "初心者"
+
+#: kdirstatfeedback.cpp:83
+msgid "What is your experience with Unix/Linux systems?"
+msgstr "Unix/Linuxシステムによるあなたの経験は？"
+
+#: kdirstatfeedback.cpp:90
+msgid "Did you have trouble figuring out how to work with this program in general?"
+msgstr "どのようにこのプログラムの動作を理解するのに苦労したか？"
+
+#: kdirstatfeedback.cpp:92
+msgid "No problem"
+msgstr "苦労しない"
+
+#: kdirstatfeedback.cpp:93
+msgid "Some"
+msgstr "時々"
+
+#: kdirstatfeedback.cpp:94 kdirstatfeedback.cpp:132
+msgid "I'm still learning"
+msgstr "まだ、学習中"
+
+#: kdirstatfeedback.cpp:95
+msgid "I didn't have a clue what to do at first"
+msgstr "何を最初にすればいいか手がかりがなかった"
+
+#: kdirstatfeedback.cpp:96 kdirstatfeedback.cpp:133
+msgid "I still don't have a clue what to do"
+msgstr "まだ何をしたら良いか解らない"
+
+#: kdirstatfeedback.cpp:98
+msgid "Where do you use this program most?"
+msgstr "どこで、あなたは最もこのプログラムを使うか？"
+
+#: kdirstatfeedback.cpp:99
+msgid "At work"
+msgstr "仕事で"
+
+#: kdirstatfeedback.cpp:100
+msgid "At home"
+msgstr "自宅で"
+
+#: kdirstatfeedback.cpp:101
+msgid "At university / school"
+msgstr "大学／学校で"
+
+#: kdirstatfeedback.cpp:103
+msgid "What is your primary role there?"
+msgstr "あなたの主な役割は?"
+
+#: kdirstatfeedback.cpp:104 kdirstatfeedback.cpp:112
+msgid "Home user"
+msgstr "自宅ユーザ"
+
+#: kdirstatfeedback.cpp:105 kdirstatfeedback.cpp:113
+msgid "Student"
+msgstr "学生"
+
+#: kdirstatfeedback.cpp:106 kdirstatfeedback.cpp:114
+msgid "Educational (teacher / professor)"
+msgstr "教育者(先生/教授)"
+
+#: kdirstatfeedback.cpp:107 kdirstatfeedback.cpp:115
+msgid "Non-computer related work"
+msgstr "非コンピュータ関連した仕事"
+
+#: kdirstatfeedback.cpp:108 kdirstatfeedback.cpp:116
+msgid "Developer"
+msgstr "開発者"
+
+#: kdirstatfeedback.cpp:109 kdirstatfeedback.cpp:117
+msgid "System administrator"
+msgstr "システム管理者"
+
+#: kdirstatfeedback.cpp:111
+msgid "Do you have any other roles there?"
+msgstr "あなたは、他の役割を持っていますか？"
+
+#: kdirstatfeedback.cpp:119
+msgid "How did you get to know this program?"
+msgstr "どのように、あなたはこのプログラムを知りましたか？"
+
+#: kdirstatfeedback.cpp:120
+msgid "In a menu on my machine"
+msgstr "私のマシンのメニューで"
+
+#: kdirstatfeedback.cpp:121
+msgid "Somebody told me about it"
+msgstr "誰かが、私に教えた"
+
+#: kdirstatfeedback.cpp:122
+msgid "On the internet"
+msgstr "インターネットの上で"
+
+#: kdirstatfeedback.cpp:123
+msgid "Printed magazine / book"
+msgstr "書籍 マガジン/本"
+
+#: kdirstatfeedback.cpp:124
+msgid "Other (please add comment below)"
+msgstr "その他 (コメントを下で記述)"
+
+#: kdirstatfeedback.cpp:126
+msgid "Did you ever get a KDirStat mail report telling you to clean up disk space?"
+msgstr "ディスクスペースをきれいにするようにKDirStatメール・レポートを得ましたか？"
+
+#: kdirstatfeedback.cpp:129
+msgid "Could you figure yet out how to work with the treemaps?"
+msgstr "Could you figure yet out how to work with the treemaps?"
+
+#: kdirstatfeedback.cpp:130
+msgid "I became an expert at it"
+msgstr "私はエキスパートになりました"
+
+#: kdirstatfeedback.cpp:131
+msgid "I got a fairly good idea of it"
+msgstr "私は、かなりよい考えを思いつきました。"
+
+#: kdirstatfeedback.cpp:134
+msgid "Treemaps? Huh? What the hell is that?"
+msgstr "ツリーマップ?へえー? 一体全体、それは何ですか"
+
+#: kdirstatfeedback.cpp:136
+msgid "What do you think about the treemaps?"
+msgstr "ツリーマップについての貴方の考えは?"
+
+#: kdirstatfeedback.cpp:137
+msgid "They are useless"
+msgstr "役立ちません"
+
+#: kdirstatfeedback.cpp:138
+msgid "The display is confusing"
+msgstr "表示は混同しています"
+
+#: kdirstatfeedback.cpp:139
+msgid "They look ugly"
+msgstr "醜く見えます"
+
+#: kdirstatfeedback.cpp:140
+msgid "They look nice"
+msgstr "よく見えます"
+
+#: kdirstatfeedback.cpp:141
+msgid "They help finding large files"
+msgstr "大きなファイルを見つけることを支援します"
+
+#: kdirstatfeedback.cpp:142
+msgid "I could do with the treemap view alone"
+msgstr "私は、ツリーマップ表示を単独で必要とします。"
+
+#: kdirstatfeedback.cpp:143
+msgid "The combination of tree view and treemaps is great"
+msgstr "ツリー表示およびツリーマップのコンビネーションは良いです"
+
+#: kdirstatfeedback.cpp:144
+msgid "I want more info inside the treemap view"
+msgstr "私は、ツリーマップ表示の内部のより多くの情報を望みます。"
+
+#: kdirstatfeedback.cpp:145
+msgid "Leave the treemaps as they are right now"
+msgstr "それらが今ちょうどあるように、ツリーマップを残します"
+
+#: kdirstatfeedback.cpp:147
+msgid "Would you recommend this program to a friend?"
+msgstr "あなたは、このプログラムを友人に推薦しますか？"
+
+#: kdirstatfeedback.cpp:158
+msgid "The directory tree display in general"
+msgstr "ディレクトリーツリーを表示する"
+
+#: kdirstatfeedback.cpp:159
+msgid "Percentage bars as graphical display of relative sizes"
+msgstr "関連するサイズのグラフィックディスプレイとしてのパーセンテージ・バー"
+
+#: kdirstatfeedback.cpp:160
+msgid "Files apart from directories in a separate <Files> item"
+msgstr "別々の<ファイル>項目でのディレクトリーからは、別ファイルとして"
+
+#: kdirstatfeedback.cpp:162
+msgid "Treemaps in general"
+msgstr "ツリーマップ(一般)"
+
+#: kdirstatfeedback.cpp:163
+msgid "The cushioned treemap rendering"
+msgstr "ツリーマップレンダー"
+
+#: kdirstatfeedback.cpp:165
+msgid "Cleanup actions in general"
+msgstr "クリーンアップ動作"
+
+#: kdirstatfeedback.cpp:166
+msgid "Predefined cleanup actions"
+msgstr "定義されたクリーンアップ動作"
+
+#: kdirstatfeedback.cpp:167
+msgid "User defined cleanup actions"
+msgstr "ユーザー定義した、クリーンアップ動作"
+
+#: kdirstatfeedback.cpp:168
+msgid "Cleanup action configuration"
+msgstr "クリーンアップ動作設定"
+
+#: kdirstatfeedback.cpp:170
+msgid "Different colors in percentage bars"
+msgstr "パーセンテージ・バーでの異なる色"
+
+#: kdirstatfeedback.cpp:171
+msgid "Tree color configuration"
+msgstr "ツリーカラー構成"
+
+#: kdirstatfeedback.cpp:172
+msgid "Staying on one file system"
+msgstr "1つのファイルシステム上に"
+
+#: kdirstatfeedback.cpp:173
+msgid "The \"mail to owner\" facility"
+msgstr "\"オーナーへのメール\" 機能"
+
+#: kdirstatfeedback.cpp:174
+msgid "This \"feedback mail\" facility"
+msgstr "\"フィードバックメール\" 機能"
+
+#: kdirstatfeedback.cpp:176
+msgid "Human readable sizes (kB, MB, ...)"
+msgstr "判読可能なサイズ（kB（MB）...）"
+
+#: kdirstatfeedback.cpp:177
+msgid "All the numbers in the tree display"
+msgstr "ツリー表示での全ての数"
+
+#: kdirstatfeedback.cpp:178
+msgid "Last change time of an entire directory tree"
+msgstr "ディレクトリーツリーの最後の変更時間"
+
+#: kdirstatfeedback.cpp:179
+msgid "The PacMan animation"
+msgstr "パックマン・アニメーション"
+
+#: kdirstatsettings.cpp:37
 msgid "Settings"
 msgstr "設定"
 
-#: kdirstatsettings.cpp:68
+#: kdirstatsettings.cpp:66
 msgid "&Cleanups"
 msgstr "クリーンアップ(&C)"
 
-#: kdirstatsettings.cpp:72
+#: kdirstatsettings.cpp:70
 msgid "&Tree Colors"
 msgstr "ツリー色(&T)"
 
-#: kdirstatsettings.cpp:98
+#: kdirstatsettings.cpp:74
+msgid "Tree&map"
+msgstr "ツリーマップ(&m)"
+
+#: kdirstatsettings.cpp:78
+msgid "&General"
+msgstr "一般(&G)"
+
+#: kdirstatsettings.cpp:104
 msgid ""
 "Really revert all settings to their default values?\n"
 "You will lose all changes you ever made!"
@@ -297,436 +578,396 @@ msgstr ""
 "本当に、全ての設定値をデフォルト値に戻しますか?\n"
 "貴方は、これまでに作った全ての変更を失います!"
 
-#: kdirstatsettings.cpp:101
-msgid "&Really revert to defaults"
+#: kdirstatsettings.cpp:107
+msgid "&Really Revert to Defaults"
 msgstr "本当に、デフォルト値に戻します。(&R)"
 
-#: kdirstatsettings.cpp:185
+#: kdirstatsettings.cpp:193
 #, c-format
-msgid "Tree level %1"
+msgid "Tree Level %1"
 msgstr "ツリーレベル %1"
 
-#: kdirstatsettings.cpp:527
+#: kdirstatsettings.cpp:529
 msgid "&Enabled"
 msgstr "有効(&E)"
 
-#: kdirstatsettings.cpp:564
+#: kdirstatsettings.cpp:566
 msgid "&Title:"
-msgstr "タイトル(&T)"
-
-#: kdirstatsettings.cpp:565
-msgid "&Command line:"
-msgstr "コマンドライン(&C) :"
+msgstr "タイトル(&T):"
 
 #: kdirstatsettings.cpp:567
+msgid "&Command Line:"
+msgstr "コマンドライン(&C):"
+
+#: kdirstatsettings.cpp:569
 #, c-format
-msgid "%p full path"
+msgid "%p Full Path"
 msgstr "%p フルパス"
 
-#: kdirstatsettings.cpp:570
+#: kdirstatsettings.cpp:572
 #, c-format
-msgid "%n file / directory name without path"
+msgid "%n File / Directory Name Without Path"
 msgstr "%n パスのない、ファイル/ディレクトリ名"
 
-#: kdirstatsettings.cpp:576
-msgid "&Recurse into subdirectories"
-msgstr "サブディレクトリへの再帰(&R)"
+#: kdirstatsettings.cpp:575
+msgid "%t KDE Trash Directory"
+msgstr "%t KDE ゴミ箱のディレクトリー"
 
 #: kdirstatsettings.cpp:581
-msgid "&Ask for confirmation"
+msgid "&Recurse into Subdirectories"
+msgstr "サブディレクトリへの再帰(&R)"
+
+#: kdirstatsettings.cpp:586
+msgid "&Ask for Confirmation"
 msgstr "確認を求める(&A)"
 
-#: kdirstatsettings.cpp:587
+#: kdirstatsettings.cpp:592
 msgid "Works for..."
 msgstr "動作..."
 
-#: kdirstatsettings.cpp:593
+#: kdirstatsettings.cpp:598
 msgid "&Directories"
 msgstr "ディレクトリ(&D)"
 
-#: kdirstatsettings.cpp:594
+#: kdirstatsettings.cpp:599
 msgid "&Files"
 msgstr "ファイル(&F)"
 
-#: kdirstatsettings.cpp:595
-msgid "<Files> p&seudo entries"
+#: kdirstatsettings.cpp:600
+msgid "<Files> P&seudo Entries"
 msgstr "<ファイル> 疑似エントリー(&s)"
 
-#: kdirstatsettings.cpp:605
-msgid "On local machine only ('file:/' protocol)"
+#: kdirstatsettings.cpp:610
+msgid "On Local Machine Only ('file:/' Protocol)"
 msgstr "ローカルマシン上のみ ('file:/' protocol)"
 
-#: kdirstatsettings.cpp:606
-msgid "Network transparent (ftp, smb, tar, ...)"
+#: kdirstatsettings.cpp:611
+msgid "Network Transparent (ftp, smb, tar, ...)"
 msgstr "ネットワークトランスペアレント(ftp, smb, tar, ...)"
 
-#: kdirstatsettings.cpp:626
+#: kdirstatsettings.cpp:631
 msgid "Refresh &Policy:"
 msgstr "リフレッシュのポリシー(&P):"
 
-#: kdirstatsettings.cpp:637
-msgid "No refresh"
+#: kdirstatsettings.cpp:642
+msgid "No Refresh"
 msgstr "リフレッシュなし"
 
-#: kdirstatsettings.cpp:638
-msgid "Refresh this entry"
+#: kdirstatsettings.cpp:643
+msgid "Refresh This Entry"
 msgstr "このエントリをリフレッシュ"
 
-#: kdirstatsettings.cpp:639
-msgid "Refresh this entry's parent"
+#: kdirstatsettings.cpp:644
+msgid "Refresh This Entry's Parent"
 msgstr "エントリーの親をリフレッシュ"
 
-#: kdirstatsettings.cpp:640
-msgid "Assume entry has been deleted"
+#: kdirstatsettings.cpp:645
+msgid "Assume Entry Has Been Deleted"
 msgstr "エントリーが削除されたと仮定"
 
-#: kdirstatfeedback.cpp:36
-msgid "What is your general opinion about this program?"
-msgstr "このプログラムに関するあなたの一般的な意見は、何ですか？"
-
-#: kdirstatfeedback.cpp:38
-msgid "It's one of my favourites"
-msgstr "私のお気に入りの１つです"
-
-#: kdirstatfeedback.cpp:39
-msgid "I like it"
-msgstr "好きです"
-
-#: kdirstatfeedback.cpp:40
-msgid "It's sometimes useful"
-msgstr "時々役に立ちます"
-
-#: kdirstatfeedback.cpp:41
-msgid "It's average"
-msgstr "普通です"
-
-#: kdirstatfeedback.cpp:42
-msgid "Nice try, but this could be done better"
-msgstr "素晴らしいです、しかしより良くすることができます"
-
-#: kdirstatfeedback.cpp:43
-msgid "It's poor"
-msgstr "貧弱です"
-
-#: kdirstatfeedback.cpp:44
-msgid "It's useless"
-msgstr "役に立ちません"
-
-#: kdirstatfeedback.cpp:45
-msgid "It's crap"
-msgstr "ナンセンスです"
-
-#: kdirstatfeedback.cpp:47
-msgid "Which features of this program do you like?"
-msgstr "あなたは、このプログラムのどの機能が好きか？"
-
-#: kdirstatfeedback.cpp:50
-msgid "Which features don't you like?"
-msgstr "あなたは、どの機能が好きでないか？"
-
-#: kdirstatfeedback.cpp:53
-msgid "Which features do you never use?"
-msgstr "あなたは、どの機能を使用しないか？"
-
-#: kdirstatfeedback.cpp:56
-msgid "What is your favourite feature?"
-msgstr "あなたの大好きな機能は、何ですか?"
-
-#: kdirstatfeedback.cpp:59
-msgid "Are there features you are missing?"
-msgstr "あなたが見逃している機能が、ありますか?"
-
-#: kdirstatfeedback.cpp:60
-msgid "Yes, a lot! (please add comment below)"
-msgstr "はい,たいへん！(コメントを下で加えます)"
-
-#: kdirstatfeedback.cpp:61
-msgid "Some (please add comment below)"
-msgstr "いくつか（コメントを下で加えます）"
-
-#: kdirstatfeedback.cpp:62
-msgid "None"
-msgstr "なし"
-
-#: kdirstatfeedback.cpp:63
-msgid "It has too many features already!"
-msgstr "すでにあまりに多くの機能を持つ！"
-
-#: kdirstatfeedback.cpp:65
-msgid "How do you rate the stability of this program?"
-msgstr "どのように、あなたはこのプログラムの安定度の評価を得ますか?"
-
-#: kdirstatfeedback.cpp:66
-msgid "Rock solid"
-msgstr "Rock solid"
-
-#: kdirstatfeedback.cpp:67 kdirstatfeedback.cpp:74
-msgid "Good"
-msgstr "良い"
-
-#: kdirstatfeedback.cpp:68 kdirstatfeedback.cpp:75 kdirstatfeedback.cpp:82
-#: kdirstatfeedback.cpp:89
-msgid "Average"
-msgstr "普通"
-
-#: kdirstatfeedback.cpp:69 kdirstatfeedback.cpp:76
-msgid "Poor"
-msgstr "貧弱"
-
-#: kdirstatfeedback.cpp:70
-msgid "It keeps crashing all the time"
-msgstr "ずっと、クラッシュし続ける"
-
-#: kdirstatfeedback.cpp:72
-msgid "How do you rate the performance of this program?"
-msgstr "どのように、このプログラムのパフォーマンスの評価を得ますか？"
-
-#: kdirstatfeedback.cpp:73
-msgid "Great"
-msgstr "とても良い"
-
-#: kdirstatfeedback.cpp:77
-#, fuzzy
-msgid "It's so slow it drives me nuts"
-msgstr "とても遅い"
-
-#: kdirstatfeedback.cpp:79
-msgid "What is your experience with computers in general?"
-msgstr "コンピュータによるあなたの経験は？"
-
-#: kdirstatfeedback.cpp:80 kdirstatfeedback.cpp:87
-msgid "Expert"
-msgstr "エキスパート"
-
-#: kdirstatfeedback.cpp:81 kdirstatfeedback.cpp:88
-msgid "Fair"
-msgstr "フェア"
-
-#: kdirstatfeedback.cpp:83 kdirstatfeedback.cpp:90
-msgid "Learning"
-msgstr "学習中"
-
-#: kdirstatfeedback.cpp:84 kdirstatfeedback.cpp:91
-msgid "Newbie"
-msgstr "初心者"
-
-#: kdirstatfeedback.cpp:86
-msgid "What is your experience with Unix/Linux systems?"
-msgstr "Unix/Linuxシステムによるあなたの経験は？"
-
-#: kdirstatfeedback.cpp:93
-msgid "Did you have trouble figuring out how to work with this program?"
-msgstr "どのようにこのプログラムの動作を理解するのに苦労したか？"
-
-#: kdirstatfeedback.cpp:95
-msgid "No problem"
-msgstr "苦労しない"
-
-#: kdirstatfeedback.cpp:96
-msgid "Some"
-msgstr "時々"
-
-#: kdirstatfeedback.cpp:97
-msgid "I'm still learning"
-msgstr "まだ、学習中"
-
-#: kdirstatfeedback.cpp:98
-msgid "I didn't have a clue what to do at first"
-msgstr "何を最初にすればいいか手がかりがなかった"
-
-#: kdirstatfeedback.cpp:99
-msgid "I still don't have a clue what to do"
-msgstr "まだそうすることがする手がかりがない"
-
-#: kdirstatfeedback.cpp:101
-msgid "Where do you use this program most?"
-msgstr "どこで、あなたは最もこのプログラムを使うか？"
-
-#: kdirstatfeedback.cpp:102
-msgid "At work"
-msgstr "仕事で"
-
-#: kdirstatfeedback.cpp:103
-msgid "At home"
-msgstr "自宅で"
-
-#: kdirstatfeedback.cpp:104
-msgid "At university / school"
-msgstr "大学／学校で"
-
-#: kdirstatfeedback.cpp:106
-msgid "What is your primary role there?"
-msgstr "あなたの主な役割は?"
-
-#: kdirstatfeedback.cpp:107 kdirstatfeedback.cpp:115
-msgid "Home user"
-msgstr "自宅ユーザ"
-
-#: kdirstatfeedback.cpp:108 kdirstatfeedback.cpp:116
-msgid "Student"
-msgstr "学生"
-
-#: kdirstatfeedback.cpp:109 kdirstatfeedback.cpp:117
-msgid "Educational (teacher / professor)"
-msgstr "教育者(先生/教授)"
-
-#: kdirstatfeedback.cpp:110 kdirstatfeedback.cpp:118
-msgid "Non-computer related work"
-msgstr "非コンピュータ関連した仕事"
-
-#: kdirstatfeedback.cpp:111 kdirstatfeedback.cpp:119
-msgid "Developer"
-msgstr "開発者"
-
-#: kdirstatfeedback.cpp:112 kdirstatfeedback.cpp:120
-msgid "System administrator"
-msgstr "システム管理者"
-
-#: kdirstatfeedback.cpp:114
-msgid "Do you have any other roles there?"
-msgstr "あなたは、他の役割を持っていますか？"
-
-#: kdirstatfeedback.cpp:122
-msgid "How did you get to know this program?"
-msgstr "どのように、あなたはこのプログラムを知りましたか？"
-
-#: kdirstatfeedback.cpp:123
-msgid "In a menu on my machine"
-msgstr "私のマシンのメニューで"
-
-#: kdirstatfeedback.cpp:124
-msgid "Somebody told me about it"
-msgstr "誰かが、私に教えた"
-
-#: kdirstatfeedback.cpp:125
-msgid "On the internet"
-msgstr "インターネットの上で"
-
-#: kdirstatfeedback.cpp:126
-msgid "Printed magazine / book"
-msgstr "印刷されたマガジン/本"
-
-#: kdirstatfeedback.cpp:127
-msgid "Other (please add comment below)"
-msgstr "その他 (コメントを下で加えます)"
-
-#: kdirstatfeedback.cpp:129
-msgid "Did you ever get a KDirStat mail report telling you to clean up disk space?"
-msgstr "ディスクスペースをきれいにするようにあなたに言っているKDirStatメール・レポートを得ましたか？"
-
-#: kdirstatfeedback.cpp:132
-msgid "Would you recommend this program to a friend?"
-msgstr "あなたは、このプログラムを友人に推薦しますか？"
-
-#: kdirstatfeedback.cpp:143
-#, fuzzy
-msgid "The directory tree display in general"
-msgstr "ディレクトリーツリーを一般に表示する"
-
-#: kdirstatfeedback.cpp:144
-msgid "Percentage bars as graphical display of relative sizes"
-msgstr "関連するサイズのグラフィックディスプレイとしてのパーセンテージ・バー"
-
-#: kdirstatfeedback.cpp:145
-#, fuzzy
-msgid "Files apart from directories in a separate <Files> item"
-msgstr "別々の<ファイル>項目でのディレクトリーからは、別ファイルとして"
-
-#: kdirstatfeedback.cpp:147
-msgid "Cleanup actions in general"
-msgstr "クリーンアップ動作一般に"
-
-#: kdirstatfeedback.cpp:148
-msgid "Predefined cleanup actions"
-msgstr "あらかじめ定義されたクリーンアップ動き"
-
-#: kdirstatfeedback.cpp:149
-msgid "User defined cleanup actions"
-msgstr "ユーザー定義した、クリーンアップ動作"
-
-#: kdirstatfeedback.cpp:150
-msgid "Cleanup action configuration"
-msgstr "クリナップ動作設定"
-
-#: kdirstatfeedback.cpp:152
-msgid "Different colors in percentage bars"
-msgstr "パーセンテージ・バーでの異なるカラー"
-
-#: kdirstatfeedback.cpp:153
-msgid "Tree color configuration"
-msgstr "ツリーカラー構成"
-
-#: kdirstatfeedback.cpp:154
-msgid "Staying on one file system"
-msgstr "1つのファイルシステム上に"
-
-#: kdirstatfeedback.cpp:155
-msgid "The \"mail to owner\" facility"
-msgstr "\"オーナーへのメール\" 機能"
-
-#: kdirstatfeedback.cpp:156
-msgid "This \"feedback mail\" facility"
-msgstr "\"フィードバックメール\" 機能"
-
-#: kdirstatfeedback.cpp:158
-msgid "Human readable sizes (kB, MB, ...)"
-msgstr "読込み可能なサイズ（kB（MB）...）"
-
-#: kdirstatfeedback.cpp:159
-msgid "All the numbers in the tree display"
-msgstr "ツリー表示での全てのナンバー"
-
-#: kdirstatfeedback.cpp:160
-msgid "Last change time of an entire directory tree"
-msgstr "全てのディレクトリーツリーの最後の変更時間"
-
-#: kdirstatfeedback.cpp:161
-msgid "The PacMan animation"
-msgstr "パックマンアニメーション"
-
-#: kfeedback.cpp:35
-msgid "Feedback"
-msgstr "フィードバック"
-
-#: kfeedback.cpp:41
-msgid "&Mail this..."
-msgstr "これをメール(&M)..."
-
-#: kfeedback.cpp:91
+#: kdirstatsettings.cpp:715
+msgid "Directory Reading"
+msgstr "ディレクトリーの読込み"
+
+#: kdirstatsettings.cpp:718
+msgid "Cross &File System Boundaries"
+msgstr "クロス・ファイル・システム境界(&F)"
+
+#: kdirstatsettings.cpp:719
+msgid "Use Optimized &Local Directory Read Methods"
+msgstr "ローカルディレクトリーを最適化(&L)"
+
+#: kdirstatsettings.cpp:726
+msgid "Animation"
+msgstr "アニメーション"
+
+#: kdirstatsettings.cpp:729
+msgid "P@cM@n Animation in Tool &Bar"
+msgstr "パックマンアニメーションツールバー(&B)"
+
+#: kdirstatsettings.cpp:730
+msgid "P@cM@n Animation in Directory &Tree"
+msgstr "ディレクトリーツリー内のパックマンアニメーション(&T)"
+
+#: kdirstatsettings.cpp:809
+msgid "S&quarify Treemap"
+msgstr "四角のツリーマップ(&q)"
+
+#: kdirstatsettings.cpp:810
+msgid "Use C&ushion Shading"
+msgstr "濃淡な図形(&u)"
+
+#: kdirstatsettings.cpp:815
+msgid "Cushion Parameters"
+msgstr "パラメータ"
+
+#: kdirstatsettings.cpp:820
+msgid "Ambient &Light"
+msgstr "アンビアント・ライト(&L)"
+
+#: kdirstatsettings.cpp:830
+msgid "&Height Scale"
+msgstr "高さ(&H)"
+
+#: kdirstatsettings.cpp:840
+msgid "Draw Lines if Lo&w Contrast"
+msgstr "低いコントラスト時の描画ライン(&w)"
+
+#: kdirstatsettings.cpp:844
+msgid "Always Draw &Grid"
+msgstr "グリッド表示(&G)"
+
+#: kdirstatsettings.cpp:847
+msgid "Gr&id Color: "
+msgstr "グリッド色(&i): "
+
+#: kdirstatsettings.cpp:857
+msgid "Colors for Plain Treemaps"
+msgstr "簡易・ツリーマップ時の色"
+
+#: kdirstatsettings.cpp:860
+msgid "&Files: "
+msgstr "ファイル(&F): "
+
+#: kdirstatsettings.cpp:865
+msgid "&Directories: "
+msgstr "ディレクトリ(&D): "
+
+#: kdirstatsettings.cpp:870
+msgid "Gr&id: "
+msgstr "グリッド(&i): "
+
+#: kdirstatsettings.cpp:884
+msgid "Hi&ghlight R&ectangle: "
+msgstr "ハイライト(&g)・長方形(&e): "
+
+#: kdirstatsettings.cpp:892
+msgid "Minim&um Treemap Tile Size: "
+msgstr "最小のツリーマップ・タイル・サイズ(&u): "
+
+#: kdirstatsettings.cpp:899
+msgid "Auto-&Resize Treemap"
+msgstr "自動リサイズ・ツリーマップ(&R)"
+
+#: kdirtree.cpp:1557
+msgid "kB"
+msgstr "kB"
+
+#: kdirtree.cpp:1566
+msgid "MB"
+msgstr "MB"
+
+#: kdirtree.cpp:1573
+msgid "GB"
+msgstr "GB"
+
+#: kdirstatapp.cpp:145
+msgid "Open &URL..."
+msgstr "URLを開く(&U)..."
+
+#: kdirstatapp.cpp:152
+msgid "Refresh &All"
+msgstr "全てリフレッシュ(&A)"
+
+#: kdirstatapp.cpp:156
+msgid "Refresh &Selected"
+msgstr "選択した項目のリフレッシュ(&S)"
+
+#: kdirstatapp.cpp:160
+msgid "Continue Reading at &Mount Point"
+msgstr "マウント・ポイントで読み続ける(&M)"
+
+#: kdirstatapp.cpp:164
+msgid "Stop Rea&ding"
+msgstr "読込み中止(&d)"
+
+#: kdirstatapp.cpp:173
+msgid "Zoom in"
+msgstr "ズームイン"
+
+#: kdirstatapp.cpp:177
+msgid "Zoom out"
+msgstr "ズームアウト"
+
+#: kdirstatapp.cpp:181
+msgid "Select Parent"
+msgstr "親を選択"
+
+#: kdirstatapp.cpp:185
+msgid "Rebuild Treemap"
+msgstr "ツリーマップの再構築"
+
+#: kdirstatapp.cpp:189
+msgid "Show Treemap"
+msgstr "ツリーマップ表示"
+
+#: kdirstatapp.cpp:193
+msgid "Help about Treemaps"
+msgstr "ツリーマップのヘルプ"
+
+#: kdirstatapp.cpp:199
+msgid "Send &Mail to Owner"
+msgstr "オーナーにメイル送信(&M)"
+
+#: kdirstatapp.cpp:203
+msgid "Send &Feedback Mail..."
+msgstr "フィードバックメール送信(&F)..."
+
+#: kdirstatapp.cpp:208
+msgid "Opens a directory"
+msgstr "ディレクトリを開きます"
+
+#: kdirstatapp.cpp:209
+msgid "Opens a (possibly remote) directory"
+msgstr "(恐らく遠隔)ディレクトリーを開きます"
+
+#: kdirstatapp.cpp:210
+msgid "Opens a recently used directory"
+msgstr "最近用いられているディレクトリーを開きます"
+
+#: kdirstatapp.cpp:211
+msgid "Closes the current directory"
+msgstr "カレント・ディレクトリを閉じます"
+
+#: kdirstatapp.cpp:212
+msgid "Re-reads the entire directory tree"
+msgstr "再度ディレクトリー全体を読みます"
+
+#: kdirstatapp.cpp:213
+msgid "Re-reads the selected subtree"
+msgstr "選択されたサブツリーを再度読みます"
+
+#: kdirstatapp.cpp:214
+msgid "Scan mounted file systems"
+msgstr "マウントしたファイル・システムをスキャンします"
+
+#: kdirstatapp.cpp:215
+msgid "Stops directory reading"
+msgstr "ディレクトリーの読込みを中止"
+
+#: kdirstatapp.cpp:216
+msgid "Quits the application"
+msgstr "アプリケーションを中止します"
+
+#: kdirstatapp.cpp:217
+msgid "Copies the URL of the selected item to the clipboard"
+msgstr "選択されたアイテムのURLをクリップボードにコピーします"
+
+#: kdirstatapp.cpp:218
+msgid "Enables/disables the toolbar"
+msgstr "ツールバーを表示/非表示"
+
+#: kdirstatapp.cpp:219
+msgid "Enables/disables the statusbar"
+msgstr "ステータスバーを表示/非表示"
+
+#: kdirstatapp.cpp:220
+msgid "Enables/disables the treemap view"
+msgstr "ツリーマップを表示/非表示"
+
+#: kdirstatapp.cpp:221
+msgid "Zoom treemap in"
+msgstr "ツリーマップズームイン"
+
+#: kdirstatapp.cpp:222
+msgid "Zoom treemap out"
+msgstr "ツリーマップズームアウト"
+
+#: kdirstatapp.cpp:223
+msgid "Select parent"
+msgstr "親を選択"
+
+#: kdirstatapp.cpp:224
+msgid "Rebuild treemap to fit into available space"
+msgstr "利用可能なスペースに入れるべきツリーマップを再構築"
+
+#: kdirstatapp.cpp:225
+msgid "Opens the preferences dialog"
+msgstr "プレファレンス・ダイアログを開く"
+
+#: kdirstatapp.cpp:226
+msgid "Sends a mail to the owner of the selected subtree"
+msgstr "選択されたサブツリーの所有者へメールを送信"
+
+#: kdirstatapp.cpp:301 kdirstatapp.cpp:335 kdirstatapp.cpp:445
+#: kdirstatapp.cpp:460 kdirstatapp.cpp:472 kdirstatapp.cpp:485
+#: kdirstatapp.cpp:494 kdirstatapp.cpp:506
+msgid "Ready."
+msgstr "準備ができています"
+
+#: kdirstatapp.cpp:328 kdirstatapp.cpp:438 kdirstatapp.cpp:467
+msgid "Opening directory..."
+msgstr "ディレクトリーを開いてます..."
+
+#: kdirstatapp.cpp:440
+msgid "Open Directory..."
+msgstr "ディレクトリー開きます"
+
+#: kdirstatapp.cpp:452
+msgid "Opening URL..."
+msgstr "URLを開いています..."
+
+#: kdirstatapp.cpp:455
+msgid "Open URL..."
+msgstr "URL開きます..."
+
+#: kdirstatapp.cpp:479
+msgid "Closing directory..."
+msgstr "ディレクトリーを閉じています..."
+
+#: kdirstatapp.cpp:492
+msgid "Refreshing directory tree..."
+msgstr "ディレクトリーツリーのリフレッシュ中..."
+
+#: kdirstatapp.cpp:504
+msgid "Refreshing selected subtree..."
+msgstr "選択されたサブツリーのリフレッシュ中..."
+
+#: kdirstatapp.cpp:684
 msgid ""
-"<p><b>Please tell us your opinion about this program.</b></p><p>You will be "
-"able to review everything in your mailer before any mail is sent.<br>Nothing "
-"will be sent behind your back.</p>"
+"Now that you know this program for some time,\n"
+"wouldn't you like to tell the authors your opinion about it?\n"
+"\n"
+"Open Source software depends on user feedback.\n"
+"Your opinion can help us make the software better."
 msgstr ""
-"<p><b>我々にこのプログラムに関するあなたの意見を話してください </b></p><p>"
-"どんなメールでも送り出される前に、あなたのメーラーですべてをチェックすることができる<br> "
-"何も、あなたの後ろで送り出されない</p>"
+"このプログラムを知っているので\n"
+"著者にあなたの見解を伝えることはいかがではないでしょうか?\n"
+"\n"
+"Open Source ソフトウェアはユーザ・フィードバックに依存します。\n"
+"あなたの意見は、私たちがソフトウェアをよりよくするのを助けることができます。"
 
-#: kfeedback.cpp:116
-msgid "Questions marked with "
-msgstr "印をつけた質問"
+#: kdirstatapp.cpp:689
+msgid "Please tell us your opinion!"
+msgstr "私たちにあなたの意見を伝えてください!"
 
-#: kfeedback.cpp:125
-msgid " must be answered before a mail can be sent."
-msgstr "メールが送信する前に、答えられてなければならない"
+#: kdirstatapp.cpp:690
+msgid "Open &Feedback Form..."
+msgstr "フィードバックフォームを開く(&F)..."
 
-#: kfeedback.cpp:136
-msgid "&Additional comments:"
-msgstr "追加コメント(&A)"
+#: kdirstatapp.cpp:691
+msgid "&No, and don't ask again!"
+msgstr "いいえ、再び尋ねないでください!(&N)"
 
-#: kfeedback.cpp:314
-msgid "yes"
-msgstr "はい"
+#: kcleanupcollection.cpp:231
+#, c-format
+msgid "User Defined Cleanup #&%1"
+msgstr "ユーザ・クリーンアップを定義しました #&%1"
 
-#: kfeedback.cpp:315
-msgid "no"
-msgstr "いいえ"
+#: kcleanupcollection.cpp:234
+#, c-format
+msgid "User Defined Cleanup #%1"
+msgstr "ユーザ・クリーンアップを定義しました #%1"
 
-#: kdirstatui.rc:32
+#: kdirstatui.rc:34
 msgid "Clean &Up"
 msgstr "クリーンアップ(&U)"
 
-#: kdirstatui.rc:60
+#: kdirstatui.rc:75
+msgid "&Treemap"
+msgstr "ツリーマップ(&T)"
+
+#: kdirstatui.rc:75
 msgid "&Report"
 msgstr "レポート(&R)"
 
