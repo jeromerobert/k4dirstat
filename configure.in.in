@@ -1,6 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(kdirstat,1.7.9-devel)
+AM_INIT_AUTOMAKE(kdirstat,1.7.10-devel)
 
 dnl
 dnl stolen from the automake info pages
