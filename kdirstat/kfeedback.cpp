@@ -5,9 +5,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-20
+ *   Updated:	2002-01-29
  *
- *   $Id: kfeedback.cpp,v 1.1 2002/01/21 10:04:52 hundhammer Exp $
+ *   $Id: kfeedback.cpp,v 1.2 2002/01/29 14:47:03 hundhammer Exp $
  *
  */
 
@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
+#include <kurl.h>
 
 #include "kfeedback.h"
 
