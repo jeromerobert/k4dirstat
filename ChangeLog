@@ -1,3 +1,7 @@
+2001-09-26 Alexander Rawass <alexannika@users.sourceforge.net>
+	
+	* debugging output in kparts
+	
 2001-09-25 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* added files kdirstat_{part,factory}.{cpp,h,rc}

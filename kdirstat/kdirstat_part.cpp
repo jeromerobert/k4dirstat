@@ -5,7 +5,7 @@
  *
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
- *   $Id: kdirstat_part.cpp,v 1.1 2001/09/25 14:40:23 alexannika Exp $
+ *   $Id: kdirstat_part.cpp,v 1.2 2001/09/26 15:53:12 alexannika Exp $
  *
  */
 
@@ -22,6 +22,8 @@ using namespace KDirStat;
 
 KDirStatPart::KDirStatPart( QWidget * parent, const char * name ) : KParts::ReadWritePart( (QObject *)parent, name )
 {
+  printf("KDirStatPart::KDirStatPart\n");
+
   KInstance * instance = new KInstance( "kdirstatpart" );
   setInstance( instance );
 

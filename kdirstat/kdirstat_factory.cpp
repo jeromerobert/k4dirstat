@@ -5,7 +5,7 @@
  *
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
- *   $Id: kdirstat_factory.cpp,v 1.1 2001/09/25 14:40:23 alexannika Exp $
+ *   $Id: kdirstat_factory.cpp,v 1.2 2001/09/26 15:53:12 alexannika Exp $
  *
  */
 
@@ -27,6 +27,7 @@ extern "C"
 {
   void* init_libkdirstat()
   {
+    printf("KDirStatFactory::init_libkdirstat\n");
     return new KDirStatFactory;
   }
 };
@@ -37,6 +38,7 @@ KAboutData* KDirStatFactory::s_about = 0L;
  KDirStatFactory::KDirStatFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
  {
+   printf("KDirStatFactory::KDirStatFactory\n");
  }
 
 
@@ -50,6 +52,8 @@ KDirStatFactory::~KDirStatFactory()
 
 QObject* KDirStatFactory::create( QObject* parent, const char* name, const char*classname, const QStringList & )
 {
+   printf("KDirStatFactory::create\n");
+
   KDirStatPart *part=new KDirStatPart((QWidget*) parent, name );
 
   if (QCString(classname) == "KParts::ReadOnlyPart")
@@ -69,6 +73,8 @@ QObject* KDirStatFactory::create( QObject* parent, const char* name, const char*
 
 KInstance *KDirStatFactory::instance()
 {
+   printf("KDirStatFactory::instance\n");
+
   if ( !s_instance )
     s_instance = new KInstance( "kdirstatpart");
   return s_instance;
