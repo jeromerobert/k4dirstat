@@ -1,0 +1,733 @@
+# translation of hu.po to Hungarian
+# translation of fr.po to hungarian
+# translation of fr.po to français
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# Michel Grentzinger <mic.grentz@online.fr>, 2003
+# Marcel Hilzinger <hili@suselinux.hu>, 2003
+# Peter Breuer <comp@suselinux.hu>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hu\n"
+"POT-Creation-Date: 2002-04-19 13:38+0900\n"
+"PO-Revision-Date: 2003-09-05 15:43+0200\n"
+"Last-Translator: Peter Breuer <comp@suselinux.hu>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.1\n"
+
+#: kcleanup.cpp:171
+msgid ""
+"%1\n"
+"in directory %2"
+msgstr ""
+"%1\n"
+"ebben a könyvtárban: %2"
+
+#: kcleanup.cpp:175
+msgid ""
+"%1\n"
+"for file %2"
+msgstr ""
+"%1\n"
+"ehhez a fájlhoz: %2"
+
+#: kcleanup.cpp:180 kdirstatsettings.cpp:100
+msgid "Please confirm"
+msgstr "Kérem, erősítse meg"
+
+#: kcleanup.cpp:181
+msgid "Confirm"
+msgstr "Megerősítés"
+
+#: kdirstatapp.cpp:126
+msgid "Refresh &All"
+msgstr "Összes &frissítése"
+
+#: kdirstatapp.cpp:130
+msgid "Refresh &Selected"
+msgstr "&Kiválasztottak frissítése"
+
+#: kdirstatapp.cpp:134
+msgid "Continue Reading at &Mount Point"
+msgstr "Az olvasás folytatása a &csatolási ponttól"
+
+#: kdirstatapp.cpp:144
+msgid "Send &Mail to Owner"
+msgstr "&Levélküldés a tulajdonosnak"
+
+#: kdirstatapp.cpp:148
+msgid "Send &Feedback Mail..."
+msgstr "&Válaszlevél küldése..."
+
+#: kdirstatapp.cpp:153
+msgid "Opens a directory"
+msgstr "Könyvtár megnyitása"
+
+#: kdirstatapp.cpp:154
+msgid "Opens a recently used directory"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: kdirstatapp.cpp:155
+msgid "Closes the current directory"
+msgstr "A jelenlegi könyvtár bezárása"
+
+#: kdirstatapp.cpp:156
+msgid "Re-reads the entire directory tree"
+msgstr "A teljes könyvtárfa újraolvasása"
+
+#: kdirstatapp.cpp:157
+msgid "Re-reads the selected subtree"
+msgstr "A kiválasztott alkönyvtárfa újraolvasása"
+
+#: kdirstatapp.cpp:158
+msgid "Scan mounted file systems"
+msgstr "Csatolt fájlrendszerek ellenőrzése"
+
+#: kdirstatapp.cpp:159
+msgid "Quits the application"
+msgstr "Kilépés az alkalmazásból"
+
+#: kdirstatapp.cpp:160
+msgid "Copies the URL of the selected item to the clipboard"
+msgstr "A kiválasztott elem URL címének vágólapra másolása"
+
+#: kdirstatapp.cpp:161
+msgid "Enables/disables the toolbar"
+msgstr "Az eszköztár ki/bekapcsolása"
+
+#: kdirstatapp.cpp:162
+msgid "Enables/disables the statusbar"
+msgstr "Az állapotsor ki/bekapcsolása"
+
+#: kdirstatapp.cpp:163
+msgid "Opens the preferences dialog"
+msgstr "A beállítási párbeszédablak megnyitása"
+
+#: kdirstatapp.cpp:164
+msgid "Sends a mail to the owner of the selected subtree"
+msgstr "Levélküldés a kiválasztott alkönyvtárak tulajdonosának"
+
+#: kdirstatapp.cpp:216 kdirstatapp.cpp:250 kdirstatapp.cpp:349
+#: kdirstatapp.cpp:361 kdirstatapp.cpp:374 kdirstatapp.cpp:383
+#: kdirstatapp.cpp:395
+msgid "Ready."
+msgstr "Kész."
+
+#: kdirstatapp.cpp:243 kdirstatapp.cpp:342 kdirstatapp.cpp:356
+msgid "Opening directory..."
+msgstr "Könyvtár megnyitása..."
+
+#: kdirstatapp.cpp:344
+msgid "Open Directory..."
+msgstr "Könyvtár megnyitása..."
+
+#: kdirstatapp.cpp:368
+msgid "Closing directory..."
+msgstr "Könyvtár bezárása..."
+
+#: kdirstatapp.cpp:381
+msgid "Refreshing directory tree..."
+msgstr "A könyvtárfa frissítése..."
+
+#: kdirstatapp.cpp:393
+msgid "Refreshing selected subtree..."
+msgstr "A kiválasztott könyvtárfa frissítése..."
+
+#: kdirstatapp.cpp:482
+msgid ""
+"Now that you know this program for some time,\n"
+"wouldn't you like to tell the authors your opinion about it?\n"
+"\n"
+"Open Source software depends on user feedback.\n"
+"Your opinion can help us make the software better."
+msgstr ""
+"Ha gyakran használja a programot,\n"
+"megosztaná velünk tapasztalatait?\n"
+"\n"
+"A nyílt forráskódú szoftver minősége a felhasználói visszajelzésektől függ.\n"
+"A megjegyzései segíthetnek jobbá tenni a szoftvert."
+
+#: kdirstatapp.cpp:487
+msgid "Please tell us your opinion!"
+msgstr "Kérjük tudassa velünk véleményét!"
+
+#: kdirstatapp.cpp:488
+msgid "Open &Feedback Form..."
+msgstr "Vála&sz űrlap megnyitása..."
+
+#: kdirstatapp.cpp:489
+msgid "&No, and don't ask again!"
+msgstr "&Nem és ne is kérdezzen újból!"
+
+#: kdirtreeview.cpp:59
+msgid "Name"
+msgstr "Név"
+
+#: kdirtreeview.cpp:61
+msgid "Subtree Percentage"
+msgstr "Alkönyvtárfa százalékban"
+
+#: kdirtreeview.cpp:62
+msgid "Percentage"
+msgstr "Százalék"
+
+#: kdirtreeview.cpp:63
+msgid "Subtree Total"
+msgstr "Alkönyvtárfa összesen"
+
+#: kdirtreeview.cpp:65
+msgid "Own Size"
+msgstr "Egyéni méret"
+
+#: kdirtreeview.cpp:66
+msgid "Items"
+msgstr "Elemek"
+
+#: kdirtreeview.cpp:67
+msgid "Files"
+msgstr "Fájlok"
+
+#: kdirtreeview.cpp:68
+msgid "Subdirs"
+msgstr "Alkönyvtárak"
+
+#: kdirtreeview.cpp:69
+msgid "Last Change"
+msgstr "Utolsó módosítás"
+
+#: kdirtreeview.cpp:156
+msgid "Read Jobs"
+msgstr "Beolvasott feladatok"
+
+#: kdirtreeview.cpp:405
+#, c-format
+msgid "Finished. Elapsed time: %1"
+msgstr "Végrehajtva. Eltelt idő : %1"
+
+#: kdirtreeview.cpp:440
+msgid "Elapsed time: %1   reading directory %2"
+msgstr "Eltelt idő: %1   %2 könyvtár olvasása "
+
+#: kdirtreeview.cpp:704 kdirtreeview.cpp:1451
+msgid "Bytes"
+msgstr "bájt(ok)"
+
+#: kdirtreeview.cpp:803
+msgid "Disk usage"
+msgstr "Lemezhasználat"
+
+#: kdirtreeview.cpp:805
+msgid "Please check your disk usage and clean up if you can. Thank you."
+msgstr "Kérem ellenőrizze a lemez kihasználtságát és tisztítsa meg a felesleges fájloktól, ha akarja. Köszönöm."
+
+#: kdirtreeview.cpp:809
+msgid "Disk usage report generated by KDirStat"
+msgstr "Lemezhasználat jelentés a KDirStat programtól"
+
+#: kdirtreeview.cpp:868
+msgid "<Files>"
+msgstr "<Fájlok>"
+
+#: kdirtreeview.cpp:1460
+msgid "kB"
+msgstr "KB"
+
+#: kdirtreeview.cpp:1469
+msgid "MB"
+msgstr "MB"
+
+#: kdirtreeview.cpp:1476
+msgid "GB"
+msgstr "GB"
+
+#: kstdcleanup.cpp:26
+msgid "Open in &Konqueror"
+msgstr "Megnyitás &Konquerorban"
+
+#: kstdcleanup.cpp:46
+msgid "Open in &Terminal"
+msgstr "Megnyitás &terminálban"
+
+#: kstdcleanup.cpp:65
+msgid "&Compress"
+msgstr "&Tömörítés"
+
+#: kstdcleanup.cpp:83
+msgid "&make clean"
+msgstr "&Tisztítás"
+
+#: kstdcleanup.cpp:100
+msgid "Delete T&rash Files"
+msgstr "KDirStat &szemétkosár ürítése"
+
+#: kstdcleanup.cpp:118
+msgid "Delete (to Trash &Bin)"
+msgstr "Kidobás a KDirStat &szemétkosárba)"
+
+#: kstdcleanup.cpp:137
+msgid "&Delete (no way to undelete!)"
+msgstr "&Törlés (nem lehet visszavonni!)"
+
+#: kcleanupcollection.cpp:234
+#, c-format
+msgid "User Defined Cleanup #&%1"
+msgstr "Felhasználó által megadott tisztítás: #&%1"
+
+#: kcleanupcollection.cpp:237
+#, c-format
+msgid "User Defined Cleanup #%1"
+msgstr "Felhasználó által megadott tisztítás: #%1"
+
+#: kdirstatsettings.cpp:39
+msgid "Settings"
+msgstr "Beállítások"
+
+#: kdirstatsettings.cpp:68
+msgid "&Cleanups"
+msgstr "&Tisztítások"
+
+#: kdirstatsettings.cpp:72
+msgid "&Tree Colors"
+msgstr "&Könyvtárfa színek"
+
+#: kdirstatsettings.cpp:98
+msgid ""
+"Really revert all settings to their default values?\n"
+"You will lose all changes you ever made!"
+msgstr ""
+"Valóban vissza szeretné állítani az összes értéket az alapértelmezett értékre?\n"
+"Minden beállítást el fog veszteni!"
+
+#: kdirstatsettings.cpp:101
+msgid "&Really revert to defaults"
+msgstr "&Alapértelmezett értékek visszaállítása"
+
+#: kdirstatsettings.cpp:185
+#, c-format
+msgid "Tree level %1"
+msgstr "Könyvtárszint %1"
+
+#: kdirstatsettings.cpp:527
+msgid "&Enabled"
+msgstr "&Aktív"
+
+#: kdirstatsettings.cpp:564
+msgid "&Title:"
+msgstr "&Cím : "
+
+#: kdirstatsettings.cpp:565
+msgid "&Command line:"
+msgstr "&Parancssor: "
+
+#: kdirstatsettings.cpp:567
+#, c-format
+msgid "%p full path"
+msgstr "%p teljes útvonal"
+
+#: kdirstatsettings.cpp:570
+#, c-format
+msgid "%n file / directory name without path"
+msgstr "%n fájl / könyvtárnév útvonal nélkül"
+
+#: kdirstatsettings.cpp:576
+msgid "&Recurse into subdirectories"
+msgstr "&Belépés az alkönyvtárakba is"
+
+#: kdirstatsettings.cpp:581
+msgid "&Ask for confirmation"
+msgstr "&Kérdezzen rá a jóváhagyáshoz"
+
+#: kdirstatsettings.cpp:587
+msgid "Works for..."
+msgstr "Működik az alábbinál..."
+
+#: kdirstatsettings.cpp:593
+msgid "&Directories"
+msgstr "&Könyvtárak"
+
+#: kdirstatsettings.cpp:594
+msgid "&Files"
+msgstr "&Fájlok"
+
+#: kdirstatsettings.cpp:595
+msgid "<Files> p&seudo entries"
+msgstr "<Fájlok> &Pszeudo-bejegyzések"
+
+#: kdirstatsettings.cpp:605
+msgid "On local machine only ('file:/' protocol)"
+msgstr "Csak a helyi gépen ('file:/' protokoll)"
+
+#: kdirstatsettings.cpp:606
+msgid "Network transparent (ftp, smb, tar, ...)"
+msgstr "Transzparens hálózat (ftp, smb, tar, ...)"
+
+#: kdirstatsettings.cpp:626
+msgid "Refresh &Policy:"
+msgstr "Frissítési &Szabályok: "
+
+#: kdirstatsettings.cpp:637
+msgid "No refresh"
+msgstr "Nincs frissítés"
+
+#: kdirstatsettings.cpp:638
+msgid "Refresh this entry"
+msgstr "Frissítse ezt a bejegyzést"
+
+#: kdirstatsettings.cpp:639
+msgid "Refresh this entry's parent"
+msgstr "Frissítse a bejegyzés szülőjét"
+
+#: kdirstatsettings.cpp:640
+msgid "Assume entry has been deleted"
+msgstr "Feltételezett törölt bejegyzés"
+
+#: kdirstatfeedback.cpp:36
+msgid "What is your general opinion about this program?"
+msgstr "Mik az általános észrevételei a programmal kapcsolatban?"
+
+#: kdirstatfeedback.cpp:38
+msgid "It's one of my favourites"
+msgstr "Egyike a kedvenceimnek"
+
+#: kdirstatfeedback.cpp:39
+msgid "I like it"
+msgstr "Kedvelem"
+
+#: kdirstatfeedback.cpp:40
+msgid "It's sometimes useful"
+msgstr "Néha hasznos"
+
+#: kdirstatfeedback.cpp:41
+msgid "It's average"
+msgstr "Közepes"
+
+#: kdirstatfeedback.cpp:42
+msgid "Nice try, but this could be done better"
+msgstr "Szép próbálkozás, de lehetne jobb is"
+
+#: kdirstatfeedback.cpp:43
+msgid "It's poor"
+msgstr "Szegényes"
+
+#: kdirstatfeedback.cpp:44
+msgid "It's useless"
+msgstr "Használhatatlan"
+
+#: kdirstatfeedback.cpp:45
+msgid "It's crap"
+msgstr "Rossz"
+
+#: kdirstatfeedback.cpp:47
+msgid "Which features of this program do you like?"
+msgstr "Mely tulajdonságokat kedvel a programban?"
+
+#: kdirstatfeedback.cpp:50
+msgid "Which features don't you like?"
+msgstr "Mely tulajdonságokat nem kedvel a programban?"
+
+#: kdirstatfeedback.cpp:53
+msgid "Which features do you never use?"
+msgstr "Mely tulajdonságokat nem használ a programban?"
+
+#: kdirstatfeedback.cpp:56
+msgid "What is your favourite feature?"
+msgstr "Melyek a kedvenc tulajdonságai?"
+
+#: kdirstatfeedback.cpp:59
+msgid "Are there features you are missing?"
+msgstr "Mik a hiányos vagy hiányzó tulajdonságok?"
+
+#: kdirstatfeedback.cpp:60
+msgid "Yes, a lot! (please add comment below)"
+msgstr "Igen, nagyon! (kérjük töltse ki a megjegyzés rovatot is)"
+
+#: kdirstatfeedback.cpp:62
+msgid "None"
+msgstr "Semmi"
+
+#: kdirstatfeedback.cpp:63
+msgid "It has too many features already!"
+msgstr "Túl sok tulajdonsága van már most is!"
+
+#: kdirstatfeedback.cpp:65
+msgid "How do you rate the stability of this program?"
+msgstr "Hogyan osztályozná a program stabilitását? "
+
+#: kdirstatfeedback.cpp:66
+msgid "Rock solid"
+msgstr "Sziklaszilárd"
+
+#: kdirstatfeedback.cpp:67 kdirstatfeedback.cpp:74
+msgid "Good"
+msgstr "Jó"
+
+#: kdirstatfeedback.cpp:68 kdirstatfeedback.cpp:75 kdirstatfeedback.cpp:82
+#: kdirstatfeedback.cpp:89
+msgid "Average"
+msgstr "Közepes"
+
+#: kdirstatfeedback.cpp:69 kdirstatfeedback.cpp:76
+msgid "Poor"
+msgstr "Szegényes"
+
+#: kdirstatfeedback.cpp:70
+msgid "It keeps crashing all the time"
+msgstr "Mindig lefagy"
+
+#: kdirstatfeedback.cpp:72
+msgid "How do you rate the performance of this program?"
+msgstr "Hogyan osztályozza a program teljesítményét?"
+
+#: kdirstatfeedback.cpp:73
+msgid "Great"
+msgstr "Kitűnő"
+
+#: kdirstatfeedback.cpp:77
+msgid "It's so slow it drives me nuts"
+msgstr "Túl lassú"
+
+#: kdirstatfeedback.cpp:79
+msgid "What is your experience with computers in general?"
+msgstr "Mi a gyakorlata általában a számítógépekkel?"
+
+#: kdirstatfeedback.cpp:80 kdirstatfeedback.cpp:87
+msgid "Expert"
+msgstr "Szakértő"
+
+#: kdirstatfeedback.cpp:81 kdirstatfeedback.cpp:88
+msgid "Fair"
+msgstr "Megfelelő"
+
+#: kdirstatfeedback.cpp:83 kdirstatfeedback.cpp:90
+msgid "Learning"
+msgstr "Tanuló"
+
+#: kdirstatfeedback.cpp:84 kdirstatfeedback.cpp:91
+msgid "Newbie"
+msgstr "Újonc"
+
+#: kdirstatfeedback.cpp:86
+msgid "What is your experience with Unix/Linux systems?"
+msgstr "Mi a gyakorlata Unix/Linux rendszerek terén?"
+
+#: kdirstatfeedback.cpp:93
+msgid "Did you have trouble figuring out how to work with this program?"
+msgstr "Vázolná nekünk, hogyan dolgozik a programmal?"
+
+#: kdirstatfeedback.cpp:95
+msgid "No problem"
+msgstr "Nincs probléma"
+
+#: kdirstatfeedback.cpp:96
+msgid "Some"
+msgstr "Néha"
+
+#: kdirstatfeedback.cpp:97
+msgid "I'm still learning"
+msgstr "Jelenleg még tanulok"
+
+#: kdirstatfeedback.cpp:98
+msgid "I didn't have a clue what to do at first"
+msgstr "Nincs ötletem mit tegyek elsőként"
+
+#: kdirstatfeedback.cpp:99
+msgid "I still don't have a clue what to do"
+msgstr "Nincs továbbra sem ötletem, mit tehetnék"
+
+#: kdirstatfeedback.cpp:101
+msgid "Where do you use this program most?"
+msgstr "Hol használja legtöbbet a programot?"
+
+#: kdirstatfeedback.cpp:102
+msgid "At work"
+msgstr "Munkahelyen"
+
+#: kdirstatfeedback.cpp:103
+msgid "At home"
+msgstr "Otthon"
+
+#: kdirstatfeedback.cpp:104
+msgid "At university / school"
+msgstr "Iskolában"
+
+#: kdirstatfeedback.cpp:106
+msgid "What is your primary role there?"
+msgstr "Mi az elsődleges célja?"
+
+#: kdirstatfeedback.cpp:107 kdirstatfeedback.cpp:115
+msgid "Home user"
+msgstr "Otthoni felhasználó"
+
+#: kdirstatfeedback.cpp:108 kdirstatfeedback.cpp:116
+msgid "Student"
+msgstr "Diák"
+
+#: kdirstatfeedback.cpp:109 kdirstatfeedback.cpp:117
+msgid "Educational (teacher / professor)"
+msgstr "Oktató (tanársegéd / tanár)"
+
+#: kdirstatfeedback.cpp:110 kdirstatfeedback.cpp:118
+msgid "Non-computer related work"
+msgstr "Nem számítógépes munka"
+
+#: kdirstatfeedback.cpp:111 kdirstatfeedback.cpp:119
+msgid "Developer"
+msgstr "Fejlesztő"
+
+#: kdirstatfeedback.cpp:112 kdirstatfeedback.cpp:120
+msgid "System administrator"
+msgstr "Rendszeradminisztrátor"
+
+#: kdirstatfeedback.cpp:114
+msgid "Do you have any other roles there?"
+msgstr "Vannak egyéb feladatai itt?"
+
+#: kdirstatfeedback.cpp:122
+msgid "How did you get to know this program?"
+msgstr "Hol találta meg a programot?"
+
+#: kdirstatfeedback.cpp:123
+msgid "In a menu on my machine"
+msgstr "A gépemen található menüből"
+
+#: kdirstatfeedback.cpp:124
+msgid "Somebody told me about it"
+msgstr "Valaki mesélt róla"
+
+#: kdirstatfeedback.cpp:125
+msgid "On the internet"
+msgstr "Az interneten"
+
+#: kdirstatfeedback.cpp:126
+msgid "Printed magazine / book"
+msgstr "Nyomtatott újságban / könyvben"
+
+#: kdirstatfeedback.cpp:127
+msgid "Other (please add comment below)"
+msgstr "Egyéb (Kérjük részletezze alább)"
+
+#: kdirstatfeedback.cpp:129
+msgid "Did you ever get a KDirStat mail report telling you to clean up disk space?"
+msgstr "Kapott már valaha KDirStat levél jelentést a lemezhely tisztításáról?"
+
+#: kdirstatfeedback.cpp:132
+msgid "Would you recommend this program to a friend?"
+msgstr "Ajánlaná a programot egy barátjának?"
+
+#: kdirstatfeedback.cpp:143
+msgid "The directory tree display in general"
+msgstr "Az általános könyvtárfa megjelenítés"
+
+#: kdirstatfeedback.cpp:144
+msgid "Percentage bars as graphical display of relative sizes"
+msgstr "A százalékjelzők grafikusak relatív méretezéssel"
+
+#: kdirstatfeedback.cpp:145
+msgid "Files apart from directories in a separate <Files> item"
+msgstr "A könyvtárakban eltérő fájlok, külön <Fájlok> bejegyzéssel "
+
+#: kdirstatfeedback.cpp:147
+msgid "Cleanup actions in general"
+msgstr "Általános akciók törlése"
+
+#: kdirstatfeedback.cpp:148
+msgid "Predefined cleanup actions"
+msgstr "Előre megadott akciók törlése"
+
+#: kdirstatfeedback.cpp:149
+msgid "User defined cleanup actions"
+msgstr "Felhasználó által megadott akciók törlése"
+
+#: kdirstatfeedback.cpp:150
+msgid "Cleanup action configuration"
+msgstr "Az akció beállítások törlése"
+
+#: kdirstatfeedback.cpp:152
+msgid "Different colors in percentage bars"
+msgstr "Eltérő színek a százalékjelzőkben"
+
+#: kdirstatfeedback.cpp:153
+msgid "Tree color configuration"
+msgstr "Könyvtárfa színek beállítása"
+
+#: kdirstatfeedback.cpp:154
+msgid "Staying on one file system"
+msgstr "Maradjon egyetlen fájlrendszeren"
+
+#: kdirstatfeedback.cpp:155
+msgid "The \"mail to owner\" facility"
+msgstr "A \"levél a felhasználónak\" lehetőség"
+
+#: kdirstatfeedback.cpp:156
+msgid "This \"feedback mail\" facility"
+msgstr "A \"válaszlevél\" lehetőség"
+
+#: kdirstatfeedback.cpp:158
+msgid "Human readable sizes (kB, MB, ...)"
+msgstr "Emberi mértékegységű méretek (KB, MB, ...)"
+
+#: kdirstatfeedback.cpp:159
+msgid "All the numbers in the tree display"
+msgstr "Az összes szám a könyvtárfa nézetben"
+
+#: kdirstatfeedback.cpp:160
+msgid "Last change time of an entire directory tree"
+msgstr "A teljes könyvtárba utolsó módosításának ideje"
+
+#: kdirstatfeedback.cpp:161
+msgid "The PacMan animation"
+msgstr "A PacMan animáció"
+
+#: kfeedback.cpp:35
+msgid "Feedback"
+msgstr "Visszajelzés"
+
+#: kfeedback.cpp:41
+msgid "&Mail this..."
+msgstr "&Levél küldése..."
+
+#: kfeedback.cpp:91
+msgid ""
+"<p><b>Please tell us your opinion about this program.</b></p><p>You will be "
+"able to review everything in your mailer before any mail is sent.<br>Nothing "
+"will be sent behind your back.</p>"
+msgstr ""
+"<p><b>Kérjük ossza meg velünk a programmal kapcsolatos észrevételeit.</b></p> "
+"<p>Minden küldendő adatot lehetősége lesz mégegyszer átolvasni a levelezőprogramjában."
+"<br>Semmit sem küldünk az Ön háta mögött.</p>"
+
+#: kfeedback.cpp:116
+msgid "Questions marked with "
+msgstr "A csillaggal jelölt kérdéseket "
+
+#: kfeedback.cpp:125
+msgid " must be answered before a mail can be sent."
+msgstr " meg kell válaszolni mielőtt a levél küldésre kerülne."
+
+#: kfeedback.cpp:136
+msgid "&Additional comments:"
+msgstr "További &megjegyzések:"
+
+#: kfeedback.cpp:314
+msgid "yes"
+msgstr "igen"
+
+#: kfeedback.cpp:315
+msgid "no"
+msgstr "nem"
+
+#: kdirstatui.rc:32
+msgid "Clean &Up"
+msgstr "&Tisztítás"
+
+#: kdirstatui.rc:60
+msgid "&Report"
+msgstr "&Jelentés"
+
+#~ #: kdirstatfeedback.cpp:61
+#~ msgid "Some (please add comment below)"
+#~ msgstr "Quelques-unes (veuillez ajouter vos commentaires ci-dessous)"
+
