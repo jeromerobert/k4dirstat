@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-08
+ *   Updated:	2003-01-14
  */
 
 
@@ -359,9 +359,6 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
     if ( newSz.isEmpty() )
 	newSize = visibleSize();
 
-    // Save current state
-    KFileInfo * savedSelection = _selectedTile ? _selectedTile->orig() : 0;
-
 
     // Delete all old stuff. Unfortunately, there is no QCanvas::clear(), so we
     // have to delete the entire canvas.
@@ -399,10 +396,10 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
 	}
 
 
-	// Restore the old state
+	// Synchronize selection with the tree
 
-	if ( savedSelection )
-	    selectTile( savedSelection );
+	if ( _tree->selection() )
+	    selectTile( _tree->selection() );
     }
     else
     {

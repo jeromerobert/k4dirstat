@@ -1,3 +1,7 @@
+2003-01-14  Stefan Hundhammer  <sh@suse.de>
+
+	* Synchronize treemap selection with dir tree after treemap rebuild
+
 2003-01-08  Stefan Hundhammer  <sh@suse.de>
 
 	* Changed activity point handling: The user was prompted far to
