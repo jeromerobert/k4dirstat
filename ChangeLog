@@ -1,3 +1,9 @@
+2002-04-18  Stefan Hundhammer  <sh@suse.de>
+
+	* KDE-3 migration:
+	  - Replaced admin/ subdirectory completely
+	* Bumped version to 2.1.0-beta
+
 2002-03-01  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.0.1
