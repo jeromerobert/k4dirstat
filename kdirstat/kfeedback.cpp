@@ -5,7 +5,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2004-11-23
  */
 
 
@@ -35,7 +35,7 @@ KFeedbackDialog::KFeedbackDialog( const QString & feedbackMailAddress,
 		   Apply )					// defaultButton
 {
     QVBoxLayout * layout = new QVBoxLayout( plainPage(), 0, spacingHint() );
-    setButtonApplyText( i18n( "&Mail this..." ) );
+    setButtonApply( KGuiItem( i18n( "&Mail this..." ) ) );
 
     if ( ! helpTopic.isEmpty() )
 	setHelp( helpTopic );

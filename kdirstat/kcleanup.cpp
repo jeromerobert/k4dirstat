@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-10-29
+ *   Updated:	2004-11-23
  */
 
 
@@ -311,11 +311,15 @@ KCleanup::expandVariables( const KFileInfo *	item,
 {
     QString expanded = unexpanded;
 
-    expanded.replace ( QRegExp ( "%p" ),
-		       "\"" + QString::fromLocal8Bit(item->url())  + "\"" );
-    expanded.replace ( QRegExp ( "%n" ),
-		       "\"" + QString::fromLocal8Bit(item->name()) + "\"" );
-    expanded.replace ( QRegExp ( "%t" ), KGlobalSettings::trashPath() );
+    expanded.replace( QRegExp( "%p" ),
+		      "\"" + QString::fromLocal8Bit( item->url() )  + "\"" );
+    expanded.replace( QRegExp( "%n" ),
+		      "\"" + QString::fromLocal8Bit( item->name() ) + "\"" );
+
+    if ( KDE::versionMajor() >= 3 && KDE::versionMinor() >= 4 )
+	expanded.replace( QRegExp( "%t" ), "trash:/" );
+    else
+	expanded.replace( QRegExp( "%t" ), KGlobalSettings::trashPath() );
 
     return expanded;
 }

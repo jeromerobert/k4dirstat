@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-08-26
+ *   Updated:	2004-11-23
  */
 
 
@@ -957,7 +957,7 @@ KAnyDirReadJob::startReading()
 {
     KURL url( _dir->url() );
 
-    if ( url.isMalformed() )
+    if ( ! url.isValid() )
     {
 	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
@@ -983,7 +983,7 @@ KAnyDirReadJob::entries ( KIO::Job *			job,
     NOT_USED( job );
     KURL url( _dir->url() );	// Cache this - it's expensive!
 
-    if ( url.isMalformed() )
+    if ( ! url.isValid() )
     {
 	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
@@ -1053,7 +1053,7 @@ KAnyDirReadJob::stat( const KURL & 	url,
 {
     KIO::UDSEntry uds_entry;
 
-    if ( KIO::NetAccess::stat( url, uds_entry ) )	// remote stat() OK?
+    if ( KIO::NetAccess::stat( url, uds_entry, qApp->mainWidget() ) )	// remote stat() OK?
     {
 	KFileItem entry( uds_entry, url,
 			 true,		// determine MIME type on demand
@@ -1082,7 +1082,7 @@ KAnyDirReadJob::owner( KURL url )
 {
     KIO::UDSEntry uds_entry;
 
-    if ( KIO::NetAccess::stat( url, uds_entry ) )	// remote stat() OK?
+    if ( KIO::NetAccess::stat( url, uds_entry, qApp->mainWidget() ) )	// remote stat() OK?
     {
 	KFileItem entry( uds_entry, url,
 			 true,		// determine MIME type on demand
@@ -1497,7 +1497,7 @@ KDirStat::fixedUrl( const QString & dirtyUrl )
 {
     KURL url = dirtyUrl;
 
-    if ( url.isMalformed() )		// Maybe it's just a path spec?
+    if ( ! url.isValid() )		// Maybe it's just a path spec?
     {
 	url = KURL();			// Start over with an empty, but valid URL
 	url.setPath( dirtyUrl );	// and use just the path part.
