@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.10 2001/07/15 02:45:19 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.11 2001/07/18 03:09:39 alexannika Exp $
  *
  */
 
@@ -37,6 +37,9 @@ QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
 }
 
 void QTreeMapWindow::makeWidgets(){
+
+  brainlist=new QList<OptionsBrain>();
+
   toolbar= new QToolBar(this);
 
   up_button=new QPushButton("Up",toolbar);
@@ -53,12 +56,21 @@ void QTreeMapWindow::makeWidgets(){
   QPopupMenu *menu_file=new QPopupMenu(this);
   menu_file->insertTearOffHandle();
   menu_file->insertItem("&Save as Bitmap");
-  
+
   menu_draw_mode=new QPopupMenu(this);
+#if 0
   makeRadioPopup(menu_draw_mode,QString("Files"),SLOT(selectDrawmode(int)),DM_FILES);
   makeRadioPopup(menu_draw_mode,QString("Dirs"),SLOT(selectDrawmode(int)),DM_DIRS);
   makeRadioPopup(menu_draw_mode,QString("Files & Dirs"),SLOT(selectDrawmode(int)),DM_BOTH);
   menu_draw_mode->setCheckable(TRUE);
+#endif
+
+  makeBrainPopup(menu_draw_mode,QString("Files"),SLOT(selectDrawmode(int)),DM_FILES,"drawmode","files_only");
+  makeBrainPopup(menu_draw_mode,QString("Dirs"),SLOT(selectDrawmode(int)),DM_DIRS,"drawmode","dirs_only");
+  makeBrainPopup(menu_draw_mode,QString("Files & Dirs"),SLOT(selectDrawmode(int)),DM_BOTH,"drawmode","both");
+  menu_draw_mode->setCheckable(TRUE);
+
+
 
   menu_paint_mode=new QPopupMenu(this);
   makeRadioPopup(menu_paint_mode,QString("Flat"), SLOT(selectShading(int)),PM_FLAT);
@@ -201,6 +213,14 @@ QTreeMapArea *QTreeMapWindow::getArea(){
   return graph_widget;
 }
 
+void QTreeMapWindow::makeBrainPopup(QPopupMenu *menu,const QString& title, const char *slot,const int param,const QString& groupname,const QString& optionname){
+
+   int id=menu->insertItem(title,this,slot);
+   menu->setItemParameter(id,param);
+ 
+   brainlist->append(new OptionsBrain(menu,groupname,optionname,0,id,param) );
+  
+}
 
 void QTreeMapWindow::makeRadioPopup(QPopupMenu *menu,const QString& title, const char *slot,const int param){
   int id=menu->insertItem(title,this,slot);
@@ -236,6 +256,7 @@ void QTreeMapWindow::setDirectoryLabel(Object *found){
 }
 void QTreeMapWindow::selectDrawmode(int id){
   options->draw_mode=id;
+  setBrainCheckMark(options,id,"drawmode");
   redoOptions();
 }
 void QTreeMapWindow::selectShading(int id){
@@ -300,4 +321,50 @@ void QTreeMapWindow::selectSFFactor(int id){
 
 void QTreeMapWindow::redoOptions(){
   graph_widget->setOptions(options);
+}
+#if 0
+int QTreeMapWindow::makeBrainMenuOption(QString& gname,QString& defaultstr){
+  int param;
+  QString modestr=config->readEntry(gname,defaultstr);
+  param=getBrainParamByName("drawmode",modestr);
+  setBrainCheckMark(NULL,param,gname);
+
+  return param;
+}
+#endif
+
+void QTreeMapWindow::setBrainCheckMark(QTreeMapOptions *opt,int param,QString gname){
+   for(int i=0;i<brainlist->count();i++){
+     OptionsBrain *brain=brainlist->at(i);
+     if(brain->groupname==gname &&
+	brain->parameter==param){
+       printf("set group %s option %s param %d\n",gname.latin1(),brain->optionname.latin1(),brain->parameter);
+
+       brain->popup->setItemChecked(brain->menuid,TRUE);
+     }
+     else if(brain->groupname==gname){
+       brain->popup->setItemChecked(brain->menuid,FALSE);
+     }
+   }
+}
+
+ int QTreeMapWindow::getBrainParamByName(QString gname,QString oname){
+   for(int i=0;i<brainlist->count();i++){
+     if(brainlist->at(i)->groupname==gname &&
+	brainlist->at(i)->optionname==oname){
+       printf("group %s option %s param %d\n",gname.latin1(),oname.latin1(),brainlist->at(i)->parameter);
+       return brainlist->at(i)->parameter;
+     }
+   }
+   printf("REAL BIG BRAIN FAULT! %s %s\n",gname.latin1(),oname.latin1());
+   return 0; //urks
+ }
+
+OptionsBrain::OptionsBrain(QPopupMenu *menu,QString group_name,QString option_name,int group_id,int menu_id,int param){
+  popup=menu;
+  groupname=group_name;
+  optionname=option_name;
+  groupid=group_id;
+  menuid=menu_id;
+  parameter=param;
 }

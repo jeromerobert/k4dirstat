@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreeview.h,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.2 2001/07/18 03:09:39 alexannika Exp $
  *
  */
 
@@ -34,6 +34,8 @@
 #include <klistview.h>
 #include "kdirtree.h"
 #include "qtreemap.h"
+#include "qtreemapwindow.h"
+#include "kdirtreemapwindow.h"
 
 // Forward declarations
 class QWidget;
@@ -344,7 +346,8 @@ namespace KDirStat
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
 	
-	QTreeMapWindow  *_treemap_view;
+	//QTreeMapWindow  *_treemap_view;
+	KDirTreeMapWindow  *_treemap_view;
     };
 
     

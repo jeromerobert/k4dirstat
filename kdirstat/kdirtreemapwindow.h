@@ -64,11 +64,13 @@ namespace KDirStat
     KDirTreeMapWindow();
 
     QTreeMapArea *makeTreeMapWidget(QWidget *parent);
+int makeBrainMenuOption(QString gname,QString defaultstr);
 
     void setConfig();
 
   private:
-    //    scheme
+    
+    KConfig *config;
   };
 } // namespace
 

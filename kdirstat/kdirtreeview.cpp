@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-21
  *
- *   $Id: kdirtreeview.cpp,v 1.3 2001/07/04 02:33:05 alexannika Exp $
+ *   $Id: kdirtreeview.cpp,v 1.4 2001/07/18 03:09:39 alexannika Exp $
  *
  */
 
@@ -107,6 +107,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 	
    _treemap_view=new KDirStat::KDirTreeMapWindow();
    _treemap_view->makeWidgets();
+   _treemap_view->setConfig();
 }
 
 

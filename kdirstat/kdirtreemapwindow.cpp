@@ -31,7 +31,7 @@
 using namespace KDirStat;
 
 KDirTreeMapWindow::KDirTreeMapWindow(  )  : QTreeMapWindow() {
-  setConfig();
+  //setConfig();
 }
 
 QTreeMapArea *KDirTreeMapWindow::makeTreeMapWidget(QWidget *parent){
@@ -40,8 +40,17 @@ QTreeMapArea *KDirTreeMapWindow::makeTreeMapWidget(QWidget *parent){
 
 #if 1
 
+int KDirTreeMapWindow::makeBrainMenuOption(QString gname,QString defaultstr){
+  int param;
+  QString modestr=config->readEntry(gname,defaultstr);
+  param=getBrainParamByName("drawmode",modestr);
+  setBrainCheckMark(NULL,param,gname);
+
+  return param;
+}
+
 void KDirTreeMapWindow::setConfig(){
-  KConfig *config=KGlobal::config();
+  config=KGlobal::config();
 
   config->setGroup("Treemap-Options");
 
@@ -49,8 +58,15 @@ void KDirTreeMapWindow::setConfig(){
   QTreeMapOptions *opt=options;
 #if 1
   opt->squarify=config->readBoolEntry("squarify",opt->squarify);
+  
   opt->paintmode=config->readUnsignedNumEntry("shading",opt->paintmode);
-  opt->draw_mode=config->readUnsignedNumEntry("drawmode",opt->draw_mode);
+
+  //  opt->draw_mode=config->readUnsignedNumEntry("drawmode",opt->draw_mode);
+
+  //QString modestr=config->readEntry("drawmode","both");
+  //opt->draw_mode=getBrainParamByName("drawmode",modestr);
+  opt->draw_mode=makeBrainMenuOption(QString("drawmode"),QString("both"));
+
   opt->mono_color=config->readColorEntry("monocolor",&opt->mono_color);
 
   QStringList group_list=config->groupList();

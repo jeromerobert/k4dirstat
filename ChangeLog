@@ -1,3 +1,9 @@
+2001-07-17 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* one can use keywords instead of numbers for options
+	* checkmarks start working
+	* yet only with drawmode
+
 2001-07-16 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* user can now use regexps or wildcards in config

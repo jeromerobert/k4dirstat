@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.6 2001/07/15 02:45:19 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.7 2001/07/18 03:09:39 alexannika Exp $
  *
  */
 
@@ -58,6 +58,15 @@ namespace KDirStat
   class QTreeMapOptions;
   class QTreeMapWindow;
 
+  class OptionsBrain {
+  public:
+    OptionsBrain(QPopupMenu *menu,QString group_name,QString option_name,int group_id,int menu_id,int param);
+
+    QPopupMenu *popup;
+    QString groupname,optionname;
+    int groupid,menuid,parameter;
+  };
+
   class QTreeMapWindow : public QMainWindow {
     Q_OBJECT
 
@@ -68,6 +77,10 @@ namespace KDirStat
     QTreeMapArea *getArea();
 
     void makeRadioPopup(QPopupMenu *menu,const QString& title, const char *slot,const int param);
+ int   getBrainParamByName(QString gname,QString oname);
+ void makeBrainPopup(QPopupMenu *menu,const QString& title, const char *slot,const int param,const QString& groupname,const QString& optionname);
+ void setBrainCheckMark(QTreeMapOptions *opt,int param,QString gname);
+ //int makeBrainMenuOption(QString& gname,QString& defaultstr);
 
     void makeWidgets();
 
@@ -143,6 +156,7 @@ namespace KDirStat
 
   int menu_file_id,menu_options_id;
 
+  QList<OptionsBrain> *brainlist;
   };
 
 } // namespace
