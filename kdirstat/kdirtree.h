@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-28
+ *   Updated:	2003-02-02
  */
 
 
@@ -385,8 +385,11 @@ namespace KDirStat
 	 * Derived classes might or might not wish to overwrite this method;
 	 * it's only advisable to do so if a derived class comes up with a
 	 * different method than brute-force search all children.
+	 *
+	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>") 
+	 * is desired.
 	 **/
-	virtual KFileInfo * locate( QString url );
+	virtual KFileInfo * locate( QString url, bool findDotEntries = false );
 
 	/**
 	 * Insert a child into the children list.
@@ -1144,10 +1147,14 @@ namespace KDirStat
 	 * Notice: This is a very expensive operation since the entire tree is
 	 * searched recursively.
 	 *
-	 * This is merely a convenience method that maps to
-	 *    KDirTree::root()->locate( url )
+	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>") 
+	 * is desired.
+	 *
+	 * This is just a convenience method that maps to
+	 *    KDirTree::root()->locate( url, findDotEntries )
 	 **/
-	KFileInfo *	locate( QString url ) { return _root ? _root->locate( url ) : 0; }
+	KFileInfo *	locate( QString url, bool findDotEntries = false )
+	    { return _root ? _root->locate( url, findDotEntries ) : 0; }
 
 	/**
 	 * Notification of a finished directory read job.

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2003-02-02
  */
 
 
@@ -150,6 +150,23 @@ namespace KDirStat
 	void rebuildTreemap();
 
 	/**
+	 * Clear the treemap contents.
+	 **/
+	void clear();
+
+	/**
+	 * Delete all items of a QCanvas.
+	 *
+	 * Strangely enough, QCanvas itself does not provide such a function.
+	 **/
+	static void deleteAllItems( QCanvas * canvas );
+
+	/**
+	 * Notification that a dir tree node has been deleted.
+	 **/
+	void deleteNotify( KFileInfo * node );
+
+	/**
 	 * Read some parameters from the global @ref KConfig object.
 	 **/
 	void readConfig();
@@ -158,7 +175,7 @@ namespace KDirStat
 
 	/**
 	 * Rebuild the treemap with 'newRoot' as the new root and the specified
-	 * size. If 'newSize' is (0, 0), visibleSize() is used instead.
+	 * size. If 'newSize' is (0, 0), visibleSize() is used.
 	 **/
 	void rebuildTreemap( KFileInfo * 	newRoot,
 			     const QSize &	newSize = QSize() );
@@ -365,6 +382,7 @@ namespace KDirStat
 	KTreemapTile *		_rootTile;
 	KTreemapTile * 		_selectedTile;
 	KTreemapSelectionRect *	_selectionRect;
+	QString			_savedRootUrl;
 
 	bool			_autoResize;
 	bool			_squarify;

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2003-02-02
  */
 
 
@@ -74,6 +74,9 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
     connect( tree,	SIGNAL( selectionChanged( KFileInfo * ) ),
 	     this,	SLOT  ( selectTile	( KFileInfo * ) ) );
 
+    connect( tree,	SIGNAL( deletingChild	( KFileInfo * )	),
+	     this,	SLOT  ( deleteNotify	( KFileInfo * ) ) );
+
     connect( tree,	SIGNAL( childDeleted()	 ),
 	     this,	SLOT  ( rebuildTreemap() ) );
 }
@@ -81,6 +84,31 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
 
 KTreemapView::~KTreemapView()
 {
+}
+
+
+void
+KTreemapView::clear()
+{
+    if ( canvas() )
+	deleteAllItems( canvas() );
+
+    _selectedTile	= 0;
+    _selectionRect	= 0;
+    _rootTile		= 0;
+}
+
+
+void
+KTreemapView::deleteAllItems( QCanvas * canvas )
+{
+    if ( ! canvas )
+	return;
+
+    QCanvasItemList all = canvas->allItems();
+
+    for ( QCanvasItemList::Iterator it = all.begin(); it != all.end(); ++it )
+	delete *it;
 }
 
 
@@ -188,8 +216,8 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 		     _selectedTile->rect().contains( event->pos() ) )
 		{
 		    // If a directory (non-leaf tile) is already selected,
-		    // don't override this by 
-		    
+		    // don't override this by
+
 		    emit contextMenu( _selectedTile, event->pos() );
 		}
 		else
@@ -302,6 +330,9 @@ KTreemapView::canZoomIn() const
     if ( ! _selectedTile || ! _rootTile )
 	return false;
 
+    if ( _selectedTile == _rootTile )
+	return false;
+
     KTreemapTile * newRootTile = _selectedTile;
 
     while ( newRootTile->parentTile() != _rootTile &&
@@ -342,16 +373,20 @@ KTreemapView::canSelectParent() const
 void
 KTreemapView::rebuildTreemap()
 {
-    if ( ! canvas() )
+    KFileInfo * root = 0;
+
+    if ( ! _savedRootUrl.isEmpty() )
     {
-	kdError() << k_funcinfo << "No canvas created yet!" << endl;
-	return;
+	// kdDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
+
+	root = _tree->locate( _savedRootUrl, true );	// node, findDotEntries
     }
 
-    _selectedTile = 0;
+    if ( ! root )
+	root = _rootTile ? _rootTile->orig() : _tree->root();
 
-    rebuildTreemap( _rootTile ? _rootTile->orig() : _tree->root(),
-		    canvas()->size() );
+    rebuildTreemap( root, canvas()->size() );
+    _savedRootUrl = "";
 }
 
 
@@ -367,22 +402,19 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
 	newSize = visibleSize();
 
 
-    // Delete all old stuff. Unfortunately, there is no QCanvas::clear(), so we
-    // have to delete the entire canvas.
-
-    if ( canvas() )
-	delete canvas();
-
-    _selectedTile	= 0;
-    _selectionRect	= 0;
-    _rootTile		= 0;
-
+    // Delete all old stuff.
+    clear();
 
     // Re-create a new canvas
 
-    QCanvas * canv = new QCanvas( this );
-    canv->resize( newSize.width(), newSize.height() );
-    setCanvas( canv );
+    if ( ! canvas() )
+    {
+	QCanvas * canv = new QCanvas( this );
+	CHECK_PTR( canv );
+	setCanvas( canv );
+    }
+
+    canvas()->resize( newSize.width(), newSize.height() );
 
     if ( newSize.width() >= UpdateMinSize && newSize.height() >= UpdateMinSize )
     {
@@ -414,6 +446,44 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
     }
 
     emit treemapChanged();
+}
+
+
+void
+KTreemapView::deleteNotify( KFileInfo * )
+{
+    if ( _rootTile )
+    {
+	if ( _rootTile->orig() != _tree->root() )
+	{
+	    // If the user zoomed the treemap in, save the root's URL so the
+	    // current state can be restored upon the next rebuildTreemap()
+	    // call (which is triggered by the childDeleted() signal that the
+	    // tree emits after deleting is done).
+	    //
+	    // Intentionally using debugUrl() here rather than just url() so
+	    // the correct zoom can be restored even when a dot entry is the
+	    // current treemap root.
+
+	    _savedRootUrl = _rootTile->orig()->debugUrl();
+	}
+	else
+	{
+	    // A shortcut for the most common case: No zoom. Simply use the
+	    // tree's root for the next treemap rebuild.
+
+	    _savedRootUrl = "";
+	}
+    }
+    else
+    {
+	// Intentionally leaving _savedRootUrl alone: Otherwise multiple
+	// deleteNotify() calls might cause a previously saved _savedRootUrl to
+	// be unnecessarily deleted, thus the treemap couldn't be restored as
+	// it was.
+    }
+
+    clear();
 }
 
 
@@ -542,25 +612,25 @@ KTreemapView::tileColor( KFileInfo * file )
 	    while ( ! ext.isEmpty() )
 	    {
 		QString lowerExt = ext.lower();
-		
+
 		// Try case sensitive comparisions first
-	    
+
 		if ( ext == ".moc.ccc"	)	return Qt::red;
 		if ( ext == "~"		)	return Qt::red;
 		if ( ext == "bak"	)	return Qt::red;
-		
+
 		if ( ext == "c"		)	return Qt::blue;
 		if ( ext == "cpp"	)	return Qt::blue;
 		if ( ext == "cc"	)	return Qt::blue;
 		if ( ext == "h"		)	return Qt::blue;
 		if ( ext == "hpp"	)	return Qt::blue;
-		
+
 		if ( ext == "o"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "lo"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "la"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "a"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "rpm"	)	return QColor( 0xff, 0xa0, 0x00 );
-		
+
 		if ( lowerExt == "tar.bz2" )	return Qt::green;
 		if ( lowerExt == "tar.gz"  )	return Qt::green;
 		if ( lowerExt == "tgz"	)	return Qt::green;
@@ -582,43 +652,43 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( lowerExt == "bmp"	)	return Qt::cyan;
 		if ( lowerExt == "xpm"	)	return Qt::cyan;
 		if ( lowerExt == "tga"	)	return Qt::cyan;
-	    
+
 		if ( lowerExt == "wav"	)	return Qt::yellow;
 		if ( lowerExt == "mp3"	)	return Qt::yellow;
-		
+
 		if ( lowerExt == "avi"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mov"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mpg"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mpeg"	)	return QColor( 0xa0, 0xff, 0x00 );
-		
+
 		if ( lowerExt == "pdf"	)	return Qt::blue;
 		if ( lowerExt == "ps"	)	return Qt::cyan;
 
-		
+
 		// Some DOS/Windows types
-		
+
 		if ( lowerExt == "exe"	)	return Qt::magenta;
 		if ( lowerExt == "com"	)	return Qt::magenta;
 		if ( lowerExt == "dll"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( lowerExt == "zip"	)	return Qt::green;
 		if ( lowerExt == "arj"	)	return Qt::green;
 
-	    
+
 		// No match so far? Try the next extension. Some files might have
 		// more than one, e.g., "tar.bz2" - if there is no match for
 		// "tar.bz2", there might be one for just "bz2".
-	    
+
 		ext = ext.section( '.', 1 );
 	    }
 
 	    // Shared libs
 	    if ( QRegExp( "lib.*\\.so.*" ).exactMatch( file->name() ) )
 		return QColor( 0xff, 0xa0, 0x00 );
-	    
+
 	    // Very special, but common: Core dumps
 	    if ( file->name() == "core" )	return Qt::red;
 
-	    // Special case: Executables 
+	    // Special case: Executables
 	    if ( ( file->mode() & S_IXUSR  ) == S_IXUSR )	return Qt::magenta;
 	}
 	else // Directories

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-28
+ *   Updated:	2003-02-02
  */
 
 
@@ -213,7 +213,7 @@ KFileInfo::isInSubtree( const KFileInfo *subtree ) const
 
 
 KFileInfo *
-KFileInfo::locate( QString url )
+KFileInfo::locate( QString url, bool findDotEntries )
 {
     if ( ! url.startsWith( _name ) )
 	return 0;
@@ -240,7 +240,7 @@ KFileInfo::locate( QString url )
 
 	while ( child )
 	{
-	    KFileInfo *foundChild = child->locate( url );
+	    KFileInfo *foundChild = child->locate( url, findDotEntries );
 
 	    if ( foundChild )
 		return foundChild;
@@ -248,6 +248,11 @@ KFileInfo::locate( QString url )
 		child = child->next();
 	}
 
+	
+	// Special case: The dot entry is requested.
+
+	if ( findDotEntries && dotEntry() && url == "<Files>" )
+	    return dotEntry();
 
 	// Search the dot entry if there is one - but only if there is no more
 	// path delimiter left in the URL. The dot entry contains files only,
@@ -259,7 +264,7 @@ KFileInfo::locate( QString url )
 	if ( dotEntry() &&
 	     url.find ( "/" ) < 0 )	// No (more) "/" in this URL
 	{
-	    return dotEntry()->locate( url );
+	    return dotEntry()->locate( url, findDotEntries );
 	}
     }
 
@@ -1106,7 +1111,7 @@ KDirTree::startReading( const KURL & url )
 #endif
 
     emit startingReading();
-    
+
     if ( _root )
     {
 	// Clean up leftover stuff
