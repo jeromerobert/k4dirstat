@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-05-11
+ *   Updated:	2002-05-13
  *
- *   $Id: ktreemaptile.cpp,v 1.1 2002/05/12 15:53:51 hundhammer Exp $
+ *   $Id: ktreemaptile.cpp,v 1.2 2002/05/13 11:46:19 hundhammer Exp $
  *
  */
 
@@ -140,8 +140,7 @@ KTreeMapTile::~KTreeMapTile()
 void
 KTreeMapTile::mouseReleaseEvent( QMouseEvent * )
 {
-    // kdDebug() << _orig->debugUrl() << endl;
-    kdDebug() << "Selected " << _orig << endl;
+    // kdDebug() << "Selected " << _orig << endl;
     emit selectionChanged( _orig );
 }
 
