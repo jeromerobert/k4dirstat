@@ -615,7 +615,6 @@ KTreemapView::tileColor( KFileInfo * file )
 
 		// Try case sensitive comparisions first
 
-		if ( ext == ".moc.ccc"	)	return Qt::red;
 		if ( ext == "~"		)	return Qt::red;
 		if ( ext == "bak"	)	return Qt::red;
 
@@ -624,9 +623,13 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( ext == "cc"	)	return Qt::blue;
 		if ( ext == "h"		)	return Qt::blue;
 		if ( ext == "hpp"	)	return Qt::blue;
+		if ( ext == "el"	)	return Qt::blue;
 
 		if ( ext == "o"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "lo"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == "Po"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == ".moc.cc"	)	return QColor( 0xff, 0xa0, 0x00 );
+		if ( ext == ".elc"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "la"	)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "a"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "rpm"	)	return QColor( 0xff, 0xa0, 0x00 );
