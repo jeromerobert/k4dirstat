@@ -33,10 +33,135 @@ dnl Forward compatibility macros (make autoconf 2.13 look like 2.50),
 dnl thanks to Raja R Harinath.
 dnl ------------------------------------------------------------------------
 dnl
-ifdef([_AC_PATH_X_DIRECT],[],
-   [AC_DEFUN([_AC_PATH_X_DIRECT],[AC_PATH_X_DIRECT])])
 ifdef([_AC_PATH_X_XMKMF],[],
    [AC_DEFUN([_AC_PATH_X_XMKMF],[AC_PATH_X_XMKMF])])
+ifdef([AC_OUTPUT_SUBDIRS],[],
+   [AC_DEFUN([AC_OUTPUT_SUBDIRS],[subdirs=$1; _AC_OUTPUT_SUBDIRS])])
+ifdef([AM_PROG_AS],[],
+   [AC_DEFUN([AM_PROG_AS,[])])
+
+# KDE_PATH_X_DIRECT
+dnl Internal subroutine of AC_PATH_X.
+dnl Set ac_x_includes and/or ac_x_libraries.
+AC_DEFUN(KDE_PATH_X_DIRECT,
+[if test "$ac_x_includes" = NO; then
+  # Guess where to find include files, by looking for this one X11 .h file.
+  test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
+
+  # First, try using that file with no special directory specified.
+AC_TRY_CPP([#include <$x_direct_test_include>],
+[# We can compile using X headers with no special include directory.
+ac_x_includes=],
+[# Look for the header file in a standard set of common directories.
+# Check X11 before X11Rn because it is often a symlink to the current release.
+  for ac_dir in               \
+    /usr/X11/include          \
+    /usr/X11R6/include        \
+    /usr/X11R5/include        \
+    /usr/X11R4/include        \
+                              \
+    /usr/include/X11          \
+    /usr/include/X11R6        \
+    /usr/include/X11R5        \
+    /usr/include/X11R4        \
+                              \
+    /usr/local/X11/include    \
+    /usr/local/X11R6/include  \
+    /usr/local/X11R5/include  \
+    /usr/local/X11R4/include  \
+                              \
+    /usr/local/include/X11    \
+    /usr/local/include/X11R6  \
+    /usr/local/include/X11R5  \
+    /usr/local/include/X11R4  \
+                              \
+    /usr/X386/include         \
+    /usr/x386/include         \
+    /usr/XFree86/include/X11  \
+                              \
+    /usr/include              \
+    /usr/local/include        \
+    /usr/unsupported/include  \
+    /usr/athena/include       \
+    /usr/local/x11r5/include  \
+    /usr/lpp/Xamples/include  \
+                              \
+    /usr/openwin/include      \
+    /usr/openwin/share/include \
+    ; \
+  do
+    if test -r "$ac_dir/$x_direct_test_include"; then
+      ac_x_includes=$ac_dir
+      break
+    fi
+  done])
+fi # $ac_x_includes = NO
+
+if test "$ac_x_libraries" = NO; then
+  # Check for the libraries.
+
+  test -z "$x_direct_test_library" && x_direct_test_library=Xt
+  test -z "$x_direct_test_function" && x_direct_test_function=XtMalloc
+
+  # See if we find them without any special options.
+  # Don't add to $LIBS permanently.
+  ac_save_LIBS="$LIBS"
+  LIBS="-l$x_direct_test_library $LIBS"
+AC_TRY_LINK(, [${x_direct_test_function}()],
+[LIBS="$ac_save_LIBS"
+# We can link X programs with no special library path.
+ac_x_libraries=],
+[LIBS="$ac_save_LIBS"
+# First see if replacing the include by lib works.
+# Check X11 before X11Rn because it is often a symlink to the current release.
+for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
+    /usr/X11/lib          \
+    /usr/X11R6/lib        \
+    /usr/X11R5/lib        \
+    /usr/X11R4/lib        \
+                          \
+    /usr/lib/X11          \
+    /usr/lib/X11R6        \
+    /usr/lib/X11R5        \
+    /usr/lib/X11R4        \
+                          \
+    /usr/local/X11/lib    \
+    /usr/local/X11R6/lib  \
+    /usr/local/X11R5/lib  \
+    /usr/local/X11R4/lib  \
+                          \
+    /usr/local/lib/X11    \
+    /usr/local/lib/X11R6  \
+    /usr/local/lib/X11R5  \
+    /usr/local/lib/X11R4  \
+                          \
+    /usr/X386/lib         \
+    /usr/x386/lib         \
+    /usr/XFree86/lib/X11  \
+                          \
+    /usr/lib              \
+    /usr/local/lib        \
+    /usr/unsupported/lib  \
+    /usr/athena/lib       \
+    /usr/local/x11r5/lib  \
+    /usr/lpp/Xamples/lib  \
+    /lib/usr/lib/X11	  \
+                          \
+    /usr/openwin/lib      \
+    /usr/openwin/share/lib \
+    ; \
+do
+dnl Don't even attempt the hair of trying to link an X program!
+  for ac_extension in a so sl; do
+    if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
+      ac_x_libraries=$ac_dir
+      break 2
+    fi
+  done
+done])
+fi # $ac_x_libraries = NO
+])
+
 
 dnl ------------------------------------------------------------------------
 dnl Find a file (or one of more files in a list of dirs)
@@ -167,6 +292,13 @@ AC_DEFUN(AC_PATH_QT_MOC_UIC,
 
    AC_SUBST(MOC)
    AC_SUBST(UIC)
+
+   UIC_TR="i18n"
+   if test $kde_qtver = 3; then
+     UIC_TR="QT_KDE_I18N"
+   fi
+
+   AC_SUBST(UIC_TR)
 ])
 
 AC_DEFUN(KDE_1_CHECK_PATHS,
@@ -572,7 +704,7 @@ fi
 ac_x_libraries=$kde_x_libraries
 ac_x_includes=$kde_x_includes
 
-_AC_PATH_X_DIRECT
+KDE_PATH_X_DIRECT
 dnl AC_PATH_X_XMKMF picks /usr/lib as the path for the X libraries.
 dnl Unfortunately, if compiling with the N32 ABI, this is not the correct
 dnl location. The correct location is /usr/lib32 or an undefined value
@@ -765,7 +897,7 @@ cat > conftest.$ac_ext <<EOF
 #include <qglobal.h>
 #include <qapplication.h>
 EOF
-if test "$kde_qtver" = "2"; then
+if test "$kde_qtver" != "1"; then
 cat >> conftest.$ac_ext <<EOF
 #include <qevent.h>
 #include <qstring.h>
@@ -787,7 +919,7 @@ cat >> conftest.$ac_ext <<EOF
 
 int main() {
 EOF
-if test "$kde_qtver" = "2"; then
+if test "$kde_qtver" != "1"; then
 cat >> conftest.$ac_ext <<EOF
     QStringList *t = new QStringList();
 EOF
@@ -838,6 +970,8 @@ if test -z "$2"; then
     else
       kde_qt_minversion=">= Qt 2.0.2"
     fi
+  elif test $kde_qtver = 3; then
+    kde_qt_minversion=">= 3.0"
   else
     kde_qt_minversion=">= 1.42 and < 2.0"
   fi
@@ -852,6 +986,8 @@ if test -z "$3"; then
     else
       kde_qt_verstring="QT_VERSION >= 200"
     fi
+   elif test $kde_qtver = 3; then
+      kde_qt_verstring="QT_VERSION >= 300"
    else
     kde_qt_verstring="QT_VERSION >= 142 && QT_VERSION < 200"
   fi
@@ -1006,7 +1142,7 @@ else
   kde_int_qt="$LIBQT"
 fi
 
-if test $kde_qtver = 2; then
+if test $kde_qtver != 1; then
 
   AC_REQUIRE([AC_FIND_PNG])
   AC_REQUIRE([AC_FIND_JPEG])
@@ -1052,7 +1188,7 @@ if test ! "$ac_qt_includes" = "NO"; then
    qt_incdirs="$ac_qt_includes $qt_incdirs"
 fi
 
-if test "$kde_qtver" = "2"; then
+if test "$kde_qtver" != "1"; then
   kde_qt_header=qstyle.h
 else
   kde_qt_header=qglobal.h
@@ -1167,6 +1303,7 @@ AC_PATH_QT_MOC_UIC
 LIB_QT="$kde_int_qt "'$(LIBPNG) $(LIBJPEG) -lXext $(LIB_X11) $(LIBSM)'
 AC_SUBST(LIB_QT)
 
+AC_SUBST(kde_qtver)
 ])
 
 AC_DEFUN(AC_PATH_QT,
@@ -1517,7 +1654,7 @@ AC_DEFUN(KDE_CREATE_LIBS_ALIASES,
    AC_REQUIRE([KDE_CHECK_LIBDL])
    AC_REQUIRE([K_PATH_X])
 
-if test $kde_qtver = 2; then
+if test $kde_qtver != 1; then
    LIB_KDECORE='-lkdecore'
    AC_SUBST(LIB_KDECORE)
    LIB_KDEUI='-lkdeui'
@@ -3828,16 +3965,6 @@ AC_DEFUN(KDE_CHECK_HEADER,
    AC_LANG_RESTORE
 ])
 
-AC_DEFUN(KDE_CHECK_QWSPRITEFIELD,
-[
-  KDE_CHECK_HEADER(QwSpriteField.h, ,
-  [
-    AC_MSG_WARN([you don't have QwSpriteField.h somewhere. Please install
-       QwSpriteField out of kdesupport.])
-      $1
-  ])
-])
-
 AC_DEFUN(KDE_FAST_CONFIGURE,
 [
   dnl makes configure fast (needs perl)
@@ -4040,8 +4167,8 @@ dnl at this point ac_java_dir is either a dir, 'no' to disable, or '' to say loo
 if test "x$ac_java_dir" = xno; then
    kde_cv_java_bindir=no
    kde_cv_java_includedir=no
-   kde_cv_java_libjvmdir=no
-   kde_cv_java_libhpidir=no
+   kde_java_libjvmdir=no
+   kde_java_libhpidir=no
 else
   if test "x$ac_java_dir" = x; then
     dnl No option set -> look in $PATH
@@ -4064,13 +4191,13 @@ else
   fi
 fi
 
-dnl Look for libjvm.so
-kde_cv_java_libjvmdir=`find $kde_cv_java_bindir/.. -name libjvm.so | sed 's,libjvm.so,,'|head -n 1`
-dnl Look for libhpi.so and avoid green threads
-kde_cv_java_libhpidir=`find $kde_cv_java_bindir/.. -name libhpi.so | grep -v green | sed 's,libhpi.so,,'`
-
 dnl At this point kde_cv_java_bindir and kde_cv_java_includedir are either set or "no"
 if test ! "x$kde_cv_java_bindir" = xno; then
+
+  dnl Look for libjvm.so
+  kde_java_libjvmdir=`find $kde_cv_java_bindir/.. -name libjvm.so | sed 's,libjvm.so,,'|head -n 1`
+  dnl Look for libhpi.so and avoid green threads
+  kde_java_libhpidir=`find $kde_cv_java_bindir/.. -name libhpi.so | grep -v green | sed 's,libhpi.so,,'`
 
   dnl Now check everything's fine under there
 
@@ -4086,11 +4213,11 @@ if test ! "x$kde_cv_java_bindir" = xno; then
   if test ! -r "$kde_cv_java_includedir/jni.h"; then
     AC_MSG_ERROR([jni.h not found under $kde_cv_java_includedir. Use --with-java or --without-java.])
   fi
-  if test ! -r "$kde_cv_java_libjvmdir/libjvm.so"; then
-    AC_MSG_ERROR([libjvm.so not found under $kde_cv_java_libjvmdir. Use --without-java.])
+  if test ! -r "$kde_java_libjvmdir/libjvm.so"; then
+    AC_MSG_ERROR([libjvm.so not found under $kde_java_libjvmdir. Use --without-java.])
   fi
-  if test ! -r "$kde_cv_java_libhpidir/libhpi.so"; then
-    AC_MSG_ERROR([libhpi.so not found under $kde_cv_java_libhpidir. Use --without-java.])
+  if test ! -r "$kde_java_libhpidir/libhpi.so"; then
+    AC_MSG_ERROR([libhpi.so not found under $kde_java_libhpidir. Use --without-java.])
   fi
 
   jni_includes="-I$kde_cv_java_includedir"
@@ -4112,15 +4239,18 @@ if test ! "x$kde_cv_java_bindir" = xno; then
 #ifndef JNI_VERSION_1_2
 Syntax Error
 #endif
-	    ],[ 
-	    ],[ AC_MSG_ERROR([Incorrect version of $kde_cv_java_includedir/jni.h.
+	    ],[ kde_jni_works=yes ],
+            [ kde_jni_works=no ])
+
+  if test $kde_jni_works = no; then
+    AC_MSG_ERROR([Incorrect version of $kde_cv_java_includedir/jni.h.
 	          You need to have Java Development Kit (JDK) version 1.2. 
 	
 	          Use --with-java to specify another location.
 	          Use --without-java to configure without java support.
         	  Or download a newer JDK and try again. 
 	          See e.g. http://java.sun.com/products/jdk/1.2 ])
-	    ])
+  fi
 
   CXXFLAGS="$ac_cxxflags_safe"    
   AC_LANG_RESTORE
@@ -4135,7 +4265,7 @@ Syntax Error
   JAR=$kde_cv_java_bindir/jar
   AC_SUBST(JAR)
   AC_SUBST(jni_includes)
-  JVMLIBS="-L$kde_cv_java_libjvmdir -ljvm -L$kde_cv_java_libhpidir -lhpi"
+  JVMLIBS="-L$kde_java_libjvmdir -ljvm -L$kde_cv_java_libhpidir -lhpi"
   AC_SUBST(JVMLIBS)
 fi
 ])

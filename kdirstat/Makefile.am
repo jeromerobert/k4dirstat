@@ -45,18 +45,17 @@ EXTRA_DIST =					\
 	kdirstatui.rc				\
 	kdirstat.desktop			\
 	lo32-app-kdirstat.png			\
-	lo16-app-kdirstat.png
+	lo16-app-kdirstat.png			\
+	treemaps/kdirtreemap.h			\
+	treemaps/kdirtreemaparea.cpp		\
+	treemaps/kdirtreemapwindow.cpp		\
+	treemaps/kdirtreemapwindow.h
 
 
 if USE_TREEMAPS
 LIB_QTREEMAP = -lqtreemap
 endif
 
-EXTRA_DIST =					\
-	treemaps/kdirtreemap.h			\
-	treemaps/kdirtreemaparea.cpp		\
-	treemaps/kdirtreemapwindow.cpp		\
-	treemaps/kdirtreemapwindow.h
 
 
 kdirstat_LDADD = $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
