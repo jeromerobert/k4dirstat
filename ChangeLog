@@ -1,3 +1,17 @@
+2003-01-08  Stefan Hundhammer  <sh@suse.de>
+
+	* Changed activity point handling: The user was prompted far to
+	  early to send feedback mail.
+
+	* Changed treemap double click handling:
+	  Now double clicking the middle button zooms out,
+	  double clicking the right button does nothing
+	  (it pops up the context menu before receiving the second click
+	  anyway)
+
+	* Changed help file accordingly
+
+
 2003-01-07  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.3.4
