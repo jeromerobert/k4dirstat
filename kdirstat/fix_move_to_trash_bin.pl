@@ -1,5 +1,9 @@
-#!/usr/bin/perl -w -p
+#!/usr/bin/perl
 #
 # Replace ~/KDesktop/Trash to %t
 #
-s:~?\S*/\S*Trash\S*:%t: if ( /^command\s*=/ )
+while( <> )
+{
+    s:~?\S*/\S*Trash\S*:%t: if ( /^\s*command\s*=\s*kfmclient\s+move/ );
+    print $_;
+}
