@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.2 2001/06/30 17:08:29 harry1701 Exp $
+ *   $Id: qtreemaparea.cpp,v 1.3 2001/07/01 17:08:26 alexannika Exp $
  *
  */
 
@@ -14,14 +14,15 @@
 #include <sys/errno.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <qtimer.h>
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-#include "kdirtree.h"
-#include "kdirtreeview.h"
-#include "kdirsaver.h"
+//#include "kdirtree.h"
+//#include "kdirtreeview.h"
+//#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
 //#include <bits/mathcalls.h>
@@ -73,23 +74,21 @@ int QTreeMapArea::getNextRotatingColorIndex(){
   return color_index;
 }
 
-void QTreeMapArea::setTreeMap(KDirInfo *dutree){
+void QTreeMapArea::setTreeMap(Object *dutree){
   root_tree=dutree;
 
-  drawTreeMap(dutree);
+  if(root_tree){
+    drawTreeMap(dutree);
 
-  emit changedDirectory(dutree);
+    emit changedDirectory(dutree);
+  }
 }
 
-void QTreeMapArea::drawTreeMap(KDirInfo *dutree){
+void QTreeMapArea::drawTreeMap(Object *dutree){
   int x0=0;
   int y0=0;
   int xd0=options->paint_size_x;
   int yd0=options->paint_size_y;
-
-  //delete offscreenptr;
-  //offscreenptr=new  QPixmap(options->paint_size_x,options->paint_size_y);
-  //offscreen=*offscreenptr;
 
   offscreen.resize(options->paint_size_x,options->paint_size_y);
   color_index=0;
@@ -116,11 +115,11 @@ void QTreeMapArea::drawTreeMap(KDirInfo *dutree){
     //    graph_widget->repaint();
 }
 
-//void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx=-1,int fy=-1,int findmode=FIND_NOTHING){
-void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode){
-  QString node_name=dutree->debugUrl();
-  KDirInfo *sub_nodes=(KDirInfo *)dutree->firstChild();
-  int node_totalsize=dutree->totalSize();
+//void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx=-1,int fy=-1,int findmode=FIND_NOTHING){
+void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bool direction, int level,Cushion *cushion,int fx,int fy,int findmode){
+  QString node_name=fullName(dutree);
+  Object *sub_nodes=firstChild(dutree);
+  int node_totalsize=totalSize(dutree);
   Cushion *c=NULL;
 
   //    printf("QTreeMapArea::drawDuTree(%s,%d,%d,%d,%d,dir=%d,level=%d) %d\n",node_name.latin1(),x0,y0,xd0,yd0,direction,level,node_totalsize);
@@ -158,7 +157,7 @@ void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, 
     }
   }
 
-  if((options->draw_mode==DM_FILES || options->draw_mode==DM_BOTH )&& dutree->isFile() /* && (fx==-1 && fy==-1) */ ){
+  if((options->draw_mode==DM_FILES || options->draw_mode==DM_BOTH )&& isLeaf(dutree) /* && (fx==-1 && fy==-1) */ ){
 	QColor basecolor;
 	//basecolor=getBaseColor(node_name);
 	basecolor=QColor(rotate_colors[color_index]);
@@ -179,7 +178,7 @@ void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, 
 	}
 
       }
-      else if((options->draw_mode==DM_DIRS || options->draw_mode==DM_BOTH) && ( dutree->isDir() || dutree->isDotEntry())) {
+      else if((options->draw_mode==DM_DIRS || options->draw_mode==DM_BOTH) && ( isNode(dutree) || isSameLevelChild(dutree))) {
 #define MDEPTH 6
 	//QColor basecolor=QColor(rotate_colors[color_index]);
 	QColor basecolor=QColor(dirBaseColor);
@@ -189,7 +188,7 @@ void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, 
 			     (int)(basecolor.blue()*i));
 	//getNextRotatingColorIndex();
 
-	//KDirInfo *dirinfo=(KDirInfo *)dutree;
+	//Object *dirinfo=(Object *)dutree;
 
 	int pmode;
 	if(fx>=0 && fy>=0){
@@ -222,8 +221,8 @@ void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, 
 	// cushion mode
 	w=( c->r[direction][1] - c->r[direction][0] )/((float)node_totalsize);
       }
-      for(KDirInfo *subtree=sub_nodes;subtree!=NULL;subtree=(KDirInfo *)subtree->next()){
-	int subnode_size=subtree->totalSize();
+      for(Object *subtree=sub_nodes;subtree!=NULL;subtree=nextChild(subtree)){
+	int subnode_size=totalSize(subtree);
 	  if(subnode_size==0){
 	    // we do not descend in directories with 0 size
 	  }
@@ -265,9 +264,9 @@ void QTreeMapArea::drawDuTree(KDirInfo *dutree, int x0,int y0,int xd0, int yd0, 
 	  }
       }
 
-      if( dutree->dotEntry()!=NULL ){
-	KDirInfo *dotentry=(KDirInfo *)dutree->dotEntry();
-	int subnode_size=dotentry->totalSize();
+      if( sameLevelChild(dutree)!=NULL ){
+	Object *dotentry=sameLevelChild(dutree);
+	int subnode_size=totalSize(dotentry);
 	    float percent_size=((float)subnode_size)/((float)node_totalsize);
 	    
 	    if(direction==HORIZONTAL){
@@ -556,8 +555,8 @@ QColor&  getBaseColor(QString name){
 }
 #endif
 
-KDirInfo *QTreeMapArea::findClickedMap(KDirInfo *dutree,int x,int y,int findmode){
-  //KDirInfo *found;
+Object *QTreeMapArea::findClickedMap(Object *dutree,int x,int y,int findmode){
+  //Object *found;
 
   found_kfileinfo=NULL;
 
@@ -592,12 +591,12 @@ KDirInfo *QTreeMapArea::findClickedMap(KDirInfo *dutree,int x,int y,int findmode
 	 x=x+20;
        }
 
-    int size=found_kfileinfo->totalSize();
+    int size=totalSize(found_kfileinfo);
     //QString text=QString(found_kfileinfo->debugUrl()+" size: "+tellUnit(size));
     
     QString text; //=found_kfileinfo->debugUrl();
     //text.sprintf("%s %d bytes",found_kfileinfo->debugUrl().latin1(),size);
-    text.sprintf("%s %s",found_kfileinfo->debugUrl().latin1(),
+    text.sprintf("%s %s",fullName(found_kfileinfo).latin1(),
 		 tellUnit(size).latin1());
 
     QRect tt_rect=painter->boundingRect(x,y,-1,-1,tf,text);
@@ -638,16 +637,16 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
     int y=mouse->y();
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       // find the first dir (the first coord. matching entry) the mouse points to
-      KDirInfo *found=findClickedMap(root_tree,x,y,FIND_FILE);
+      Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
       
       if(found!=NULL){
     kdDebug() << k_funcinfo << endl;
     pop=new QPopupMenu(this); // memory hole!
 	pop->insertTearOffHandle();
-	pop->insertItem(found->debugUrl());
+	pop->insertItem(fullName(found));
 	pop->insertSeparator();
 	
-	KDirInfo *walk=found;
+	Object *walk=found;
 	while(walk!=NULL){
 	  QPopupMenu *popwalk=new QPopupMenu(this); // memory hole!
 	  //popwalk->insertTearOffHandle();
@@ -662,10 +661,10 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
 	  popwalk->setItemParameter(konq_id,(int)walk);  // ouch!
 
 	  QString text;
-	  text.sprintf("%-20s %5s",walk->debugUrl().latin1(),tellUnit(walk->totalSize()).latin1());
+	  text.sprintf("%-20s %5s",fullName(walk).latin1(),tellUnit(totalSize(walk)).latin1());
 	  pop->insertItem(text,popwalk);
 
-	  walk=(KDirInfo *)walk->parent();
+	  walk=parentNode(walk);
 	}
 	pop->popup(this->mapToGlobal(QPoint(x,y)));
       }
@@ -679,7 +678,7 @@ void QTreeMapArea::mouseDoubleClickEvent(QMouseEvent *mouse){
     int y=mouse->y();
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       // find the first dir (the first coord. matching entry) the mouse points to
-      KDirInfo *found=findClickedMap(root_tree,x,y,FIND_FIRSTDIR);
+      Object *found=findClickedMap(root_tree,x,y,FIND_FIRSTDIR);
       
       if(found!=NULL){
 	// draw the new map
@@ -695,7 +694,7 @@ void QTreeMapArea::mouseMoveEvent(QMouseEvent *mouse){
     int y=mouse->y();
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       // find the file (the last coord. matching entry) the mouse points to
-      KDirInfo *found=findClickedMap(root_tree,x,y,FIND_FILE);
+      Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
       emit highlighted(found);
     }
   }
@@ -721,7 +720,7 @@ void QTreeMapArea::buttonUp(){
 }
 
 void QTreeMapArea::directoryUp(){
-  KDirInfo *parent=(KDirInfo *)root_tree->parent();
+  Object *parent=parentNode(root_tree);
   if(parent!=NULL){
     setTreeMap(parent);
   }
@@ -745,23 +744,6 @@ QTreeMapOptions *QTreeMapArea::getOptions(){
   return options;
 }
 
-QString QTreeMapArea::tellUnit(int size){
-  QString str;
-  if(size<1024){
-    str.sprintf("%d bytes",size);
-  }
-  else if(size<(1024*1024)){
-    str.sprintf("%d kB",size/(1024));
-  }
-  else if(size<(1024*1024*1024)){
-    str.sprintf("%d MB",size/(1024*1024));
-  }
-  else {
-    str.sprintf("%d GB",size/(1024*1024*1024));
-  }
-
-  return str;
-}
 
 void QTreeMapArea::zoomIn(){
   options->paint_size_x*=2;
@@ -789,25 +771,25 @@ void QTreeMapArea::deleteFile(){
 }
 
 void QTreeMapArea::deleteFile(int id){
-  deleteFile((KDirInfo *)id);
+  deleteFile((Object *)id);
 }
 
-void QTreeMapArea::deleteFile(KDirInfo *convicted){
-  printf("delete File %s\n",convicted->debugUrl().latin1());
+void QTreeMapArea::deleteFile(Object *convicted){
+  printf("delete File %s\n",fullName(convicted).latin1());
 }
 
 void QTreeMapArea::shellWindow(int id){
-  KDirInfo *dir=(KDirInfo *)id;
+  Object *dir=(Object *)id;
 
-  if(dir->isDir()){
+  if(isNode(dir)){
     //system("xterm "+dir->url()+" &"); // this should of course be changed!
-    system("( cd "+dir->url()+" ; xterm ) &"); // this should of course be changed!
+    system("( cd "+fullName(dir)+" ; xterm ) &"); // this should of course be changed!
   }
 }
 void QTreeMapArea::browserWindow(int id){
-  KDirInfo *dir=(KDirInfo *)id;
+  Object *dir=(Object *)id;
 
-    system("konqueror "+dir->url()+" &"); // this should of course be changed!
+    system("konqueror "+fullName(dir)+" &"); // this should of course be changed!
 }
 
 QTreeMapArea::~QTreeMapArea()
@@ -845,3 +827,4 @@ QTreeMapOptions::QTreeMapOptions(){
   draw_text=TRUE;
   color_scheme=CS_CYCLIC;
 }
+

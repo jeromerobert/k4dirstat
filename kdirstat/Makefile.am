@@ -9,6 +9,7 @@ bin_PROGRAMS = kdirstat
 kdirstat_SOURCES = 				\
 	qtreemapwindow.cpp			\
 	qtreemaparea.cpp			\
+	kdirtreemaparea.cpp		\
 	kdirtree.cpp				\
 	kdirtreeview.cpp			\
 	kdirsaver.cpp				\
@@ -18,6 +19,8 @@ kdirstat_SOURCES = 				\
 
 noinst_HEADERS =				\
 	qtreemap.h				\
+	qtreemapwindow.h	\
+	kdirtreemap.h		\
 	kdirtree.h				\
 	kdirtreeview.h				\
 	kdirsaver.h				\

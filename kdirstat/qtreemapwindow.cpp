@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.2 2001/06/30 17:08:29 harry1701 Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.3 2001/07/01 17:09:18 alexannika Exp $
  *
  */
 
@@ -24,7 +24,8 @@
 #include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
-//#include <bits/mathcalls.h>
+#include "qtreemapwindow.h"
+#include "kdirtreemap.h"
 
 using namespace KDirStat;
 
@@ -66,7 +67,7 @@ QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
   for(int i=0; i<=10;i++){
     QString s;
     s.sprintf("%2d",i);
-    makeRadioPopup(menu_border_width,s,SLOT(selectBorderWidth(int)),i);
+    makeRadioPopup(menu_border_width,s, SLOT(selectBorderWidth(int)),i);
   }
   menu_border_width->setCheckable(TRUE);
 
@@ -87,19 +88,26 @@ QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
   
 
   scrollview=new QScrollView(this);
-  graph_widget=new QTreeMapArea(scrollview->viewport());
+  //graph_widget=new QTreeMapArea(scrollview->viewport());
+  graph_widget=new KDirTreeMapArea(scrollview->viewport());
   scrollview->addChild(graph_widget);
 
   this->setCentralWidget(scrollview);
 
   graph_widget->show();
 
-  QObject::connect(up_button, SIGNAL(clicked()), graph_widget, SLOT(directoryUp()));
-  QObject::connect(zoom_in_button, SIGNAL(clicked()), graph_widget, SLOT(zoomIn()));
-  QObject::connect(zoom_out_button, SIGNAL(clicked()), graph_widget, SLOT(zoomOut()));
+  QTreeMapArea *qtm_area=(QTreeMapArea *)graph_widget;
 
-  QObject::connect(graph_widget,SIGNAL(highlighted(KDirInfo *)), this, SLOT(setStatusBar(KDirInfo *))  );
-  QObject::connect(graph_widget,SIGNAL(changedDirectory(KDirInfo *)), this, SLOT(setDirectoryLabel(KDirInfo *))  );
+  printf("CONNECTS\n");
+  QObject::connect(up_button, SIGNAL(clicked()), qtm_area, SLOT(directoryUp()));
+  QObject::connect(zoom_in_button, SIGNAL(clicked()), qtm_area, SLOT(zoomIn()));
+  QObject::connect(zoom_out_button, SIGNAL(clicked()), qtm_area , SLOT(zoomOut()));
+
+
+  QObject::connect(qtm_area ,SIGNAL(highlighted(KDirInfo *)), this, SLOT(setStatusBar(KDirInfo *))  );
+  QObject::connect(qtm_area ,SIGNAL(changedDirectory(KDirInfo *)), this, SLOT(setDirectoryLabel(KDirInfo *))  );
+
+  printf("CONNECTSEND\n");
 
   this->resize((options->paint_size_x)+50,(options->paint_size_y)+200);
   this->show();
@@ -111,7 +119,8 @@ QTreeMapArea *QTreeMapWindow::getArea(){
   return graph_widget;
 }
 
-void QTreeMapWindow::makeRadioPopup(QPopupMenu *menu, const QString& title, const char *slot, const int param) {
+
+void QTreeMapWindow::makeRadioPopup(QPopupMenu *menu,const QString& title, const char *slot,const int param){
   int id=menu->insertItem(title,this,slot);
   menu->setItemParameter(id,param);
   

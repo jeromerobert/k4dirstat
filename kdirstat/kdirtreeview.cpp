@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-21
  *
- *   $Id: kdirtreeview.cpp,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.2 2001/07/01 17:12:47 alexannika Exp $
  *
  */
 
@@ -25,6 +25,7 @@
 #include "kdirtreeview.h"
 #include "kpacman.h"
 #include "qtreemap.h"
+#include "qtreemapwindow.h"
 
 using namespace KDirStat;
 
@@ -141,7 +142,12 @@ KDirTreeView::idleDisplay()
     }
 
     //_treemap_view->drawTreeMap(_tree->root());
-    _treemap_view->getArea()->setTreeMap((KDirInfo *)_tree->root());
+    //_treemap_view->getArea()->setTreeMap((KDirInfo *)_tree->root());
+
+
+    if(_tree && _tree->root()){
+           _treemap_view->getArea()->setTreeMap((Object *)_tree->root());
+     }
 }
 
 
