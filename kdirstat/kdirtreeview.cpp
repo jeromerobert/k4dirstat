@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-09-16
  *
- *   $Id: kdirtreeview.cpp,v 1.7 2001/09/19 09:31:25 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.8 2001/10/22 21:17:46 harry1701 Exp $
  *
  */
 
@@ -20,6 +20,8 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <kicontheme.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 #include "kdirtreeview.h"
@@ -366,13 +368,13 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
 		       .arg( _currentDir ) );
 }
 
-
+#if QT_VERSION < 300
 void
 KDirTreeView::sendProgressInfo()
 {
     sendProgressInfo( _currentDir );
 }
-
+#endif
 
 KDirTreeViewItem *
 KDirTreeView::locate( KFileInfo *wanted, bool lazy )

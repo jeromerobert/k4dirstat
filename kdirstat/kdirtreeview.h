@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-09-16
  *
- *   $Id: kdirtreeview.h,v 1.5 2001/09/19 09:31:25 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.6 2001/10/22 21:17:46 harry1701 Exp $
  *
  */
 
@@ -288,11 +288,14 @@ namespace KDirStat
 	 **/
 	void	sendProgressInfo( const QString & currentDir = "" );
 
+
+#if QT_VERSION < 300
 	/**
 	 * "moc" doesnt't seem to handle default arguments well, so this is an
 	 * overloaded slot that uses the internally stored current directory.
 	 **/
 	void	sendProgressInfo();
+#endif
 
 	/**
 	 * Change the tree display to "busy" state, i.e. add a column to

@@ -8,7 +8,7 @@
  *
  *   Updated:	2001-09-16
  *
- *   $Id: kdirstatapp.cpp,v 1.2 2001/09/19 09:31:25 hundhammer Exp $
+ *   $Id: kdirstatapp.cpp,v 1.3 2001/10/22 21:17:46 harry1701 Exp $
  *
  */
 
@@ -18,6 +18,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kmenubar.h>
+#include <kstatusbar.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstdaction.h>
