@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-08
+ *   Updated:	2002-01-04
  *
- *   $Id: kdirtreeview.h,v 1.9 2001/12/10 10:32:58 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.10 2002/01/07 09:07:05 hundhammer Exp $
  *
  */
 
@@ -40,6 +40,7 @@
 #include "qtreemapwindow.h"
 #include "kdirtreemapwindow.h"
 #endif
+
 
 // Forward declarations
 class QWidget;
@@ -105,7 +106,6 @@ namespace KDirStat
 	 **/
 	KDirTreeViewItem *	selection() const { return _selection; }
 
-
 	/**
 	 * Returns the default level until which items are opened by default
 	 * (unless they are dot entries).
@@ -129,7 +129,13 @@ namespace KDirStat
 	 * Return the percentage bar fill color for the specified directory
 	 * level (0..MaxInt). Wraps around every usedFillColors() colors.
 	 **/
-	virtual const QColor &	fillColor( int level ) const;
+	const QColor &	fillColor( int level ) const;
+
+	/**
+	 * Very much like @ref fillColor(), but doesn't wrap around at @ref
+	 * usedFillColors(), but at KDirTreeViewMaxFillColor.
+	 **/
+	const QColor &	rawFillColor( int level ) const;
 
 	/**
 	 * Set the fill color of percentage bars of the specified directory
@@ -140,6 +146,11 @@ namespace KDirStat
 	 **/
 	void setFillColor( int level, const QColor &color );
 
+	/**
+	 * Set all tree colors to default values.
+	 **/
+	void setDefaultFillColors();
+	
 	/**
 	 * Set the number of used percentage bar fill colors
 	 * (1..KDirTreeViewMaxFillColor).
@@ -168,6 +179,25 @@ namespace KDirStat
 	 * Returns the background color for percentage bars.
 	 **/
 	const QColor &	percentageBarBackground()	const	{ return _percentageBarBackground; }
+
+	/**
+	 * (Try to) ensure good contrast between the tree background and the
+	 * percentage bars' 3D edges - prevent ugly 3D effects which will
+	 * inevitably be the case for a white background (which unfortunately
+	 * is very common): The percentage bars use white and black for 3D
+	 * borders - like any other widget. But other widgets normally can
+	 * assume their parent widget uses some more neutral color so white and
+	 * black will result in at least some minimal contrast.
+	 *
+	 * This function automagically sets a reasonable default background
+	 * color for the tree display: If the current color scheme's document
+	 * background color (as used for input fields, lists etc.) is white or
+	 * black, use the palette midlight color (the same color as "normal"
+	 * widgets like push buttons etc., but brighter). For all other colors
+	 * than white, the document background color (the palette base color)
+	 * is used.
+	 **/
+	void ensureContrast();
 
 
 	int	nameCol()		const	{ return _nameCol;		}
@@ -243,29 +273,31 @@ namespace KDirStat
 	void clearSelection();
 
 	/**
-	 * (Try to) ensure good contrast between the tree background and the
-	 * percentage bars' 3D edges - prevent ugly 3D effects which will
-	 * inevitably be the case for a white background (which unfortunately
-	 * is very common): The percentage bars use white and black for 3D
-	 * borders - like any other widget. But other widgets normally can
-	 * assume their parent widget uses some more neutral color so white and
-	 * black will result in at least some minimal contrast.
+	 * Send a standardized mail to the owner of the selected branch.
+	 * The user will get a mailer window where he can edit that mail all he
+	 * likes before deciding to send or discard it.
 	 *
-	 * This function automagically sets a reasonable default background
-	 * color for the tree display: If the current color scheme's document
-	 * background color (as used for input fields, lists etc.) is white or
-	 * black, use the palette midlight color (the same color as "normal"
-	 * widgets like push buttons etc., but brighter). For all other colors
-	 * than white, the document background color (the palette base color)
-	 * is used.
+	 * The mail includes all currently open branches from the selected
+	 * branch on.
 	 **/
-	void ensureContrast();
-
+	void sendMailToOwner();
+	
 	/**
 	 * Notification of a change in the KDE palette, i.e. the user selected
 	 * and applied different colors in the KDE control center.
 	 **/
 	void paletteChanged();
+
+	/**
+	 * Read configuration and initialize variables accordingly.
+	 * Will be called automatically in the constructor.
+	 **/
+	void readConfig();
+
+	/**
+	 * Save configuraton.
+	 **/
+	void saveConfig() const;
 
 
     protected slots:
@@ -564,6 +596,13 @@ namespace KDirStat
 	 **/
 	void openSubtree();
 
+	/**
+	 * Recursively return an ASCII representation of all open items from
+	 * here on.
+	 **/
+	QString asciiDump();
+
+	
     protected:
 
 	/**
@@ -623,6 +662,26 @@ namespace KDirStat
 	float			_percent;
 
     };
+
+
+    inline kdbgstream & operator<< ( kdbgstream & stream, KDirTreeViewItem * item )
+    {
+	if ( item )
+	{
+	    if ( item->orig() )
+	    {
+		stream << item->orig()->debugUrl();
+	    }
+	    else
+	    {
+		stream << "<NULL orig()> " << endl;
+	    }
+	}
+	else
+	    stream << "<NULL>";
+	
+	return stream;
+    }
 
 
 

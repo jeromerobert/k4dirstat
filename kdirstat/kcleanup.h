@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-09
+ *   Updated:	2002-01-04
  *
- *   $Id: kcleanup.h,v 1.2 2001/12/10 10:32:58 hundhammer Exp $
+ *   $Id: kcleanup.h,v 1.3 2002/01/07 09:07:04 hundhammer Exp $
  *
  */
 
@@ -23,6 +23,8 @@
 #include <qdict.h>
 #include <qlist.h>
 #include <qintdict.h>
+#include <kaction.h>
+#include <kdebug.h>
 #include "kdirtree.h"
 
 
@@ -34,12 +36,8 @@ namespace KDirStat
      * @short KDirStat cleanup action
      **/
 
-    class KCleanup: public QObject
+    class KCleanup: public KAction
     {
-	// TODO: Derive from KAction
-	// TODO: Overwrite KAction::slotActivated()
-	// TODO: KCleanupCollection
-	
 	Q_OBJECT
 
     public:
@@ -48,17 +46,26 @@ namespace KDirStat
 
 	/**
 	 * Constructor.
+	 *
+	 * 'id' is the name of this cleanup action as used in the XML UI file
+	 * and config files, 'title' is the human readable menu title.
+	 * 'command' is the shell command to execute.
+	 *
+	 * Most applications will want to pass KMainWindow::actionCollection()
+	 * for 'parent' so the menus and toolbars can be created using the XML
+	 * UI description ('kdirstatui.rc' for KDirStat).
 	 **/
 	KCleanup( QString		id		= "",
 		  QString		command 	= "",
-		  QString		title 		= "" );
+		  QString		title 		= "",
+		  KActionCollection *	parent		= 0 );
 
 	/**
 	 * Copy Constructor.
 	 *
 	 * Notice that this is a not quite complete copy constructor: Since
-	 * there is no QObject copy constructor, the inherited QObject members
-	 * will be constructed with the QObject default constructor. Thus, an
+	 * there is no KAction copy constructor, the inherited KAction members
+	 * will be constructed with the KAction default constructor. Thus, an
 	 * object created with this copy constructor can rely only on its
 	 * KCleanup members. This is intended for save/restore operations only,
 	 * not for general use. In particular, DO NOT connect an object thus
@@ -69,20 +76,16 @@ namespace KDirStat
 	/**
 	 * Assignment operator.
 	 *
-	 * This will not modify the QObject members, just the KCleanup
+	 * This will not modify the KAction members, just the KCleanup
 	 * members. Just like the copy constructor, this is intended for
 	 * save/restore operations, not for general use.
 	 **/
 	KCleanup &	operator= ( const KCleanup &src );
 
 	/**
-	 * Return the KDirTree this cleanup action works on.
-	 **/
-	KDirTree *	tree()		const { return _tree; }
-
-	/**
-	 * Return the ID (name) of this cleanup action as used for setup
-	 * files. This ID should be unique within the application.
+	 * Return the ID (name) of this cleanup action as used for setup files
+	 * and the XML UI description. This ID should be unique within the
+	 * application.
 	 **/
 	const QString &	id()		const { return _id; }
    
@@ -96,13 +99,27 @@ namespace KDirStat
 
 	/**
 	 * Return the user title of this command as displayed in menus.
+	 * This may include '&' characters for keyboard shortcuts.
+	 * See also @ref cleanTitle() .
 	 **/
 	const QString &	title()		const { return _title; }
+
+	/**
+	 * Returns the cleanup action's title without '&' keyboard shortcuts.
+	 * Uses the ID as fallback if the name is empty.
+	 **/
+	QString cleanTitle() const;
 
 	/**
 	 * Return whether or not this cleanup action is generally enabled.
 	 **/
 	bool enabled()			const { return _enabled; }
+
+	/**
+	 * Return this cleanup's internally stored @ref KDirTree
+	 * selection. Important only for copy constructor etc.
+	 **/
+	KFileInfo * selection()		const { return _selection; }
 
 	/**
 	 * Return whether or not this cleanup action works for this particular
@@ -131,10 +148,28 @@ namespace KDirStat
 	bool worksForDotEntry()		const { return _worksForDotEntry; }
 
 	/**
+	 * Return whether or not this cleanup action works for simple local
+	 * files and directories only ('file:/' protocol) or network
+	 * transparent, i.e. all protocols KDE supports ('ftp', 'smb' - but
+	 * even 'tar', even though it is - strictly spoken - local).
+	 **/
+	bool worksLocalOnly()		const { return _worksLocalOnly; }
+
+	/**
 	 * Return whether or not the cleanup action should be performed
 	 * recursively in subdirectories of the initial KFileInfo.
 	 **/
 	bool recurse()			const { return _recurse; }
+
+	/**
+	 * Return whether or not this cleanup should ask the user for
+	 * confirmation when it is executed.
+	 *
+	 * The default is 'false'. Use with caution - not only can this become
+	 * very annoying, people also tend to automatically click on 'OK' when
+	 * too many confirmation dialogs pop up!
+	 **/
+	bool askForConfirmation()	const { return _askForConfirmation; }
 
 	/**
 	 * Return the refresh policy of this cleanup action - i.e. the action
@@ -168,34 +203,18 @@ namespace KDirStat
 	enum RefreshPolicy refreshPolicy()	const { return _refreshPolicy; }
 
 
-	void setTree			( KDirTree *tree	)	{ _tree			= tree;		}
+	void setTitle			( const QString &title	);
 	void setId			( const QString &id	) 	{ _id			= id;		}
 	void setCommand			( const QString &command) 	{ _command 		= command;	}
-	void setTitle			( const QString &title	) 	{ _title		= title;	}
 	void setEnabled			( bool enabled	)		{ _enabled		= enabled;	}
 	void setWorksForDir		( bool canDo 	)		{ _worksForDir		= canDo; 	}
 	void setWorksForFile		( bool canDo 	)		{ _worksForFile		= canDo; 	}
 	void setWorksForDotEntry	( bool canDo 	)		{ _worksForDotEntry	= canDo; 	}
+	void setWorksLocalOnly		( bool canDo 	)		{ _worksLocalOnly	= canDo; 	}
 	void setRecurse			( bool recurse	)		{ _recurse		= recurse; 	}
-	void msetRefreshPolicy		( enum RefreshPolicy refreshPolicy ) { _refreshPolicy = refreshPolicy; 	}
+	void setAskForConfirmation	( bool ask	)		{ _askForConfirmation	= ask;		}
+	void setRefreshPolicy		( enum RefreshPolicy refreshPolicy ) { _refreshPolicy = refreshPolicy; 	}
 
-
-	/**
-	 * Read all values for this cleanup action from the application's
-	 * KConfig object, i.e. from the configuration file. The cleanup action
-	 * object will use its ID as a config key, so at least the ID needs to
-	 * be valid.
-	 **/
-	void readConfig();
-
-	/**
-	 * Write all of this cleanup action object's values to the
-	 * application's KConfig object, i.e. to the configuration file. Just
-	 * like in @ref KCleanup::readConfig(), the ID will be used as the
-	 * config key.
-	 **/
-	void writeConfig() const;
-   
 
     public slots:
 
@@ -210,8 +229,34 @@ namespace KDirStat
 	 * any.
 	 **/
 	void executeWithSelection();
-   
 
+	/**
+	 * Set enabled/disabled status according to 'selection' and internally
+	 * store 'selection' - this will also be used upon calling
+	 * @ref executeWithSelection() . '0' means "nothing selected".
+	 **/
+	void selectionChanged( KFileInfo *selection );
+
+        /**
+	 * Read configuration.
+	 **/
+        void readConfig();
+
+	/**
+	 * Save configuration.
+	 **/
+	void saveConfig() const;
+	
+
+    protected slots:
+
+        /**
+	 * Inherited from @ref KAction : Perform the action.
+	 * In this case, execute the cleanup with the current selection.
+	 **/
+        virtual void slotActivated() { executeWithSelection(); }
+
+    
     protected:
 
 	/**
@@ -219,6 +264,12 @@ namespace KDirStat
 	 **/
 	void executeRecursive( KFileInfo *item );
 
+	/**
+	 * Ask user for confirmation to execute this cleanup action for
+	 * 'item'. Returns 'true' if user accepts, 'false' otherwise.
+	 **/
+	bool confirmation( KFileInfo *item );
+	
 	/**
 	 * Retrieve the directory part of a KFileInfo's path.
 	 **/
@@ -256,8 +307,18 @@ namespace KDirStat
 	void	runCommand	( const KFileInfo *	item,
 				  const QString &	command ) const;
 
+	/**
+	 * Internal implementation of the copy constructor and assignment
+	 * operator: Copy all data members from 'src'.
+	 **/
+	void	copy		( const KCleanup &src );
 
-	KDirTree *		_tree;
+
+	//
+	// Data members
+	//
+	
+	KFileInfo *		_selection;
 	QString			_id;
 	QString			_command;
 	QString			_title;
@@ -265,20 +326,22 @@ namespace KDirStat
 	bool			_worksForDir;
 	bool			_worksForFile;
 	bool			_worksForDotEntry;
+	bool			_worksLocalOnly;
 	bool			_recurse;
+	bool			_askForConfirmation;
 	enum RefreshPolicy	_refreshPolicy;
     };
 
 
-    typedef QDict<KCleanup>		KCleanupDict;
-    typedef QDictIterator<KCleanup>	KCleanupDictIterator;
-
-    typedef QIntDict<KCleanup>		KCleanupIntDict;
-    typedef QIntDictIterator<KCleanup>	KCleanupIntDictIterator;
-
-    typedef QList<KCleanup>		KCleanupList;
-    typedef QListIterator<KCleanup>	KCleanupListIterator;
-    
+    inline kdbgstream & operator<< ( kdbgstream & stream, const KCleanup * cleanup )
+    {
+	if ( cleanup )
+	    stream << cleanup->id();
+	else
+	    stream << "<NULL>";
+	
+	return stream;
+    }
 }	// namespace KDirStat
 
 

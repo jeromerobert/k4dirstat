@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-08-08
  *
- *   $Id: kdirtreeiterators.cpp,v 1.1 2001/08/16 14:36:08 hundhammer Exp $
+ *   $Id: kdirtreeiterators.cpp,v 1.2 2002/01/07 09:07:05 hundhammer Exp $
  *
  */
 
@@ -72,7 +72,7 @@ void KFileInfoIterator::next()
 	}
 	else
 	{
-	    // kdDebug() << k_funcinfo << " direct child " << _current->debugUrl() << endl;
+	    // kdDebug() << k_funcinfo << " direct child " << _current << endl;
 	}
     }
     else	// _directChildrenProcessed
@@ -90,7 +90,7 @@ void KFileInfoIterator::next()
 	    }
 	    else
 	    {
-		// kdDebug() << k_funcinfo << " dot entry " << _current->debugUrl() << endl;
+		// kdDebug() << k_funcinfo << " dot entry " << _current << endl;
 	    }
 	}
 	else	// Dot entry already processed or processing it not desired
@@ -111,7 +111,7 @@ void KFileInfoIterator::next()
 		    }
 		    else
 		    {
-			// kdDebug() << k_funcinfo << " dot entry child " << _current->debugUrl() << endl;
+			// kdDebug() << k_funcinfo << " dot entry child " << _current << endl;
 		    }
 		}
 		else	// _policy != KDotEntryTransparent

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-08-08
+ *   Updated:	2002-01-03
  *
- *   $Id: kdirtreeiterators.h,v 1.1 2001/08/16 14:36:08 hundhammer Exp $
+ *   $Id: kdirtreeiterators.h,v 1.2 2002/01/07 09:07:05 hundhammer Exp $
  *
  */
 
@@ -205,7 +205,7 @@ namespace KDirStat
 	/**
 	 * Destructor.
 	 **/
-	virtual 	~KFileInfoSortedIterator();
+	virtual ~KFileInfoSortedIterator();
 
 	/**
 	 * Advance to the next child. Same as @ref operator++().
@@ -214,7 +214,7 @@ namespace KDirStat
 	 *
 	 * Inherited from @ref KFileInfoSortedIterator.
 	 **/
-	virtual void	next();
+	virtual void next();
 
 
     protected:

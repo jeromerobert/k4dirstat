@@ -1,3 +1,57 @@
+2002-01-04  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 1.8.3-beta
+	  The new KDirStat is now as complete as the old one ever was!
+	
+	* Added simple 'mail to owner' report
+	* Implemented cleanup configuration
+	* Added 'ask for confirmation' flag to cleanups
+	* Added 'works for local files only' flag to cleanups
+	* Fixed URL handling: Always strip off trailing slash
+	* Fixed app icon
+	* Fixed .desktop file - KDirStat is now in 'Utilities'
+
+2002-01-03  Stefan Hundhammer  <sh@suse.de>
+
+	* Implemented save/read configuration
+	* Updated TODO list - gosh, was this thing outdated!
+	* kdDebug() operator << for KCleanup
+	* kdDebug() operator << for KDirTreeViewItem
+	
+
+2002-01-02  Stefan Hundhammer  <sh@suse.de>
+
+	* Implemented 'settings' dialog
+	* Implemented 'tree colors' settings
+
+	
+2002-01-01  Stefan Hundhammer  <sh@suse.de>
+
+	* Implemented / completed KCleanupCollection
+	* Fixed some core dumps (oops)
+
+	
+2001-12-31  Stefan Hundhammer  <sh@suse.de>
+
+	* kdDebug() operator<< for KFileInfo
+
+	
+2001-12-30  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 1.8.2-beta
+	* Cleanups are back!
+
+	
+2001-12-26  Stefan Hundhammer  <sh@suse.de>
+
+	* Mount point remains marked as mount point even after 
+	  "refresh selected branch" 
+
+	* KFileInfo / KDirInfo now have direct access to their
+	  KDirTree (i.e. they now have their own pointer)
+	  => transparent access from outside easier
+	
+
 2001-12-08  Stefan Hundhammer  <sh@suse.de>
 
 	* Tree colors are back again

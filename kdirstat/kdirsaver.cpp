@@ -5,9 +5,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-10
+ *   Updated:	2002-01-02
  *
- *   $Id: kdirsaver.cpp,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: kdirsaver.cpp,v 1.2 2002/01/07 09:07:04 hundhammer Exp $
  *
  */
 
@@ -67,7 +67,7 @@ KDirSaver::currentDirPath() const
 
 
 void
-KDirSaver::restore( void )
+KDirSaver::restore()
 {
     chdir( oldWorkingDir.path() );
 }

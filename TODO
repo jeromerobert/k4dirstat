@@ -1,37 +1,59 @@
+			    TODO list for KDirStat
+			   ========================
+							Updated: 2002-01-04
 
-Become KDirStat 0.86-compatible again:
+- misc app configs:
+  - pacman animation in tool bar
+  - pacman animation in tree view (for fast machines)
+  - enable/disable local dir reader
+  - enable/disable 'cross file systems'
 
-- most menu stuff
-- cleanup actions
-- configure cleanups
-- configure tree colors
+- session management
 
+- write English help file 
 
-- Make treemaps work again; this will most likely require a rewrite of the
+- German translation for program
+
+- German help file
+
+- make treemaps work again; this will most likely require a rewrite of the
   treemap related part. 
 
+- make KDirStat a KPart
+
+- check in to the 'kdenonbeta' CVS - I don't like this part... ;-)
+
+
+
+Maybe:
+======
+
+- Animation other than pacman (optional?)
+
+- configure mail report texts (the user gets an editor in the mailer anyway)
+
+- 'kdf' like 'disk free' display for file system of current tree - pie, bar graph?
+
+- Filter on tree view: by user, by mtime, by size
+
+- Select items in the tree view as "special interest" for further processing in mail reports
+
+- Manually mark dir subtrees as "static" - e.g., for system directories that
+  almost never change anyway; scan them just once and save their sizes to file;
+  only rescan those subtrees on explicit user request
+
+- Automagically mark such subtrees by mtime and/or a hardwired list
 
 
 
 
+Postponed until further notice:
+===============================
 
+- write scanned trees to cache file for later reuse;
+  use this cache file first and then begin scanning the dir tree.
 
+  Since the Linux 2.4 kernel is great at caching directory entries,
+  this isn't really necessary for Linux - and I am a Linux guy...
+  ;-)
 
-Old ideas:
-
-Advanced stuff:
-
-- tree maps
-- cushioned tree maps
-- squarified cushioned tree maps
-
-
-Mabe if it turns out to be necessary:
-
-- write scanned trees to cache file for later reuse
-- use delayed dir tree scanning for seldom changed sys dirs
-- let user choose (static) dirs to disregard
-
-But:
-  The Linux 2.4 kernel is great at caching directory entries,
-  thus for Linux this really isn't necessary - and I am a Linux guy... 

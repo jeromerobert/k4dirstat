@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-08
+ *   Updated:	2002-01-04
  *
- *   $Id: kdirtreeview.cpp,v 1.11 2001/12/10 10:32:58 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.12 2002/01/07 09:07:05 hundhammer Exp $
  *
  */
 
@@ -23,7 +23,6 @@
 #include <kglobalsettings.h>
 #include <kicontheme.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 
 #include "kdirtreeview.h"
 #include "kdirtreeiterators.h"
@@ -96,30 +95,10 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
 #undef loadIcon
 
-    // Initialize colors.
-
-    _usedFillColors = 0;
-
-    _fillColor[	_usedFillColors++ ] = QColor ( 0,     0, 255 );
-    _fillColor[	_usedFillColors++ ] = QColor ( 128,   0, 128 );
-    _fillColor[	_usedFillColors++ ] = QColor ( 231, 147,  43 );
-    _fillColor[	_usedFillColors++ ] = QColor (   4, 113,   0 );
-    
-    for ( int i= _usedFillColors; i < KDirTreeViewMaxFillColor; i++ )
-    {
-	_fillColor[i]	= blue;
-    }
-    
+    setDefaultFillColors();
+    readConfig();
     ensureContrast();
 
-
-#if 0
-    // Provide some nice 3D look.
-
-    setFrameStyle ( QFrame::WinPanel | QFrame::Sunken );
-    setMargin ( 2 );
-    setLineWidth ( 2 );
-#endif
 
     connect( kapp,	SIGNAL( kdisplayPaletteChanged()	),
 	     this,	SLOT  ( paletteChanged()		) );
@@ -127,8 +106,8 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
 	     this,	SLOT  ( selectItem		( QListViewItem * ) ) );
 
-   connect ( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
-	     this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
+    connect ( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
+	      this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
 
    _contextInfo	  = new QPopupMenu;
    _idContextInfo = _contextInfo->insertItem ( "dummy" );
@@ -250,6 +229,9 @@ KDirTreeView::openURL( KURL url )
     connect( this,  SIGNAL( selectionChanged( KFileInfo * ) ),
 	     _tree, SLOT  ( selectItem      ( KFileInfo * ) ) );
 
+    connect( _tree, SIGNAL( selectionChanged( KFileInfo * ) ),
+	     this,  SLOT  ( selectItem      ( KFileInfo * ) ) );
+
     prepareReading();
     _tree->startReading( url );
 }
@@ -330,7 +312,7 @@ KDirTreeView::addChild( KFileInfo *newChild )
 
 	if ( cloneParent )
 	{
-	    // kdDebug() << "Immediately cloning " << newChild->debugUrl() << endl;
+	    // kdDebug() << "Immediately cloning " << newChild << endl;
 	    new KDirTreeViewItem( this, cloneParent, newChild );
 	}
 	else	// Error
@@ -338,13 +320,13 @@ KDirTreeView::addChild( KFileInfo *newChild )
 	    if ( ! _doLazyClone )
 	    {
 		kdError() << k_funcinfo << "Can't find parent view item for "
-			  << newChild->debugUrl() << endl;
+			  << newChild << endl;
 	    }
 	}
     }
     else	// No parent - top level item
     {
-	// kdDebug() << "Immediately top level cloning " << newChild->debugUrl() << endl;
+	// kdDebug() << "Immediately top level cloning " << newChild << endl;
 	new KDirTreeViewItem( this, newChild );
     }
 }
@@ -355,13 +337,43 @@ KDirTreeView::deleteChild( KFileInfo *child )
 {
     KDirTreeViewItem *clone = locate( child,
 				      false );	// lazy
+    KDirTreeViewItem *nextSelection = 0;
+
+    // kdDebug() << "Received deletingChild signal for " << child << endl;
+    
     if ( clone )
     {
+	if ( clone == _selection )
+	{
+	    /**
+	     * The selected item is about to be deleted. Select some other item
+	     * so there is still something selected: Preferably the next item
+	     * or the parent if there is no next. This cannot be done from
+	     * outside because the order of items is not known to the outside;
+	     * it might appear very random if the next item in the KFileInfo
+	     * list would be selected. The order of that list is definitely
+	     * different than the order of this view - which is what the user
+	     * sees. So let's give the user a reasonable next selection so he
+	     * can continue working without having to explicitly select another
+	     * item.
+	     *
+	     * This is very useful if the user just activated a cleanup action
+	     * that deleted an item: It makes sense to implicitly select the
+	     * next item so he can clean up many items in a row.
+	     **/
+
+	    nextSelection = clone->next() ? clone->next() : clone->parent();
+	    // kdDebug() << k_funcinfo << " Next selection: " << nextSelection << endl;
+	}
+	
 	KDirTreeViewItem *parent = clone->parent();
 	delete clone;
 
 	if ( parent )
 	    parent->updateSummary();
+
+	if ( nextSelection )
+	    selectItem( nextSelection );
     }
 }
 
@@ -454,8 +466,19 @@ void
 KDirTreeView::selectItem( QListViewItem *listViewItem )
 {
     _selection = dynamic_cast<KDirTreeViewItem *>( listViewItem );
-    // kdDebug() << "Selecting item " << ( _selection ? (const char *) _selection->orig()->debugUrl() : "<none>" ) << endl;
 
+    if ( _selection )
+    {
+	// kdDebug() << k_funcinfo << " Selecting item " << _selection << endl;
+	setSelected( _selection, true );
+    }
+    else
+    {
+	// kdDebug() << k_funcinfo << " Clearing selection" << endl;
+	clearSelection();
+    }
+	
+    
     emit selectionChanged( _selection );
     emit selectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
 }
@@ -489,11 +512,11 @@ KDirTreeView::clearSelection()
 {
     // kdDebug() << k_funcinfo << endl;
     _selection = 0;
+    QListView::clearSelection();
 
     emit selectionChanged( (KDirTreeViewItem *) 0 );
     emit selectionChanged( (KFileInfo *) 0 );
 }
-
 
 
 const QColor &
@@ -502,19 +525,31 @@ KDirTreeView::fillColor( int level ) const
     if ( level < 0 )
     {
 	level = 0;
-	warning ( "KDirTreeView::fillColor(): Invalid argument: %d", level );
+	kdWarning() << k_funcinfo << "Invalid argument: " << level << endl;
     }
 
     return _fillColor [ level % _usedFillColors ];
 }
 
 
+const QColor &
+KDirTreeView::rawFillColor( int level ) const
+{
+    if ( level < 0 || level > KDirTreeViewMaxFillColor )
+    {
+	level = 0;
+	kdWarning() << k_funcinfo << "Invalid argument: " << level << endl;
+    }
+
+    return _fillColor [ level % KDirTreeViewMaxFillColor ];
+}
+
 
 void
 KDirTreeView::setFillColor( int			level,
 			    const QColor &	color )
 {
-    if ( level > 0 && level < KDirTreeViewMaxFillColor )
+    if ( level >= 0 && level < KDirTreeViewMaxFillColor )
 	_fillColor[ level ] = color;
 }
 
@@ -538,6 +573,33 @@ KDirTreeView::setUsedFillColors( int usedFillColors )
     _usedFillColors = usedFillColors;
 }
 
+
+void
+KDirTreeView::setDefaultFillColors()
+{
+    int i;
+    
+    for ( i=0; i < KDirTreeViewMaxFillColor; i++ )
+    {
+	_fillColor[i] = blue;
+    }
+
+    i = 0;
+    _usedFillColors = 4;
+   
+    setFillColor ( i++, QColor ( 0,     0, 255 ) );
+    setFillColor ( i++, QColor ( 128,   0, 128 ) );
+    setFillColor ( i++, QColor ( 231, 147,  43 ) );
+    setFillColor ( i++, QColor (   4, 113,   0 ) );
+    setFillColor ( i++, QColor ( 176,   0,   0 ) );
+    setFillColor ( i++, QColor ( 204, 187,   0 ) );
+    setFillColor ( i++, QColor ( 162,  98,  30 ) );
+    setFillColor ( i++, QColor (   0, 148, 146 ) );
+    setFillColor ( i++, QColor ( 217,  94,   0 ) );
+    setFillColor ( i++, QColor (   0, 194,  65 ) );
+    setFillColor ( i++, QColor ( 194, 108, 187 ) );
+    setFillColor ( i++, QColor (   0, 179, 255 ) );
+}
 
 
 void
@@ -573,7 +635,6 @@ KDirTreeView::paletteChanged()
     setTreeBackground( KGlobalSettings::baseColor() );
     ensureContrast();
 }
-
 
 
 void
@@ -645,6 +706,97 @@ KDirTreeView::popupContextInfo( const QPoint &	pos,
 {
     _contextInfo->changeItem( info, _idContextInfo );
     _contextInfo->popup( pos );
+}
+
+
+void
+KDirTreeView::readConfig()
+{
+    KConfig *config = kapp->config();
+    KConfigGroupSaver saver( config, "Tree Colors" );
+    _usedFillColors = config->readNumEntry( "usedFillColors", -1 );
+
+    if ( _usedFillColors < 0 )
+    {
+	/*
+	 * No 'usedFillColors' in the config file?  Better forget that
+	 * file and use default values. Otherwise, all colors would very
+	 * likely become blue - the default color.
+	 */
+	setDefaultFillColors();
+    }
+    else
+    {
+	// Read the rest of the 'Tree Colors' section
+      
+	QColor defaultColor( blue );
+   
+	for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
+	{
+	    QString name;
+	    name.sprintf( "fillColor_%02d", i );
+	    _fillColor [i] = config->readColorEntry( name, &defaultColor );
+	}
+    }
+
+    if ( isVisible() )
+	triggerUpdate();
+}
+
+
+void
+KDirTreeView::saveConfig() const
+{
+    KConfig *config = kapp->config();
+    KConfigGroupSaver saver( config, "Tree Colors" );
+   
+    config->writeEntry( "usedFillColors", _usedFillColors );
+
+    for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
+    {
+	QString name;
+	name.sprintf( "fillColor_%02d", i );
+	config->writeEntry ( name, _fillColor [i] );
+    }
+}
+
+
+void
+KDirTreeView::sendMailToOwner()
+{
+    if ( ! _selection )
+    {
+	kdError() << k_funcinfo << "Nothing selected!" << endl;
+	return;
+    }
+
+    QString owner = KAnyDirReadJob::owner( fixedUrl( _selection->orig()->url() ) );
+    QString subject = i18n( "Disk usage" );
+    QString body =
+	i18n("Please check your disk usage and clean up if you can. Thank you." )
+	+ "\n\n"
+	+ _selection->asciiDump()
+	+ "\n\n"
+	+ i18n( "Disk usage report generated by KDirStat" )
+	+ "\nhttp://www.suse.de/~sh/kdirstat";
+
+    // kdDebug() << "owner: "   << owner   << endl;
+    // kdDebug() << "subject: " << subject << endl;
+    // kdDebug() << "body:\n"   << body    << endl;
+
+    KURL mail;
+    mail.setProtocol( "mailto" );
+    mail.setPath( owner );
+    mail.setQuery( "?subject="	+ KURL::encode_string( subject ) +
+		   "&body="	+ KURL::encode_string( body ) );
+
+    // TODO: Check for maximum command line length.
+    //
+    // The hard part with this is how to get this from all that 'autoconf'
+    // stuff into 'config.h' or some other include file without hardcoding
+    // anything - this is too system dependent.
+    
+    kapp->invokeMailer( mail );
 }
 
 
@@ -789,7 +941,6 @@ KDirTreeViewItem::updateSummary()
     // Update this item
 
     setIcon();
-    // setText( _view->latestMtimeCol(),	"  " + formatTimeDate( _orig->latestMtime() ) );
     setText( _view->latestMtimeCol(),		"  " + localeTimeDate( _orig->latestMtime() ) );
 
     if ( _orig->isDir() || _orig->isDotEntry() )
@@ -922,7 +1073,7 @@ KDirTreeViewItem::deferredClone()
     {
 	if ( startingClean || ! locate( origChild, false, level ) )
 	{
-	    // kdDebug() << "Deferred cloning " << origChild->debugUrl() << endl;
+	    // kdDebug() << "Deferred cloning " << origChild << endl;
 	    new KDirTreeViewItem( _view, this, origChild );
 	}
 
@@ -935,7 +1086,7 @@ KDirTreeViewItem::deferredClone()
     if ( _orig->dotEntry() &&
 	 ( startingClean || ! locate( _orig->dotEntry(), false, level ) ) )
     {
-	// kdDebug() << "Deferred cloning dot entry for " << _orig->debugUrl() << endl;
+	// kdDebug() << "Deferred cloning dot entry for " << _orig << endl;
 	new KDirTreeViewItem( _view, this, _orig->dotEntry() );
     }
 }
@@ -944,7 +1095,7 @@ KDirTreeViewItem::deferredClone()
 void
 KDirTreeViewItem::finalizeLocal()
 {
-    // kdDebug() << k_funcinfo << _orig->debugUrl() << endl;
+    // kdDebug() << k_funcinfo << _orig << endl;
     cleanupDotEntries();
 
     if ( _orig->totalItems() == 0 )
@@ -972,7 +1123,7 @@ KDirTreeViewItem::cleanupDotEntries()
 
     if ( ! _orig->firstChild() )
     {
-	// kdDebug() << "Removing solo dot entry clone " << _orig->debugUrl() << endl;
+	// kdDebug() << "Removing solo dot entry clone " << _orig << endl;
 	KDirTreeViewItem *child = dotEntry->firstChild();
 
 	while ( child )
@@ -982,7 +1133,7 @@ KDirTreeViewItem::cleanupDotEntries()
 
 	    // Reparent this child
 
-	    // kdDebug() << "Reparenting clone " << child->orig()->debugUrl() << endl;
+	    // kdDebug() << "Reparenting clone " << child << endl;
 	    dotEntry->removeItem( child );
 	    insertItem( child );
 
@@ -1009,7 +1160,7 @@ KDirTreeViewItem::cleanupDotEntries()
 
     if ( ! _orig->dotEntry()->firstChild() && dotEntry )
     {
-	// kdDebug() << "Removing empty dot entry clone " << _orig->debugUrl() << endl;
+	// kdDebug() << "Removing empty dot entry clone " << _orig << endl;
 	delete dotEntry;
     }
 }
@@ -1026,21 +1177,6 @@ KDirTreeViewItem::setOpen( bool open )
 
     if ( open )
 	updateSummary();
-
-#if 0
-    // Iterator demo - look at stdout while clicking closed items open
-
-    if ( open )
-    {
-	KFileInfoSortedIterator it( _orig, KDotEntryTransparent, KSortByLatestMtime, false );
-
-	while ( *it )
-	{
-	    kdDebug() << (*it)->debugUrl() << "\t" << formatSize( (*it)->totalSize() ) << endl;
-	    ++it;
-	}
-    }
-#endif
 }
 
 
@@ -1053,6 +1189,29 @@ KDirTreeViewItem::openSubtree()
     setOpen( true );
 }
 
+
+QString
+KDirTreeViewItem::asciiDump()
+{
+    QString dump;
+    
+    dump.sprintf( "%10s  %s\n",
+		  (const char *) formatSize( _orig->totalSize() ),
+		  (const char *) _orig->debugUrl() );
+
+    if ( isOpen() )
+    {
+	KDirTreeViewItem *child = firstChild();
+
+	while ( child )
+	{
+	    dump += child->asciiDump();
+	    child = child->next();
+	}
+    }
+
+    return dump;
+}
 
 
 QString
@@ -1138,7 +1297,7 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 	{
 	    if ( _pacMan && _orig->isBusy() )
 	    {
-		// kdDebug() << "Animating PacMan for " << _orig->debugUrl() << endl;
+		// kdDebug() << "Animating PacMan for " << _orig << endl;
 		// painter->setBackgroundColor( _view->treeBackground() );
 		painter->setBackgroundColor( colorGroup.base() );
 		_pacMan->animate( painter, QRect( 0, 0, width, height() ) );

@@ -4,77 +4,99 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-09
+ *   Updated:	2002-01-04
  *
- *   $Id: kcleanup.cpp,v 1.2 2001/12/10 10:32:58 hundhammer Exp $
+ *   $Id: kcleanup.cpp,v 1.3 2002/01/07 09:07:04 hundhammer Exp $
  *
  */
 
 
-#include "kcleanup.h"
-#include "kdirsaver.h"
+#include <stdlib.h>
+#include <qapplication.h>
+#include <qregexp.h>
+
 #include <kapp.h>
 #include <kprocess.h>
 #include <kdebug.h>
-#include <qapplication.h>
-#include <qregexp.h>
-#include <stdlib.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+
+#include "kcleanup.h"
+#include "kdirsaver.h"
 
 #define VERBOSE_RUN_COMMAND	1
-#define SIMULATE_COMMAND	1
+#define SIMULATE_COMMAND	0
 
 using namespace KDirStat;
 
 
-KCleanup::KCleanup( QString	id,
-		     QString	command,
-		     QString	title	)
-    : QObject()
+KCleanup::KCleanup( QString		id,
+		    QString		command,
+		    QString		title,
+		    KActionCollection *	parent	)
+    
+    : KAction( title,
+	       0,	// accel
+	       parent,
+	       id )
+    
     , _id	( id	  )
     , _command	( command )
     , _title	( title	  )
 {
-    _tree		= 0;
+    _selection		= 0;
     _enabled		= true;
     _worksForDir	= true;
     _worksForFile	= false;
     _worksForDotEntry	= false;
+    _worksLocalOnly	= true;
     _recurse		= false;
+    _askForConfirmation	= false;
     _refreshPolicy	= noRefresh;
+    
+    KAction::setEnabled( false );
 }
 
 
 KCleanup::KCleanup( const KCleanup &src )
-    : QObject()
+    : KAction()
 {
-    _tree		= src.tree();
-    _id			= src.id();
-    _command		= src.command();
-    _title		= src.title();
-    _enabled		= src.enabled();
-    _worksForDir	= src.worksForDir();
-    _worksForFile	= src.worksForFile();
-    _worksForDotEntry	= src.worksForDotEntry();
-    _recurse		= src.recurse();
-    _refreshPolicy	= src.refreshPolicy();
+    copy( src );
 }
 
 
 KCleanup &
 KCleanup::operator= ( const KCleanup &src )
 {
-    _tree		= src.tree();
+    copy( src );
+    
+    return *this;
+}
+
+
+void
+KCleanup::copy( const KCleanup &src )
+{
+    setTitle( src.title() );
+    _selection		= src.selection();
     _id			= src.id();
     _command		= src.command();
-    _title		= src.title();
     _enabled		= src.enabled();
     _worksForDir	= src.worksForDir();
     _worksForFile	= src.worksForFile();
     _worksForDotEntry	= src.worksForDotEntry();
+    _worksLocalOnly	= src.worksLocalOnly();
     _recurse		= src.recurse();
+    _askForConfirmation	= src.askForConfirmation();
     _refreshPolicy	= src.refreshPolicy();
+}
 
-    return *this;
+
+void
+KCleanup::setTitle( const QString &title )
+{
+    _title = title;
+    KAction::setText( _title );
 }
 
 
@@ -82,6 +104,9 @@ bool
 KCleanup::worksFor( KFileInfo *item ) const
 {
     if ( ! _enabled || ! item )
+	return false;
+
+    if ( worksLocalOnly() && ! item->tree()->isFileProtocol() )
 	return false;
 
     if	( item->isDotEntry() )	return worksForDotEntry();
@@ -92,23 +117,43 @@ KCleanup::worksFor( KFileInfo *item ) const
 
 
 void
+KCleanup::selectionChanged( KFileInfo *selection )
+{
+    _selection = selection;
+    KAction::setEnabled( worksFor( selection ) );
+}
+
+
+void
 KCleanup::executeWithSelection()
 {
-    if ( ! _tree )
+    if ( _selection )
+	execute( _selection );
+}
+
+
+bool
+KCleanup::confirmation( KFileInfo * item )
+{
+    QString msg;
+
+    if ( item->isDir() || item->isDotEntry() )
     {
-	kdError() << "Trying to execute cleanup '" << _title
-		  << "' without a tree to work on" << endl;
-	return;
+	msg = i18n( "%1\nin directory %2" ).arg( cleanTitle() ).arg( item->url() );
+    }
+    else
+    {
+	msg = i18n( "%1\nfor file %2" ).arg( cleanTitle() ).arg( item->url() );
     }
 
-    if ( ! _tree->selection() )
-    {
-	kdError() << "Trying to execute cleanup '" << _title
-		  << "' without selected item" << endl;
-	return;
-    }
-    
-    execute( _tree->selection() );
+    if ( KMessageBox::warningContinueCancel( 0,				// parentWidget
+					     msg,			// message
+					     i18n( "Please confirm" ),	// caption
+					     i18n( "Confirm" )		// confirmButtonLabel
+					     ) == KMessageBox::Continue )
+	return true;
+    else
+	return false;
 }
 
 
@@ -117,18 +162,13 @@ KCleanup::execute( KFileInfo *item )
 {
     if ( worksFor( item ) )
     {
-#if 0
-	// FIXME
-	KFileInfo *sel  = _tree->selection();
-#endif
+	if ( _askForConfirmation && ! confirmation( item ) )
+	    return;
+	    
+	KDirTree  * tree = item->tree();
 	
 	executeRecursive( item );
-
 	
-#if 0
-	// FIXME
-	// FIXME
-	// FIXME
 	switch ( _refreshPolicy )
 	{
 	    case noRefresh:
@@ -137,60 +177,31 @@ KCleanup::execute( KFileInfo *item )
 
 
 	    case refreshThis:
-		(void) _tree->refreshSubTree( item );
+		tree->refresh( item );
 		break;
 
 
 	    case refreshParent:
-		if ( item->parent() )
-		    (void) _tree->refreshSubTree( item->parent() );
-		else
-		    (void) _tree->refreshAll();
-
+		tree->refresh( item->parent() );
 		break;
 
 
 	    case assumeDeleted:
 
-		// As long as the pointers are still valid (i.e. before
-		// deleteSubTree()), try to figure out a good value for a
-		// new selection. Try the next sibling or, if there is
-		// none, the parent of the current selection.
-
-		KFileInfo *nextSelection = (KFileInfo *) sel->next();
-		if ( ! nextSelection )
-		    nextSelection = sel->parent();
-
-
 		// Assume the cleanup action has deleted the item.
 		// Modify the KDirTree accordingly.
 
-		_tree->deleteSubTree( item );
+		tree->deleteSubtree( item );
 
-
-		// In case the item we just performed the cleanup action
-		// had been the current selection of its KDirTree, try
-		// a reasonable automatic selection. This is for cases
-		// where the user wants to go through a subtree (maybe
-		// even using the keyboard) and deletes an item every now
-		// and then. We don't want him to lose his context just
-		// because the item he had selected previously now is
-		// gone. So we automatically select the logical "next in
-		// line" so he can seamlessly continue with his work.
-		//
-		// Notice: Losing the selection would almost certainly
-		// require mouse interaction which might be unacceptable
-		// in such a situation.
-
-		if ( sel == item && nextSelection )
-		    _tree->selectItem( nextSelection );
+		// Don't try to figure out a reasonable next selection - the
+		// views have to do that while handling the subtree
+		// deletion. Only the views have any knowledge about a
+		// reasonable strategy for choosing a next selection. Unlike
+		// the view items, the KFileInfo items don't have an order that
+		// makes any sense to the user.
 
 		break;
 	}
-	// FIXME
-	// FIXME
-	// FIXME
-#endif
     }
 }
 
@@ -242,6 +253,26 @@ KCleanup::itemDir( const KFileInfo *item ) const
     }
 
     return dir;
+}
+
+
+QString
+KCleanup::cleanTitle() const
+{
+    // Use the cleanup action's title, if possible.
+   
+    QString title = _title;
+
+    if ( title.isEmpty() )
+    {
+	title = _id;
+    }
+
+    // Get rid of any "&" characters in the text that denote keyboard
+    // shortcuts in menus.
+    title.replace( QRegExp( "&" ), "" );
+
+    return title;
 }
 
 
@@ -311,15 +342,10 @@ KCleanup::runCommand ( const KFileInfo *	item,
 void
 KCleanup::readConfig()
 {
-#if 0
-    // FIXME
-    // FIXME
-    // FIXME
-    
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, _id );
 
-    bool valid 		= config->readBoolEntry( "valid", false	);
+    bool valid = config->readBoolEntry( "valid", false	);
 
     // If the config section requested exists, it should contain a
     // "valid" field with a true value. If not, there is no such
@@ -331,31 +357,23 @@ KCleanup::readConfig()
     if ( valid )
     {
 	_command		= config->readEntry	( "command"		);
-	_title			= config->readEntry	( "title"		);
 	_enabled		= config->readBoolEntry ( "enabled"		);
 	_worksForDir		= config->readBoolEntry ( "worksForDir"		);
 	_worksForFile		= config->readBoolEntry ( "worksForFile"	);
 	_worksForDotEntry	= config->readBoolEntry ( "worksForDotEntry"	);
-	_recurse		= config->readBoolEntry ( "recurse"		);
+	_worksLocalOnly		= config->readBoolEntry ( "worksLocalOnly"	);
+	_recurse		= config->readBoolEntry ( "recurse"		, false	);
+	_askForConfirmation	= config->readBoolEntry ( "askForConfirmation"	, false	);
 	_refreshPolicy		= (KCleanup::RefreshPolicy) config->readNumEntry( "refreshPolicy" );
+	setTitle( config->readEntry( "title" ) );
     }
-
-    // FIXME
-    // FIXME
-    // FIXME
-#endif
 }
 
 
 void
-KCleanup::writeConfig() const
+KCleanup::saveConfig() const
 {
-#if 0
-    // FIXME
-    // FIXME
-    // FIXME
-    
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, _id );
 
     config->writeEntry( "valid",		true			);
@@ -365,13 +383,10 @@ KCleanup::writeConfig() const
     config->writeEntry( "worksForDir",		_worksForDir		);
     config->writeEntry( "worksForFile",		_worksForFile		);
     config->writeEntry( "worksForDotEntry",	_worksForDotEntry	);
+    config->writeEntry( "worksLocalOnly",	_worksLocalOnly		);
     config->writeEntry( "recurse",		_recurse		);
+    config->writeEntry( "askForConfirmation",	_askForConfirmation	);
     config->writeEntry( "refreshPolicy",	(int) _refreshPolicy	);
-    
-    // FIXME
-    // FIXME
-    // FIXME
-#endif
 }
 
 

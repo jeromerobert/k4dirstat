@@ -12,6 +12,7 @@ configure.files
 configure.in
 libtool
 stamp-h
+stamp-h1
 subdirs
 *.bak
 *.auto

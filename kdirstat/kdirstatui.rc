@@ -1,24 +1,117 @@
+<!-- Emacs: -*-xml-*-	 [must remain in first line!]	-->
+<!--							-->
+<!-- XML GUI description file for KDirStat		-->
+<!--							-->
+<!-- Author:	Stefan Hundhammer (sh@suse.de)		-->
+<!-- Updated:	2002-01-04				-->
+
+
 <!DOCTYPE kpartgui>
-<kpartgui name="kdirstat" version="1.1">
-<MenuBar>
+
+<!-- DOCTYPE kpartgui SYSTEM "kpartgui.dtd" would be correct, but		-->
+<!-- unfortunately, the DTD isn't installed anywhere, so this only confuses any -->
+<!-- XML/SGML tools like Emacs PSGML mode :-(					-->
+
+
+<kpartgui name="kdirstat" version="1.8.2">
+
+
+    <MenuBar>
 
 	<Menu name="file" noMerge="1"> <text>&amp;File</text>
-		<Action name="file_open" />
-		<Action name="file_open_recent" />
-    		<Action name="file_refresh_all"/>
-    		<Action name="file_refresh_selected"/>
-    		<Separator/>
-    		<Action name="file_close"/>
-		<Action name="file_quit"/>
+	    <Action name="file_open" />
+	    <Action name="file_open_recent" />
+	    <Action name="file_refresh_all"/>
+	    <Action name="file_refresh_selected"/>
+	    <Separator/>
+	    <Action name="file_close"/>
+	    <Action name="file_quit"/>
 	</Menu>
 
-</MenuBar>
+	<Menu name="cleanup" noMerge="1"> <text>Clean &amp;Up</text>
+	    <TearOffHandle/>
+	    <Action name="cleanup_open_in_konqueror"/>
+	    <Action name="cleanup_open_in_terminal"/>
+	    <Action name="cleanup_compress_subtree"/>
+	    <Action name="cleanup_make_clean"/>
+	    <Action name="cleanup_delete_trash"/>
+	    <Action name="cleanup_move_to_trash_bin"/>
+	    <Action name="cleanup_hard_delete"/>
+	    <Separator/>
+	    <Action name="cleanup_user_defined_0"/>
+	    <Action name="cleanup_user_defined_1"/>
+	    <Action name="cleanup_user_defined_2"/>
+	    <Action name="cleanup_user_defined_3"/>
+	    <Action name="cleanup_user_defined_4"/>
+	    <Action name="cleanup_user_defined_5"/>
+	    <Action name="cleanup_user_defined_6"/>
+	    <Action name="cleanup_user_defined_7"/>
+	    <Action name="cleanup_user_defined_8"/>
+	    <Action name="cleanup_user_defined_9"/>
+	</Menu>
 
-<ToolBar name="mainToolBar" noMerge="1"> <text>Main Toolbar</text>
-	<Action name="file_open"		group="file_operations" />
-	<Action name="file_refresh_all" 	group="file_operations"/>
+	<Menu name="settings" noMerge="1"> <text>&amp;Settings</text>
+	    <Action name="options_show_toolbar"/>
+	    <Action name="options_show_statusbar"/>
+	    <Action name="options_configure"/>
+	</Menu>
+
+	<Menu name="report" noMerge="1"> <text>&amp;Report</text>
+	    <Action name="report_mail_to_owner"/>
+	</Menu>
+
+    </MenuBar>
+
+
+    <ToolBar name="mainToolBar" fullWidth="true" noMerge="1"> <text>Main Toolbar</text>
+	<Action name="file_open"			group="file_operations" />
+	<Action name="file_refresh_all"			group="file_operations" />
 	<Separator/>
-	<Action name="edit_copy"/>
-</ToolBar>
+	<Action name="edit_copy"			group="edit_operations" />
+        <Action name="report_mail_to_owner"		group="report_operations"/>
+	<Separator/>
+	<Action name="cleanup_open_in_konqueror"	group="cleanup_operations"/>
+	<Action name="cleanup_open_in_terminal"		group="cleanup_operations"/>
+	<Action name="cleanup_compress_subtree"		group="cleanup_operations"/>
+	<Action name="cleanup_move_to_trash_bin"	group="cleanup_operations"/>
+        <Action name="cleanup_hard_delete"              group="cleanup_operations"/>
+    </ToolBar>
+
+
+
+    <!-- Context menu for the tree view -->
+
+    <Menu name="treeViewContextMenu" noMerge="1">
+	<Action name="edit_copy" />
+	<Action name="report_mail_to_owner"/>
+	<Separator/>
+	<Action name="file_refresh_all"/>
+	<Action name="file_refresh_selected"/>
+	<Separator/>
+	<Action name="cleanup_open_in_konqueror"/>
+	<Action name="cleanup_open_in_terminal"/>
+	<Action name="cleanup_compress_subtree"/>
+	<Action name="cleanup_make_clean"/>
+	<Action name="cleanup_delete_trash"/>
+	<Action name="cleanup_move_to_trash_bin"/>
+        <Action name="cleanup_hard_delete"/>
+	<Separator/>
+	<Action name="cleanup_user_defined_0"/>
+	<Action name="cleanup_user_defined_1"/>
+	<Action name="cleanup_user_defined_2"/>
+	<Action name="cleanup_user_defined_3"/>
+	<Action name="cleanup_user_defined_4"/>
+	<Action name="cleanup_user_defined_5"/>
+	<Action name="cleanup_user_defined_6"/>
+	<Action name="cleanup_user_defined_7"/>
+	<Action name="cleanup_user_defined_8"/>
+	<Action name="cleanup_user_defined_9"/>
+    </Menu>
+
+
+    <!-- Emacs Customization			-->
+    <!-- Local Variables:			-->
+    <!--	sgml-indent-step:	4	-->
+    <!-- End:					-->
 
 </kpartgui>

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-08
+ *   Updated:	2002-01-04
  *
- *   $Id: kdirtree.h,v 1.8 2001/12/10 10:32:58 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.9 2002/01/07 09:07:05 hundhammer Exp $
  *
  */
 
@@ -23,6 +23,7 @@
 #include <limits.h>
 #include <dirent.h>
 #include <qqueue.h>
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <kio/jobclasses.h>
 
@@ -106,20 +107,23 @@ namespace KDirStat
 	/**
 	 * Default constructor.
 	 **/
-	KFileInfo(  KFileInfo  * 	parent = 0,
-		    const char *	name   = 0 );
+	KFileInfo( KDirTree   * tree,
+		   KFileInfo  * parent = 0,
+		   const char *	name   = 0 );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
 	 **/
 	KFileInfo( const QString &	filenameWithoutPath,
 		   struct stat *	statInfo,
+		   KDirTree    *	tree,
 		   KFileInfo   *	parent = 0 );
 
 	/**
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
 	KFileInfo( const KFileItem *	fileItem,
+		   KDirTree  *		tree,
 		   KFileInfo * 		parent = 0 );
 
 	/**
@@ -161,6 +165,10 @@ namespace KDirStat
 	/**
 	 * Very much like @ref KFileInfo::url(), but with "/<Files>" appended
 	 * if this is a dot entry. Useful for debugging.
+	 * You can, however, simply use the @ref kdbgstream operator<< to
+	 * output exactly this:
+	 *
+	 * kdDebug() << "Found fileInfo " << info << endl;
 	 **/
 	QString			debugUrl()		const;
 
@@ -313,6 +321,11 @@ namespace KDirStat
 	//
 	// Tree management
 	//
+
+	/**
+	 * Returns a pointer to the @ref KDirTree this entry belongs to.
+	 **/
+	KDirTree *	tree()			const { return _tree; }
 
 	/**
 	 * Returns a pointer to this entry's parent entry or 0 if there is
@@ -516,6 +529,7 @@ namespace KDirStat
 						 S_ISCHR ( _mode ) ||
 						 S_ISFIFO( _mode ) ||
 						 S_ISSOCK( _mode )   ) ? true : false; }
+	
     protected:
 
 	// Data members.
@@ -534,6 +548,7 @@ namespace KDirStat
 
 	KFileInfo *	_parent;	// pointer to the parent entry
 	KFileInfo *	_next;		// pointer to the next entry
+	KDirTree  *	_tree;		// pointer to the parent tree
     };	// class KFileInfo
 
 
@@ -556,7 +571,8 @@ namespace KDirStat
 	 * non-directory children. This is the only way to create a "dot
 	 * entry"!
 	 **/
-	KDirInfo( KFileInfo *	parent 		= 0,
+	KDirInfo( KDirTree  *	tree,
+		  KFileInfo *	parent 		= 0,
 		  bool		asDotEntry	= false );
 
 	/**
@@ -564,12 +580,14 @@ namespace KDirStat
 	 **/
 	KDirInfo( const QString	& filenameWithoutPath,
 		  struct stat	* statInfo,
+		  KDirTree	* tree,
 		  KFileInfo	* parent	= 0 );
 
 	/**
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
 	KDirInfo( const KFileItem	* fileItem,
+		  KDirTree		* tree,
 		  KFileInfo		* parent	= 0 );
 
 	/**
@@ -840,6 +858,16 @@ namespace KDirStat
     };	// class KDirInfo
 
 
+    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileInfo * info )
+    {
+	if ( info )
+	    stream << info->debugUrl();
+	else
+	    stream << "<NULL>";
+	
+	return stream;
+    }
+
 
     /**
      * A directory read job that can be queued. This is mainly to prevent
@@ -961,7 +989,9 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * stat( const KURL & url, KFileInfo * parent = 0 );
+	static KFileInfo * stat( const KURL & 	url,
+				 KDirTree  * 	tree,
+				 KFileInfo * 	parent = 0 );
 
     protected:
 	DIR * _diskDir;
@@ -1009,9 +1039,19 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * stat( const KURL & url, KFileInfo * parent = 0 );
+	static KFileInfo * 	stat( const KURL &	url,
+				      KDirTree  * 	tree,
+				      KFileInfo * 	parent = 0 );
 
+	/**
+	 * Obtain the owner of the URL specified.
+	 *
+	 * This is a moderately expensive operation since it involves a network
+	 * transparent stat() call.
+	 **/
+	static QString		owner( KURL url );
 
+	
     protected slots:
 	/**
 	 * Receive directory entries from a KIO job.
@@ -1095,6 +1135,11 @@ namespace KDirStat
 	 * Select nothing if '0' is passed.
 	 **/
 	void selectItem( KFileInfo *newSelection );
+
+	/**
+	 * Delete a subtree.
+	 **/
+	void deleteSubtree( KFileInfo *subtree );
 
 	
     public:
@@ -1194,7 +1239,13 @@ namespace KDirStat
 	 **/
 	void sendFinalizeLocal( KDirInfo *dir );
 
+	/**
+	 * Returns 'true' if this tree uses the 'file:/' protocol (regardless
+	 * of local or network transparent directory reader).
+	 **/
+	bool isFileProtocol()	{ return _isFileProtocol; }
 
+	
     signals:
 
 	/**
@@ -1264,6 +1315,7 @@ namespace KDirStat
 	KDirReadMethod		_readMethod;
 	bool			_crossFileSystems;
 	bool			_enableLocalFileReader;
+	bool			_isFileProtocol;
     };
 
     

@@ -5,8 +5,13 @@ Exec=kdirstat -caption "%c" %i %m
 Icon=kdirstat.png
 MiniIcon=kdirstat.png
 DocPath=kdirstat/index.html
-Comment=
-Comment[de]=
+Comment=Directory statistics and disk usage
+Comment[de]=Verzeichnisstatistik und Platzverbrauch
 Terminal=0
-Name=KDirStat
-Name[de]=KDirStat
+Name=KDirStat - Directory Statistics
+Name[de]=KDirStat - Verzeichnisstatistik
+
+MimeType=inode/directory
+
+
+

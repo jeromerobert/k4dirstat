@@ -15,6 +15,9 @@ kdirstat_SOURCES =				\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
 	kcleanup.cpp				\
+	kstdcleanup.cpp 			\
+	kcleanupcollection.cpp			\
+	kdirstatsettings.cpp			\
 	kdirsaver.cpp				\
 	kpacman.cpp
 
@@ -37,6 +40,9 @@ noinst_HEADERS =				\
 	kdirtreeiterators.h			\
 	kdirtree.h				\
 	kcleanup.h				\
+	kstdcleanup.h				\
+	kcleanupcollection.h			\
+	kdirstatsettings.h			\
 	kdirsaver.h				\
 	kpacman.h
 
@@ -46,6 +52,8 @@ EXTRA_DIST =					\
 	kdirstat.desktop			\
 	lo32-app-kdirstat.png			\
 	lo16-app-kdirstat.png			\
+	hi32-app-kdirstat.png			\
+	hi16-app-kdirstat.png			\
 	treemaps/kdirtreemap.h			\
 	treemaps/kdirtreemaparea.cpp		\
 	treemaps/kdirtreemapwindow.cpp		\
@@ -61,17 +69,23 @@ endif
 kdirstat_LDADD = $(LIB_QTREEMAP) -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 install-data-local:
-	$(mkinstalldirs) $(kde_appsdir)/Applications/
-	$(INSTALL_DATA) $(srcdir)/kdirstat.desktop $(kde_appsdir)/Applications/kdirstat.desktop
+	$(mkinstalldirs) $(kde_appsdir)/Utilities/
+	$(INSTALL_DATA) $(srcdir)/kdirstat.desktop $(kde_appsdir)/Utilities/kdirstat.desktop
 	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
 	$(INSTALL_DATA) $(srcdir)/lo32-app-kdirstat.png $(kde_icondir)/locolor/32x32/apps/kdirstat.png
 	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
 	$(INSTALL_DATA) $(srcdir)/lo16-app-kdirstat.png $(kde_icondir)/locolor/16x16/apps/kdirstat.png
+	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
+	$(INSTALL_DATA) $(srcdir)/hi32-app-kdirstat.png $(kde_icondir)/hicolor/32x32/apps/kdirstat.png
+	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
+	$(INSTALL_DATA) $(srcdir)/hi16-app-kdirstat.png $(kde_icondir)/hicolor/16x16/apps/kdirstat.png
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/kdirstat.desktop
 	-rm -f $(kde_icondir)/locolor/32x32/apps/kdirstat.png
 	-rm -f $(kde_icondir)/locolor/16x16/apps/kdirstat.png
+	-rm -f $(kde_icondir)/hicolor/32x32/apps/kdirstat.png
+	-rm -f $(kde_icondir)/hicolor/16x16/apps/kdirstat.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
