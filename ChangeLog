@@ -1,3 +1,10 @@
+2002-02-02  Stefan Hundhammer  <sh@suse.de>
+
+	* Initial help documentation
+	* Bumped version to 1.8.6-rc1
+	  This is the first release candidate.
+	  The final version will be released as 2.0
+
 2002-01-27  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed update bug upon "refresh branch" and executing cleanups

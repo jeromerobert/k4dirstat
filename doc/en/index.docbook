@@ -45,11 +45,10 @@ as Authors, publish date, the abstract, and Keywords -->
 
 <authorgroup>
 <author>
-<firstname>George</firstname>
-<othername>N.</othername>
-<surname>Ugnacious</surname>
+<firstname>Stefan</firstname>
+<surname>Hundhammer</surname>
 <affiliation>
-<address><email>gnu@kde.org</email></address>
+<address><email>sh@suse.de</email></address>
 </affiliation>
 </author>
 </authorgroup>
@@ -59,7 +58,9 @@ as Authors, publish date, the abstract, and Keywords -->
 <copyright>
 <year>1999</year>
 <year>2000</year>
-<holder>George N. Ugnacious</holder>
+<year>2001</year>
+<year>2002</year>
+<holder>Stefan Hundhammer</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
 <!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
@@ -73,15 +74,16 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>03/04/1999</date>
-<releaseinfo>1.01.00</releaseinfo>
+<date>02/02/2002</date>
+<releaseinfo>0.1.01</releaseinfo>
+
 
 <!-- Abstract about this handbook -->
 
 <abstract>
 <para>
-&kdirstat; is an application specially designed to do nothing you would
-ever want.
+&kdirstat; is a graphical disk usage utility, very much like the Unix "du" command,
+plus some cleanup facilities to reclaim disk space.
 </para>
 </abstract>
 
@@ -92,9 +94,10 @@ Please at least include KDE, the KDE package it is in, the name
 <keywordset>
 <keyword>KDE</keyword>
 <keyword>kdeutils</keyword>
-<keyword>Kapp</keyword>
-<keyword>nothing</keyword>
-<keyword>nothing else</keyword>
+<keyword>utilities</keyword>
+<keyword>file system</keyword>
+<keyword>disk usage</keyword>
+<keyword>cleanup</keyword>
 </keywordset>
 
 </bookinfo>
@@ -108,8 +111,11 @@ system. Any chapter labelled (OPTIONAL) may be left out at the author's
 discretion. Other chapters should not be left out in order to maintain a
 consistent documentation style across all KDE apps. -->
 
-<chapter id="introduction">
-<title>Introduction</title>
+
+
+
+<chapter id="overview">
+<title>Overview</title>
 
 <!-- The introduction chapter contains a brief introduction for the
 application that explains what it does and where to report
@@ -117,172 +123,244 @@ problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
 <para>
-&kapp; is a program that lets you do absolutely nothing. Please report
-any problems or feature requests to the KDE mailing lists.
+&kapp; is a graphical disk usage utility. It shows you where all your disk
+space has gone and tries to help clean it up.
 </para>
-</chapter>
 
-<chapter id="using-kapp">
-<title>Using KDirStat</title>
 
-<!-- This chapter should tell the user how to use your app. You should use as
-many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
-your application. -->
+<sect1 id="screenshot">
+<title>Screen Shot</title>
 
 <para>
 
-<!-- Note that all graphics should be in .png format. Use no gifs because of
-patent issues. -->
-
 <screenshot>
-<screeninfo>Here's a screenshot of &kapp;</screeninfo>
+<screeninfo>The &kapp; main window</screeninfo>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="screenshot.png" format="PNG"/>
-	  </imageobject>
-	  <imageobject>
-	    <imagedata fileref="screenshot.eps" format="EPS"/>
+	    <imagedata fileref="kdirstat-main.png" format="PNG"/>
 	  </imageobject>
 	  <textobject>
-	    <phrase>Screenshot</phrase>
+	    <phrase>Main window screenshot</phrase>
 	  </textobject>
 	</mediaobject>
 </screenshot>
 </para>
+</sect1>
 
 
-<sect1 id="kapp-features">
-<title>More Kapp features</title>
 
-<para>It slices! It dices! and it comes with a free toaster!</para>
+
+<sect1 id="features">
+<title>Features</title>
+
+
+<sect2><title>Display Features</title>
+<itemizedlist>
+
+<listitem><para>
+Graphical and numeric display of used disk space
+</para></listitem>
+
+<listitem><para>
+Files kept apart from directories in separate &lt;Files&gt; items to prevent
+cluttering the display
+</para></listitem>
+
+
+<listitem><para>
+All numbers displayed human readable - e.g., 34.4 MB instead of 36116381 Bytes
+</para></listitem>
+
+
+<listitem><para>
+Different colors in the directory tree display to keep the different tree
+levels visually apart
+</para></listitem>
+
+
+<listitem><para>
+Display of latest change time within an entire directory tree - you can easily
+see what object was changed last and when.
+</para></listitem>
+
+</itemizedlist>
+</sect2>
+
+
+<sect2><title>Directory Reading</title>
+<itemizedlist>
+
+<listitem>
 <para>
-The Squiggle Tool <guiicon><inlinemediaobject>
-	  <imageobject>
-	    <imagedata fileref="squiggle.png" format="PNG"/>
-	  </imageobject>
-	  <imageobject>
-	    <imagedata fileref="squiggle.eps" format="EPS"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Squiggle</phrase>
-	  </textobject>
-</inlinemediaobject></guiicon> is used to draw squiggly lines all over
-the &kdirstat; main window. It's not a bug, it's a feature!
+Stays on one file system by default - reads mounted file systems only on
+request. 
 </para>
+<para>
+You don't care about a mounted /usr file system if the root file
+system is full and you need to find out why in a hurry, nor do you want to scan
+everybody's home directory on the NFS server when your local disk is full.
+</para>
+</listitem>
+
+
+<listitem><para>
+Network transparency: Scan FTP or Samba directories - or whatever else
+protocols KDE support.
+</para></listitem>
+
+<listitem><para>
+PacMan animation while directories are being read. 
+OK, this is not exactly essential, but it's fun.
+</para></listitem>
+
+
+</itemizedlist>
+</sect2>
+
+
+<sect2><title>Cleaning up</title>
+<itemizedlist>
+
+<listitem><para>
+Predefined cleanup actions: Easily delete a file or a directory tree, move it
+to the KDE trash bin, compress it to a .tar.bz2 archive or simply open a shell
+or a Konqueror window there.
+</para></listitem>
+
+
+<listitem><para>
+User-defined cleanup actions: Add your own cleanup commands or edit the
+existing ones.
+</para></listitem>
+
+<listitem><para>
+"Send mail to owner" report facility: Send a mail requesting the owner
+of a large directory tree to please clean up unused files.
+</para></listitem>
+
+
+</itemizedlist>
+</sect2>
+
+
+<sect2><title>Misc</title>
+<itemizedlist>
+
+<listitem><para>
+Feedback mail facility: Rate the program and tell the authors your opinion
+about it.
+</para></listitem>
+
+</itemizedlist>
+</sect2>
 
 </sect1>
-</chapter>
 
-<chapter id="commands">
-<title>Command Reference</title>
 
-<!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of the
-application windows and their menubar and toolbar commands for easy reference.
-Also include any keys that have a special function but have no equivalent in the
-menus or toolbars. This may not be necessary for small apps or apps with no tool
-or menu bars. -->
+<sect1 id="more-screen-shots">
+<title>More Sceen Shots</title>
 
-<sect1 id="kapp-mainwindow">
-<title>The main KDirStat window</title>
-<para></para>
 
-<sect2>
-<title>The File Menu</title>
+<sect2><title>Configuring cleanup actions</title>
 <para>
-<variablelist>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>New</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Creates a new document</action></para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo><keycap>Ctrl</keycap><keycap>s</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Save</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Saves the document</action></para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo><keycap>Ctrl</keycap><keycap>q</keycap></keycombo>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Quit</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Quits</action> &kapp;</para></listitem>
-</varlistentry>
-</variablelist>
+<screenshot>
+<screeninfo>Configuring cleanup actions</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-config-cleanups.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Configure cleanup actions window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
 </para>
+</sect2>
 
+
+<sect2><title>Configuring tree colors</title>
+<para>
+<screenshot>
+<screeninfo>Configuring tree colors</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-config-tree-colors.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Configure tree colors window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+</sect2>
+
+<sect2><title>Feedback mail</title>
+<para>
+<screenshot>
+<screeninfo>Feedback mail</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="feedback-mail.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Feedback mail window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
 </sect2>
 
 </sect1>
 </chapter>
 
+
+
+
+
+
+
+
 <chapter id="developers">
 <title>Developer's Guide to KDirStat</title>
 
-<!-- (OPTIONAL) A Programming/Scripting reference chapter should be
-used for apps that use plugins or that provide their own scripting hooks
-and/or development libraries. -->
-
 <para>
-Programming &kdirstat; plugins is a joy to behold. Just read through the next
-66 pages of API's to learn how!
+Most of what you can see of &kdirstat; is one separate KDE widget that can be
+used in other applications, too. Those parts of &kdirstat; are even licensed
+under the LGPL, so you are even allowed to use it in commercial applications.
 </para>
 
-<!-- Use refentries to describe APIs.  Refentries are fairly complicated and you
-should consult the docbook reference for further details. The example below was
-taken from that reference and shortened a bit for readability. -->
+<para>
+The &kdirstat; sources are extensively documented. Read the documentation in
+the header files for more details or use "kdoc" to generate HTML documentation
+from them.
+</para>
+
 
 </chapter>
 
+<!--
 <chapter id="faq">
 <title>Questions and Answers</title>
 
-<!-- (OPTIONAL but recommended) This chapter should include all of the silly
-(and not-so-silly) newbie questions that fill up your mailbox. This chapter
-should be reserved for BRIEF questions and answers! If one question uses more
-than a page or so then it should probably be part of the
-"Using this Application" chapter instead. You should use links to
-cross-reference questions to the parts of your documentation that answer them.
-This is also a great place to provide pointers to other FAQ's if your users
-must do some complicated configuration on other programs in order for your
-application work. -->
 
 &reporting.bugs;
 &updating.documentation;
 
+
 <qandaset id="faqlist">
 <qandaentry>
 <question>
-<para>My Mouse doesn't work. How do I quit &kapp;?</para>
+<para></para>
 </question>
 <answer>
-<para>You silly goose! Check out the <link linkend="commands">Commands
-Section</link> for the answer.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>Why can't I twiddle my documents?</para>
-</question>
-<answer>
-<para>You can only twiddle your documents if you have the foobar.lib
-installed.</para>
+<para></para>
 </answer>
 </qandaentry>
 </qandaset>
+
 </chapter>
+-->
+
 
 <chapter id="credits">
 
@@ -297,20 +375,22 @@ distribution. -->
 &kapp;
 </para>
 <para>
-Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
+Program copyright 1999-2002 Stefan Hundhammer <email>sh@suse.de</email>
 </para>
+
 <para>
 Contributors:
 <itemizedlist>
-<listitem><para>Konqui the KDE Dragon <email>konqui@kde.org</email></para>
-</listitem>
-<listitem><para>Tux the Linux Penguin <email>tux@linux.org</email></para>
+<listitem>
+	<para>Alexander Rawawss <email>alexannika@users.sourceforge.net</email>
+	Initial treemaps (those who currently don't work any more)
+	</para>
 </listitem>
 </itemizedlist>
 </para>
 
 <para>
-Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
+Documentation copyright 2002 Stefan Hundhammer <email>sh@suse.de</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
@@ -318,18 +398,10 @@ Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
 &underFDL;               <!-- FDL: do not remove. Commercial development should -->
 <!-- replace this with their copyright and either remove it or re-set this.-->
 
-<!-- Determine which license your application is licensed under, 
-     and delete all the remaining licenses below:
-
-     (NOTE:  All documentation are licensed under the FDL, 
-     regardless of what license the application uses) -->
-
 &underGPL;        	 <!-- GPL License -->
-&underBSDLicense;        <!-- BSD License -->
-&underArtisticLicense;   <!-- BSD Artistic License -->
-&underX11License;        <!-- X11 License  -->
 
 </chapter>
+
 
 <appendix id="installation">
 <title>Installation</title>
@@ -340,70 +412,44 @@ Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
 <para>
 &kdirstat; is part of the KDE project
 <ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-&kdirstat; can be found in the kdeutils package on
-<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
-main ftp site of the KDE project. </para>
+
+&kdirstat; can be found on the &kdirstat; home page at 
+<ulink url="http://kdirstat.sourceforge.net/">http://kdirstat.sourceforge.net/</ulink>
+.</para>
 </sect1>
 
 <sect1 id="requirements">
 <title>Requirements</title>
 
-<!--
-List any special requirements for your application here. This should include:
-.Libraries or other software that is not included in kdesupport,
-kdelibs, or kdebase.
-.Hardware requirements like amount of RAM, disk space, graphics card
-capabilities, screen resolution, special expansion cards, etc.
-.Operating systems the app will run on. If your app is designed only for a
-specific OS, (you wrote a graphical LILO configurator for example) put this
-information here.
--->
-
-<para>
-In order to successfully use &kdirstat;, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced &kdirstat; features. &kdirstat; uses about 5 megs of
-memory to run, but this may vary depending on your platform and
-configuration.
+<itemizedlist>
+<listitem>
+<para>Linux or any other Unix-type operating system.</para>
+<para>As stupid as this sounds: There were quite some people complaining that
+they couldn't get &kdirstat; installed on their Win9x system. Many people seem
+to believe that if it has windows, it has to run on MS Windows...
 </para>
+</listitem>
+
+<listitem><para>KDE 2.x</para></listitem>
+
+</itemizedlist>
 
 <para>
-All required libraries as well as &kdirstat; itself can be found
-on <ulink url="ftp://ftp.kapp.org">The &kdirstat; home page</ulink>.
-</para>
-
-<!-- For a list of updates, you may refer to the application web site
-or the ChangeLog file, or ... -->
-<para>
-You can find a list of changes at <ulink
-url="http://apps.kde.org/kapp">http://apps.kde.org/kapp</ulink>.
+All required libraries as well as &kdirstat; itself can be found on 
+<ulink url="http://kdirstat.sourceforge.net/">The &kdirstat; home page</ulink>.
 </para>
 </sect1>
+
 
 <sect1 id="compilation">
 <title>Compilation and Installation</title>
 
 <para>
-In order to compile and install KApp on your system, type the following in the base
-directory of the Icon Editor distribution:
-<screen width="40">
-<prompt>%</prompt> <userinput>./configure</userinput>
-<prompt>%</prompt> <userinput>make</userinput>
-<prompt>%</prompt> <userinput>make install</userinput>
-</screen>
+See file "build-howto.html" in the distribution tarball.
 </para>
 
-<para>Since KApp uses autoconf and automake you should have not trouble compiling it.
-Should you run into problems please report them to the KDE mailing lists.</para>
-
 </sect1>
 
-<sect1 id="configuration">
-<title>Configuration</title>
-
-<para>Don't forget to tell your system to start the <filename>dtd</filename>
-dicer-toaster daemon first, or KApp won't work !</para>
-
-</sect1>
 
 </appendix>
 
@@ -418,16 +464,4 @@ sgml-indent-step:0
 sgml-indent-data:nil
 End:
 -->
-
-
-
-
-
-
-
-
-
-
-
-
 
