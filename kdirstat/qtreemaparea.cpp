@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.9 2001/07/12 22:39:35 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.10 2001/07/14 02:11:43 alexannika Exp $
  *
  */
 
@@ -64,6 +64,8 @@ QTreeMapArea::QTreeMapArea(QWidget *parent) : QWidget(parent) {
 
   this->resize(options->paint_size_x,options->paint_size_y);
   this->setBackgroundMode(PaletteBackground);
+
+  selected_list=new ObjList();
 }
 
 int QTreeMapArea::getNextRotatingColorIndex(){
@@ -198,11 +200,52 @@ void QTreeMapArea::paintEvent( QPaintEvent *event){
   }
 }
 
+void QTreeMapArea::toggleSelection(Object *found){
+      if(found!=NULL){
+	if(selected_list->containsRef((KDirInfo *)found)){
+	  selected_list->removeRef((KDirInfo *)found);
+	  printf("removed %s\n",fullName(found).latin1());
+	}
+	else{
+	  selected_list->append((KDirInfo *)found);
+	  printf("appended %s\n",fullName(found).latin1());
+	}
+      }
+}
+
+
 void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
   //   kdDebug() << k_funcinfo << endl;
-  if(root_tree!=NULL && mouse->button()==RightButton){
     int x=mouse->x();
     int y=mouse->y();
+  if(root_tree!=NULL && mouse->button()==LeftButton){
+    if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
+      // find the first dir (the first coord. matching entry) the mouse points to
+      Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
+     
+      toggleSelection(found);
+
+  Object *dutree=root_tree;
+
+    painter->begin(&offscreen);
+
+    Cushion *cushion=new Cushion(options->paint_size_x,options->paint_size_y,options->sequoia_h,options->sequoia_f);
+
+      drawDuTree(dutree,0,0,options->paint_size_x,options->paint_size_y,options->start_direction,0,cushion,x,y,FIND_SELECTION);
+
+    delete cushion;
+
+    painter->end();
+
+  win_painter->begin(this);
+  win_painter->drawPixmap(0,0,offscreen,0,0,options->paint_size_x,options->paint_size_y);
+  win_painter->flush();
+  win_painter->end();
+
+    }
+
+  }
+  else if(root_tree!=NULL && mouse->button()==RightButton){
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       // find the first dir (the first coord. matching entry) the mouse points to
       Object *found=findClickedMap(root_tree,x,y,FIND_FILE);
@@ -234,6 +277,31 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
 
 	  walk=parentNode(walk);
 	}
+	
+	QPopupMenu *popselection=new QPopupMenu(this); // memory hole!
+	for(int i=0;i<selected_list->count();i++){
+	  Object *walk=(Object *)selected_list->at(i);
+
+
+	  QPopupMenu *popwalk=new QPopupMenu(this); // memory hole!
+	  //popwalk->insertTearOffHandle();
+
+	  int delete_id=popwalk->insertItem("delete",this, SLOT(deleteFile(int))); // howto?
+	  popwalk->setItemParameter(delete_id,(int)walk);  // ouch!
+
+	  int xterm_id=popwalk->insertItem("xterm",this, SLOT(shellWindow(int))); // howto?
+	  popwalk->setItemParameter(xterm_id,(int)walk);  // ouch!
+
+	  int konq_id=popwalk->insertItem("konqueror",this, SLOT(browserWindow(int))); // howto?
+	  popwalk->setItemParameter(konq_id,(int)walk);  // ouch!
+
+
+
+	  QString text;
+	  text.sprintf("%-20s %5s",fullName(walk).latin1(),tellUnit(totalSize(walk)).latin1());
+	  int id=popselection->insertItem(text,popwalk);
+	}
+	pop->insertItem("selection:",popselection);
 	pop->popup(this->mapToGlobal(QPoint(x,y)));
       }
     }
@@ -246,11 +314,15 @@ void QTreeMapArea::mouseDoubleClickEvent(QMouseEvent *mouse){
     int y=mouse->y();
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       // find the first dir (the first coord. matching entry) the mouse points to
-      Object *found=findClickedMap(root_tree,x,y,FIND_FIRSTDIR);
-      
-      if(found!=NULL){
+      Object *found_dir=findClickedMap(root_tree,x,y,FIND_FIRSTDIR);
+
+      Object *found_file=findClickedMap(root_tree,x,y,FIND_FILE);
+
+      toggleSelection(found_file);
+
+      if(found_dir!=NULL){
 	// draw the new map
-	setTreeMap(found);
+	setTreeMap(found_dir);
       }
     }
   }
@@ -424,5 +496,8 @@ QTreeMapOptions::QTreeMapOptions(){
   sequoia_h=0.5;
   squarify=FALSE;
   show_inodes=TRUE;
+
+  select_color=QColor(255,200,200);
+  match_color=QColor(100,200,230);
 }
 

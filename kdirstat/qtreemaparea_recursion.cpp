@@ -179,6 +179,22 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 
 	int pmode;
 	if((fx>=0 && fy>=0)){
+	  if(findmode==FIND_SELECTION){
+	    if(dutree==found_kfileinfo){
+	      if(selected_list->containsRef((KDirInfo *)dutree)){
+		printf("setting selection\n");
+		QColor foundcolor=options->select_color;
+		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
+	      }
+	      else{
+		printf("clearing selection\n");
+		QColor foundcolor=getBaseColor(node_name);
+		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
+	      }
+	  }
+	    
+	  }
+	  else{
 	  if(options->dynamic_shading && (next_shaded==dutree || next_shaded==NULL)){
 	      QPaintDevice *pd=painter->device();
 	      painter->end();
@@ -201,23 +217,33 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 #endif
 	      paintEntry(x0,y0,xd0,yd0,node_name,direction,level,options->highlight_frame_col,pmode,c);
 	  }
+	  } // end else selection
 	}
 	else if(findmode==FIND_MATCH){
 	  if(dutree==found_kfileinfo){
-	    QColor foundcolor=QColor(100,200,230);
+	    QColor foundcolor=options->match_color;
 	    paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);	    
 	  }
 	}
 	else{
 	  // really draw this entry
 	  pmode=options->paintmode;
+	  if(selected_list->containsRef((KDirInfo *)dutree)){
+		printf("setting selection\n");
+		QColor fcolor=options->select_color;
+		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,fcolor,options->paintmode,c);
+	  }
+	  else{
 	  paintEntry(x0,y0,xd0,yd0,node_name,direction,level,basecolor,pmode,c);
+#if 0
 	  QPaintDevice *pd=painter->device();
 	  painter->end();
 	  painter->begin(this);
 	  paintEntry(x0,y0,xd0,yd0,node_name,direction,level,basecolor,pmode,c);
 	  painter->end();
 	  painter->begin(pd);
+#endif
+	  }
 	}
 
       }

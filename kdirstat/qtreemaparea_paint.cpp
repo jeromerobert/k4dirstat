@@ -594,15 +594,15 @@ void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,
     float globmax=0.0;
 
     printf("x,y,xd,yd: %d,%d,%d,%d\n",x0,y0,xd,yd);
-    printf("r[dy][0],r[dy][1],r[dx][0],r[dx][1]: %f,%f,%f,%f\n",c->r[DY][0],c->r[DY][1],c->r[DX][0],c->r[DX][1]);
+    printf("r[dy][0],r[dy][1],r[dx][0],r[dx][1]: %f,%f,%f,%f\n",c->r[VERTIKAL][0],c->r[VERTIKAL][1],c->r[HORIZONTAL][0],c->r[HORIZONTAL][1]);
 
-    for(float iy=c->r[DY][0] + 0.5 ; iy<=( c->r[DY][1] - 0.5 );iy++){
-      for(float ix=c->r[DX][0] + 0.5 ; ix<=( c->r[DX][1] - 0.5 );ix++){
+    for(float iy=c->r[VERTIKAL][0] + 0.5 ; iy<=( c->r[VERTIKAL][1] - 0.5 );iy++){
+      for(float ix=c->r[HORIZONTAL][0] + 0.5 ; ix<=( c->r[HORIZONTAL][1] - 0.5 );ix++){
 
     //    for(float iy=y0;iy<=y0+yd;iy++){
     //     for(float ix=x0;ix<=x0+xd;ix++){
-	float nx=-(2*c->s[DX][2]*(ix+0.5) + c->s[DX][1] );
-	float ny=-(2*c->s[DY][2]*(iy+0.5) + c->s[DY][1] );
+	float nx=-(2*c->s[HORIZONTAL][2]*(ix+0.5) + c->s[HORIZONTAL][1] );
+	float ny=-(2*c->s[VERTIKAL][2]*(iy+0.5) + c->s[VERTIKAL][1] );
 	float cosa=(nx*Lx + ny*Ly + Lz )/sqrt(nx*nx + ny*ny +1.0);
 
 	if(isnan(cosa)){

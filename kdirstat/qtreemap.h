@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.9 2001/07/12 22:39:35 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.10 2001/07/14 02:11:43 alexannika Exp $
  *
  */
 
@@ -104,6 +104,7 @@ namespace KDirStat
 #define FIND_FILE 1
 #define FIND_FIRSTDIR 2
 #define FIND_MATCH 3
+#define FIND_SELECTION 4
 
   // directions
 
@@ -165,6 +166,8 @@ public:
     float sequoia_f;
     bool squarify;
     bool show_inodes;
+    QColor select_color;
+    QColor match_color;
   };
 
   class Cushion {
@@ -240,6 +243,7 @@ public:
   void appendRectlist(QString node_name,int x,int y,int xd,int yd);
   int getNextRotatingColorIndex();
 
+  void toggleSelection(Object *found);
 
   // for squarified treemaps
   ObjList *sortedList(Object *dutree);
@@ -283,6 +287,9 @@ public:
 
   Object *last_shaded;
   Object *next_shaded;
+
+  ObjList *selected_list;
+
   // cushion rendering
 
   void cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2);
