@@ -4,10 +4,7 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-06
- *
- *   $Id: kdirstatsettings.cpp,v 1.6 2003/01/06 14:18:52 hundhammer Exp $
- *
+ *   Updated:	2003-01-07
  */
 
 
@@ -989,7 +986,7 @@ KTreemapPage::setup()
     _doCushionShading->setChecked	( config->readBoolEntry( "CushionShading"	, true	) );
 
     _ambientLight->setValue		( config->readNumEntry( "AmbientLight"		  , DefaultAmbientLight       ) );
-    _heightScalePercent->setValue( 100 *  config->readDoubleNumEntry ( "HeightScaleFactor", DefaultHeightScalePercent ) );
+    _heightScalePercent->setValue( 100 *  config->readDoubleNumEntry ( "HeightScaleFactor", DefaultHeightScaleFactor  ) );
     _ensureContrast->setChecked		( config->readBoolEntry( "EnsureContrast"	, true	) );
     _forceCushionGrid->setChecked	( config->readBoolEntry( "ForceCushionGrid"	, false ) );
     _minTileSize->setValue		( config->readNumEntry ( "MinTileSize"		, DefaultMinTileSize ) );
