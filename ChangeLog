@@ -2,6 +2,8 @@
 
 	* Bumped version to 2.3.7
 	
+	* Added French translation by Michel Grentzinger <mic.grentz@online.fr>
+	
 	* Don't add up special files (char/block devices, sockets, FIFOs)
 	
 
