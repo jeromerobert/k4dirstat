@@ -1,6 +1,6 @@
 /*
  *   File name:	qxmltreemapwindow.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
@@ -47,12 +47,8 @@
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
 #endif
 
-// Open a new name space since KDE's name space is pretty much cluttered
-// already - all names that would even remotely match are already used up,
-// yet the resprective classes don't quite fit the purposes required here.
-
-namespace KDirStat
-{
+//namespace KDirStat
+//{
 
   class QTreeMapArea;
   class QTreeMapOptions;
@@ -73,7 +69,7 @@ int makeBrainMenuOption(QString gname,QString defaultstr);
     
     KConfig *config;
   };
-} // namespace
+//} // namespace
 
 #endif
 

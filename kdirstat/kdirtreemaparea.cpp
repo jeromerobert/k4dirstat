@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: kdirtreemaparea.cpp,v 1.5 2001/07/28 22:56:47 alexannika Exp $
+ *   $Id: kdirtreemaparea.cpp,v 1.6 2001/08/06 00:06:23 alexannika Exp $
  *
  */
 
@@ -44,7 +44,7 @@ QString KDirTreeMapArea::fullName(Object *node){
 }
 
 int KDirTreeMapArea::thisDirItems(Object *node){
-  KDirInfo *kdi_node=(KDirInfo *)node;
+  //  KDirInfo *kdi_node=(KDirInfo *)node;
   int count=0;
   
   if(isNode(node)){
@@ -143,6 +143,7 @@ QString KDirTreeMapArea::tellUnit(int size){
 }
 
 void KDirTreeMapArea::dirChange(Object *node){
+  NOT_USED(node);
 #if 0
   //  printf("CALLBACK KDirTreeMapArea\n");
   emit changedDirectory(node);

@@ -1,6 +1,6 @@
 /*
  *   File name:	qxmltreemap.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
@@ -27,7 +27,6 @@
 #include <qstatusbar.h>
 #include <qmenubar.h>
 #include <qmainwindow.h>
-#include "kdirtree.h"
 #include <qpen.h>
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -52,8 +51,8 @@ class Object;
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
-namespace KDirStat
-{
+//namespace KDirStat
+//{
 
   class QXmlTreeMapArea : public QTreeMapArea {
     Q_OBJECT
@@ -100,7 +99,7 @@ namespace KDirStat
 
   };
 
-} // namespace
+//} // namespace
 
 
 #endif // ifndef QXmlTreeMap_h

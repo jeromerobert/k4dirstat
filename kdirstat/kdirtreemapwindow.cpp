@@ -77,7 +77,7 @@ void KDirTreeMapWindow::setConfig(){
 
   options->scheme_list=new QList<QTMcolorScheme>();
 
-  for(int i=0;i<group_list.count();i++){
+  for(uint i=0;i<group_list.count();i++){
     if(reg.match(group_list[i])!=-1){
       config->setGroup(group_list[i]);
       
@@ -93,7 +93,7 @@ void KDirTreeMapWindow::setConfig(){
 	}
 
       scheme->regexplist=new QList<QRegExp>;
-      for(int p=0;p<scheme->patternlist.count();p++){
+      for(uint p=0;p<scheme->patternlist.count();p++){
 #if 0
 	  QString regstr=QString(scheme->patternlist[p]);
 	  regstr=regstr.remove(0,1);

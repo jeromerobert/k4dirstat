@@ -1,6 +1,6 @@
 /*
  *   File name:	qxmltreemapwindow.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
@@ -19,16 +19,12 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-#include "kdirtree.h"
-#include "kdirtreeview.h"
-#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include "qtreemapwindow.h"
 #include "qxmltreemap.h"
 #include "qxmltreemapwindow.h"
 
-using namespace KDirStat;
 
 QXmlTreeMapWindow::QXmlTreeMapWindow(  )  : QTreeMapWindow() {
   //setConfig();
@@ -77,7 +73,7 @@ void QXmlTreeMapWindow::setConfig(){
 
   options->scheme_list=new QList<QTMcolorScheme>();
 
-  for(int i=0;i<group_list.count();i++){
+  for(uint i=0;i<group_list.count();i++){
       printf("config0: %s\n",group_list[i].latin1());
     if(reg.match(group_list[i])!=-1){
       printf("config: %s\n",group_list[i].latin1());
@@ -95,7 +91,7 @@ void QXmlTreeMapWindow::setConfig(){
 	}
 
       scheme->regexplist=new QList<QRegExp>;
-      for(int p=0;p<scheme->patternlist.count();p++){
+      for(uint p=0;p<scheme->patternlist.count();p++){
 #if 0
 	  QString regstr=QString(scheme->patternlist[p]);
 	  regstr=regstr.remove(0,1);

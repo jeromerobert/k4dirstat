@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirtreemapwindow.cpp
+ *   File name:	kdirtreemapwindow.h
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
@@ -40,11 +40,18 @@
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 #include <kconfig.h>
+#include "qtreemap.h"
+#include "qtreemapwindow.h"
 #include "kdirtreemap.h"
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
 #endif
+
+//  class QTreeMapArea;
+//  class QTreeMapOptions;
+//  class QTreeMapWindow;
+
 
 // Open a new name space since KDE's name space is pretty much cluttered
 // already - all names that would even remotely match are already used up,
@@ -52,10 +59,6 @@
 
 namespace KDirStat
 {
-
-  class QTreeMapArea;
-  class QTreeMapOptions;
-  class QTreeMapWindow;
 
 
   class KDirTreeMapWindow : public QTreeMapWindow {

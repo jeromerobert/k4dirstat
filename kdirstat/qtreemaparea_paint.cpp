@@ -20,14 +20,8 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-//#include "kdirtree.h"
-//#include "kdirtreeview.h"
-//#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
-//#include <bits/mathcalls.h>
-
-using namespace KDirStat;
 
 
 void QTreeMapArea::paintEntry(int x0, int y0, int xd, int yd,QString entry_name,bool direction,int level,const QColor &basecolor,int pmode,Cushion *c){

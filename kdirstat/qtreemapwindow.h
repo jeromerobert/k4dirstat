@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.9 2001/07/30 03:21:38 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.10 2001/08/06 00:06:23 alexannika Exp $
  *
  */
 
@@ -27,7 +27,6 @@
 #include <qstatusbar.h>
 #include <qmenubar.h>
 #include <qmainwindow.h>
-#include "kdirtree.h"
 #include <qpen.h>
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -51,8 +50,8 @@
 
 class Object;
 
-namespace KDirStat
-{
+//namespace KDirStat
+//{
 
   class QTreeMapArea;
   class QTreeMapOptions;
@@ -165,7 +164,7 @@ namespace KDirStat
   QList<OptionsBrain> *brainlist;
   };
 
-} // namespace
+//} // namespace
 
 
 #endif // ifndef QTreeMapWindow_h

@@ -1,12 +1,12 @@
 /*
  *   File name:	qtreemapwindow.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
  *   Updated:	2001-07-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.13 2001/07/30 03:21:38 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.14 2001/08/06 00:06:23 alexannika Exp $
  *
  */
 
@@ -19,15 +19,15 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-#include "kdirtree.h"
-#include "kdirtreeview.h"
-#include "kdirsaver.h"
+//#include "kdirtree.h"
+//#include "kdirtreeview.h"
+//#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include "qtreemapwindow.h"
-#include "kdirtreemap.h"
+//#include "kdirtreemap.h"
 
-using namespace KDirStat;
+//using namespace KDirStat;
 
 QTreeMapWindow::QTreeMapWindow(  )  : QMainWindow() {
 
@@ -341,6 +341,7 @@ void QTreeMapWindow::selectSFFactor(int id){
   redoOptions();
 }
 void QTreeMapWindow::toggleRibbonOptions(int id){
+  NOT_USED(id);
 #ifdef HAVE_PIEMAP
   NOT_USED(id);
   if(id==RIBBON_DRAWTREE){
@@ -380,7 +381,8 @@ int QTreeMapWindow::makeBrainMenuOption(QString& gname,QString& defaultstr){
 #endif
 
 void QTreeMapWindow::setBrainCheckMark(QTreeMapOptions *opt,int param,QString gname){
-   for(int i=0;i<brainlist->count();i++){
+  NOT_USED(opt);
+   for(uint i=0;i<brainlist->count();i++){
      OptionsBrain *brain=brainlist->at(i);
      if(brain->groupname==gname &&
 	brain->parameter==param){
@@ -395,7 +397,7 @@ void QTreeMapWindow::setBrainCheckMark(QTreeMapOptions *opt,int param,QString gn
 }
 
  int QTreeMapWindow::getBrainParamByName(QString gname,QString oname){
-   for(int i=0;i<brainlist->count();i++){
+   for(uint i=0;i<brainlist->count();i++){
      if(brainlist->at(i)->groupname==gname &&
 	brainlist->at(i)->optionname==oname){
        //printf("group %s option %s param %d\n",gname.latin1(),oname.latin1(),brainlist->at(i)->parameter);
@@ -421,8 +423,6 @@ void QTreeMapWindow::saveAsXML(){
 }
 
 void QTreeMapWindow::loadFromXML(){
-  printf("qtreemapwindow::loadfromxml\n");
-  //printf("CALLBACK KDirTreeMapArea\n");
   graph_widget->loadFromXML();
 
 }

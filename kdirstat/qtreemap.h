@@ -1,12 +1,12 @@
 /*
  *   File name:	qtreemap.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.14 2001/07/30 03:21:38 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.15 2001/08/06 00:06:23 alexannika Exp $
  *
  */
 
@@ -42,21 +42,14 @@ class Object;
 #include <qlist.h>
 #include <qtextstream.h>
 //#include <qxmltreemapwindow.h>
-#include "kdirtree.h"
 #include <qdom.h>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
 #endif
 
-// Open a new name space since KDE's name space is pretty much cluttered
-// already - all names that would even remotely match are already used up,
-// yet the resprective classes don't quite fit the purposes required here.
-
-class Object;
-
-namespace KDirStat
-{
+//namespace KDirStat
+//{
 
   // paint modes
 
@@ -141,10 +134,16 @@ namespace KDirStat
   class QXmlTreeMapWindow;
   class ObjList;
 
-class ObjList : public QList<KDirInfo> {
+  //class ObjList : public QList<KDirInfo> {
+class ObjList : public QList<Object *> {
 public:
+  ObjList(QTreeMapArea *area);
+
   //int compareItems(Object *o1, Object *o2);
   int compareItems(QCollection::Item o1, QCollection::Item o2);
+
+ private:
+  QTreeMapArea *treemaparea;
 };
 
 
@@ -223,6 +222,8 @@ public:
     //KTreeMap(QWidget *parent=0);
     QTreeMapArea(QWidget *parent=0);
     ~QTreeMapArea();
+
+     int compareItems(Object *o1,Object *o2);
 
     void drawTreeMap(Object *dutree);
     void setTreeMap(Object *dutree);
@@ -304,7 +305,7 @@ public:
   QPoint calcRibbon3Point(int level,float angle,int x0,int y0,int ox,int oy);
   QPoint calcRibbon4Point(int level,float angle,int x0,int y0,int ox,int oy);
 
-  QColor& getBaseColor(QString name);
+  QColor getBaseColor(QString name);
 
   void   saveAsXML(QTextStream& file,Object *tree,int level);
   void loadFromXML(QString filename);
@@ -387,7 +388,7 @@ public:
       void changedDirectory(Object *newdir);
   };
 
-} // namespace
+//} // namespace
 
 
 #endif // ifndef QTreeMap_h

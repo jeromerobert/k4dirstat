@@ -1,3 +1,11 @@
+2001-08-05 Alexander Rawass <alexannika@users.sourceforge.net>
+
+	* compiler warnings removed
+	* using List of Objects (instead List of KDirInfo)
+	* Bug: regexps not working in xml-window
+	       selection not working in xml-window
+	* removed dependencies to KDirStat from QTreeMap
+	
 2001-07-29 Alexander Rawass <alexannika@users.sourceforge.net>
 	
 	* load XML working (with memory hole)

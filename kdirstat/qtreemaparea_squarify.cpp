@@ -1,6 +1,6 @@
 /*
  *   File name:	qtreemaparea_squarify.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
@@ -28,14 +28,10 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-//#include "kdirtree.h"
-//#include "kdirtreeview.h"
-//#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
-//#include <bits/mathcalls.h>
 
-using namespace KDirStat;
+//using namespace KDirStat;
 
 
 //#define DEBUG_SQR 1
@@ -44,7 +40,7 @@ using namespace KDirStat;
 
 ObjList *QTreeMapArea::sortedList(Object *dutree){
 
-  ObjList *slist=new ObjList();
+  ObjList *slist=new ObjList(this);
 
   Object *child=firstChild(dutree);
   bool dotentry_flag=FALSE;
@@ -52,7 +48,7 @@ ObjList *QTreeMapArea::sortedList(Object *dutree){
     //printf("appending %s\n",fullName(child).latin1());
 
     if(totalSize(child)!=0){
-      slist->append((KDirInfo *)child);
+      slist->append((Object **)child);
     }
 
     child=nextChild(child);
@@ -356,8 +352,28 @@ float QTreeMapArea::worst_aspect(ObjList *sorted_list,int i1,int i2,int width){
 }
 
 
+int QTreeMapArea::compareItems(Object *o1,Object *o2){
+  if( totalSize(o1) >  totalSize(o2) ){
+    return -1;
+  }
+  else if( totalSize(o1) < totalSize(o2) ){
+    return 1;
+  }
+  else{
+       return 0;
+     }
+
+}
+
+ObjList::ObjList(QTreeMapArea *area){
+  treemaparea=area;
+}
+
 //int ObjList::compareItems(Object *o1,Object *o2){
 int ObjList::compareItems(QCollection::Item o1, QCollection::Item o2){
+  return treemaparea->compareItems((Object *)o1,(Object *)o2);
+
+#if 0
   if( (((KDirInfo *)o1)->totalSize()) >  (((KDirInfo *)o2)->totalSize()) ){
     return -1;
   }
@@ -367,6 +383,7 @@ int ObjList::compareItems(QCollection::Item o1, QCollection::Item o2){
   else{
        return 0;
      }
+#endif
 }
 
 

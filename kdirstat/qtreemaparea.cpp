@@ -1,12 +1,12 @@
 /*
  *   File name:	qtreemaparea.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.14 2001/07/30 03:21:38 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.15 2001/08/06 00:06:23 alexannika Exp $
  *
  */
 
@@ -20,9 +20,6 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-//#include "kdirtree.h"
-//#include "kdirtreeview.h"
-//#include "kdirsaver.h"
 #include "qtreemap.h"
 #include <qmainwindow.h>
 #include <qfiledialog.h>
@@ -32,9 +29,7 @@
 #include "qxmltreemapwindow.h"
 #include <iostream.h>
 
-//#include <bits/mathcalls.h>
-
-using namespace KDirStat;
+//using namespace KDirStat;
 
 QTreeMapArea::QTreeMapArea(QWidget *parent) : QWidget(parent) {
   options=new QTreeMapOptions();
@@ -75,7 +70,7 @@ QTreeMapArea::QTreeMapArea(QWidget *parent) : QWidget(parent) {
   this->resize(options->paint_size_x,options->paint_size_y);
   this->setBackgroundMode(PaletteBackground);
 
-  selected_list=new ObjList();
+  selected_list=new ObjList(this);
 }
 
 int QTreeMapArea::getNextRotatingColorIndex(){
@@ -98,7 +93,7 @@ void QTreeMapArea::setTreeMap(Object *dutree){
   }
 }
 
-QColor&  QTreeMapArea::getBaseColor(QString name){
+QColor  QTreeMapArea::getBaseColor(QString name){
   QColor bcolor;
 
   if(options->color_scheme==CS_CYCLIC){
@@ -115,11 +110,11 @@ QColor&  QTreeMapArea::getBaseColor(QString name){
             bcolor=options->mono_color;
 
 
-      for(int i=0;i<options->scheme_list->count() && found==FALSE;i++){
+      for(uint i=0;i<options->scheme_list->count() && found==FALSE;i++){
 	QTMcolorScheme *scheme=options->scheme_list->at(i);
 	QList<QRegExp> *rlist=scheme->regexplist;
 
-	for(int j=0;j<rlist->count() && found==FALSE;j++){
+	for(uint j=0;j<rlist->count() && found==FALSE;j++){
 	  if(rlist->at(j)->match(name)!=-1){
 	    //	    printf("found pattern %s on name %s %d %d %d\n",rlist->at(j)->pattern().latin1(),name.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
 	    //	    printf("found on name %s %d %d %d\n",name.latin1(),scheme->color.red(),scheme->color.green(),scheme->color.blue());
@@ -226,12 +221,12 @@ void QTreeMapArea::paintEvent( QPaintEvent *event){
 
 void QTreeMapArea::toggleSelection(Object *found){
       if(found!=NULL){
-	if(selected_list->containsRef((KDirInfo *)found)){
-	  selected_list->removeRef((KDirInfo *)found);
+	if(selected_list->containsRef((Object **)found)){
+	  selected_list->removeRef((Object **)found);
 	  //	  printf("removed %s\n",fullName(found).latin1());
 	}
 	else{
-	  selected_list->append((KDirInfo *)found);
+	  selected_list->append((Object **)found);
 	  //printf("appended %s\n",fullName(found).latin1());
 	}
       }
@@ -309,7 +304,7 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
 	}
 	
 	QPopupMenu *popselection=new QPopupMenu(this); // memory hole!
-	for(int i=0;i<selected_list->count();i++){
+	for(uint i=0;i<selected_list->count();i++){
 	  Object *walk=(Object *)selected_list->at(i);
 
 
@@ -329,7 +324,7 @@ void QTreeMapArea::mousePressEvent(QMouseEvent *mouse){
 
 	  QString text;
 	  text.sprintf("%-20s %5s",fullName(walk).latin1(),tellUnit(totalSize(walk)).latin1());
-	  int id=popselection->insertItem(text,popwalk);
+	  /* int id= */ popselection->insertItem(text,popwalk);
 	}
 	pop->insertItem("selection:",popselection);
 	pop->popup(this->mapToGlobal(QPoint(x,y)));
@@ -364,7 +359,7 @@ void QTreeMapArea::mouseMoveEvent(QMouseEvent *mouse){
     int y=mouse->y();
     if( (0<=x && x<=options->paint_size_x) && (0<=y && y<=options->paint_size_y)){
       //      if(flag_middle_button==TRUE){
-      if(mouse->state()==MidButton){
+      if(mouse->state()==MidButton && options->piemap==TRUE){
 #ifdef HAVE_PIEMAP
 	int dx=-(middle_x-x);
 	int dy=-(middle_y-y);
@@ -605,7 +600,7 @@ void QTreeMapArea::saveAsXML(){
   saveAsXML(file,root_tree,0);
 
   file.device()->flush();
-  file.device()->close;
+  file.device()->close();
 
   //delete file;
   }
@@ -643,21 +638,15 @@ void QTreeMapArea::loadFromXML(QString filename){
   
   //  return;
 
-  printf("qtreemaparea::loadfromxml1\n");
   QDomElement root_elem=doc.documentElement();
-  printf("qtreemaparea::loadfromxml2\n");
   xml_treemap_window=new QXmlTreeMapWindow();
-  printf("qtreemaparea::loadfromxml3\n");
   xml_treemap_window->makeWidgets();
-  //xml_treemap_window->setConfig();
-  printf("qtreemaparea::loadfromxml4\n");
+  xml_treemap_window->getArea()->setOptions(options);
   xml_treemap_window->getArea()->setTreeMap((Object *)(new QDomElement(root_elem)));
-  printf("qtreemaparea::loadfromxml5\n");
 
 }
 
 void QTreeMapArea::loadFromXML(){
-  printf("qtreemaparea::loadfromxml\n");
   QString filename=QFileDialog::getOpenFileName("treemap.xml", "XML (*.xml)" , this);
 
   if(!filename.isEmpty()){

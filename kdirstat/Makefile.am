@@ -22,8 +22,8 @@ kdirstat_SOURCES = 				\
 	kpacman.cpp				\
 	kdirstatapp.cpp 			\
 	kdirstatmain.cpp
-
 #	qtreemaparea_piemap.cpp		\
+
 
 noinst_HEADERS =				\
 	qtreemap.h				\

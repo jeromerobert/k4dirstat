@@ -1,6 +1,6 @@
 /*
  *   File name:	qxmltreemaparea.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Alexander Rawass <alexannika@users.sourceforge.net>
  *
@@ -19,15 +19,10 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <klocale.h>
-#include "kdirtree.h"
-#include "kdirtreeview.h"
-#include "kdirsaver.h"
 #include "qxmltreemap.h"
 #include <qmainwindow.h>
 #include <qdom.h>
-//#include <bits/mathcalls.h>
 
-using namespace KDirStat;
 
 #define _dp(x) ((Object *)(new QDomElement(x)))
 
@@ -51,7 +46,7 @@ QString QXmlTreeMapArea::fullName(Object *node){
 }
 
 int QXmlTreeMapArea::thisDirItems(Object *node){
-  QDomElement *kdi_node=(QDomElement *)node;
+  //  QDomElement *kdi_node=(QDomElement *)node;
   int count=0;
   
   if(isNode(node)){
@@ -79,7 +74,7 @@ int QXmlTreeMapArea::thisDirItems(Object *node){
 void QXmlTreeMapArea::printXmlInfo(Object *node){
   QDomElement *kdi_node=(QDomElement *)node;
 
-  printf("NODE:n=%x tag=%s name=%s value=%s attr=%s\n",kdi_node,kdi_node->tagName().latin1(), \
+  printf("NODE:n=%x tag=%s name=%s value=%s attr=%s\n",(int)kdi_node,kdi_node->tagName().latin1(), \
 	 kdi_node->nodeName().latin1(), \
 	 kdi_node->nodeValue().latin1(), \
 	 kdi_node->attribute("name").latin1());
@@ -123,7 +118,8 @@ int QXmlTreeMapArea::totalSize(Object *node){
   return kdi_node->attribute("size","0").toInt();
 }
 int QXmlTreeMapArea::totalItems(Object *node){
-  QDomElement *kdi_node=(QDomElement *)node;
+  NOT_USED(node);
+  //  QDomElement *kdi_node=(QDomElement *)node;
 
   //return kdi_node->totalItems();
   return 0;
@@ -145,13 +141,14 @@ bool QXmlTreeMapArea::isLeaf(Object *node){
 
 bool QXmlTreeMapArea::isNode(Object *node){
   //printXmlInfo(node);
-  QDomElement *kdi_node=(QDomElement *)node;
+  //QDomElement *kdi_node=(QDomElement *)node;
 
   return !isLeaf(node);
 }
 
 bool QXmlTreeMapArea::isSameLevelChild(Object *node){
-  QDomElement *kdi_node=(QDomElement *)node;
+  NOT_USED(node);
+  //QDomElement *kdi_node=(QDomElement *)node;
 
   return FALSE;
 }
@@ -174,7 +171,8 @@ Object *QXmlTreeMapArea::nextChild(Object *node){
 }
 
 Object *QXmlTreeMapArea::sameLevelChild(Object *node){
-  QDomElement *kdi_node=(QDomElement *)node;
+  NOT_USED(node);
+  //QDomElement *kdi_node=(QDomElement *)node;
 
   return NULL;
 }
@@ -213,6 +211,7 @@ QString QXmlTreeMapArea::tellUnit(int size){
 }
 
 void QXmlTreeMapArea::dirChange(Object *node){
+  NOT_USED(node);
 #if 0
   //  printf("CALLBACK QXmlTreeMapArea\n");
   emit changedDirectory(node);
