@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-28
  */
 
 
@@ -1206,6 +1206,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	 **/
 	parent->deletingChild( subtree );
 	delete subtree;
+	emit childDeleted();
 
 
 	// Create new subtree root.

@@ -5,7 +5,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2003-01-28
  */
 
 
@@ -28,11 +28,11 @@
 
 KFeedbackDialog::KFeedbackDialog( const QString & feedbackMailAddress,
 				  const QString & helpTopic		)
-    : KDialogBase( Plain,				// dialogFace
-		   i18n( "Feedback" ),			// caption
+    : KDialogBase( Plain,					// dialogFace
+		   i18n( "Feedback" ),				// caption
 		   Apply | Cancel
-		   | ( helpTopic.isEmpty() ? 0 : Help ),// buttonMask
-		   Apply )				// defaultButton
+		   | ( helpTopic.isEmpty() ? 0 : (int) Help ),	// buttonMask
+		   Apply )					// defaultButton
 {
     QVBoxLayout * layout = new QVBoxLayout( plainPage(), 0, spacingHint() );
     setButtonApplyText( i18n( "&Mail this..." ) );
