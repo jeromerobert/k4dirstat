@@ -9,6 +9,8 @@ bin_PROGRAMS = kdirstat
 kdirstat_SOURCES = 				\
 	qtreemapwindow.cpp			\
 	qtreemaparea.cpp			\
+	qtreemaparea_paint.cpp			\
+	qtreemaparea_recursion.cpp		\
 	kdirtreemaparea.cpp		\
 	kdirtreemapwindow.cpp			\
 	kdirtree.cpp				\

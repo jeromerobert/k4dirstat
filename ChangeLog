@@ -1,3 +1,14 @@
+2001-07-05 Alexander Rawass <alexannika@users.sourceforge.net>
+	
+	* more options and exp. shadings
+	* experimental dynamic shading (not working)
+	* user can watch treemap build up
+	* paintEntry moved to qtreemaparea_paint.cpp
+	* drawTreeMap,drawDuTree,CTM moved to qtreemaparea_recursion.cpp
+	* renamed some of the shadings and
+	* wrote some Documentation how to use Shadings and Options
+
+	
 2001-07-03 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* QTreeMapWindow is now an abstract class

@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.cpp,v 1.4 2001/07/04 02:33:05 alexannika Exp $
+ *   $Id: qtreemapwindow.cpp,v 1.5 2001/07/05 23:15:37 alexannika Exp $
  *
  */
 
@@ -61,11 +61,18 @@ void QTreeMapWindow::makeWidgets(){
   menu_paint_mode=new QPopupMenu(this);
   makeRadioPopup(menu_paint_mode,QString("Flat"), SLOT(selectShading(int)),PM_FLAT);
   makeRadioPopup(menu_paint_mode,QString("Sinus"), SLOT(selectShading(int)),PM_SIMPLE_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("fast Sinus"), SLOT(selectShading(int)),PM_SQUARE_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("Sinus 2"), SLOT(selectShading(int)),PM_WAVE_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("fast Bumb"), SLOT(selectShading(int)),PM_SQUARE_CUSHION);
   makeRadioPopup(menu_paint_mode,QString("Cone"), SLOT(selectShading(int)),PM_CONE_CUSHION);
   makeRadioPopup(menu_paint_mode,QString("Outline"), SLOT(selectShading(int)),PM_OUTLINE);
-  makeRadioPopup(menu_paint_mode,QString("test Cushion"), SLOT(selectShading(int)),PM_CUSHION);
-  makeRadioPopup(menu_paint_mode,QString("hierarch. Cushion"), SLOT(selectShading(int)),PM_HIERARCH_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("wave2 Cushion"), SLOT(selectShading(int)),PM_WAVE2_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("test CTM Cushion"), SLOT(selectShading(int)),PM_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("hierarch. Sinus Cushion"), SLOT(selectShading(int)),PM_HIERARCH_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("hierarch. Sinus Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH2_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("hierarch. Dist. Cushion"), SLOT(selectShading(int)),PM_HIERARCH3_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("hierarch. Dist. Cushion 2"), SLOT(selectShading(int)),PM_HIERARCH4_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("hierarch.5 Cushion"), SLOT(selectShading(int)),PM_HIERARCH5_CUSHION);
+  makeRadioPopup(menu_paint_mode,QString("hierarch. Debug Cushion"), SLOT(selectShading(int)),PM_HIERARCH_TEST_CUSHION);
   menu_paint_mode->setCheckable(TRUE);
 
   menu_border_width=new QPopupMenu(this);
@@ -101,20 +108,45 @@ void QTreeMapWindow::makeWidgets(){
   }
   menu_hfactor->setCheckable(TRUE);
 
+  menu_shfactor=new QPopupMenu(this);
+  for(int i=-100; i<=100;i+=10){
+    QString s;
+    s.sprintf("%2d %%",i);
+    makeRadioPopup(menu_shfactor,s, SLOT(selectSHFactor(int)),i);
+  }
+  menu_shfactor->setCheckable(TRUE);
+
+  menu_sffactor=new QPopupMenu(this);
+  for(int i=-100; i<=100;i+=10){
+    QString s;
+    s.sprintf("%2d %%",i);
+    makeRadioPopup(menu_sffactor,s, SLOT(selectSFFactor(int)),i);
+  }
+  menu_sffactor->setCheckable(TRUE);
+
   menu_start_direction=new QPopupMenu(this);
   makeRadioPopup(menu_start_direction,QString("Horizontal"),SLOT(selectStartDirection(int)),HORIZONTAL);
   makeRadioPopup(menu_start_direction,QString("Vertikal"),SLOT(selectStartDirection(int)),VERTIKAL);
 
+  menu_colorscheme=new QPopupMenu(this);
+  makeRadioPopup(menu_colorscheme,QString("cyclic"),SLOT(selectColorScheme(int)),CS_CYCLIC);
+  makeRadioPopup(menu_colorscheme,QString("regexp"),SLOT(selectColorScheme(int)),CS_REGEXP);
+  makeRadioPopup(menu_colorscheme,QString("monochrome"),SLOT(selectColorScheme(int)),CS_MONO);
+
   menu_options=new QPopupMenu(this);
   menu_options->insertTearOffHandle();
-  menu_options->insertItem("&Paint Mode",menu_paint_mode);
+  menu_options->insertItem("&Shadings",menu_paint_mode);
   menu_options->insertItem("&Draw Mode",menu_draw_mode);
   menu_options->insertItem("Border &Width (any)",menu_border_width);
   menu_options->insertItem("Border &Step (node)",menu_border_step);
   menu_options->insertItem("Start &Direction",menu_start_direction);
   menu_options->insertItem("Dont Draw if smaller",menu_dont_draw);
   menu_options->insertItem("Hierarch. Cushion Factor",menu_hfactor);
+  menu_options->insertItem("Test Cushion Factor h=",menu_shfactor);
+  menu_options->insertItem("Test Cushion Factor f=",menu_sffactor);
+  menu_options->insertItem("Color Scheme",menu_colorscheme);
   menu_options->insertItem("Draw &Text",this,SLOT(changeDrawText(int)));
+  menu_options->insertItem("dynamic shading",this,SLOT(changeDynamicShading(int)));
 
   menu_file_id=menubar->insertItem("&File",menu_file);
   menu_options_id=menubar->insertItem("&Options",menu_options);
@@ -201,6 +233,10 @@ void QTreeMapWindow::selectStartDirection(int id){
   options->start_direction=id;
   redoOptions();
 }
+void QTreeMapWindow::selectColorScheme(int id){
+  options->color_scheme=id;
+  redoOptions();
+}
 void QTreeMapWindow::selectDontDrawOption(int id){
   options->dont_draw_xyd=id;
   redoOptions();
@@ -210,9 +246,24 @@ void QTreeMapWindow::changeDrawText(int id){
   options->draw_text=!(options->draw_text);
   redoOptions();
 }
+void QTreeMapWindow::changeDynamicShading(int id){
+  NOT_USED(id);
+  options->dynamic_shading=!(options->dynamic_shading);
+  redoOptions();
+}
 void QTreeMapWindow::selectHFactor(int id){
   NOT_USED(id);
   options->hc_factor=((float)id)/100.0;
+  redoOptions();
+}
+void QTreeMapWindow::selectSHFactor(int id){
+  NOT_USED(id);
+  options->sequoia_h=((float)id)/100.0;
+  redoOptions();
+}
+void QTreeMapWindow::selectSFFactor(int id){
+  NOT_USED(id);
+  options->sequoia_f=((float)id)/100.0;
   redoOptions();
 }
 

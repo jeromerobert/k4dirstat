@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.2 2001/07/04 02:33:05 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.3 2001/07/05 23:15:37 alexannika Exp $
  *
  */
 
@@ -83,9 +83,13 @@ namespace KDirStat
     void selectBorderWidth(int id);
     void selectBorderStep(int id);
     void selectStartDirection(int id);
+    void selectColorScheme(int id);
     void changeDrawText(int id);
+    void changeDynamicShading(int id);
     void selectDontDrawOption(int id);
     void selectHFactor(int id);
+    void selectSHFactor(int id);
+    void selectSFFactor(int id);
     void redoOptions();
 
     //void paintEvent(QPaintEvent *event);
@@ -118,6 +122,9 @@ namespace KDirStat
   QPopupMenu *menu_start_direction;
   QPopupMenu *menu_dont_draw;
   QPopupMenu *menu_hfactor;
+  QPopupMenu *menu_shfactor;
+  QPopupMenu *menu_sffactor;
+  QPopupMenu *menu_colorscheme;
 
   QPushButton *zoom_out_button;
   QPushButton *zoom_in_button;

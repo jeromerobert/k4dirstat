@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.4 2001/07/04 02:33:05 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.5 2001/07/05 23:15:37 alexannika Exp $
  *
  */
 
@@ -67,6 +67,12 @@ namespace KDirStat
 #define PM_CONE_CUSHION 8
 #define PM_WAVE_CUSHION 9
 #define PM_HIERARCH_CUSHION 10
+#define PM_WAVE2_CUSHION 11
+#define PM_HIERARCH2_CUSHION 12
+#define PM_HIERARCH3_CUSHION 13
+#define PM_HIERARCH4_CUSHION 14
+#define PM_HIERARCH5_CUSHION 15
+#define PM_HIERARCH_TEST_CUSHION 16
 
   // draw modes
 
@@ -77,6 +83,8 @@ namespace KDirStat
   // color scheme
 
 #define CS_CYCLIC 0
+#define CS_REGEXP 1
+#define CS_MONO 2
 
   // color scheme type
 
@@ -136,11 +144,15 @@ namespace KDirStat
     bool draw_text;
     float hc_factor;
     int border_step;
+    bool dynamic_shading;
+    QColor mono_color;
+    float sequoia_h;
+    float sequoia_f;
   };
 
   class Cushion {
   public:
-    Cushion(int xd,int yd);
+    Cushion(int xd,int yd,float sh,float sf);
     //    Cushion(Cushion *old);
 
     float    r[2][2];
@@ -233,6 +245,9 @@ namespace KDirStat
   QColor dirBaseColor;
 
   QPopupMenu *pop;
+
+  Object *last_shaded;
+  Object *next_shaded;
   // cushion rendering
 
   void cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2);

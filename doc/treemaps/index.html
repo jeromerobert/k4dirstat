@@ -19,21 +19,201 @@ by Stefan Hundhammer &lt;<a href="mailto:sh@suse.de">sh@suse.de</a>>
 <p>QTreeMap is currently in heavy development, expect newer versions any
 time
 <br>&nbsp;
-<p>Example screenshots:
-<p><img SRC="screenshots/flat_usr_x11r6_medium.png" NOSAVE height=264 width=404><img SRC="screenshots/simple_cushion_usr_x11r6_medium.png" NOSAVE height=264 width=404>
+<br>&nbsp;
+<h4>
+Example screenshots:</h4>
+<img SRC="screenshots/flat_usr_x11r6_medium.png" NOSAVE height=264 width=404><img SRC="screenshots/simple_cushion_usr_x11r6_medium.png" NOSAVE height=264 width=404>
 <p>The left picture shows my /usr/X11R6 tree drawn with shading 'Flat'
-<br>The right picture shows /usr/X11R6 with 'Simple Cushion' shading
+<br>The right picture shows /usr/X11R6 with 'Sinus' shading
 <br>&nbsp;
-<p>ToDo:
 <br>&nbsp;
-<p>Bugs:
+<h4>
+Usage:</h4>
+
+<ul>
+<li>
+move the mouse and a tooltip will show you file name and size</li>
+
+<li>
+doubleclick on a rectangle and you're stepping (one directory) down into
+the direction of that file</li>
+
+<li>
+click right mouse button and a popmenu will open, displaying the file name
+and size of each subpath</li>
+
+<br>calling konqueror or xterm is broken, no delete yet</ul>
+
+<h4>
+Description of Shadings and Options:</h4>
+undocumented Shadings/Options are experimental/for debugging purposes and
+should be left alone, exept when you want to play around...
+<ul>
+<li>
+Shadings (best used with cyclic <a href="#colorscheme">ColorScheme</a>)
+:</li>
+
+<ul>
+<li>
+Flat</li>
+
+<br>draws flat rectangles
+<li>
+Sinus</li>
+
+<br>draws a bump/parabola with a sin-Function
+<li>
+Sinus 2</li>
+
+<br>modified Version of Sinus
+<li>
+fast Bumb</li>
+
+<br>draws a faster bump/parabola with a x^2-Function
+<li>
+Cone</li>
+
+<br>draws with help of a linear Function
+<li>
+Outline</li>
+
+<br>just draws the outline of the rectangle</ul>
+
+<li>
+<a NAME="hierarch_shadings"></a>Hierarchical Shadings (best used with monochrome
+<a href="#colorscheme">ColorScheme</a>)</li>
+
+<ul>
+<li>
+test CTM Cushion</li>
+
+<br>does not work yet
+<li>
+hierarch. Sinus Cushion</li>
+
+<br>draws a Cushion, where the center of the bump is moved in the direction
+of hierarchies
+<br>a sin-Curve is used to make the bump
+<li>
+hierarch. Sinus Cushion 2</li>
+
+<br>modified version of hierarch. Sinus Cushion
+<li>
+hierarch. Dist. Cushion</li>
+
+<br>draws a Cushion, where the center of the bump is moved in the direction
+of hierarchies
+<br>a distance-Function is used to draw the bump
+<li>
+hierarch. Dist. Cushion 2</li>
+
+<br>modified version of hierarch. Dist. Cushion
+<li>
+hierarch. Cushion 5</li>
+
+<br>just testing
+<li>
+hierarch. Debug Cushion</li>
+
+<br>just for debugging
+<li>
+Wave2 Cushion</li>
+
+<br>just testing</ul>
+
+<li>
+Draw Modes:</li>
+
+<br>[to do]
+<li>
+Start Direction:</li>
+
+<br>chooses the direction in which the root node is drawn
+<li>
+Don't draw if smaller:&nbsp; off, 0-10</li>
+
+<ul>
+<li>
+off</li>
+
+<br>draws every small file, even when it is too small to be seen
+<li>
+values 0-10</li>
+
+<br>doesn't draw files which are less than 0-10 pixels wide
+<br>drawing gets done a lot faster, but 'empty space' may appear where
+lots of small files don't get drawn
+<li>
+sensible values are off, 1,2 or 3</li>
+</ul>
+
+<li>
+Hierarch. Cushion Factor: -100% to 100%</li>
+
+<ul>
+<li>
+when using <a href="#hierarch_shadings">hierarchical shading</a>, the center
+of each bump is moved n % to the direction of the center of the parent
+bump</li>
+
+<li>
+sensible values are 10 % to 40%, default is 30%</li>
+</ul>
+
+<li>
+<a NAME="colorscheme"></a>Color Scheme:</li>
+
+<ul>
+<li>
+cyclic (default)</li>
+
+<br>uses a set of colors, the colors are cycled
+<br>not good to display <a href="#hierarch_shadings">hierarchies</a>
+<li>
+regexp</li>
+
+<br>not yet working
+<li>
+monochrome</li>
+
+<br>switches to monochrome shading
+<br>when using <a href="#hierarch_shadings">hierarchical cushion</a>, monochrome
+is much better to see the hierarchies than cyclic, because you don't get
+confused by all those different colors</ul>
+
+<li>
+Draw Text</li>
+
+<br>draws Text into each rectangle
+<li>
+dynamic Shading</li>
+
+<br>crashes yet</ul>
+
+<h4>
+ToDo:</h4>
+&nbsp;
+<h4>
+Bugs:</h4>
+
 <ul>
 <li>
 Cushions a la SequoiaView are not yet working</li>
+
+<li>
+current dirname display not working</li>
+
+<li>
+no checkmarks in option menues</li>
+
+<li>
+hierarch. Factor >=50% is nonsense</li>
 </ul>
 
-<p><br>ChangeLog:
-<p>2001-07-03 Alexander Rawass &lt;alexannika@users.sourceforge.net>
+<h4>
+ChangeLog:</h4>
+
+<p><br>2001-07-03 Alexander Rawass &lt;alexannika@users.sourceforge.net>
 <p>&nbsp;* QTreeMapWindow is now an abstract class
 <br>&nbsp;* KDirTreeMapWindow implements makeTreeMapWidget()
 <br>&nbsp;* experimental hierach. cushion
@@ -63,7 +243,9 @@ of grey)
 border width, draw text
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removed most compiler warnings
 <br>&nbsp;
-<p>Planned:
+<h4>
+Planned:</h4>
+
 <ul>
 <li>
 squarified treemaps</li>
@@ -92,7 +274,9 @@ that uses a QListView to display hierarchies of any sort (file systems,
 menu items, bookmark folders)</li>
 </ul>
 
-<p><br>Ideas for the usage of Treemaps:
+<h4>
+Ideas for the usage of Treemaps:</h4>
+
 <ul>
 <li>
 Disk Usage Display</li>
@@ -110,7 +294,9 @@ Navigation help in large Source Code projects, i.e. in kdevelop</li>
 Profiling Information Display (for use with gprof output)</li>
 </ul>
 
-<p><br>Other similar Projects:
+<h4>
+Other similar Projects:</h4>
+
 <ul>
 <li>
 <a href="http://www.win.tue.nl/sequoiaview/">SequoiaView</a> (from which
@@ -139,7 +325,7 @@ java treemap component</li>
 
 <hr WIDTH="100%">
 <p>Alexander Rawass &lt;<a href="mailto:alexannika@users.sourceforge.net">alexannika@users.sourceforge.net</a>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Last modification Date: 03 July 2001
+Last modification Date: 05 July 2001
 <br>&nbsp;
 <br>&nbsp;
 </body>
