@@ -1,3 +1,8 @@
+2002-01-19  Stefan Hundhammer  <sh@suse.de>
+
+	* Added feedback mail facility
+	* Bumped version to 1.8.4-beta
+
 2002-01-10  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed repaint error in percentage bar column when scrolling

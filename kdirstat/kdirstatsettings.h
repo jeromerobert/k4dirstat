@@ -4,9 +4,9 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-04
+ *   Updated:	2002-01-19
  *
- *   $Id: kdirstatsettings.h,v 1.1 2002/01/07 09:07:04 hundhammer Exp $
+ *   $Id: kdirstatsettings.h,v 1.2 2002/01/21 10:04:52 hundhammer Exp $
  *
  */
 
@@ -61,9 +61,9 @@ namespace KDirStat
 	/**
 	 * Constructor.
 	 *
-	 * Notice there is no parent widget passed but the application's main window
-	 * so its functions can be accessed. The parent of this widget is always 0
-	 * since this is a dialog.
+	 * Notice there is no parent widget passed but the application's main
+	 * window so its functions can be accessed. The parent of this widget
+	 * is always 0 since this is a dialog.
 	 **/
 
 	KSettingsDialog( KDirStatApp * mainWin );

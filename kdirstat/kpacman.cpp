@@ -1,13 +1,13 @@
 
 /*
- *   File name:	kpacman.h
+ *   File name:	kpacman.cpp
  *   Summary:	PacMan animation
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-06-17
+ *   Updated:	2002-01-19
  *
- *   $Id: kpacman.cpp,v 1.1 2001/06/29 16:37:49 hundhammer Exp $
+ *   $Id: kpacman.cpp,v 1.2 2002/01/21 10:04:52 hundhammer Exp $
  *
  */
 
@@ -32,7 +32,7 @@ KPacManAnimation::KPacManAnimation( QWidget *	widget,
     _pos		= 0;
     _speed		= 4;
     _interval		= 100;
-			
+
     _minMouth		= 10;
     _maxMouth		= 70;
     _mouthInc		= ( _maxMouth - _minMouth ) / 3;
@@ -52,7 +52,7 @@ void
 KPacManAnimation::restart()
 {
     _justStarted = true;
-    
+
     if ( _randomStart )
     {
 	_goingRight = ( rand() > ( RAND_MAX / 2 ) );
@@ -95,12 +95,12 @@ KPacManAnimation::animate( QPainter *	painter,
 
 	if ( _pacManRect.width() > 0 )
 	    painter->eraseRect( _pacManRect );
-    
+
 	if ( _randomStart )
 	{
 	    // Set random initial position
 	    // - this depends on the width which is unknown in the constructor.
-	
+
 	    _pos = (int) ( (rect.width() - size ) * ( (double) rand() / RAND_MAX) );
 	}
     }
@@ -110,7 +110,7 @@ KPacManAnimation::animate( QPainter *	painter,
 
 	if ( ! _goingRight )
 	    _pacManRect.setX( _pacManRect.x() + _pacManRect.width() - _speed );
-    
+
 	_pacManRect.setWidth( _speed );
 	painter->eraseRect( _pacManRect );
     }
@@ -121,9 +121,9 @@ KPacManAnimation::animate( QPainter *	painter,
 	// Notice: This can also happen when the rectangle is resized - i.e. it
 	// really makes sense to do that right here rather than at the end of
 	// this function!
-	
+
 	// Turn left
-	
+
 	_pos 		= rect.width() - size;
 	_goingRight	= false;
 	_mouth		= _minMouth;
@@ -131,13 +131,13 @@ KPacManAnimation::animate( QPainter *	painter,
     else if ( _pos < 0 )	// Left edge reached?
     {
 	// Turn right
-	
+
 	_pos 		= 0;
 	_goingRight	= true;
 	_mouth		= _minMouth;
     }
 
-    
+
     // Draw PacMan (double-buffered)
 
     _pacManRect = QRect( 0, 0, size, size );
@@ -145,7 +145,7 @@ KPacManAnimation::animate( QPainter *	painter,
     pixmap.fill( painter->backgroundColor() );
     QPainter p( &pixmap, _widget );
     p.setBrush( _brush );
-    
+
     if ( _goingRight )
     {
 	p.drawPie( _pacManRect,
@@ -222,7 +222,7 @@ KPacMan::~KPacMan()
 {
     if ( _painter )
 	delete _painter;
-    
+
     if ( _pacMan )
 	delete _pacMan;
 }
@@ -235,7 +235,7 @@ KPacMan::start()
     {
 	_timer = new QTimer( this );
     }
-    
+
     _pacMan->restart();
 
     if ( _timer )
@@ -252,7 +252,7 @@ void
 KPacMan::stop()
 {
     _active = false;
-    
+
     if ( _timer )
 	_timer->stop();
 
@@ -277,7 +277,7 @@ KPacMan::setInterval( int intervalMilliSec )
 	_timer->changeInterval( _interval );
 }
 
-    
+
 void
 KPacMan::paintEvent( QPaintEvent *ev )
 {

@@ -11,6 +11,8 @@ bin_PROGRAMS 	= kdirstat
 kdirstat_SOURCES =				\
 	kdirstatmain.cpp			\
 	kdirstatapp.cpp				\
+	kdirstatfeedback.cpp			\
+	kfeedback.cpp				\
 	kdirtreeview.cpp			\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
@@ -36,6 +38,7 @@ endif
 
 noinst_HEADERS =				\
 	kdirstatapp.h				\
+	kfeedback.h				\
 	kdirtreeview.h				\
 	kdirtreeiterators.h			\
 	kdirtree.h				\
