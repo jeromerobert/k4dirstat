@@ -5,9 +5,9 @@
  *
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-01-21
+ *   Updated:	2002-02-06
  *
- *   $Id: kdirstatfeedback.cpp,v 1.1 2002/01/21 10:04:52 hundhammer Exp $
+ *   $Id: kdirstatfeedback.cpp,v 1.2 2002/02/06 11:58:12 hundhammer Exp $
  *
  */
 
@@ -80,7 +80,7 @@ KDirStatApp::sendFeedbackMail()
 	question->addAnswer( i18n( "Learning"					),	"4/5_learning"	);
 	question->addAnswer( i18n( "Newbie"					),	"5/5_newbie"		);
 
-	question = list->addQuestion( i18n( "What is your experience with Unix/Linux systems?" ), "computer_experience", true );
+	question = list->addQuestion( i18n( "What is your experience with Unix/Linux systems?" ), "unix_experience", true );
 	question->addAnswer( i18n( "Expert"					),	"1/5_expert"		);
 	question->addAnswer( i18n( "Fair"					),	"2/5_fair"		);
 	question->addAnswer( i18n( "Average"					),	"3/5_average"		);
@@ -100,7 +100,15 @@ KDirStatApp::sendFeedbackMail()
 	question->addAnswer( i18n( "At home"					),	"at_home"		);
 	question->addAnswer( i18n( "At university / school"			),	"university"		);
 
-	question = list->addQuestion( i18n( "What is your role there?"		),	"role",			true );
+	question = list->addQuestion( i18n( "What is your primary role there?"	),	"primary_role",		true );
+	question->addAnswer( i18n( "Home user"					),	"home_user"		);
+	question->addAnswer( i18n( "Student"					),	"student"		);
+	question->addAnswer( i18n( "Educational (teacher / professor)"		),	"educational"		);
+	question->addAnswer( i18n( "Non-computer related work"			),	"non_computer"		);
+	question->addAnswer( i18n( "Developer"					),	"developer"		);
+	question->addAnswer( i18n( "System administrator"			),	"sysadmin"		);
+
+	question = list->addQuestion( i18n( "Do you have any other roles there?" ),	"other_roles",		false );
 	question->addAnswer( i18n( "Home user"					),	"home_user"		);
 	question->addAnswer( i18n( "Student"					),	"student"		);
 	question->addAnswer( i18n( "Educational (teacher / professor)"		),	"educational"		);
