@@ -1,3 +1,9 @@
+2004-12-06  Stefan Hundhammer  <sh@suse.de>
+
+	* Added "Open with" cleanup upon request by Jarl Friis <jarl@softace.dk>
+
+	* Bumped version to 2.4.3
+
 2004-11-23  Stefan Hundhammer  <sh@suse.de>
 
 	* Migration to KIO slave trash:/ for "move to trash" cleanup
