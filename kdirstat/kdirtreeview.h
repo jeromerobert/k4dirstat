@@ -19,6 +19,7 @@
 // it seems to confuse the 'moc' preprocessor.
 
 #define USE_KLISTVIEW		0
+#define DEBUG_COUNTERS		10
 
 
 #ifdef HAVE_CONFIG_H
@@ -79,10 +80,13 @@ namespace KDirStat
 	/**
 	 * Locate the counterpart to an original tree item "wanted" somewhere
 	 * within this view tree. Returns 0 on failure.
-	 * When "lazy" is set, only the open part of the tree is searched.
+	 * If "lazy" is set, only the open part of the tree is searched.
+	 * "doClone" specifies whether or not to (deferred) clone nodes that
+	 * are not cloned yet. This is only used if "lazy" is false.
 	 **/
 	KDirTreeViewItem *	locate( KFileInfo *	wanted,
-					bool		lazy = true );
+					bool		lazy	= true,
+					bool		doClone	= true );
 
 	/**
 	 * Get the first child of this view or 0 if there is none.
@@ -245,6 +249,17 @@ namespace KDirStat
 	QPixmap	readyIcon()		const	{ return _readyIcon;		}
 
 
+	/**
+	 * Set function name of debug function #i
+	 **/
+	void	setDebugFunc( int i, const QString & functionName );
+
+	/**
+	 * Increase debug counter #i
+	 **/
+	void	incDebugCount( int i );
+
+	
     public slots:
 
 	/**
@@ -419,6 +434,7 @@ namespace KDirStat
 	void 	popupContextInfo	( const QPoint &	pos,
 					  const QString & 	info );
 
+	
     protected slots:
 
 	/**
@@ -517,6 +533,9 @@ namespace KDirStat
 	int	_latestMtimeCol;
 	int	_readJobsCol;
 	int	_sortCol;
+	
+	int 	_debugCount[ DEBUG_COUNTERS ];
+	QString	_debugFunc [ DEBUG_COUNTERS ];
 
 
 	// The various icons
@@ -564,12 +583,15 @@ namespace KDirStat
 	 * within this view tree. Returns 0 on failure.
 	 *
 	 * When "lazy" is set, only the open part of the tree is searched.
+	 * "doClone" specifies whether or not to (deferred) clone nodes that
+	 * are not cloned yet. This is only used if "lazy" is false.
 	 * "Level" is just a hint for the current tree level for better
 	 * performance. It will be calculated automatically if omitted.
 	 **/
 	KDirTreeViewItem *	locate( KFileInfo *	wanted,
-					bool 		lazy = true,
-					int 		level = -1 );
+					bool 		lazy	= true,
+					bool		doClone	= true,
+					int 		level	= -1 );
 
 	/**
 	 * Recursively update the visual representation of the summary fields.
@@ -624,11 +646,22 @@ namespace KDirStat
 	    { return (KDirTreeViewItem *) QListViewItem::nextSibling(); }
 
 	/**
-	 * Returns the sort key for any column.
-	 * Reimplemented from @ref QListViewItem.
+	 * Comparison function used for sorting the list.
+	 *
+	 * Using this function is much more efficient than overwriting
+	 * QListViewItem::key() which operates on QStrings.
+	 *
+	 * Returns:
+	 * -1 if this <  other
+	 *  0 if this == other
+	 * +1 if this >  other
+	 *
+	 * Reimplemented from QListViewItem
 	 **/
-	virtual QString key ( int	column,
-			      bool	ascending ) const;
+	virtual int compare( QListViewItem *	other,
+			     int		col,
+			     bool		ascending ) const;
+
 	/**
 	 * Perform any necessary pending updates when a branch is opened.
 	 * Reimplemented from @ref QListViewItem.
@@ -684,6 +717,18 @@ namespace KDirStat
 	void	cleanupDotEntries();
 
 	/**
+	 * Find this entry's dot entry (clone).
+	 *
+	 * This doesn't create one if deferred cloning is in effect (which is
+	 * not a drawback since cloning directory nodes create a dot entry
+	 * clone along with the directory clone).
+	 *
+	 * Returns 0 if there is no dot entry clone.
+	 **/
+	KDirTreeViewItem * findDotEntry() const;
+
+	
+	/**
 	 * Paint method. Reimplemented from @ref QListViewItem so different
 	 * colors can be used - and of course for painting percentage bars.
 	 *
@@ -707,6 +752,16 @@ namespace KDirStat
 				  const QColor &	fillColor,
 				  const QColor &	barBackground	);
 
+	/**
+	 * Generic comparison function.
+	 **/
+	template<typename T> inline
+	int compare( T a, T b ) const
+	{
+	    if ( a < b ) return -1;
+	    if ( a > b ) return  1;
+	    return 0;
+	}
 
     private:
 
@@ -806,7 +861,7 @@ namespace KDirStat
      **/
     QColor contrastingColor ( const QColor &desiredColor,
 			      const QColor &contrastColor );
-
+    
 }	// namespace KDirStat
 
 

@@ -9,6 +9,7 @@
 
 
 #include <time.h>
+#include <stdlib.h>
 
 #include <qtimer.h>
 #include <qcolor.h>
@@ -42,6 +43,15 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _doPacManAnimation	= false;
     _updateInterval	= 333;	// millisec
     _sortCol		= -1;
+
+    for ( int i=0; i < DEBUG_COUNTERS; i++ )
+	_debugCount[i]	= 0;
+
+    setDebugFunc( 1, "KDirTreeViewItem::init()" );
+    setDebugFunc( 2, "KDirTreeViewItem::updateSummary()" );
+    setDebugFunc( 3, "KDirTreeViewItem::deferredClone()" );
+    setDebugFunc( 4, "KDirTreeViewItem::compare()" );
+    setDebugFunc( 5, "KDirTreeViewItem::paintCell()" );
 
 #if SEPARATE_READ_JOBS_COL
     _readJobsCol	= -1;
@@ -125,6 +135,22 @@ KDirTreeView::~KDirTreeView()
      * Don't delete _updateTimer here, it's already automatically deleted by Qt!
      * (Since it's derived from QObject and has a QObject parent).
      */
+}
+
+
+void
+KDirTreeView::setDebugFunc( int i, const QString & functionName )
+{
+    if ( i > 0 && i < DEBUG_COUNTERS )
+	_debugFunc[i] = functionName;
+}
+
+
+void
+KDirTreeView::incDebugCount( int i )
+{
+    if ( i > 0 && i < DEBUG_COUNTERS )
+	_debugCount[i]++;
 }
 
 
@@ -237,11 +263,11 @@ KDirTreeView::prepareReading()
     if ( _updateTimer )
     {
 	_updateTimer->changeInterval( _updateInterval );
-	connect( _updateTimer, SIGNAL( timeout() ),
-		 this,   SLOT  ( updateSummary() ) );
+	connect( _updateTimer,	SIGNAL( timeout() ),
+		 this,   	SLOT  ( updateSummary() ) );
 
 	connect( _updateTimer, SIGNAL( timeout() ),
-		 this,   SLOT  ( sendProgressInfo() ) );
+		 this,   	SLOT  ( sendProgressInfo() ) );
     }
 
 
@@ -288,6 +314,9 @@ KDirTreeView::clear()
 {
     clearSelection();
     KDirTreeViewParentClass::clear();
+
+    for ( int i=0; i < DEBUG_COUNTERS; i++ )
+	_debugCount[i]	= 0;
 }
 
 
@@ -296,12 +325,17 @@ KDirTreeView::addChild( KFileInfo *newChild )
 {
     if ( newChild->parent() )
     {
-	KDirTreeViewItem *cloneParent = locate( newChild->parent(), _doLazyClone );
+	KDirTreeViewItem *cloneParent = locate( newChild->parent(),
+						_doLazyClone,		// lazy
+						true );			// doClone
 
 	if ( cloneParent )
 	{
-	    // kdDebug() << "Immediately cloning " << newChild << endl;
-	    new KDirTreeViewItem( this, cloneParent, newChild );
+	    if ( isOpen( cloneParent ) || ! _doLazyClone )
+	    {
+		// kdDebug() << "Immediately cloning " << newChild << endl;
+		new KDirTreeViewItem( this, cloneParent, newChild );
+	    }
 	}
 	else	// Error
 	{
@@ -324,7 +358,8 @@ void
 KDirTreeView::deleteChild( KFileInfo *child )
 {
     KDirTreeViewItem *clone = locate( child,
-				      false );	// lazy
+				      false,	// lazy
+				      false );	// doClone
     KDirTreeViewItem *nextSelection = 0;
 
     if ( clone )
@@ -396,6 +431,16 @@ KDirTreeView::slotFinished()
     updateSummary();
     logActivity( 30 );
 
+#if 0
+    for ( int i=0; i < DEBUG_COUNTERS; i++ )
+    {
+	kdDebug() << "Debug counter #" << i << ": " << _debugCount[i]
+		  << "\t" << _debugFunc[i]
+		  << endl;
+    }
+    kdDebug() << endl;
+#endif
+
     emit finished();
 }
 
@@ -406,7 +451,8 @@ KDirTreeView::finalizeLocal( KDirInfo *dir )
     if ( dir )
     {
 	KDirTreeViewItem *clone = locate( dir,
-					  false );	// lazy
+					  false,	// lazy
+					  false );	// doClone
 	if ( clone )
 	    clone->finalizeLocal();
     }
@@ -434,13 +480,13 @@ KDirTreeView::sendProgressInfo()
 
 
 KDirTreeViewItem *
-KDirTreeView::locate( KFileInfo *wanted, bool lazy )
+KDirTreeView::locate( KFileInfo *wanted, bool lazy, bool doClone )
 {
     KDirTreeViewItem *child = firstChild();
 
     while ( child )
     {
-	KDirTreeViewItem *wantedChild = child->locate( wanted, lazy, 0 );
+	KDirTreeViewItem *wantedChild = child->locate( wanted, lazy, doClone, 0 );
 
 	if ( wantedChild )
 	    return wantedChild;
@@ -505,7 +551,8 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
     else
     {
 	_selection = locate( newSelection,
-			     false );	// lazy
+			     false,	// lazy
+			     true );	// doClone
 	if ( _selection )
 	{
 	    closeAllExcept( _selection );
@@ -889,6 +936,9 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     _pacMan	= 0;
     _openCount	= 0;
 
+    // _view->incDebugCount(1);
+    // kdDebug() << "new KDirTreeViewItem for " << orig << endl;
+
     if ( _orig->isDotEntry() )
     {
        setText( view->nameCol(), i18n( "<Files>" ) );
@@ -996,6 +1046,8 @@ KDirTreeViewItem::setIcon()
 void
 KDirTreeViewItem::updateSummary()
 {
+    // _view->incDebugCount(2);
+
     // Update this item
 
     setIcon();
@@ -1071,6 +1123,7 @@ KDirTreeViewItem::updateSummary()
 KDirTreeViewItem *
 KDirTreeViewItem::locate( KFileInfo *	wanted,
 			  bool		lazy,
+			  bool		doClone,
 			  int 		level )
 {
     if ( lazy && ! isOpen() )
@@ -1091,6 +1144,8 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 	 * cost, even if that means deferred cloning children whose creation
 	 * has been delayed until now.
 	 */
+
+	// kdDebug() << "Too lazy to search for " << wanted << " from " << this << endl;
 	return 0;
     }
 
@@ -1108,15 +1163,16 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 
 	KDirTreeViewItem *child = firstChild();
 
-	if ( ! child && _orig->hasChildren() )
+	if ( ! child && _orig->hasChildren() && doClone )
 	{
+	    // kdDebug() << "Deferred cloning " << this << " for children search of " << wanted << endl;
 	    deferredClone();
 	    child = firstChild();
 	}
 
 	while ( child )
 	{
-	    KDirTreeViewItem *foundChild = child->locate( wanted, lazy, level+1 );
+	    KDirTreeViewItem *foundChild = child->locate( wanted, lazy, doClone, level+1 );
 
 	    if ( foundChild )
 		return foundChild;
@@ -1132,6 +1188,8 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 void
 KDirTreeViewItem::deferredClone()
 {
+    // _view->incDebugCount(3);
+
     if ( ! _orig->hasChildren() )
     {
 	// kdDebug() << k_funcinfo << "Oops, no children - sorry for bothering you!" << endl;
@@ -1149,7 +1207,11 @@ KDirTreeViewItem::deferredClone()
 
     while ( origChild )
     {
-	if ( startingClean || ! locate( origChild, false, level ) )
+	if ( startingClean ||
+	     ! locate( origChild,
+		       false,		// lazy
+		       true,		// doClone
+		       level ) )
 	{
 	    // kdDebug() << "Deferred cloning " << origChild << endl;
 	    new KDirTreeViewItem( _view, this, origChild );
@@ -1162,7 +1224,13 @@ KDirTreeViewItem::deferredClone()
     // Clone the dot entry
 
     if ( _orig->dotEntry() &&
-	 ( startingClean || ! locate( _orig->dotEntry(), false, level ) ) )
+	 ( startingClean ||
+	   ! locate( _orig->dotEntry(),
+		     false,	// lazy
+		     true,	// doClone
+		     level )
+	   )
+	 )
     {
 	// kdDebug() << "Deferred cloning dot entry for " << _orig << endl;
 	new KDirTreeViewItem( _view, this, _orig->dotEntry() );
@@ -1191,7 +1259,7 @@ KDirTreeViewItem::cleanupDotEntries()
     if ( ! _orig->dotEntry() )
 	return;
 
-    KDirTreeViewItem *dotEntry = locate( _orig->dotEntry(), false );
+    KDirTreeViewItem *dotEntry = findDotEntry();
 
     if ( ! dotEntry )
 	return;
@@ -1244,11 +1312,31 @@ KDirTreeViewItem::cleanupDotEntries()
 }
 
 
+KDirTreeViewItem *
+KDirTreeViewItem::findDotEntry() const
+{
+    KDirTreeViewItem *child = firstChild();
+
+    while ( child )
+    {
+	if ( child->orig()->isDotEntry() )
+	    return child;
+	
+	child = child->next();
+    }
+
+    return 0;
+}
+
+
 void
 KDirTreeViewItem::setOpen( bool open )
 {
     if ( open && _view->doLazyClone() )
+    {
+	// kdDebug() << "Opening " << this << endl;
 	deferredClone();
+    }
 
     if ( isOpen() != open )
     {
@@ -1355,53 +1443,49 @@ KDirTreeViewItem::asciiDump()
 }
 
 
-QString
-KDirTreeViewItem::key( int column, bool ascending ) const
+/**
+ * Comparison function used for sorting the list.
+ * Returns:
+ * -1 if this <	 other
+ *  0 if this == other
+ * +1 if this >	 other
+ **/
+int
+KDirTreeViewItem::compare( QListViewItem *	otherListViewItem,
+			   int			column,
+			   bool			ascending ) const
 {
-    static QString sortKey;
-    NOT_USED( ascending );
+    // _view->incDebugCount(4);
+    KDirTreeViewItem * other = dynamic_cast<KDirTreeViewItem *> (otherListViewItem);
+
+    if ( other )
+    {
+	KFileInfo * otherOrig = other->orig();
 
 #if ! SEPARATE_READ_JOBS_COL
-    if ( column == _view->readJobsCol() )
-    {
-	sortKey.sprintf( "%010d", INT_MAX - _orig->pendingReadJobs() );
-    } else
+	if ( column == _view->readJobsCol() )		return - compare( _orig->pendingReadJobs(), otherOrig->pendingReadJobs() );
+	else
 #endif
-    if ( column == _view->totalSizeCol()  ||
-	 column == _view->percentNumCol() ||
-	 column == _view->percentBarCol()   )
-    {
-	sortKey = hexKey( KFileSizeMax - _orig->totalSize() );
+	if ( column == _view->totalSizeCol()  ||
+	     column == _view->percentNumCol() ||
+	     column == _view->percentBarCol()   )	return - compare( _orig->totalSize(), 	 otherOrig->totalSize()    );
 
-    } else if ( column == _view->ownSizeCol() )
-    {
-	sortKey = hexKey( KFileSizeMax - _orig->size() );
-    } else if ( column == _view->totalItemsCol() )
-    {
-	sortKey.sprintf( "%010d", INT_MAX - _orig->totalItems() );
-    } else if ( column == _view->totalFilesCol() )
-    {
-	sortKey.sprintf( "%010d", INT_MAX - _orig->totalFiles() );
-    } else if ( column == _view->totalSubDirsCol() )
-    {
-	sortKey.sprintf( "%010d", INT_MAX - _orig->totalSubDirs() );
-    }
-    else if ( column == _view->latestMtimeCol() )
-    {
-	sortKey = formatTimeDate( _orig->latestMtime() );
-    } else
-    {
-	if ( _orig->isDotEntry() )	// make sure this will be the last
-	{
-	    sortKey.fill( 0xff, 20 );
-	}
+        else if ( column == _view->ownSizeCol() )	return - compare( _orig->size(), 	 otherOrig->size() 	   );
+	else if ( column == _view->totalItemsCol() )	return - compare( _orig->totalItems(), 	 otherOrig->totalItems()   );
+	else if ( column == _view->totalFilesCol() )	return - compare( _orig->totalFiles(), 	 otherOrig->totalFiles()   );
+	else if ( column == _view->totalSubDirsCol() )	return - compare( _orig->totalSubDirs(), otherOrig->totalSubDirs() );
+	else if ( column == _view->latestMtimeCol() )	return - compare( _orig->latestMtime(),	 otherOrig->latestMtime()  );
 	else
 	{
-	    sortKey = text( column );
+	    if ( _orig->isDotEntry() )	// make sure dot entries are last in the list
+		return 1;
+
+	    if ( otherOrig->isDotEntry() )
+		return -1;
 	}
     }
 
-    return sortKey;
+    return QListViewItem::compare( otherListViewItem, column, ascending );
 }
 
 
@@ -1412,6 +1496,8 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 			     int			width,
 			     int			alignment )
 {
+    // _view->incDebugCount(5);
+
     if ( column == _view->percentBarCol() )
     {
 	painter->setBackgroundColor( colorGroup.base() );
