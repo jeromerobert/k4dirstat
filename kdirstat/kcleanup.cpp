@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-02-09
+ *   Updated:	2002-02-11
  *
- *   $Id: kcleanup.cpp,v 1.5 2002/02/11 10:04:33 hundhammer Exp $
+ *   $Id: kcleanup.cpp,v 1.6 2002/02/11 13:45:12 hundhammer Exp $
  *
  */
 
@@ -119,8 +119,37 @@ KCleanup::worksFor( KFileInfo *item ) const
 void
 KCleanup::selectionChanged( KFileInfo *selection )
 {
+    bool enabled = false;
     _selection = selection;
-    KAction::setEnabled( worksFor( selection ) );
+
+    if ( selection )
+    {
+	enabled = worksFor( selection );
+
+	if ( ! selection->isFinished() )
+	{
+	    // This subtree isn't finished reading yet
+
+	    switch ( _refreshPolicy )
+	    {
+		// Refresh policies that would cause this subtree to be deleted
+		case refreshThis:
+		case refreshParent:
+		case assumeDeleted:
+
+		    // Prevent premature deletion of this tree - this would
+		    // cause a core dump for sure. 
+		    enabled = false;
+		    break;
+			
+		default:
+		    break;
+	    }
+	    
+	}
+    }
+    
+    KAction::setEnabled( enabled );
 }
 
 

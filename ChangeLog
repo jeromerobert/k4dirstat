@@ -1,3 +1,8 @@
+2002-02-11  Stefan Hundhammer  <sh@suse.de>
+
+	* Prevent crash: Disable cleanups that modify the subtree while it
+	  is still being read 
+
 2002-02-10  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed double slashes in URLs when opening with file selection box
