@@ -17,7 +17,7 @@ Group:        X11/KDE/Utilities
 Summary:      Graphical directory statistics for used disk space
 Version:      2.3.3
 Release:      0
-Source0:      kdirstat-2.3.3.tgz
+Source0:      kdirstat-2.3.3.tar.bz2
 
 %description
 KDirStat (for KDE Directory Statistics) is a utility program that sums up
