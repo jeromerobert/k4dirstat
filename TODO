@@ -7,10 +7,17 @@ Become KDirStat 0.86-compatible again:
 - configure tree colors
 
 
-New features:
+- Make treemaps work again; this will most likely require a rewrite of the
+  treemap related part. 
 
-- continue dir scanning at mount points at user request
 
+
+
+
+
+
+
+Old ideas:
 
 Advanced stuff:
 
@@ -25,3 +32,6 @@ Mabe if it turns out to be necessary:
 - use delayed dir tree scanning for seldom changed sys dirs
 - let user choose (static) dirs to disregard
 
+But:
+  The Linux 2.4 kernel is great at caching directory entries,
+  thus for Linux this really isn't necessary - and I am a Linux guy... 

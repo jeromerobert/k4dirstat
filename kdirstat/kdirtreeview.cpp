@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-25
+ *   Updated:	2001-12-08
  *
- *   $Id: kdirtreeview.cpp,v 1.10 2001/11/27 09:40:18 hundhammer Exp $
+ *   $Id: kdirtreeview.cpp,v 1.11 2001/12/10 10:32:58 hundhammer Exp $
  *
  */
 
@@ -43,7 +43,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     : KDirTreeViewParentClass( parent )
 {
     _tree		= 0;
-    
+
 #if USE_TREMAPS
     _treemap_view	= 0;	// FIXME
 #endif
@@ -98,12 +98,18 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
     // Initialize colors.
 
-    for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
+    _usedFillColors = 0;
+
+    _fillColor[	_usedFillColors++ ] = QColor ( 0,     0, 255 );
+    _fillColor[	_usedFillColors++ ] = QColor ( 128,   0, 128 );
+    _fillColor[	_usedFillColors++ ] = QColor ( 231, 147,  43 );
+    _fillColor[	_usedFillColors++ ] = QColor (   4, 113,   0 );
+    
+    for ( int i= _usedFillColors; i < KDirTreeViewMaxFillColor; i++ )
     {
 	_fillColor[i]	= blue;
     }
-
-    _usedFillColors = 1;
+    
     ensureContrast();
 
 
@@ -123,11 +129,11 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
    connect ( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
 	     this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
-    
+
    _contextInfo	  = new QPopupMenu;
    _idContextInfo = _contextInfo->insertItem ( "dummy" );
 
-    
+
 #if USE_TREEMAPS
    // FIXME: Move this out of here. No use opening an empty window at this time -
    // do it upon some finished() signal.
@@ -150,7 +156,7 @@ KDirTreeView::~KDirTreeView()
 	delete _treemap_view;
     }
 #endif
-    
+
 
     /*
      * Don't delete _updateTimer here, it's already automatically deleted by Qt!
@@ -214,7 +220,7 @@ KDirTreeView::openURL( KURL url )
 	_treemap_view = 0;
     }
 #endif
-    
+
     if ( _tree )
 	delete _tree;
 
@@ -241,6 +247,9 @@ KDirTreeView::openURL( KURL url )
     connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
 	     this,  SLOT  ( finalizeLocal( KDirInfo * ) ) );
 
+    connect( this,  SIGNAL( selectionChanged( KFileInfo * ) ),
+	     _tree, SLOT  ( selectItem      ( KFileInfo * ) ) );
+
     prepareReading();
     _tree->startReading( url );
 }
@@ -249,7 +258,7 @@ KDirTreeView::openURL( KURL url )
 void
 KDirTreeView::prepareReading()
 {
-    
+
     // Prepare cyclic update
 
     if ( _updateTimer )
@@ -412,6 +421,7 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
 		       .arg( _currentDir ) );
 }
 
+
 #if QT_VERSION < 300
 void
 KDirTreeView::sendProgressInfo()
@@ -419,6 +429,7 @@ KDirTreeView::sendProgressInfo()
     sendProgressInfo( _currentDir );
 }
 #endif
+
 
 KDirTreeViewItem *
 KDirTreeView::locate( KFileInfo *wanted, bool lazy )
@@ -444,9 +455,32 @@ KDirTreeView::selectItem( QListViewItem *listViewItem )
 {
     _selection = dynamic_cast<KDirTreeViewItem *>( listViewItem );
     // kdDebug() << "Selecting item " << ( _selection ? (const char *) _selection->orig()->debugUrl() : "<none>" ) << endl;
-    
+
     emit selectionChanged( _selection );
     emit selectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
+}
+
+
+void
+KDirTreeView::selectItem( KFileInfo *newSelection )
+{
+    // Short-circuit for the most common case: The signal has been triggered by
+    // this view, and the KDirTree has sent it right back.
+
+    if ( _selection && _selection->orig() == newSelection )
+	return;
+
+    if ( ! newSelection )
+	clearSelection();
+    else
+    {
+	_selection = locate( newSelection,
+			     false );	// lazy
+
+	emit selectionChanged( _selection );
+	_selection->openSubtree();
+	setSelected( _selection, true );
+    }
 }
 
 
@@ -455,7 +489,7 @@ KDirTreeView::clearSelection()
 {
     // kdDebug() << k_funcinfo << endl;
     _selection = 0;
-    
+
     emit selectionChanged( (KDirTreeViewItem *) 0 );
     emit selectionChanged( (KFileInfo *) 0 );
 }
@@ -569,21 +603,21 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
     // If the column is one with a large size in kB/MB/GB, open a
     // info popup with the exact number.
-   
+
     if ( column == _ownSizeCol && ! item->orig()->isDotEntry() )
     {
 	popupContextSizeInfo( pos, item->orig()->size() );
     }
-   
+
     if ( column == _totalSizeCol &&
 	 ( item->orig()->isDir() || item->orig()->isDotEntry() ) )
     {
 	popupContextSizeInfo( pos, item->orig()->totalSize() );
     }
 
-    
+
     // Show alternate time / date format in time / date related columns.
-    
+
     if ( column == _latestMtimeCol )
     {
 	popupContextInfo( pos, formatTimeDate( item->orig()->latestMtime() ) );
@@ -1009,6 +1043,15 @@ KDirTreeViewItem::setOpen( bool open )
 #endif
 }
 
+
+void
+KDirTreeViewItem::openSubtree()
+{
+    if ( parent() )
+	parent()->setOpen( true );
+
+    setOpen( true );
+}
 
 
 

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-01
+ *   Updated:	2001-12-08
  *
- *   $Id: kdirtree.cpp,v 1.5 2001/12/03 10:19:21 hundhammer Exp $
+ *   $Id: kdirtree.cpp,v 1.6 2001/12/10 10:32:58 hundhammer Exp $
  *
  */
 
@@ -182,6 +182,23 @@ bool
 KFileInfo::hasChildren() const
 {
     return firstChild() || dotEntry();
+}
+
+
+bool
+KFileInfo::isInSubtree( const KFileInfo *subtree ) const
+{
+    const KFileInfo * ancestor = this;
+
+    while ( ancestor )
+    {
+	if ( ancestor == subtree )
+	    return true;
+
+	ancestor = ancestor->parent();
+    }
+
+    return false;
 }
 
 
@@ -999,6 +1016,7 @@ KDirTree::KDirTree()
     : QObject()
 {
     _root			= 0;
+    _selection			= 0;
     _crossFileSystems		= false;
     _enableLocalFileReader	= true;
     _readMethod			= KDirReadUnknown;
@@ -1010,6 +1028,8 @@ KDirTree::~KDirTree()
 {
     // Jobs still in the job queue are automatically deleted along with the
     // queue since autoDelete is set.
+
+    selectItem( 0 );
 
     if ( _root )
 	delete _root;
@@ -1035,6 +1055,7 @@ KDirTree::startReading( const KURL & url )
     {
 	// Clean up leftover stuff
 
+	selectItem( 0 );
 	emit deletingChild( _root );
 
 	// kdDebug() << "Deleting root prior to reading" << endl;
@@ -1104,6 +1125,11 @@ KDirTree::refresh( KFileInfo *subtree )
 	KURL url		= subtree->url();
 	KFileInfo *parent	= subtree->parent();
 
+
+	// Select nothing if the current selection is to be deleted
+	
+	if ( _selection && _selection->isInSubtree( subtree ) )
+	    selectItem( 0 );
 
 	// Get rid of the old subtree.
 
@@ -1209,6 +1235,9 @@ KDirTree::childAddedNotify( KFileInfo *newChild )
 void
 KDirTree::deletingChildNotify( KFileInfo *deletedChild )
 {
+    if ( _selection && _selection->isInSubtree( deletedChild ) )
+	 selectItem( 0 );
+	 
     emit deletingChild( deletedChild );
 }
 
@@ -1235,6 +1264,24 @@ KDirTree::sendFinalizeLocal( KDirInfo *dir )
 }
 
 
+void
+KDirTree::selectItem( KFileInfo *newSelection )
+{
+    if ( newSelection == _selection )
+	return;
+
+#if 0
+    if ( newSelection )
+	kdDebug() << k_funcinfo << " selecting " << newSelection->debugUrl() << endl;
+    else
+	kdDebug() << k_funcinfo << " selecting nothing" << endl;
+#endif
+    
+    _selection = newSelection;
+    emit selectionChanged( _selection );
+}
+
+
 
 
 
@@ -1251,7 +1298,7 @@ KDirStat::fixedUrl( const QString & dirtyUrl )
     }
     else
     {
-	url.cleanPath(); // Resolve relative paths, get rid of multiple '/'
+	url.cleanPath(); // Resolve relative paths, get rid of multiple slashes.
     }
 
     return url;

@@ -1,0 +1,12 @@
+			     KDirStat - known bugs
+			     =====================
+
+Too many to list them all here yet...
+;-)
+
+
+Just kidding. Lots of stuff is still unfinished, so it might be a good idea
+to just wait until everything is implemented and _then_ begin registering
+bugs.
+
+KDirStat shouldn't ever crash and dump core, however.

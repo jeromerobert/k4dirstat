@@ -14,8 +14,10 @@ kdirstat_SOURCES =				\
 	kdirtreeview.cpp			\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
+	kcleanup.cpp				\
 	kdirsaver.cpp				\
 	kpacman.cpp
+
 
 
 if USE_TREEMAPS
@@ -34,6 +36,7 @@ noinst_HEADERS =				\
 	kdirtreeview.h				\
 	kdirtreeiterators.h			\
 	kdirtree.h				\
+	kcleanup.h				\
 	kdirsaver.h				\
 	kpacman.h
 

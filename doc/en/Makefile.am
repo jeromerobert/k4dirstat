@@ -1,9 +1,5 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 
-
-EXTRA_DIST = index.docbook 
-
-####### kdevelop will overwrite this part!!! (end)############
+# EXTRA_DIST = index.docbook 
 
 KDE_LANG = en
 KDE_DOCS = kdirstat

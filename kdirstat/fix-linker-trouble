@@ -20,11 +20,16 @@
 #
 
 tmpdir=$$.tmp
+treemaps=*treemap.h
 
-if grep "USE_TREEMAPS 0" ../config.h ; then
-	echo "Moving treemap headers out of the way"
-	mkdir $tmpdir
-	mv *treemap.h $tmpdir
+if [ -e kdirtreemap.h ]; then
+	if grep -q "USE_TREEMAPS 0" ../config.h ; then
+		echo "Moving treemap headers out of the way"
+		mkdir $tmpdir
+		mv *treemap.h $tmpdir
+	fi
+else
+	echo "No treemap sources here - no need to move them out of the way"
 fi
 
 echo "Regenerating moc make rules"

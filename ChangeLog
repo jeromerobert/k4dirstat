@@ -1,3 +1,11 @@
+2001-12-08  Stefan Hundhammer  <sh@suse.de>
+
+	* Tree colors are back again
+
+	* Transparently handle selections in the KDirTree;
+	  all kinds of views should benefit from that.
+	
+
 2001-11-25  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 1.8.0-beta

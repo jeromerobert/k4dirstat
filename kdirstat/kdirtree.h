@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-12-01
+ *   Updated:	2001-12-08
  *
- *   $Id: kdirtree.h,v 1.7 2001/12/03 10:19:21 hundhammer Exp $
+ *   $Id: kdirtree.h,v 1.8 2001/12/10 10:32:58 hundhammer Exp $
  *
  */
 
@@ -358,6 +358,12 @@ namespace KDirStat
 	 * Returns true if this entry has any children.
 	 **/
 	virtual bool	hasChildren()		const;
+
+	/**
+	 * Returns true if this entry is in subtree 'subtree', i.e. if this is
+	 * a child or grandchild etc. of 'subtree'.
+	 **/
+	bool isInSubtree( const KFileInfo *subtree ) const;
 
 	/**
 	 * Locate a child somewhere in this subtree whose URL (i.e. complete
@@ -1080,6 +1086,16 @@ namespace KDirStat
 	 **/
 	void refresh( KFileInfo *subtree = 0 );
 
+
+	/**
+	 * Select some other item in this tree. Triggers the @ref
+	 * selectionChanged() signal - even to the sender of this signal,
+	 * i.e. take care not to cause endless signal ping-pong!
+	 *
+	 * Select nothing if '0' is passed.
+	 **/
+	void selectItem( KFileInfo *newSelection );
+
 	
     public:
 	
@@ -1134,6 +1150,20 @@ namespace KDirStat
 	 * Set or unset the "cross file systems" flag.
 	 **/
 	void	setCrossFileSystems( bool doCross ) { _crossFileSystems = doCross; }
+
+	/**
+	 * Return the tree's current selection.
+	 *
+	 * Even though the KDirTree by itself doesn't have a visual
+	 * representation, it supports the concept of one single selected
+	 * item. Views can use this to transparently keep track of this single
+	 * selected item, notifying the KDirTree and thus other views with @ref
+	 * KDirTree::selectItem() . Attached views should connect to the @ref
+	 * selectionChanged() signal to be notified when the selection changes.
+	 *
+	 * NOTE: This method returns 0 if nothing is selected.
+	 **/
+	KFileInfo *	selection() const { return _selection; }
 
 	/**
 	 * Notification that a child has been added.
@@ -1193,7 +1223,16 @@ namespace KDirStat
 	 * @ref KDirInfo::finalizeLocal(), e.g. cleaning up unused / undesired
 	 * dot entries like in @ref KDirInfo::cleanupDotEntries().
 	 **/
-	virtual void finalizeLocal( KDirInfo *dir );
+	void finalizeLocal( KDirInfo *dir );
+
+	/**
+	 * Emitted when the current selection has changed, i.e. whenever some
+	 * attached view triggers the @ref selectItem() slot or when the
+	 * current selection is deleted.
+	 *
+	 * NOTE: 'newSelection' may be 0 if nothing is selected.
+	 **/
+	void selectionChanged( KFileInfo *newSelection );
 
 	/**
 	 * Single line progress information, emitted when the read status
@@ -1220,6 +1259,7 @@ namespace KDirStat
     protected:
 
 	KFileInfo *		_root;
+	KFileInfo *		_selection;
 	QQueue<KDirReadJob>	_jobQueue;
 	KDirReadMethod		_readMethod;
 	bool			_crossFileSystems;

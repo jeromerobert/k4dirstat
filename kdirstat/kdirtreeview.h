@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2001-11-25
+ *   Updated:	2001-12-08
  *
- *   $Id: kdirtreeview.h,v 1.8 2001/11/27 09:40:18 hundhammer Exp $
+ *   $Id: kdirtreeview.h,v 1.9 2001/12/10 10:32:58 hundhammer Exp $
  *
  */
 
@@ -105,7 +105,7 @@ namespace KDirStat
 	 **/
 	KDirTreeViewItem *	selection() const { return _selection; }
 
-	
+
 	/**
 	 * Returns the default level until which items are opened by default
 	 * (unless they are dot entries).
@@ -232,10 +232,16 @@ namespace KDirStat
         void selectItem( KDirTreeViewItem *item ) { selectItem( (QListViewItem *) item ); }
 
 	/**
+	 * Select a KDirTree item. Used for connecting the @ref
+	 * KDirTree::selectionChanged() signal.
+	 **/
+	void selectItem( KFileInfo *item );
+
+	/**
 	 * Clear the current selection. Triggers selectionChanged() signals.
 	 **/
 	void clearSelection();
-	
+
 	/**
 	 * (Try to) ensure good contrast between the tree background and the
 	 * percentage bars' 3D edges - prevent ugly 3D effects which will
@@ -311,10 +317,10 @@ namespace KDirStat
 
         /**
 	 * Set up everything prior to reading: Cyclic update timer, display
-	 * busy state, default sorting, stopwatch. 
+	 * busy state, default sorting, stopwatch.
 	 **/
         void	prepareReading();
-    
+
 	/**
 	 * Change the tree display to "busy" state, i.e. add a column to
 	 * display the number of pending read jobs for each level.
@@ -331,7 +337,7 @@ namespace KDirStat
 	/**
 	 * Pop up context menu (i.e. emit the contextMenu() signal) or open a
 	 * small info popup with exact information, depending on 'column'.
-	 **/ 
+	 **/
 	void 	popupContextMenu	( QListViewItem *	listViewItem,
 					  const QPoint &	pos,
 					  int 			column );
@@ -372,7 +378,7 @@ namespace KDirStat
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
 	void selectionChanged( KDirTreeViewItem *item );
-	
+
 	/**
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
@@ -391,7 +397,7 @@ namespace KDirStat
 	 * usually only in the nameCol().
 	 **/
 	void contextMenu( KDirTreeViewItem *item, const QPoint &pos );
-	
+
 
     protected:
 
@@ -444,7 +450,7 @@ namespace KDirStat
 	QPixmap _fifoIcon;
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
-	
+
 
 #if USE_TREEMAPS
 	// FIXME: This stuff doesn't belong here. Move it out somewhere else.
@@ -553,6 +559,10 @@ namespace KDirStat
 	 **/
 	virtual void setOpen( bool open );
 
+	/**
+	 * Recursively open this subtree and all its ancestors up to the root.
+	 **/
+	void openSubtree();
 
     protected:
 
