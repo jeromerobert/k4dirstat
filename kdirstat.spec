@@ -1,37 +1,52 @@
-Name: kdirstat
-Summary: KDirStat - disk usage utility
-Version: 1.7.8
-Release: 1
-Copyright: GPL
-Group: X11/KDE/Development
-Source: http://kdirstat.sourceforge.net/download/kdirstat-1.7.8-devel.tar.gz
-Packager: Alexander Rawass <alexannika@users.sourceforge.net>
-BuildRoot: /tmp/kd/kdirstat-1.7.8-devel
-Prefix: /usr/local
+#
+# spec file for package kdirstat (Version 2.1.0)
+# 
+# Copyright  (c)  2002  SuSE GmbH  Nuernberg, Germany.
+# This file and all modifications and additions to the pristine
+# package are under the same license as the package itself.
+# 
+# please send bugfixes or comments to feedback@suse.de.
+#
+
+# neededforbuild  kde3-devel-packages
+# usedforbuild    aaa_base aaa_dir autoconf automake base bash bindutil binutils bison bzip compress cpio cpp cracklib cyrus-sasl db devs diffutils docbook-dsssl-stylesheets docbook_3 e2fsprogs fam file fileutils findutils flex freetype2 freetype2-devel gawk gcc gdbm gdbm-devel gettext glibc glibc-devel gpm gpp gppshare grep groff gzip iso_ent jade_dsl kbd kdelibs kdelibs-artsd kdelibs-devel less libgpp libjpeg liblcms libmng libmng-devel libpng libtiff libtool libxml2 libxml2-devel libxslt libxslt-devel libz m4 make man mesa mesa-devel mesaglut mesaglut-devel mesasoft mktemp modutils ncurses ncurses-devel net-tools netcfg openssl openssl-devel pam pam-devel patch perl ps qt qt-devel qt-extensions rcs readline rpm sendmail sh-utils shadow sp sp-devel strace syslogd sysvinit texinfo textutils timezone unzip util-linux vim xdevel xf86 xf86glu xf86glu-devel xshared
+
+Name:         kdirstat
+Copyright:    GPL
+Group:        X11/KDE/Utilities
+Summary:      Graphical directory statistics for used disk space
+Version:      2.1.1.beta
+Release:      0
+Source0:      kdirstat-2.1.1-beta.tar.bz2
 
 %description
-A du-tool that displays disk-usage information in a normal tree view
-and with a treemap
+KDirStat (for KDE Directory Statistics) is a utility program that sums up
+disk usage for direcory trees - very much like the Unix 'du' command.
+It also can help you clean up used space.
+
+Authors:
+--------
+    Stefan Hundhammer <sh@suse.de>
+
+SuSE series: kde
 
 %prep
-rm -rf $RPM_BUILD_ROOT
-%setup -n kdirstat-1.7.8-devel
+%setup -n kdirstat-2.1.1-beta
 
 %build
-./configure --prefix=/usr/local
+CXXFLAGS="$CXXFLAGS -DNDEBUG -O2 " ./configure \
+  --prefix=/opt/kde3 \
+  --with-qt-dir=/usr/lib/qt3/
 make
 
 %install
-make DESTDIR=$RPM_BUILD_ROOT install
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+make install-strip
 
 %files
-%{prefix}/share/apps/kdirstat/icons/locolor/16x16/actions/symlink.png
-%{prefix}/share/apps/kdirstat/kdirstatui.rc
-%{prefix}/share/applnk/Applications/kdirstat.desktop
-%{prefix}/share/icons/locolor/32x32/apps/kdirstat.png
-%{prefix}/share/icons/locolor/16x16/apps/kdirstat.png
-%{prefix}/share/doc/HTML/en/kdirstat/index.docbook
-%{prefix}/bin/kdirstat
+%doc COPYING AUTHORS ChangeLog TODO INSTALL README 
+/opt/kde3/bin/kdirstat
+/opt/kde3/share/apps/kdirstat
+/opt/kde3/share/applnk/*/kdirstat*
+/opt/kde3/share/doc/HTML/*/kdirstat/
+/opt/kde3/share/icons/??color/??x??/*/kdirstat*
+/opt/kde3/share/locale/*/LC_MESSAGES/kdirstat.mo
