@@ -40,6 +40,7 @@
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 #include "qtreemap.h"
+#include <qdom.h>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -61,6 +62,9 @@ namespace KDirStat
     //KTreeMap(QWidget *parent=0);
     QXmlTreeMapArea(QWidget *parent=0);
     //~QTreeMapArea();
+
+    void printXmlInfo(Object *node);
+    QDomElement findElement(QDomNode n);
 
     // reimplemented abstract functions
 

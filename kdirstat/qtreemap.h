@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemap.h,v 1.13 2001/07/28 22:56:47 alexannika Exp $
+ *   $Id: qtreemap.h,v 1.14 2001/07/30 03:21:38 alexannika Exp $
  *
  */
 
@@ -41,8 +41,9 @@ class Object;
 #include <qscrollview.h>
 #include <qlist.h>
 #include <qtextstream.h>
-
+//#include <qxmltreemapwindow.h>
 #include "kdirtree.h"
+#include <qdom.h>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -137,6 +138,7 @@ namespace KDirStat
   class QTreeMapArea;
   class QTreeMapOptions;
   class QTreeMapWindow;
+  class QXmlTreeMapWindow;
   class ObjList;
 
 class ObjList : public QList<KDirInfo> {
@@ -305,6 +307,9 @@ public:
   QColor& getBaseColor(QString name);
 
   void   saveAsXML(QTextStream& file,Object *tree,int level);
+  void loadFromXML(QString filename);
+
+    void xmlwalker(QDomElement el,int level);
 
   QPainter *painter;
   QTreeMapOptions *options;
@@ -346,6 +351,8 @@ public:
   int middle_x,middle_y;
   int offset_x,offset_y;
 
+  QXmlTreeMapWindow *xml_treemap_window;
+
   // cushion rendering
 
   void cushion_AddRidge(float x1,float x2,float h,float& s1,float& s2);
@@ -373,6 +380,7 @@ public:
   void zoomOut();
   void saveAsXML();
   void saveAsBitmap();
+  void loadFromXML();
 
   signals:
       void highlighted(Object *high);

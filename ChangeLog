@@ -1,3 +1,7 @@
+2001-07-29 Alexander Rawass <alexannika@users.sourceforge.net>
+	
+	* load XML working (with memory hole)
+
 2001-07-28 Alexander Rawass <alexannika@users.sourceforge.net>
 
 	* new sort of treemap/drawing mode: piemap

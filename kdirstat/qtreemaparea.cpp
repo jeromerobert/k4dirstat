@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemaparea.cpp,v 1.13 2001/07/28 22:56:47 alexannika Exp $
+ *   $Id: qtreemaparea.cpp,v 1.14 2001/07/30 03:21:38 alexannika Exp $
  *
  */
 
@@ -27,6 +27,10 @@
 #include <qmainwindow.h>
 #include <qfiledialog.h>
 #include <qfile.h>
+#include "qtreemapwindow.h"
+#include "qxmltreemap.h"
+#include "qxmltreemapwindow.h"
+#include <iostream.h>
 
 //#include <bits/mathcalls.h>
 
@@ -604,6 +608,60 @@ void QTreeMapArea::saveAsXML(){
   file.device()->close;
 
   //delete file;
+  }
+}
+
+void QTreeMapArea::xmlwalker(QDomElement docElem,int level){
+  QDomNode n = docElem.firstChild();
+  while( !n.isNull() ) {
+      QDomElement e = n.toElement(); // try to convert the node to an element.
+      if( !e.isNull() ) { // the node was really an element.
+	cout << "tagname=" << e.tagName() << "name=" << e.attribute("name") << endl;
+	xmlwalker(e,level+1);
+      }
+      n = n.nextSibling();
+  }
+}
+
+void QTreeMapArea::loadFromXML(QString filename){
+  QDomDocument doc(filename);
+
+  QFile file(filename);
+  if(!file.open(IO_ReadOnly)){
+    return;
+  }
+  if(!doc.setContent(&file)){
+    file.close();
+    return;
+  }
+  file.close();
+
+  QDomElement docElem = doc.documentElement();
+
+  //  xmlwalker(docElem,0);
+
+  
+  //  return;
+
+  printf("qtreemaparea::loadfromxml1\n");
+  QDomElement root_elem=doc.documentElement();
+  printf("qtreemaparea::loadfromxml2\n");
+  xml_treemap_window=new QXmlTreeMapWindow();
+  printf("qtreemaparea::loadfromxml3\n");
+  xml_treemap_window->makeWidgets();
+  //xml_treemap_window->setConfig();
+  printf("qtreemaparea::loadfromxml4\n");
+  xml_treemap_window->getArea()->setTreeMap((Object *)(new QDomElement(root_elem)));
+  printf("qtreemaparea::loadfromxml5\n");
+
+}
+
+void QTreeMapArea::loadFromXML(){
+  printf("qtreemaparea::loadfromxml\n");
+  QString filename=QFileDialog::getOpenFileName("treemap.xml", "XML (*.xml)" , this);
+
+  if(!filename.isEmpty()){
+    loadFromXML(filename);
   }
 }
 

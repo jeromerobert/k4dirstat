@@ -35,15 +35,19 @@ QXmlTreeMapArea::QXmlTreeMapArea(QWidget *parent) : QTreeMapArea(parent) {
 }
 
 QString QXmlTreeMapArea::shortName(Object *node){
+  //  printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
   return kdi_node->attribute("name");
 }
 
 QString QXmlTreeMapArea::fullName(Object *node){
+  //  printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
-  return kdi_node->attribute("name");
+  QString name=kdi_node->attribute("name");
+  //  printf("xml:name=%s\n",name.latin1());
+  return name;
 }
 
 int QXmlTreeMapArea::thisDirItems(Object *node){
@@ -72,16 +76,48 @@ int QXmlTreeMapArea::thisDirItems(Object *node){
   return count;
 }
 
-Object *QXmlTreeMapArea::firstChild(Object *node){
+void QXmlTreeMapArea::printXmlInfo(Object *node){
   QDomElement *kdi_node=(QDomElement *)node;
 
-  QDomElement elem=(kdi_node->firstChild().toElement());//.toElement());
-  return _dp(elem);
+  printf("NODE:n=%x tag=%s name=%s value=%s attr=%s\n",kdi_node,kdi_node->tagName().latin1(), \
+	 kdi_node->nodeName().latin1(), \
+	 kdi_node->nodeValue().latin1(), \
+	 kdi_node->attribute("name").latin1());
+}
+
+QDomElement QXmlTreeMapArea::findElement(QDomNode n){
+  QDomElement elem;
+
+  while(!n.isNull() && elem.isNull()){
+    elem=n.toElement();
+    n=n.nextSibling();
+  }
+  return elem;
+}
+
+Object *QXmlTreeMapArea::firstChild(Object *node){
+  //  printf("firstChild: ");
+  //printXmlInfo(node);
+  QDomElement *kdi_node=(QDomElement *)node;
+
+  QDomNode n=kdi_node->firstChild();
+  QDomElement elem=findElement(n);
+
+    
+  //QDomElement elem=(kdi_node->firstChild().toElement());//.toElement());
+
+  if(elem.isNull()){
+    return NULL;
+  }
+  else{
+    return _dp(elem);
+  }
 }
 
 
 
 int QXmlTreeMapArea::totalSize(Object *node){
+  //printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
   return kdi_node->attribute("size","0").toInt();
@@ -94,15 +130,21 @@ int QXmlTreeMapArea::totalItems(Object *node){
 }
 
 bool QXmlTreeMapArea::isLeaf(Object *node){
+  //printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
-  if(kdi_node->firstChild().isNull()){
+  QDomNode n=kdi_node->firstChild();
+  QDomElement elem=findElement(n);
+
+  if(elem.isNull()){
+    //    printf("isleaf\n");
     return TRUE;
   }
   return FALSE;
 }
 
 bool QXmlTreeMapArea::isNode(Object *node){
+  //printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
   return !isLeaf(node);
@@ -115,9 +157,20 @@ bool QXmlTreeMapArea::isSameLevelChild(Object *node){
 }
 
 Object *QXmlTreeMapArea::nextChild(Object *node){
+  //  printf("nextChild: ");
+  //  printXmlInfo(node);
   QDomElement *kdi_node=(QDomElement *)node;
 
-  return _dp(kdi_node->nextSibling().toElement());
+  QDomNode n=kdi_node->nextSibling();
+  QDomElement elem=findElement(n);
+
+  if(elem.isNull()){
+    return NULL;
+  }
+  else{
+    return _dp(elem);
+  }
+
 }
 
 Object *QXmlTreeMapArea::sameLevelChild(Object *node){
@@ -129,7 +182,16 @@ Object *QXmlTreeMapArea::sameLevelChild(Object *node){
 Object *QXmlTreeMapArea::parentNode(Object *node){
   QDomElement *kdi_node=(QDomElement *)node;
 
-  return _dp(kdi_node->parentNode().toElement());
+  QDomNode n=kdi_node->parentNode();
+   QDomElement elem=findElement(n);
+
+  if(elem.isNull()){
+    return NULL;
+  }
+  else{
+    return _dp(elem);
+  }
+
 }
 
 QString QXmlTreeMapArea::tellUnit(int size){

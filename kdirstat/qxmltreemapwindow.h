@@ -40,6 +40,7 @@
 #include <qbuttongroup.h>
 #include <qscrollview.h>
 #include <kconfig.h>
+#include "qtreemap.h"
 #include "qxmltreemap.h"
 
 #ifndef NOT_USED

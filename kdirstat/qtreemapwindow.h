@@ -6,7 +6,7 @@
  *
  *   Updated:	2001-06-11
  *
- *   $Id: qtreemapwindow.h,v 1.8 2001/07/28 22:56:47 alexannika Exp $
+ *   $Id: qtreemapwindow.h,v 1.9 2001/07/30 03:21:38 alexannika Exp $
  *
  */
 
@@ -112,6 +112,7 @@ namespace KDirStat
 
     void saveAsBitmap();
     void saveAsXML();
+    void loadFromXML();
 
     //void paintEvent(QPaintEvent *event);
 

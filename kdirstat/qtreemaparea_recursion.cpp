@@ -83,7 +83,7 @@ void QTreeMapArea::drawTreeMap(Object *dutree){
 
   delete cushion;
 
-  //  printf("END OF RECURSION\n");
+    printf("END OF RECURSION\n");
     painter->end();
 
     this->update();
@@ -189,11 +189,16 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	if((fx>=0 && fy>=0)){
 	  if(findmode==FIND_SELECTION){
 	    if(dutree==found_kfileinfo){
+#ifdef HAVE_SELECTION
 	      if(selected_list->containsRef((KDirInfo *)dutree)){
 		//		printf("setting selection\n");
 		QColor foundcolor=options->select_color;
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,foundcolor,options->paintmode,c);
 	      }
+#else
+	      if(FALSE){
+	      }
+#endif
 	      else{
 		//printf("clearing selection\n");
 		QColor foundcolor=getBaseColor(node_name);
@@ -236,11 +241,16 @@ void QTreeMapArea::drawDuTree(Object *dutree, int x0,int y0,int xd0, int yd0, bo
 	else{
 	  // really draw this entry
 	  pmode=options->paintmode;
+#ifdef HAVE_SELECTION
 	  if(selected_list->containsRef((KDirInfo *)dutree)){
 	    //		printf("setting selection\n");
 		QColor fcolor=options->select_color;
 		paintEntry(x0,y0,xd0,yd0,node_name,direction,level,fcolor,options->paintmode,c);
 	  }
+#else
+	  if(FALSE){
+	  }
+#endif
 	  else{
 	  paintEntry(x0,y0,xd0,yd0,node_name,direction,level,basecolor,pmode,c);
 #if 0
