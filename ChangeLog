@@ -1,3 +1,17 @@
+2003-08-26  Stefan Hundhammer  <sh@suse.de>
+
+	* Bumped version to 2.4.0
+
+	* Fixed crash on program end while reading directories
+
+	* Fixed crash on open dir while still reading another directory
+
+	* Added "stop reading" action
+
+	* Added German translation contributed by 
+	  Christoph Eckert <fmchristoph.eckert@t-online.de>
+	
+
 2003-05-25  Stefan Hundhammer  <sh@suse.de>
 
 	* Bumped version to 2.3.7
