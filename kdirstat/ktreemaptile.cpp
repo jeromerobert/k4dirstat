@@ -6,7 +6,7 @@
  *
  *   Updated:	2003-01-06
  *
- *   $Id: ktreemaptile.cpp,v 1.5 2003/01/06 14:18:55 hundhammer Exp $
+ *   $Id: ktreemaptile.cpp,v 1.6 2003/01/06 15:20:45 hundhammer Exp $
  *
  */
 
@@ -36,27 +36,31 @@ KTreemapTile::KTreemapTile( KTreemapView *	parentView,
     , _parentTile( parentTile )
     , _orig( orig )
 {
-    if ( orig->totalSize() == 0 )
-	return;
-
-    // Set up height (z coordinate) - one level higher than the parent so this
-    // will be closer to the foreground.
-    //
-    // Note that this must happen before any children are created.
-    // I found that out the hard way. ;-)
-
-    setZ( parentTile ? ( parentTile->z() + 1.0 ) : 0.0 );
-
+    init();
+    
     if ( parentTile )
 	_cushionSurface = parentTile->cushionSurface();
 
-    setBrush( QColor( 0x60, 0x60, 0x60 ) );
-    setPen( NoPen );
+    createChildren( rect, orientation );
+}
 
-    show();	// QCanvasItems are invisible by default!
 
-    // kdDebug() << "Creating treemap tile for " << orig << " " << rect << " size " << orig->totalSize() << endl;
-
+KTreemapTile::KTreemapTile( KTreemapView *		parentView,
+			    KTreemapTile *		parentTile,
+			    KFileInfo *			orig,
+			    const QRect &		rect,
+			    const KCushionSurface &	cushionSurface,
+			    KOrientation		orientation )
+    : QCanvasRectangle( rect, parentView->canvas() )
+    , _parentView( parentView )
+    , _parentTile( parentTile )
+    , _orig( orig )
+    , _cushionSurface( cushionSurface )
+{
+    init();
+    
+    // Intentionally not copying the parent's cushion surface!
+    
     createChildren( rect, orientation );
 }
 
@@ -68,9 +72,32 @@ KTreemapTile::~KTreemapTile()
 
 
 void
+KTreemapTile::init()
+{
+    // Set up height (z coordinate) - one level higher than the parent so this
+    // will be closer to the foreground.
+    //
+    // Note that this must happen before any children are created.
+    // I found that out the hard way. ;-)
+
+    setZ( _parentTile ? ( _parentTile->z() + 1.0 ) : 0.0 );
+
+    setBrush( QColor( 0x60, 0x60, 0x60 ) );
+    setPen( NoPen );
+
+    show();	// QCanvasItems are invisible by default!
+
+    // kdDebug() << "Creating treemap tile for " << orig << " " << rect << " size " << orig->totalSize() << endl;
+}
+
+
+void
 KTreemapTile::createChildren( const QRect &	rect,
 			      KOrientation	orientation )
 {
+    if ( _orig->totalSize() == 0 )	// Prevent division by zero
+	return;
+
     if ( _parentView->squarify() )
 	createSquarifiedChildren( rect );
     else
@@ -249,12 +276,23 @@ KTreemapTile::layoutRow( const QRect &		rect,
     KFileSize sum = row.sumTotalSizes();
     int secondary = (int) ( sum * scale / primary );
 
-    if ( sum == 0 )			// Prevent division by zero.
+    if ( sum == 0 )	// Prevent division by zero.
 	return rect;
 
     if ( secondary < _parentView->minTileSize() )	// We don't want tiles that small.
 	return rect;
 
+    
+    // Set up a cushion surface for this layout row:
+    // Add another ridge perpendicular to the row's direction
+    // that optically groups this row's tiles together.
+    
+    KCushionSurface rowCushionSurface = _cushionSurface;
+
+    rowCushionSurface.addRidge( dir == KTreemapHorizontal ? KTreemapVertical : KTreemapHorizontal,
+				_cushionSurface.height() * _parentView->heightScaleFactor(),
+				rect );
+    
     int offset = 0;
     int remaining = primary;
     KFileInfoListIterator it( row );
@@ -277,11 +315,11 @@ KTreemapTile::layoutRow( const QRect &		rect,
 	    else
 		childRect = QRect( rect.x(), rect.y() + offset, secondary, childSize );
 
-	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, KTreemapAuto );
+	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
 	    CHECK_PTR( tile );
 
 	    tile->cushionSurface().addRidge( dir,
-					     _cushionSurface.height() * _parentView->heightScaleFactor(),
+					     rowCushionSurface.height() * _parentView->heightScaleFactor(),
 					     childRect );
 	    offset += childSize;
 	}
@@ -289,7 +327,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 	++it;
     }
 
-
+    
     // Subtract the layouted area from the rectangle.
 
     QRect newRect;

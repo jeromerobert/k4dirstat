@@ -6,7 +6,7 @@
  *
  *   Updated:	2003-01-06
  *
- *   $Id: ktreemapview.h,v 1.3 2003/01/06 14:19:01 hundhammer Exp $
+ *   $Id: ktreemapview.h,v 1.4 2003/01/06 15:20:48 hundhammer Exp $
  *
  */
 
@@ -25,7 +25,7 @@
 #define DefaultAmbientLight		40
 
 #define	MinHeightScalePercent		10
-#define	MaxHeightScalePercent		300
+#define	MaxHeightScalePercent		200
 #define DefaultHeightScalePercent	100
 #define DefaultHeightScaleFactor	( DefaultHeightScalePercent / 100.0 )
 

@@ -4,9 +4,9 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2002-12-31
+ *   Updated:	2003-01-06
  *
- *   $Id: ktreemaptile.h,v 1.2 2003/01/05 14:52:29 hundhammer Exp $
+ *   $Id: ktreemaptile.h,v 1.3 2003/01/06 15:20:47 hundhammer Exp $
  *
  */
 
@@ -144,12 +144,26 @@ namespace KDirStat
 	 * 'orientation' is the direction for further subdivision. 'Auto'
 	 * selects the wider direction inside 'rect'.
 	 **/
-	KTreemapTile( KTreemapView *	parentView,
-		      KTreemapTile *	parentTile,
-		      KFileInfo *	orig,
-		      const QRect &	rect,
-		      KOrientation	orientation = KTreemapAuto );
+	KTreemapTile( KTreemapView *		parentView,
+		      KTreemapTile *		parentTile,
+		      KFileInfo *		orig,
+		      const QRect &		rect,
+		      KOrientation		orientation = KTreemapAuto );
 
+    protected:
+
+	/**
+	 * Alternate constructor: Like the above, but explicitly specify a
+	 * cushion surface rather than using the parent's.
+	 **/
+	KTreemapTile( KTreemapView *		parentView,
+		      KTreemapTile *		parentTile,
+		      KFileInfo *		orig,
+		      const QRect &		rect,
+		      const KCushionSurface &	cushionSurface,
+		      KOrientation		orientation = KTreemapAuto );
+
+    public:
 	/**
 	 * Destructor.
 	 **/
@@ -271,6 +285,15 @@ namespace KDirStat
 	 **/
 	QRgb contrastingColor( QRgb col );
 
+    private:
+
+	/**
+	 * Initialization common to all constructors.
+	 **/
+	void init();
+
+	
+    protected:
 
 	// Data members
 
