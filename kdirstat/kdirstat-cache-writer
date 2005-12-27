@@ -39,8 +39,7 @@
 
 # TO DO:
 #
-# - MIME-encode stuff
-# - use UTF-8
+# - ensure to use UTF-8
 
 
 
@@ -352,8 +351,8 @@ sub write_file_entry()
 
     my $type = "F";
 
-    if    ( $mode & S_IFREG  )	{ $type = "F";		}
-    elsif ( $mode & S_IFLNK  )	{ $type = "L";		}
+    if    ( $mode & S_IFLNK  )	{ $type = "L";		}
+    elsif ( $mode & S_IFREG  )	{ $type = "F";		}
     elsif ( $mode & S_IFBLK  )	{ $type = "BlockDev";	}
     elsif ( $mode & S_IFCHR  )	{ $type = "CharDev";	}
     elsif ( $mode & S_IFIFO  )	{ $type = "FIFO";	}
