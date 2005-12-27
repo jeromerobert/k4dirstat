@@ -228,7 +228,10 @@ sub write_cache_tree($)
 	if ( $entry ne "."  and
 	     $entry ne ".." )
 	{
-	    if ( -d $dir . "/" . $entry )
+	    my $full_path = $dir . "/" . $entry;
+
+	    if ( -d   $full_path &&
+		 ! -l $full_path )
 	    {
 		push @subdirs, $entry;
 	    }
@@ -351,12 +354,12 @@ sub write_file_entry()
 
     my $type = "F";
 
-    if    ( $mode & S_IFLNK  )	{ $type = "L";		}
-    elsif ( $mode & S_IFREG  )	{ $type = "F";		}
-    elsif ( $mode & S_IFBLK  )	{ $type = "BlockDev";	}
-    elsif ( $mode & S_IFCHR  )	{ $type = "CharDev";	}
-    elsif ( $mode & S_IFIFO  )	{ $type = "FIFO";	}
-    elsif ( $mode & S_IFSOCK )	{ $type = "Socket";	}
+    if    ( S_ISREG ( $mode ) )		{ $type = "F";		}
+    elsif ( S_ISLNK ( $mode ) )		{ $type = "L";		}
+    elsif ( S_ISBLK ( $mode ) )		{ $type = "BlockDev";	}
+    elsif ( S_ISCHR ( $mode ) )		{ $type = "CharDev";	}
+    elsif ( S_ISFIFO( $mode ) )		{ $type = "FIFO";	}
+    elsif ( S_ISSOCK( $mode ) )		{ $type = "Socket";	}
 
     print CACHE "$type";
 
