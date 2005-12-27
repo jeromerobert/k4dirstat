@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-30
+ *   Updated:	2005-12-26
  */
 
 
@@ -89,7 +89,8 @@ KTreemapTile::init()
 
     show();	// QCanvasItems are invisible by default!
 
-    // kdDebug() << "Creating treemap tile for " << orig << " " << rect << " size " << orig->totalSize() << endl;
+    // kdDebug() << "Creating treemap tile for " << _orig
+    //           << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
 
@@ -350,7 +351,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 void
 KTreemapTile::drawShape( QPainter & painter )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // kdDebug() << "drawShape() " << _orig << endl;
 
     QSize size = rect().size();
 
@@ -454,7 +455,7 @@ KTreemapTile::renderCushion()
 	    nx = 2.0 * xx2 * (x+x0) + xx1;
 	    ny = 2.0 * yy2 * (y+y0) + yy1;
 	    cosa  = ( nx * lightX + ny * lightY + lightZ ) / sqrt( nx*nx + ny*ny + 1.0 );
-	    
+
 	    red	  = (int) ( maxRed   * cosa + 0.5 );
 	    green = (int) ( maxGreen * cosa + 0.5 );
 	    blue  = (int) ( maxBlue  * cosa + 0.5 );

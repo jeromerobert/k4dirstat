@@ -3,17 +3,12 @@
 <!-- XML GUI description file for KDirStat		-->
 <!--							-->
 <!-- Author:	Stefan Hundhammer (sh@suse.de)		-->
-<!-- Updated:	2004-12-06				-->
+<!-- Updated:	2005-12-24				-->
 
 
-<!DOCTYPE kpartgui>
+<!DOCTYPE kpartgui SYSTEM "/opt/kde3/share/apps/katexmltools/kpartgui.dtd.xml">
 
-<!-- DOCTYPE kpartgui SYSTEM "kpartgui.dtd" would be correct, but		-->
-<!-- unfortunately, the DTD isn't installed anywhere, so this only confuses any -->
-<!-- XML/SGML tools like Emacs PSGML mode :-(					-->
-
-
-<kpartgui name="kdirstat" version="1.8.2">
+<kpartgui name="kdirstat" version="2.5.1">
 
 
     <MenuBar>
@@ -26,6 +21,9 @@
 	    <Action name="file_refresh_selected"/>
 	    <Action name="file_continue_reading_at_mount_point"/>
 	    <Action name="file_stop_reading"/>
+	    <Separator/>
+	    <Action name="file_ask_write_cache"/>
+	    <Action name="file_ask_read_cache"/>
 	    <Separator/>
 	    <Action name="file_close"/>
 	    <Action name="file_quit"/>

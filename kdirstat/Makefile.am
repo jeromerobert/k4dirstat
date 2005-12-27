@@ -6,6 +6,7 @@
 SUBDIRS		= pics
 
 bin_PROGRAMS 	= kdirstat
+bin_SCRIPTS	= kdirstat-cache-writer
 
 
 kdirstat_SOURCES =				\
@@ -16,6 +17,7 @@ kdirstat_SOURCES =				\
 	kdirtreeview.cpp			\
 	kdirtreeiterators.cpp			\
 	kdirtree.cpp				\
+	kdirtreecache.cpp			\
 	ktreemapview.cpp			\
 	ktreemaptile.cpp			\
 	kcleanup.cpp				\
@@ -33,6 +35,7 @@ noinst_HEADERS =				\
 	kdirtreeview.h				\
 	kdirtreeiterators.h			\
 	kdirtree.h				\
+	kdirtreecache.h				\
 	ktreemapview.h				\
 	ktreemaptile.h				\
 	kcleanup.h				\
@@ -58,26 +61,13 @@ update_DATA	= kdirstat.upd
 update_SCRIPTS	= fix_move_to_trash_bin.pl
 
 
-kdirstat_LDADD = $(LIB_KFILE)
+kdirstat_LDADD = $(LIB_KFILE) $(LIBZ)
 
 KDE_ICON = kdirstat
 
 applnkdir = $(kde_appsdir)/Utilities
 applnk_DATA = kdirstat.desktop
 
-####### kdevelop will overwrite this part!!! (end)############
-# this 10 paths are KDE specific. Use them:
-# kde_htmldir	    Where your docs should go to. (contains lang subdirs)
-# kde_appsdir	    Where your application file (.kdelnk) should go to.
-# kde_icondir	    Where your icon should go to.
-# kde_minidir	    Where your mini icon should go to.
-# kde_datadir	    Where you install application data. (Use a subdir)
-# kde_locale	    Where translation files should go to.(contains lang subdirs)
-# kde_cgidir	    Where cgi-bin executables should go to.
-# kde_confdir	    Where config files should go to.
-# kde_mimedir	    Where mimetypes should go to.
-# kde_toolbardir    Where general toolbar icons should go to.
-# kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)

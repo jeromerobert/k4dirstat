@@ -1,10 +1,10 @@
 /*
- *   File name:	kdirtree.h
+ *   File name: kdirtree.h
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-01-07
+ *   Updated:	2005-12-27
  */
 
 
@@ -59,6 +59,7 @@ namespace KDirStat
 	KDirReading,		// Reading in progress
 	KDirFinished,		// Reading finished and OK
 	KDirOnRequestOnly,	// Will be read upon explicit request only (mount points)
+	KDirCached,		// Content was read from a cache
 	KDirAborted,		// Reading aborted upon user request
 	KDirError		// Error while reading
     } KDirReadState;
@@ -80,7 +81,7 @@ namespace KDirStat
      * The most basic building block of a @ref KDirTree:
      *
      * Information about one single directory entry. This is the type of info
-     * typically obtained by stat() / lstat() or similar calls.  Most of this
+     * typically obtained by stat() / lstat() or similar calls.	 Most of this
      * can also be obtained by @ref KIO::KDirListJob, but not all: The device
      * this file resides on is something none of KIO's many classes will tell
      * (since of course this only makes sense for local files) - yet this had
@@ -107,7 +108,7 @@ namespace KDirStat
 	 **/
 	KFileInfo( KDirTree   * tree,
 		   KDirInfo   * parent = 0,
-		   const char *	name   = 0 );
+		   const char * name   = 0 );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
@@ -121,8 +122,23 @@ namespace KDirStat
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
 	KFileInfo( const KFileItem *	fileItem,
-		   KDirTree  *		tree,
-		   KDirInfo * 		parent = 0 );
+		   KDirTree *		tree,
+		   KDirInfo *		parent = 0 );
+
+	/**
+	 * Constructor from the bare neccessary fields
+	 * for use from a cache file reader
+	 *
+	 * If 'blocks' is -1, it will be calculated from 'size'.
+	 **/
+	KFileInfo( KDirTree *		tree,
+		   KDirInfo *		parent,
+		   const QString &	filenameWithoutPath,
+		   mode_t		mode,
+		   KFileSize		size,
+		   time_t		mtime,
+		   KFileSize		blocks = -1,
+		   nlink_t		links  = 1 );
 
 	/**
 	 * Destructor.
@@ -182,7 +198,7 @@ namespace KDirStat
 	 * Returns the major and minor device numbers of the device this file
 	 * resides on or 0 if this is a remote file.
 	 **/
-	dev_t			device()	const { return _device;	}
+	dev_t			device()	const { return _device; }
 
 	/**
 	 * The file permissions and object type as returned by lstat().
@@ -222,8 +238,8 @@ namespace KDirStat
 	 * have options to handle this more graciously - but usually only when
 	 * specifically requested. See the respective man pages.
 	 **/
-	KFileSize		allocatedSize()	const;
-	
+	KFileSize		allocatedSize() const;
+
 	/**
 	 * The file size, taking into account multiple links for plain files or
 	 * the true allocated size for sparse files. For plain files with
@@ -308,7 +324,7 @@ namespace KDirStat
 	 * This default implementation always returns 'true';
 	 * derived classes should overwrite this.
 	 **/
-	virtual bool		isFinished() 	{ return true; }
+	virtual bool		isFinished()	{ return true; }
 
 	/**
 	 * Returns true if this subtree is busy, i.e. it is not finished
@@ -317,7 +333,7 @@ namespace KDirStat
 	 * This default implementation always returns 'false';
 	 * derived classes should overwrite this.
 	 **/
-	virtual bool 		isBusy() 	{ return false; }
+	virtual bool		isBusy()	{ return false; }
 
 	/**
 	 * Returns the number of pending read jobs in this subtree. When this
@@ -547,6 +563,16 @@ namespace KDirStat
 	bool isCharDevice()	const { return S_ISCHR ( _mode ) ? true : false; }
 
 	/**
+	 * Returns true if this is a FIFO.
+	 **/
+	bool isFifo()		const { return S_ISFIFO ( _mode ) ? true : false; }
+
+	/**
+	 * Returns true if this is a socket.
+	 **/
+	bool isSocket()		const { return S_ISSOCK ( _mode ) ? true : false; }
+
+	/**
 	 * Returns true if this is a "special" file, i.e. a (block or character)
 	 * device, a FIFO (named pipe) or a socket.
 	 **/
@@ -571,7 +597,7 @@ namespace KDirStat
 	KFileSize	_size;			// size in bytes
 	KFileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
-						
+
 	KDirInfo *	_parent;		// pointer to the parent entry
 	KFileInfo *	_next;			// pointer to the next entry
 	KDirTree  *	_tree;			// pointer to the parent tree
@@ -598,13 +624,13 @@ namespace KDirStat
 	 * entry"!
 	 **/
 	KDirInfo( KDirTree  *	tree,
-		  KDirInfo *	parent 		= 0,
+		  KDirInfo *	parent		= 0,
 		  bool		asDotEntry	= false );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
 	 **/
-	KDirInfo( const QString	& filenameWithoutPath,
+	KDirInfo( const QString & filenameWithoutPath,
 		  struct stat	* statInfo,
 		  KDirTree	* tree,
 		  KDirInfo	* parent	= 0 );
@@ -617,6 +643,17 @@ namespace KDirStat
 		  KDirInfo		* parent	= 0 );
 
 	/**
+	 * Constructor from the bare neccessary fields
+	 * for use from a cache file reader
+	 **/
+	KDirInfo( KDirTree *		tree,
+		  KDirInfo *		parent,
+		  const QString &	filenameWithoutPath,
+		  mode_t		mode,
+		  KFileSize		size,
+		  time_t		mtime );
+
+	/**
 	 * Destructor.
 	 **/
 	virtual ~KDirInfo();
@@ -627,14 +664,14 @@ namespace KDirStat
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual KFileSize 	totalSize();
+	virtual KFileSize	totalSize();
 
 	/**
 	 * Returns the total size in blocks of this subtree.
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual KFileSize 	totalBlocks();
+	virtual KFileSize	totalBlocks();
 
 	/**
 	 * Returns the total number of children in this subtree, excluding this item.
@@ -664,7 +701,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual time_t 		latestMtime();
+	virtual time_t		latestMtime();
 
 	/**
 	 * Returns whether or not this is a mount point.
@@ -697,7 +734,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
-	virtual bool 		isBusy();
+	virtual bool		isBusy();
 
 	/**
 	 * Returns the number of pending read jobs in this subtree. When this
@@ -806,6 +843,12 @@ namespace KDirStat
 	virtual void finalizeLocal();
 
 	/**
+	 * Recursively finalize all directories from here on -
+	 * call finalizeLocal() recursively.
+	 **/
+	void finalizeAll();
+
+	/**
 	 * Get the current state of the directory reading process:
 	 *
 	 *    KDirQueued	waiting in the directory read queue
@@ -892,7 +935,7 @@ namespace KDirStat
      * (directory handles in this case).
      *
      * Objects of this kind are transient by nature: They live only as long as
-     * the job is queued or executed. When it's done, the data is contained in
+     * the job is queued or executed. When it is done, the data is contained in
      * the corresponding @ref KDirInfo subtree of the corresponding @ref
      * KDirTree.
      *
@@ -1005,9 +1048,9 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * stat( const KURL & 	url,
-				 KDirTree  * 	tree,
-				 KDirInfo * 	parent = 0 );
+	static KFileInfo * stat( const KURL &	url,
+				 KDirTree  *	tree,
+				 KDirInfo *	parent = 0 );
 
     protected:
 	DIR * _diskDir;
@@ -1055,9 +1098,9 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * 	stat( const KURL &	url,
-				      KDirTree  * 	tree,
-				      KDirInfo * 	parent = 0 );
+	static KFileInfo *	stat( const KURL &	url,
+				      KDirTree	*	tree,
+				      KDirInfo *	parent = 0 );
 
 	/**
 	 * Obtain the owner of the URL specified.
@@ -1072,8 +1115,8 @@ namespace KDirStat
 	/**
 	 * Receive directory entries from a KIO job.
 	 **/
-        void entries( KIO::Job *		job,
-		      const KIO::UDSEntryList &	entryList );
+	void entries( KIO::Job *		job,
+		      const KIO::UDSEntryList & entryList );
 
 	/**
 	 * KIO job is finished.
@@ -1126,7 +1169,7 @@ namespace KDirStat
 	 * constructor must return before any signals are sent, i.e. before
 	 * anything is read.
 	 **/
-	void startReading( const KURL &	url );
+	void startReading( const KURL & url );
 
 	/**
 	 * Forcefully stop a running read process.
@@ -1169,6 +1212,19 @@ namespace KDirStat
 	 * Currently, there can only be one single root item for each tree.
 	 */
 	KFileInfo *	root() const { return _root; }
+
+	/**
+	 * Sets the root item of this tree.
+	 **/
+	void setRoot( KFileInfo *newRoot );
+
+	/**
+	 * Clear all items of this tree.
+	 *
+	 * 'sendSignals' indicates whether or not to send deletingChild() and childDeleted() signals.
+	 * A selectionChanged() signal will be sent in any case if there was a selected item.
+	 **/
+	void clear( bool sendSignals = false );
 
 	/**
 	 * Locate a child somewhere in the tree whose URL (i.e. complete path)
@@ -1273,6 +1329,21 @@ namespace KDirStat
 	void sendFinalizeLocal( KDirInfo *dir );
 
 	/**
+	 * Send a @ref startingReading() signal.
+	 **/
+	void sendStartingReading();
+
+	/**
+	 * Send a @ref finished() signal.
+	 **/
+	void sendFinished();
+
+	/**
+	 * Send a @ref aborted() signal.
+	 **/
+	void sendAborted();
+
+	/**
 	 * Returns 'true' if this tree uses the 'file:/' protocol (regardless
 	 * of local or network transparent directory reader).
 	 **/
@@ -1282,6 +1353,20 @@ namespace KDirStat
 	 * Returns 'true' if directory reading is in progress in this tree.
 	 **/
 	bool isBusy() { return _isBusy; }
+
+	/**
+	 * Write the complete tree to a cache file.
+	 *
+	 * Returns true if OK, false upon error.
+	 **/
+	bool writeCache( const QString & cacheFileName );
+
+	/**
+	 * Read a cache file.
+	 *
+	 * Returns true if OK, false upon error.
+	 **/
+	bool readCache( const QString & cacheFileName );
 
 
     signals:
@@ -1352,7 +1437,7 @@ namespace KDirStat
 
     protected slots:
 
-        /**
+	/**
 	 * Time-sliced work procedure to be performed while the application is
 	 * in the main loop: Read some directory entries, but relinquish
 	 * control back to the application so it can maintain some
@@ -1361,7 +1446,7 @@ namespace KDirStat
 	 * to process. Call this only once directly after inserting a read job
 	 * into the job queue.
 	 **/
-        void timeSlicedRead();
+	void timeSlicedRead();
 
 	/**
 	 * Read some parameters from the global @ref KConfig object.
@@ -1399,7 +1484,7 @@ namespace KDirStat
      *
      * Note: For kdDebug() etc., operator<< is overwritten to do exactly that:
      *
-     *     kdDebug() << "Size: " << x->totalSize() << endl;
+     *	   kdDebug() << "Size: " << x->totalSize() << endl;
      **/
     QString formatSize ( KFileSize lSize );
 

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-01-07
+ *   Updated:	2005-12-26
  */
 
 
@@ -125,6 +125,8 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
    _contextInfo	  = new QPopupMenu;
    _idContextInfo = _contextInfo->insertItem ( "dummy" );
+
+   createTree();
 }
 
 
@@ -205,6 +207,19 @@ KDirTreeView::idleDisplay()
 void
 KDirTreeView::openURL( KURL url )
 {
+    clear();
+    _tree->clear();
+
+    // Implicitly calling prepareReading() via the tree's startingReading() signal
+    _tree->startReading( url );
+
+    logActivity( 30 );
+}
+
+
+void
+KDirTreeView::createTree()
+{
     // Clean up any old leftovers
 
     clear();
@@ -247,18 +262,12 @@ KDirTreeView::openURL( KURL url )
 
     connect( _tree, SIGNAL( selectionChanged( KFileInfo * ) ),
 	     this,  SLOT  ( selectItem      ( KFileInfo * ) ) );
-
-    // Implicitly calling prepareReading() via the tree's startingReading() signal
-    _tree->startReading( url );
-
-    logActivity( 30 );
 }
 
 
 void
 KDirTreeView::prepareReading()
 {
-
     // Prepare cyclic update
 
     if ( _updateTimer )
@@ -331,6 +340,26 @@ KDirTreeView::clear()
 
     for ( int i=0; i < DEBUG_COUNTERS; i++ )
 	_debugCount[i]	= 0;
+}
+
+
+bool
+KDirTreeView::writeCache( const QString & cacheFileName )
+{
+    if ( _tree )
+	return _tree->writeCache( cacheFileName );
+
+    return false;
+}
+
+
+bool
+KDirTreeView::readCache( const QString & cacheFileName )
+{
+    clear();
+    _tree->clear();
+
+    return _tree->readCache( cacheFileName );
 }
 
 
@@ -508,15 +537,6 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
 }
 
 
-#if QT_VERSION < 300
-void
-KDirTreeView::sendProgressInfo()
-{
-    sendProgressInfo( _currentDir );
-}
-#endif
-
-
 KDirTreeViewItem *
 KDirTreeView::locate( KFileInfo *wanted, bool lazy, bool doClone )
 {
@@ -635,8 +655,8 @@ KDirTreeView::fillColor( int level ) const
 {
     if ( level < 0 )
     {
-	level = 0;
 	kdWarning() << k_funcinfo << "Invalid argument: " << level << endl;
+	level = 0;
     }
 
     return _fillColor [ level % _usedFillColors ];
@@ -779,11 +799,11 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
     if ( column == _ownSizeCol && ! item->orig()->isDotEntry() )
     {
 	KFileInfo * orig = item->orig();
-	
+
 	if ( orig->isSparseFile() || ( orig->links() > 1 && orig->isFile() ) )
 	{
 	    QString text;
-	    
+
 	    if ( orig->isSparseFile() )
 	    {
 		text = i18n( "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)" )

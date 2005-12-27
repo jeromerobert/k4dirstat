@@ -22,7 +22,7 @@ EXTRA_DIST = 					\
 
 # This is not a GNU package. You can remove this line
 # if have all needed files a GNU package needs.
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign dist-bzip2 no-dist-gzip
 
 CLEANFILES = $(wildcard autom4te.cache/*)
 

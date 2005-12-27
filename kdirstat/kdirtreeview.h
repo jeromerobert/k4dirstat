@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-08-26
+ *   Updated:	2005-12-26
  */
 
 
@@ -117,7 +117,7 @@ namespace KDirStat
 	/**
 	 * Enable / disable PacMan animation in this tree view during directory
 	 * reading. This is disabled by default since it eats quite some
-	 * performance. 
+	 * performance.
 	 **/
 	void	enablePacManAnimation( bool enable ) { _doPacManAnimation = enable; }
 	/**
@@ -156,7 +156,7 @@ namespace KDirStat
 	 * Set all tree colors to default values.
 	 **/
 	void setDefaultFillColors();
-	
+
 	/**
 	 * Set the number of used percentage bar fill colors
 	 * (1..KDirTreeViewMaxFillColor).
@@ -260,7 +260,7 @@ namespace KDirStat
 	 **/
 	void	incDebugCount( int i );
 
-	
+
     public slots:
 
 	/**
@@ -314,7 +314,7 @@ namespace KDirStat
 	 * Close all tree branches except the one specified.
 	 **/
 	void closeAllExcept( KDirTreeViewItem *except );
-	
+
 	/**
 	 * Send a standardized mail to the owner of the selected branch.
 	 * The user will get a mailer window where he can edit that mail all he
@@ -324,7 +324,7 @@ namespace KDirStat
 	 * branch on.
 	 **/
 	void sendMailToOwner();
-	
+
 	/**
 	 * Notification of a change in the KDE palette, i.e. the user selected
 	 * and applied different colors in the KDE control center.
@@ -352,7 +352,21 @@ namespace KDirStat
 	 * Reimplemented from QWidget.
 	 **/
 	virtual QSize minimumSizeHint() const { return QSize( 0, 0 ); }
-	
+
+	/**
+	 * Write the current tree to a cache file.
+	 *
+	 * Returns true if OK, false upon error.
+	 **/
+	bool writeCache( const QString & cacheFileName );
+
+	/**
+	 * Read a cache file.
+	 *
+	 * Returns true if OK, false upon error.
+	 **/
+	bool readCache( const QString & cacheFileName );
+
 
     protected slots:
 
@@ -446,12 +460,10 @@ namespace KDirStat
 	void 	popupContextInfo	( const QPoint &	pos,
 					  const QString & 	info );
 
-	
-    protected slots:
 
 	/**
 	 * Notification that a column has just been resized, thus may need
-	 * repaining. 
+	 * repaining.
 	 **/
         void columnResized( int column, int oldSize, int newSize );
 
@@ -514,8 +526,17 @@ namespace KDirStat
 	 **/
 	void userActivity( int points );
 
-	
+
     protected:
+
+	/**
+	 * Create a new tree (and delete the old one if there is one)
+	 **/
+	void createTree();
+
+	//
+	// Data members
+	//
 
 	KDirTree *		_tree;
 	QTimer *		_updateTimer;
@@ -550,7 +571,7 @@ namespace KDirStat
 	int	_latestMtimeCol;
 	int	_readJobsCol;
 	int	_sortCol;
-	
+
 	int 	_debugCount[ DEBUG_COUNTERS ];
 	QString	_debugFunc [ DEBUG_COUNTERS ];
 
@@ -698,7 +719,7 @@ namespace KDirStat
 	void openSubtree();
 
 	/**
-	 * Recursively close all tree branches from here on downwards. 
+	 * Recursively close all tree branches from here on downwards.
 	 **/
 	void closeSubtree();
 
@@ -706,7 +727,7 @@ namespace KDirStat
 	 * Close all tree branches except this one from the root on.
 	 **/
 	void closeAllExceptThis();
-	
+
 	/**
 	 * Returns the number of open items in this subtree.
 	 **/
@@ -718,7 +739,7 @@ namespace KDirStat
 	 **/
 	QString asciiDump();
 
-	
+
     protected:
 
 	/**
@@ -745,7 +766,7 @@ namespace KDirStat
 	 **/
 	KDirTreeViewItem * findDotEntry() const;
 
-	
+
 	/**
 	 * Paint method. Reimplemented from @ref QListViewItem so different
 	 * colors can be used - and of course for painting percentage bars.
@@ -819,7 +840,7 @@ namespace KDirStat
 	}
 	else
 	    stream << "<NULL>";
-	
+
 	return stream;
     }
 
@@ -879,7 +900,7 @@ namespace KDirStat
      **/
     QColor contrastingColor ( const QColor &desiredColor,
 			      const QColor &contrastColor );
-    
+
 }	// namespace KDirStat
 
 

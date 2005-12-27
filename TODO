@@ -1,21 +1,59 @@
 			    TODO list for KDirStat
 			   ========================
-							Updated: 2005-01-07
+							Updated: 2005-12-27
 
-- help text for "treemap" settings
 
-- help text for "general" settings
 
-- update screen shots in online help (no treemaps yet)
+- Integrate cache files fully into UI
 
-- make KDirStat a KPart
+- Read cache files for subtrees, not only for root
+
+- Write cache files for subtrees, not only root [simple]
+
+- Automatically read cache files when found while reading a directory tree
+
+- Config switch to disable auto-reading cache files
+
+
+
+- Improve concept for deleting files
+
+- Allow selecting multiple files for deletion
+
+  Maybe not via the normal QListView selection, but via a separate check box?
+  Maybe with a special "delete cursor"? (switchable tool like in Gimp,
+  CorelDraw etc.)
+
+  This concept does not need to be extended to cover all cleanup actions;
+  it is mostly useful for deleting.
+  (Does it make sense at all for other cleanups?)
+
+
+
+
+Done:
+=====
+
+- Write and read cache files for really fast startup
+
+- Perl script to generate cache files via cron job
+
+
+In some Distant Future:
+=======================
+
+- Help text for "treemap" settings
+
+- Help text for "general" settings
+
+- Update screen shots in online help (no treemaps yet)
+
+- Make KDirStat a KPart
 
 
 
 Maybe:
 ======
-
-- German help file
 
 - Animation other than pacman (optional?)
 
@@ -29,24 +67,10 @@ Maybe:
 
 - Select items in the tree view as "special interest" for further processing in mail reports
 
-- Manually mark dir subtrees as "static" - e.g., for system directories that
-  almost never change anyway; scan them just once and save their sizes to file;
-  only rescan those subtrees on explicit user request
 
-- Automagically mark such subtrees by mtime and/or a hardwired list
+Cancelled:
+=========
 
-
-
-
-Postponed until further notice:
-===============================
-
-- write scanned trees to cache file for later reuse;
-  use this cache file first and then begin scanning the dir tree.
-
-  Since the Linux 2.4 kernel is great at caching directory entries,
-  this isn't really necessary for Linux - and I am a Linux guy...
-  ;-)
-
-
+- German help file - no way, even if there are volunteers; I would have to keep
+  that thing updated, and I really don't want to carry that burden, too.
 

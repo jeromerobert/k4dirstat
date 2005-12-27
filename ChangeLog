@@ -1,6 +1,29 @@
+2005-12-27  Stefan Hundhammer  <sh@suse.de>
+
+	* Added Perl script to write cache files from cron jobs
+	
+
+2005-12-26  Stefan Hundhammer  <sh@suse.de>
+
+	* Added cache reading
+
+	* Now using zlib for reading and writing cache files in gzip format
+
+	* Added specification for cache file format
+
+	* Made file names in cache files i18n safe (using UTF-8)
+
+
+2005-12-24  Stefan Hundhammer  <sh@suse.de>
+
+	* Added cache writing
+
+	* Bumped version to 2.5.1-devel (last stable is 2.4.4)
+
+
 2005-01-07  Stefan Hundhammer  <sh@suse.de>
 
-	* Improved handling of sparse files: 
+	* Improved handling of sparse files:
 	  Now adding up only allocated size
 
 	* Improved handling of regular files with multiple links:
@@ -10,21 +33,25 @@
 	* Extended "own size" column context menu to show sparse files
 	  and regular files with multiple links
 
-	* Reordered "own size" column context menu for consistency: xxx MB (yyy Bytes)
+	* Reordered "own size" column context menu for consistency: 
+	  xxx MB (yyy Bytes)
 
 	* Removed currently read path from status line while reading:
-	  Much less flicker, no more constant window resizing, improved performance
+	  Much less flicker, no more constant window resizing, 
+	  improved performance
 
 	* Added explanations for sparse files and multiple links to online help
-	
+
 	* Bumped version to 2.4.4
-	
+
 
 2004-12-06  Stefan Hundhammer  <sh@suse.de>
 
-	* Added "Open with" cleanup upon request by Jarl Friis <jarl@softace.dk>
+	* Added "Open with" cleanup upon request 
+	  by Jarl Friis <jarl@softace.dk>
 
 	* Bumped version to 2.4.3
+
 
 2004-11-23  Stefan Hundhammer  <sh@suse.de>
 

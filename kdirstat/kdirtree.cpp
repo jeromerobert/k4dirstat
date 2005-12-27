@@ -4,12 +4,13 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-01-07
+ *   Updated:	2005-12-27
  */
 
 
 #include "config.h"
 #include <string.h>
+#include <stdio.h>
 #include <sys/errno.h>
 #include <qtimer.h>
 #include <kapp.h>
@@ -19,8 +20,10 @@
 #include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
 #include "kdirsaver.h"
+#include "kdirtreecache.h"
 #include "kio/job.h"
 #include "kio/netaccess.h"
+#include "config.h"
 
 #define HAVE_STUPID_COMPILER 0
 
@@ -79,7 +82,7 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 
 	if ( _isSparseFile )
 	{
-	    kdDebug() << "Found sparse file: " << this 
+	    kdDebug() << "Found sparse file: " << this
 		      << "    Byte size: " << formatSize( byteSize() )
 		      << "  Allocated: " << formatSize( allocatedSize() )
 		      << endl;
@@ -92,7 +95,7 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 	}
 #endif
     }
-    
+
 #if 0
 #warning Debug mode: Huge sizes
     _size <<= 10;
@@ -115,7 +118,7 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
     _mode	 = fileItem->mode();
     _links	 = 1;
 
-    
+
     if ( isSpecial() )
     {
 	_size	 	= 0;
@@ -130,7 +133,7 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 	// blocks, calculate that information artificially so callers don't
 	// need to bother with special cases depending on how this object was
 	// constructed.
-	
+
 	_blocks	 = _size / blockSize();
 
 	if ( ( _size % blockSize() ) > 0 )
@@ -141,6 +144,43 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
     }
 
     _mtime	 = fileItem->time( KIO::UDS_MODIFICATION_TIME );
+}
+
+
+KFileInfo::KFileInfo( KDirTree * 	tree,
+		      KDirInfo * 	parent,
+		      const QString &	filenameWithoutPath,
+		      mode_t	   	mode,
+		      KFileSize	   	size,
+		      time_t	   	mtime,
+		      KFileSize	   	blocks,
+		      nlink_t	   	links )
+    : _parent( parent )
+    , _next( 0 )
+    , _tree( tree )
+{
+    _name		= filenameWithoutPath;
+    _isLocalFile	= true;
+    _mode		= mode;
+    _size	 	= size;
+    _mtime	 	= mtime;
+    _links	 	= links;
+
+    if ( blocks < 0 )
+    {
+	_isSparseFile	= false;
+	_blocks		= _size / blockSize();
+
+	if ( ( _size % blockSize() ) > 0 )
+	    _blocks++;
+    }
+    else
+    {
+	_isSparseFile	= true;
+	_blocks		= blocks;
+    }
+
+    // kdDebug() << "Created KFileInfo " << this << endl;
 }
 
 
@@ -314,7 +354,7 @@ KFileInfo::locate( QString url, bool findDotEntries )
 		child = child->next();
 	}
 
-	
+
 	// Special case: The dot entry is requested.
 
 	if ( findDotEntries && dotEntry() && url == "<Files>" )
@@ -383,6 +423,24 @@ KDirInfo::KDirInfo( const KFileItem	* fileItem,
     : KFileInfo( fileItem,
 		 tree,
 		 parent )
+{
+    init();
+    _dotEntry	= new KDirInfo( tree, this, true );
+}
+
+
+KDirInfo::KDirInfo( KDirTree * 		tree,
+		    KDirInfo * 		parent,
+		    const QString &	filenameWithoutPath,
+		    mode_t	 	mode,
+		    KFileSize	 	size,
+		    time_t	 	mtime )
+    : KFileInfo( tree,
+		 parent,
+		 filenameWithoutPath,
+		 mode,
+		 size,
+		 mtime )
 {
     init();
     _dotEntry	= new KDirInfo( tree, this, true );
@@ -551,7 +609,7 @@ KDirInfo::isFinished()
 void KDirInfo::setReadState( KDirReadState newReadState )
 {
     // "aborted" has higher priority than "finished"
-    
+
     if ( _readState == KDirAborted && newReadState == KDirFinished )
 	return;
 
@@ -757,6 +815,38 @@ KDirInfo::finalizeLocal()
 }
 
 
+void
+KDirInfo::finalizeAll()
+{
+    if ( _isDotEntry )
+	return;
+
+    KFileInfo *child = firstChild();
+
+    while ( child )
+    {
+	KDirInfo * dir = dynamic_cast<KDirInfo *> (child);
+
+	if ( dir && ! dir->isDotEntry() )
+	    dir->finalizeAll();
+
+	child = child->next();
+    }
+
+    // Optimization: As long as this directory is not finalized yet, it does
+    // (very likely) have a dot entry and thus all direct children are
+    // subdirectories, not plain files, so we don't need to bother checking
+    // plain file children as well - so do finalizeLocal() only after all
+    // children are processed. If this step were the first, for directories
+    // that don't have any subdirectories finalizeLocal() would immediately
+    // get all their plain file children reparented to themselves, so they
+    // would need to be processed in the loop, too.
+
+    _tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
+    finalizeLocal();
+}
+
+
 KDirReadState
 KDirInfo::readState() const
 {
@@ -777,7 +867,7 @@ KDirInfo::cleanupDotEntries()
 
     if ( ! _firstChild )
     {
-	// kdDebug() << "Removing solo dot entry " << this << " " << endl;
+	// kdDebug() << "Reparenting children of solo dot entry " << this << endl;
 
 	KFileInfo *child = _dotEntry->firstChild();
 	_firstChild = child;		// Move the entire children chain here.
@@ -796,6 +886,7 @@ KDirInfo::cleanupDotEntries()
     if ( ! _dotEntry->firstChild() )
     {
 	// kdDebug() << "Removing empty dot entry " << this << endl;
+
 	delete _dotEntry;
 	_dotEntry = 0;
     }
@@ -880,9 +971,6 @@ KLocalDirReadJob::startReading()
 			KDirInfo *subDir = new KDirInfo( entryName, &statInfo, _tree, _dir );
 			_dir->insertChild( subDir );
 			childAdded( subDir );
-
-			if ( subDir->dotEntry() )
-			    childAdded( subDir->dotEntry() );
 
 			if ( _dir->device() == subDir->device()	)	// normal case
 			{
@@ -1057,9 +1145,6 @@ KAnyDirReadJob::entries ( KIO::Job *			job,
 		_dir->insertChild( subDir );
 		childAdded( subDir );
 
-		if ( subDir->dotEntry() )
-		    childAdded( subDir->dotEntry() );
-
 		_tree->addJob( new KAnyDirReadJob( _tree, subDir ) );
 	    }
 	    else	// non-directory child
@@ -1166,13 +1251,13 @@ KDirTree::~KDirTree()
 
     // Jobs still in the job queue are automatically deleted along with the
     // queue since autoDelete is set.
-    // 
+    //
     // However, the queue needs to be cleared first before the entire tree is
     // deleted, otherwise the dir pointers in each read job becomes invalid too
-    // early. 
+    // early.
 
     _jobQueue.clear();
-    
+
     if ( _root )
 	delete _root;
 }
@@ -1186,6 +1271,45 @@ KDirTree::readConfig()
 
     _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",     false );
     _enableLocalDirReader	= config->readBoolEntry( "EnableLocalDirReader", true  );
+}
+
+
+void
+KDirTree::setRoot( KFileInfo *newRoot )
+{
+    if ( _root )
+    {
+	selectItem( 0 );
+	emit deletingChild( _root );
+	delete _root;
+	emit childDeleted();
+    }
+
+    _root = newRoot;
+}
+
+
+void
+KDirTree::clear( bool sendSignals )
+{
+    _jobQueue.clear();
+
+    if ( _root )
+    {
+	_jobQueue.clear();
+	selectItem( 0 );
+
+	if ( sendSignals )
+	    emit deletingChild( _root );
+
+	delete _root;
+	_root = 0;
+
+	if ( sendSignals )
+	    emit childDeleted();
+    }
+
+    _isBusy = false;
 }
 
 
@@ -1207,19 +1331,7 @@ KDirTree::startReading( const KURL & url )
     _isBusy = true;
     emit startingReading();
 
-    if ( _root )
-    {
-	// Clean up leftover stuff
-
-	selectItem( 0 );
-	emit deletingChild( _root );
-
-	// kdDebug() << "Deleting root prior to reading" << endl;
-	delete _root;
-	_root = 0;
-	emit childDeleted();
-    }
-
+    setRoot( 0 );
     readConfig();
     _isFileProtocol = url.isLocalFile();
 
@@ -1354,7 +1466,6 @@ KDirTree::refresh( KFileInfo *subtree )
 }
 
 
-
 void
 KDirTree::timeSlicedRead()
 {
@@ -1363,13 +1474,12 @@ KDirTree::timeSlicedRead()
 }
 
 
-
 void
 KDirTree::abortReading()
 {
     if ( _jobQueue.isEmpty() )
 	return;
-    
+
     while ( ! _jobQueue.isEmpty() )
     {
 	_jobQueue.head()->dir()->readJobAborted();
@@ -1379,7 +1489,6 @@ KDirTree::abortReading()
     _isBusy = false;
     emit aborted();
 }
-
 
 
 void
@@ -1519,6 +1628,27 @@ KDirTree::sendFinalizeLocal( KDirInfo *dir )
 
 
 void
+KDirTree::sendStartingReading()
+{
+    emit startingReading();
+}
+
+
+void
+KDirTree::sendFinished()
+{
+    emit finished();
+}
+
+
+void
+KDirTree::sendAborted()
+{
+    emit aborted();
+}
+
+
+void
 KDirTree::selectItem( KFileInfo *newSelection )
 {
     if ( newSelection == _selection )
@@ -1534,6 +1664,38 @@ KDirTree::selectItem( KFileInfo *newSelection )
     _selection = newSelection;
     emit selectionChanged( _selection );
 }
+
+
+bool
+KDirTree::writeCache( const QString & cacheFileName )
+{
+    CacheWriter writer( cacheFileName, this );
+    return writer.ok();
+}
+
+
+bool
+KDirTree::readCache( const QString & cacheFileName )
+{
+    // The CacheReader takes care of sending startingReading() and finished()
+    // signals. In particular, the finished() signal may not be sent before the
+    // CacheReader is destroyed - otherwise views that have problems with
+    // KFileInfo items that are destroyed (like cleaned up dot entries) may get
+    // problems.
+    //
+    // Been there, done that, spent half a day debugging this with the KTreeMapView.
+
+    CacheReader reader( cacheFileName, this );
+
+    while ( reader.ok() && ! reader.eof() )
+    {
+	reader.read( 500 );
+	sendProgressInfo( "" );
+    }
+
+    return reader.ok();
+}
+
 
 
 

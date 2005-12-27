@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2005-12-26
  */
 
 
@@ -58,7 +58,7 @@ namespace KDirStat
      *
      *    while ( *it )
      *    {
-     *       kdDebug() << *it << ":\t" << (*it)->totalSize() ) << endl;
+     *       kdDebug() << *it << ":\t" << (*it)->totalSize() << endl;
      *       ++it;
      *    }
      *

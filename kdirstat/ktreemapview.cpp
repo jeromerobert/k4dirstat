@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-10-20
+ *   Updated:	2005-12-26
  */
 
 
@@ -179,6 +179,9 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 
     KTreemapTile * tile = tileAt( event->pos() );
 
+    if ( ! tile )
+	return;
+
     switch ( event->button() )
     {
 	case LeftButton:
@@ -244,6 +247,9 @@ KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
     // kdDebug() << k_funcinfo << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
+
+    if ( ! tile )
+	return;
 
     switch ( event->button() )
     {
