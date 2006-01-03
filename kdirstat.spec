@@ -54,6 +54,7 @@ make DESTDIR=$RPM_BUILD_ROOT $INSTALL_TARGET
 %defattr(-,root,root)
 %doc COPYING AUTHORS ChangeLog TODO README
 /opt/kde3/bin/kdirstat
+/opt/kde3/bin/kdirstat-cache-writer
 /opt/kde3/share/apps/kdirstat
 /opt/kde3/share/appl*/*/kdirstat*
 /opt/kde3/share/doc/HTML/*/kdirstat/
