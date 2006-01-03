@@ -2,7 +2,7 @@
 		       ================================
 
 Author:  Stefan Hundhammer <sh@suse.de>
-Updated: 2005-12-27
+Updated: 2006-01-03
 
 
 KDirStat can read cache files in either gzip or plain text (uncompressed)
@@ -123,9 +123,9 @@ absolute or a relative path.
     subdirectories when writing a cache file.
 
 
-Paths and names are encoded in UTF-8 and then URL-encoded, i.e. any character
-(in particular whitespace) that might otherwise be some kind of delimiter is
-specified as its hex code with preceding "%":
+Paths and names are URL-encoded, i.e. any character (in particular whitespace)
+that might otherwise be some kind of delimiter is specified as its hex code
+with preceding "%":
 
 	with blank	->	with%20blank
 	with%percent	->	with%25percent
@@ -134,6 +134,26 @@ Take special care for blanks, tabs, newlines, and percent characters. It
 does not hurt to escape a few more characters than would strictly be
 neccessary.
 
+As for encoding, unfortunately this is one big mess. 7 bit ASCII works
+allright, but if there are any special characters, everything depends on the
+locale in which the user created a file. There is no standard for file name
+encodings in file systems; it all Special characters may come in all kinds of
+flavours - in Latin-1 (ISO-8859-1), Latin-2, UTF-8, Japanese, Korean, Chinese,
+whatever. In an ideal world, the file system would take care about this and
+normalize file names with non-ASCII (7 bit) characters, but that doesn't
+happen. So if one user uses, say, Latin-1 and another uses UTF-8, a file system
+may have files with different encodings for each file name. Worse yet, the same
+(special, i.e. non-7-bit-ASCII) character will be be stored in different
+character representations for different file names.
+
+Those character representations is what readdir() returns. There is no way to
+tell in which encoding a name may come, so there is also no way to convert it
+to a well-defined standard encoding like, say, UTF-8. So what gets stored in
+the cache file is the same byte sequence as returned by readdir(). Those names
+encoded in something other than the current locale of KDE where KDirStat is
+running will of course be displayed with garbage letters, but this cannot be
+helped. This is just the same as when the name is read directly from the file
+system with readdir(). Bad luck.
 
 
 Size

@@ -33,7 +33,7 @@
 #	-h	help (usage message)
 #
 # Author:  Stefan Hundhammer <sh@suse.de>
-# Updated: 2005-12-27
+# Updated: 2006-01-02
 
 
 
@@ -49,7 +49,7 @@ use English;
 use Getopt::Std;
 use Fcntl ':mode';
 use Encode;
-use URI::Escape qw(uri_escape uri_escape_utf8);
+use URI::Escape qw(uri_escape);
 use vars qw( $opt_l $opt_m $opt_v $opt_d $opt_h );
 
 
@@ -135,6 +135,7 @@ sub write_cache_file()
     my $start_time = time();
 
     open( CACHE,  ">" . $cache_file_name ) or die "Can't open $cache_file_name";
+    binmode( CACHE, ":bytes" );
     write_cache_header();
     write_cache_tree( $toplevel_dir );
 
@@ -307,7 +308,6 @@ sub write_dir_entry()
 
     if ( $dev == $toplevel_device || $scan_mounted )
     {
-	# $dir = encode( "utf8", $dir );
 	$dir = uri_escape( $dir, $unsafe_chars );
 
 	print CACHE "D $dir";
@@ -363,12 +363,10 @@ sub write_file_entry()
 
     print CACHE "$type";
 
-    # $name = encode( "utf8", $name );
     $name = uri_escape( $name, $unsafe_chars );
 
     if ( $long_format )
     {
-	# $dir = encode( "utf8", $dir );
 	$dir = uri_escape( $dir, $unsafe_chars );
 	print CACHE " $dir/$name";
     }

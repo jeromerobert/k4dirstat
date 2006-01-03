@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-12-27
+ *   Updated:	2006-01-02
  */
 
 
@@ -125,13 +125,13 @@ CacheWriter::writeItem( gzFile cache, KFileInfo * item )
     {
 	// Use absolute path
 
-	gzprintf( cache, " %s", (const char *) KURL::encode_string( item->url() ).utf8() );
+	gzprintf( cache, " %s", (const char *) KURL::encode_string( item->url() ).latin1() );
     }
     else
     {
 	// Use relative path
 
-	gzprintf( cache, "\t%s", (const char *) KURL::encode_string( item->name() ).utf8() );
+	gzprintf( cache, "\t%s", (const char *) KURL::encode_string( item->name() ).latin1() );
     }
 
 
@@ -347,8 +347,8 @@ CacheReader::addItem()
 	    raw_name = raw_path;
     }
 
-    QString path = KURL::decode_string( QString::fromUtf8( raw_path ) );
-    QString name = KURL::decode_string( QString::fromUtf8( raw_name ) );
+    QString path = KURL::decode_string( QString::fromLatin1( raw_path ) );
+    QString name = KURL::decode_string( QString::fromLatin1( raw_name ) );
 
     KDirInfo * parent = _lastItem;
 
