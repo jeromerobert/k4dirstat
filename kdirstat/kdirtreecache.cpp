@@ -4,11 +4,12 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-02
+ *   Updated:	2006-01-03
  */
 
 
 #include <ctype.h>
+#include <errno.h>
 #include <kdebug.h>
 #include "kdirtreecache.h"
 #include "kdirtree.h"
@@ -280,7 +281,7 @@ CacheReader::addItem()
 
     // Type
 
-    mode_t mode = 0;
+    mode_t mode = S_IFREG;
 
     if      ( strcasecmp( type, "F"        ) == 0 )	mode = S_IFREG;
     else if ( strcasecmp( type, "D"        ) == 0 )	mode = S_IFDIR;
@@ -321,12 +322,12 @@ CacheReader::addItem()
 
     // Blocks
 
-    KFileSize blocks = blocks_str ? blocks = strtoll( blocks_str, 0, 10 ) : -1;
+    KFileSize blocks = blocks_str ? strtoll( blocks_str, 0, 10 ) : -1;
 
 
     // Links
 
-    int links = links_str ? links = atoi( links_str ) : 1;
+    int links = links_str ? atoi( links_str ) : 1;
 
 
     //
