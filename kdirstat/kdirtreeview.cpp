@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-12-26
+ *   Updated:	2006-01-05
  */
 
 
@@ -1100,8 +1100,9 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	 * is still being read.
 	 */
 
-	if ( _orig->readState() == KDirQueued ||
-	     _orig->readState() == KDirReading  )
+	if ( _orig->readState() == KDirQueued  ||
+	     _orig->readState() == KDirReading ||
+	     _orig->readState() == KDirCached    )
 	{
 	    setExpandable( true );
 	}
@@ -1141,8 +1142,11 @@ KDirTreeViewItem::setIcon()
     }
     else if ( _orig->isDir() )
     {
-	if ( _orig->readState() == KDirAborted )	icon = _view->stopIcon();
-	else if ( _orig->readState() == KDirError )
+	if  ( _orig->readState() == KDirAborted )
+	{
+	    icon = _view->stopIcon();
+	}
+	else if ( _orig->readState() == KDirError   )
 	{
 	    icon = _view->unreadableDirIcon();
 	    setExpandable( false );
