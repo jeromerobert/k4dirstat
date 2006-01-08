@@ -71,8 +71,8 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>02/02/2002</date>
-<releaseinfo>0.1.01</releaseinfo>
+<date>2002-02-22</date>
+<releaseinfo>2.4.4</releaseinfo>
 
 
 <!-- Abstract about this handbook -->
