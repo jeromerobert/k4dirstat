@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-05
+ *   Updated:	2006-01-07
  */
 
 
@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 
 #include "kdirtreeview.h"
+#include "kdirreadjob.h"
 #include "kdirtreeiterators.h"
 #include "kpacman.h"
 
@@ -353,13 +354,13 @@ KDirTreeView::writeCache( const QString & cacheFileName )
 }
 
 
-bool
+void
 KDirTreeView::readCache( const QString & cacheFileName )
 {
     clear();
     _tree->clear();
 
-    return _tree->readCache( cacheFileName );
+    _tree->readCache( cacheFileName );
 }
 
 
@@ -473,6 +474,18 @@ KDirTreeView::slotFinished()
     idleDisplay();
     updateSummary();
     logActivity( 30 );
+
+    if ( _tree->root() &&
+	 _tree->root()->totalSubDirs() == 0 &&	// No subdirs
+	 _tree->root()->totalItems() > 0 )	// but file children
+    {
+	QListViewItem * root = firstChild();
+	
+	if ( root )
+	    root->setOpen( true );
+    }
+	 
+    
 
 #if 0
     for ( int i=0; i < DEBUG_COUNTERS; i++ )
@@ -964,7 +977,7 @@ KDirTreeView::sendMailToOwner()
 	return;
     }
 
-    QString owner = KAnyDirReadJob::owner( fixedUrl( _selection->orig()->url() ) );
+    QString owner = KioDirReadJob::owner( fixedUrl( _selection->orig()->url() ) );
     QString subject = i18n( "Disk Usage" );
     QString body =
 	i18n("Please check your disk usage and clean up if you can. Thank you." )

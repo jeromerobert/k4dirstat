@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-12-26
+ *   Updated:	2006-01-06
  */
 
 
@@ -362,10 +362,8 @@ namespace KDirStat
 
 	/**
 	 * Read a cache file.
-	 *
-	 * Returns true if OK, false upon error.
 	 **/
-	bool readCache( const QString & cacheFileName );
+	void readCache( const QString & cacheFileName );
 
 
     protected slots:

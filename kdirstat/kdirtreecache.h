@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-12-27
+ *   Updated:	2006-01-06
  */
 
 
@@ -32,7 +32,7 @@
 
 namespace KDirStat
 {
-    class CacheWriter
+    class KCacheWriter
     {
     public:
 
@@ -41,12 +41,12 @@ namespace KDirStat
 	 *
 	 * Check CacheWriter::ok() to see if writing the cache file went OK.
 	 **/
-	CacheWriter( const QString & fileName, KDirTree *tree );
+	KCacheWriter( const QString & fileName, KDirTree *tree );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~CacheWriter();
+	virtual ~KCacheWriter();
 
 	/**
 	 * Returns true if writing the cache file went OK.
@@ -90,26 +90,30 @@ namespace KDirStat
 
 
 
-    class CacheReader
+    class KCacheReader: public QObject
     {
+	Q_OBJECT
+
     public:
 
 	/**
 	 * Begin reading cache file 'fileName'. The cache file remains open
 	 * until this object is destroyed.
 	 **/
-	CacheReader( const QString & fileName, KDirTree *tree );
+	KCacheReader( const QString &	fileName,
+		      KDirTree *	tree,
+		      KDirInfo *	parent = 0 );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~CacheReader();
+	virtual ~KCacheReader();
 
 	/**
 	 * Read at most maxLines from the cache file (check with eof() if the
 	 * end of file is reached yet) or the entire file (if maxLines is 0).
 	 *
-	 * Returns true if OK, false if error.
+	 * Returns true if OK and there is more to read, false otherwise.
 	 **/
 	bool read( int maxLines = 0 );
 
@@ -123,6 +127,12 @@ namespace KDirStat
 	 * Returns true if writing the cache file went OK.
 	 **/
 	bool ok() const { return _ok; }
+
+	/**
+	 * Resets the reader so all data lines of the cache can be read with
+	 * subsequent read() calls.
+	 **/
+	void rewind();
 
 #if 0
 	/**
@@ -158,6 +168,25 @@ namespace KDirStat
 	 * Returns the new string length.
 	 **/
 	static void killTrailingWhiteSpace( char * cptr );
+
+
+    signals:
+
+	/**
+	 * Emitted when a child has been added.
+	 **/
+	void childAdded( KFileInfo *newChild );
+
+	/**
+	 * Emitted when reading this cache is finished.
+	 **/
+	void finished();
+
+	/**
+	 * Emitted if there is a read error.
+	 **/
+	void error();
+
 
     protected:
 

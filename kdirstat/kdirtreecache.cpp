@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-03
+ *   Updated:	2006-01-06
  */
 
 
@@ -27,20 +27,20 @@
 using namespace KDirStat;
 
 
-CacheWriter::CacheWriter( const QString & fileName, KDirTree *tree )
+KCacheWriter::KCacheWriter( const QString & fileName, KDirTree *tree )
 {
     _ok = writeCache( fileName, tree );
 }
 
 
-CacheWriter::~CacheWriter()
+KCacheWriter::~KCacheWriter()
 {
     // NOP
 }
 
 
 bool
-CacheWriter::writeCache( const QString & fileName, KDirTree *tree )
+KCacheWriter::writeCache( const QString & fileName, KDirTree *tree )
 {
     if ( ! tree || ! tree->root() )
 	return false;
@@ -68,7 +68,7 @@ CacheWriter::writeCache( const QString & fileName, KDirTree *tree )
 
 
 void
-CacheWriter::writeTree( gzFile cache, KFileInfo * item )
+KCacheWriter::writeTree( gzFile cache, KFileInfo * item )
 {
     if ( ! item )
 	return;
@@ -102,7 +102,7 @@ CacheWriter::writeTree( gzFile cache, KFileInfo * item )
 
 
 void
-CacheWriter::writeItem( gzFile cache, KFileInfo * item )
+KCacheWriter::writeItem( gzFile cache, KFileInfo * item )
 {
     if ( ! item )
 	return;
@@ -158,7 +158,7 @@ CacheWriter::writeItem( gzFile cache, KFileInfo * item )
 
 
 QString
-CacheWriter::formatSize( KFileSize size )
+KCacheWriter::formatSize( KFileSize size )
 {
     QString str;
 
@@ -190,7 +190,10 @@ CacheWriter::formatSize( KFileSize size )
 
 
 
-CacheReader::CacheReader( const QString & fileName, KDirTree *tree )
+KCacheReader::KCacheReader( const QString &	fileName,
+			    KDirTree *		tree,
+			    KDirInfo *		parent )
+    : QObject()
 {
     _fileName	= fileName;
     _buffer[0] 	= 0;
@@ -199,10 +202,9 @@ CacheReader::CacheReader( const QString & fileName, KDirTree *tree )
     _ok		= true;
     _tree	= tree;
     _lastItem	= 0;
-    _toplevel	= 0;
+    _toplevel	= parent;
 
-    if ( _tree )
-	_tree->sendStartingReading();
+    (void) parent;	// TO DO
 
     _cache = gzopen( (const char *) fileName, "r" );
 
@@ -210,18 +212,19 @@ CacheReader::CacheReader( const QString & fileName, KDirTree *tree )
     {
 	kdError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
 	_ok = false;
+	emit error();
 	return;
     }
 
     // kdDebug() << "Opening " << fileName << " OK" << endl;
     checkHeader();
 
-    if ( _ok )
+    if ( _ok && ! parent )
 	_tree->setRoot( 0 );
 }
 
 
-CacheReader::~CacheReader()
+KCacheReader::~KCacheReader()
 {
     if ( _cache )
 	gzclose( _cache );
@@ -231,39 +234,52 @@ CacheReader::~CacheReader()
     if ( _toplevel )
 	_toplevel->finalizeAll();
 
-    if ( _tree )
-	_tree->sendFinished();
-}
-
-
-bool
-CacheReader::read( int maxLines )
-{
-    while ( ! gzeof( _cache )
-	    && _ok
-	    && ( maxLines == 0 || maxLines-- > 0 ) )
-    {
-	readLine();
-	splitLine();
-	addItem();
-    }
-
-    return _ok;
+    emit finished();
 }
 
 
 void
-CacheReader::addItem()
+KCacheReader::rewind()
+{
+    if ( _cache )
+    {
+	gzrewind( _cache );
+	checkHeader();		// skip cache header
+    }
+}
+
+
+bool
+KCacheReader::read( int maxLines )
+{
+    while ( ! gzeof( _cache )
+	    && _ok
+	    && ( maxLines == 0 || --maxLines > 0 ) )
+    {
+	if ( readLine() )
+	{
+	    splitLine();
+	    addItem();
+	}
+    }
+
+    return _ok && ! gzeof( _cache );
+}
+
+
+void
+KCacheReader::addItem()
 {
     if ( fieldsCount() < 4 )
     {
 	_ok = false;
+	emit error();
 	return;
     }
 
     int n = 0;
     char * type		= field( n++ );
-    char * raw_path		= field( n++ );
+    char * raw_path	= field( n++ );
     char * size_str	= field( n++ );
     char * mtime_str	= field( n++ );
     char * blocks_str	= 0;
@@ -390,7 +406,7 @@ CacheReader::addItem()
 	    _tree->setRoot( dir );
 	    _toplevel = dir;
 	}
-	
+
 	if ( ! _toplevel )
 	    _toplevel = dir;
 
@@ -421,7 +437,7 @@ CacheReader::addItem()
 
 
 bool
-CacheReader::eof()
+KCacheReader::eof()
 {
     if ( ! _ok || ! _cache )
 	return true;
@@ -433,7 +449,7 @@ CacheReader::eof()
 #if 0
 
 QString
-CacheReader::firstDir()
+KCacheReader::firstDir()
 {
     QString dir;
 
@@ -448,7 +464,7 @@ CacheReader::firstDir()
 
 
 bool
-CacheReader::checkHeader()
+KCacheReader::checkHeader()
 {
     if ( ! _ok || ! readLine() )
 	return false;
@@ -487,12 +503,15 @@ CacheReader::checkHeader()
 
     // kdDebug() << "Cache file header check OK: " << _ok << endl;
 
+    if ( ! _ok )
+	emit error();
+
     return _ok;
 }
 
 
 bool
-CacheReader::readLine()
+KCacheReader::readLine()
 {
     if ( ! _ok || ! _cache )
 	return false;
@@ -505,10 +524,15 @@ CacheReader::readLine()
 
 	if ( ! gzgets( _cache, _buffer, MAX_CACHE_LINE_LEN-1 ) )
 	{
-	    _ok		= false;
 	    _buffer[0]	= 0;
 	    _line	= _buffer;
-	    kdError() << _fileName << ":" << _lineNo << ": Read error" << endl;
+
+	    if ( ! gzeof( _cache ) )
+	    {
+		_ok = false;
+		kdError() << _fileName << ":" << _lineNo << ": Read error" << endl;
+		emit error();
+	    }
 
 	    return false;
 	}
@@ -527,12 +551,15 @@ CacheReader::readLine()
 
 
 void
-CacheReader::splitLine()
+KCacheReader::splitLine()
 {
     _fieldsCount = 0;
 
     if ( ! _ok || ! _line )
 	return;
+
+    if ( *_line == '#' )	// skip comment lines
+	*_line = 0;
 
     char * current = _line;
     char * end     = _line + strlen( _line );
@@ -555,7 +582,7 @@ CacheReader::splitLine()
 
 
 char *
-CacheReader::field( int no )
+KCacheReader::field( int no )
 {
     if ( no >= 0 && no < _fieldsCount )
 	return _fields[ no ];
@@ -565,7 +592,7 @@ CacheReader::field( int no )
 
 
 char *
-CacheReader::skipWhiteSpace( char * cptr )
+KCacheReader::skipWhiteSpace( char * cptr )
 {
     if ( cptr == 0 )
 	return 0;
@@ -578,7 +605,7 @@ CacheReader::skipWhiteSpace( char * cptr )
 
 
 char *
-CacheReader::findNextWhiteSpace( char * cptr )
+KCacheReader::findNextWhiteSpace( char * cptr )
 {
     if ( cptr == 0 )
 	return 0;
@@ -591,7 +618,7 @@ CacheReader::findNextWhiteSpace( char * cptr )
 
 
 void
-CacheReader::killTrailingWhiteSpace( char * cptr )
+KCacheReader::killTrailingWhiteSpace( char * cptr )
 {
     char * start = cptr;
 

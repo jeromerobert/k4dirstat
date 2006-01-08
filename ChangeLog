@@ -1,3 +1,15 @@
+2006-01-06  Stefan Hundhammer  <sh@suse.de>
+
+	* Automatically open root item if it has only file children 
+	  and no subdirs
+
+	* Integrated cache reading into dir read job scheme
+
+	* Cache reading now time-sliced - allow display update while reading
+
+	* Bumped version to 2.5.2
+
+	
 2005-12-27  Stefan Hundhammer  <sh@suse.de>
 
 	* Added Perl script to write cache files from cron jobs
