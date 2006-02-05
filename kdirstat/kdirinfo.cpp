@@ -1,18 +1,17 @@
 /*
- *   File name:	kdirtree.cpp
+ *   File name:	kdirinfo.cpp
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2006-02-04
  */
 
 
 #include <kapp.h>
 #include <klocale.h>
-#include "kdirtree.h"
+#include "kdirinfo.h"
 #include "kdirtreeiterators.h"
-#include "config.h"
 
 using namespace KDirStat;
 

@@ -4,12 +4,14 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2006-02-04
  */
 
 
-#include "config.h"
-#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <stdio.h>
 #include <sys/errno.h>
 #include <klocale.h>
@@ -20,8 +22,6 @@
 #include "kdirtree.h"
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
-
-#include "config.h"
 
 #define HAVE_STUPID_COMPILER 0
 
@@ -501,6 +501,7 @@ KDirReadJobQueue::enqueue( KDirReadJob * job )
 
 	if ( ! _timer.isActive() )
 	{
+	    // kdDebug() << "First job queued" << endl;
 	    emit startingReading();
 	    _timer.start( 0 );
 	}
@@ -586,6 +587,7 @@ KDirReadJobQueue::jobFinishedNotify( KDirReadJob *job )
     if ( _queue.isEmpty() )	// No new job available - we're done.
     {
 	_timer.stop();
+	// kdDebug() << "No more jobs - finishing" << endl;	
 	emit finished();
     }
 }

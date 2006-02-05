@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-06
+ *   Updated:	2006-02-04
  */
 
 
@@ -13,11 +13,6 @@
 #include <kdebug.h>
 #include "kdirtreecache.h"
 #include "kdirtree.h"
-
-#if HAVE_CONFIG_H
-#    include <config.h>
-#endif
-
 
 #define KB 1024
 #define MB (1024*1024)

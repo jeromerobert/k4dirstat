@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2006-02-04
  */
 
 
@@ -13,7 +13,6 @@
 #include "kdirtree.h"
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
-#include "config.h"
 
 using namespace KDirStat;
 

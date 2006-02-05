@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2006-02-04
  */
 
 
@@ -293,9 +293,6 @@ KDirTreeView::prepareReading()
     busyDisplay();
     emit startingReading();
 
-
-    // Actually do something
-
     _stopWatch.start();
 }
 
@@ -480,12 +477,12 @@ KDirTreeView::slotFinished()
 	 _tree->root()->totalItems() > 0 )	// but file children
     {
 	QListViewItem * root = firstChild();
-	
+
 	if ( root )
 	    root->setOpen( true );
     }
-	 
-    
+
+
 
 #if 0
     for ( int i=0; i < DEBUG_COUNTERS; i++ )

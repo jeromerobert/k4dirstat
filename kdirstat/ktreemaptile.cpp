@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2005-12-26
+ *   Updated:	2006-02-04
  */
 
 
@@ -357,7 +357,6 @@ KTreemapTile::drawShape( QPainter & painter )
 
     if ( size.height() < 1 || size.width() < 1 )
 	return;
-
 
     if ( _parentView->doCushionShading() )
     {

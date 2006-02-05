@@ -1,18 +1,29 @@
 /*
- *   File name:	kdirtree.cpp
+ *   File name:	kfileinfo.cpp
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2006-02-04
  */
 
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <klocale.h>
 
-#include "kdirtree.h"
+#include "kfileinfo.h"
+#include "kdirinfo.h"
 #include "kdirsaver.h"
-#include "config.h"
+
+// Some file systems (NTFS seems to be among them) may handle block fragments well.
+// Don't report files as "sparse" files if the block size is only a few bytes
+// less than the byte size - it may be due to intelligent fragment handling.
+
+#define FRAGMENT_SIZE	2048
+
 
 using namespace KDirStat;
 
@@ -64,13 +75,16 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
     {
 	_size	 	= statInfo->st_size;
 	_blocks	 	= statInfo->st_blocks;
-	_isSparseFile	= isFile() && ( allocatedSize() < _size );
+	_isSparseFile	= isFile()
+	    && _blocks > 0				// if file system can't report blocks
+	    && allocatedSize() + FRAGMENT_SIZE < _size;	// allow for intelligent fragment handling
 
 	if ( _isSparseFile )
 	{
 	    kdDebug() << "Found sparse file: " << this
 		      << "    Byte size: " << formatSize( byteSize() )
 		      << "  Allocated: " << formatSize( allocatedSize() )
+		      << " (" << (int) _blocks << " blocks)"
 		      << endl;
 	}
 
