@@ -1,6 +1,15 @@
+2006-02-04  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed crash on reloading and (sometimes) initial directory reading
+
+	* Fixed bogus "sparse files" reports
+
+	* Bumped version to 2.5.3
+
+
 2006-01-06  Stefan Hundhammer  <sh@suse.de>
 
-	* Automatically open root item if it has only file children 
+	* Automatically open root item if it has only file children
 	  and no subdirs
 
 	* Integrated cache reading into dir read job scheme
@@ -9,11 +18,11 @@
 
 	* Bumped version to 2.5.2
 
-	
+
 2005-12-27  Stefan Hundhammer  <sh@suse.de>
 
 	* Added Perl script to write cache files from cron jobs
-	
+
 
 2005-12-26  Stefan Hundhammer  <sh@suse.de>
 
@@ -45,11 +54,11 @@
 	* Extended "own size" column context menu to show sparse files
 	  and regular files with multiple links
 
-	* Reordered "own size" column context menu for consistency: 
+	* Reordered "own size" column context menu for consistency:
 	  xxx MB (yyy Bytes)
 
 	* Removed currently read path from status line while reading:
-	  Much less flicker, no more constant window resizing, 
+	  Much less flicker, no more constant window resizing,
 	  improved performance
 
 	* Added explanations for sparse files and multiple links to online help
@@ -59,7 +68,7 @@
 
 2004-12-06  Stefan Hundhammer  <sh@suse.de>
 
-	* Added "Open with" cleanup upon request 
+	* Added "Open with" cleanup upon request
 	  by Jarl Friis <jarl@softace.dk>
 
 	* Bumped version to 2.4.3
