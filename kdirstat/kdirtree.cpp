@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-04
+ *   Updated:	2006-02-06
  */
 
 
@@ -37,15 +37,6 @@ KDirTree::KDirTree()
 KDirTree::~KDirTree()
 {
     selectItem( 0 );
-
-    // Jobs still in the job queue are automatically deleted along with the
-    // queue since autoDelete is set.
-    //
-    // However, the queue needs to be cleared first before the entire tree is
-    // deleted, otherwise the dir pointers in each read job becomes invalid too
-    // early.
-
-    _jobQueue.clear();
 
     if ( _root )
 	delete _root;
