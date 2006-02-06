@@ -1,3 +1,9 @@
+2006-02-06  Stefan Hundhammer  <sh@suse.de>
+
+	* Now _really_ fixed crash on directory reading
+	  thanks to Dirk Mueller <dmueller@suse.de> & Michael Matz <matz@suse.de>
+	
+
 2006-02-04  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed crash on reloading and (sometimes) initial directory reading

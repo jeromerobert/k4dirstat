@@ -60,8 +60,11 @@ KDirReadJob::read()
 {
     if ( ! _started )
     {
-	startReading();
 	_started = true;
+	startReading();
+
+ 	// Don't do anything after startReading() - startReading() might call
+ 	// finished() which in turn makes the queue destroy this object
     }
 }
 
@@ -525,7 +528,15 @@ KDirReadJobQueue::dequeue()
 void
 KDirReadJobQueue::clear()
 {
-    _queue.clear();
+    _queue.first();		// set _queue.current() to the first position
+
+    while ( KDirReadJob * job = _queue.current() )
+    {
+	_queue.remove();	// remove current() and move current() to next
+	delete job;
+
+	_queue.next();		// move current() on
+    }
 }
 
 
@@ -579,21 +590,14 @@ KDirReadJobQueue::jobFinishedNotify( KDirReadJob *job )
     // Get rid of the old (finished) job.
 
     _queue.removeFirst();
-
-#warning Memory leak
-#if 0
     delete job;
-#else
-    (void) job;
-#endif
-
 
     // Look for a new job.
 
     if ( _queue.isEmpty() )	// No new job available - we're done.
     {
 	_timer.stop();
-	// kdDebug() << "No more jobs - finishing" << endl;	
+	// kdDebug() << "No more jobs - finishing" << endl;
 	emit finished();
     }
 }
