@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-04
+ *   Updated:	2006-02-06
  */
 
 
@@ -579,7 +579,13 @@ KDirReadJobQueue::jobFinishedNotify( KDirReadJob *job )
     // Get rid of the old (finished) job.
 
     _queue.removeFirst();
+
+#warning Memory leak
+#if 0
     delete job;
+#else
+    (void) job;
+#endif
 
 
     // Look for a new job.
