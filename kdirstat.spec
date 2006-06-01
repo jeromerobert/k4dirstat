@@ -9,7 +9,6 @@
 #
 
 # norootforbuild
-# neededforbuild  kde3-devel-packages
 
 BuildRequires:	kdelibs3-devel
 
