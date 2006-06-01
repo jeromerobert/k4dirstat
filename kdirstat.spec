@@ -1,27 +1,27 @@
 #
-# spec file for package kdirstat 
+# spec file for package kdirstat
 #
-# Copyright (c) 2005 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2006 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 #
-# Please submit bugfixes or comments via http://www.suse.de/feedback/
+# Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
 # norootforbuild
 # neededforbuild  kde3-devel-packages
 
-BuildRequires: aaa_base acl attr bash bind-utils bison bzip2 coreutils cpio cpp cracklib cvs cyrus-sasl db devs diffutils e2fsprogs file filesystem fillup findutils flex gawk gdbm-devel glibc glibc-devel glibc-locale gpm grep groff gzip info insserv klogd less libacl libattr libgcc libnscd libselinux libstdc++ libxcrypt libzio m4 make man mktemp module-init-tools ncurses ncurses-devel net-tools netcfg openldap2-client openssl pam pam-modules patch permissions popt procinfo procps psmisc pwdutils rcs readline sed strace syslogd sysvinit tar tcpd texinfo timezone unzip util-linux vim zlib zlib-devel arts arts-devel autoconf automake binutils expat fam fam-devel fontconfig fontconfig-devel freeglut freeglut-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext glib2 glib2-devel gnome-filesystem jack jack-devel kdelibs3 kdelibs3-devel kdelibs3-doc libart_lgpl libart_lgpl-devel libgcrypt libgcrypt-devel libgpg-error libgpg-error-devel libidn libidn-devel libjpeg libjpeg-devel liblcms liblcms-devel libmng libmng-devel libpng libpng-devel libstdc++-devel libtiff libtiff-devel libtool libxml2 libxml2-devel libxslt libxslt-devel openssl-devel pcre pcre-devel perl python qt3 qt3-devel rpm unsermake update-desktop-files xorg-x11-Mesa xorg-x11-Mesa-devel xorg-x11-devel xorg-x11-libs
+BuildRequires:	kdelibs3-devel
 
-Name:         kdirstat
-URL:          http://kdirstat.sourceforge.net
-License:      GPL
-Group:        Productivity/File utilities
-Summary:      Graphical Directory Statistics for Used Disk Space
-Version:      2.5.3
-Release:      0
-BuildRoot:    %{_tmppath}/%{name}-%{version}-build
-Source0:      kdirstat-%{version}.tar.bz2
+Name:		kdirstat
+URL:		http://kdirstat.sourceforge.net
+License:	GPL
+Group:		Productivity/File utilities
+Summary:	Graphical Directory Statistics for Used Disk Space
+Version:	2.5.3
+Release:	0
+BuildRoot:	%{_tmppath}/%{name}-%{version}-build
+Source0:	kdirstat-%{version}.tar.bz2
 
 %description
 KDirStat (KDE Directory Statistics) is a utility program that sums up
@@ -47,8 +47,16 @@ make
 %install
 . /etc/opt/kde3/common_options
 make DESTDIR=$RPM_BUILD_ROOT $INSTALL_TARGET
+
+%if %suse_version < 1010
 %suse_update_desktop_file %name Filesystem
+%else
+%suse_update_desktop_file -N "KDirStat" -G "Directory Statistics" %name Filesystem
+%endif
+
 %find_lang %name
+
+
 
 %files -f %name.lang
 %defattr(-,root,root)
