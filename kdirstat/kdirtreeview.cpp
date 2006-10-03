@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-04
+ *   Updated:	2006-10-02
  */
 
 
@@ -356,7 +356,6 @@ KDirTreeView::readCache( const QString & cacheFileName )
 {
     clear();
     _tree->clear();
-
     _tree->readCache( cacheFileName );
 }
 

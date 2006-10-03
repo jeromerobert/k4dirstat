@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-06
+ *   Updated:	2006-10-02
  */
 
 
@@ -134,13 +134,19 @@ namespace KDirStat
 	 **/
 	void rewind();
 
-#if 0
 	/**
 	 * Returns the absolute path of the first directory in this cache file
 	 * or an empty string if there is none.
+	 *
+	 * This method expects the cache file to be just opened without any
+	 * previous read() operations on the file. If this is not the case,
+	 * call rewind() immediately before firstDir().
+	 *
+	 * After firstDir(), some records of the cache file will be read.
+	 * Make sure to call rewind() if you intend to read from this cache
+	 * file afterwards.
 	 **/
 	QString firstDir();
-#endif
 
 	/**
 	 * Returns the tree associated with this reader.

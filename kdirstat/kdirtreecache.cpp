@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-04
+ *   Updated:	2006-10-02
  */
 
 
@@ -196,10 +196,8 @@ KCacheReader::KCacheReader( const QString &	fileName,
     _lineNo	= 0;
     _ok		= true;
     _tree	= tree;
-    _lastItem	= 0;
+    _lastItem	= parent;
     _toplevel	= parent;
-
-    (void) parent;	// TO DO
 
     _cache = gzopen( (const char *) fileName, "r" );
 
@@ -213,9 +211,6 @@ KCacheReader::KCacheReader( const QString &	fileName,
 
     // kdDebug() << "Opening " << fileName << " OK" << endl;
     checkHeader();
-
-    if ( _ok && ! parent )
-	_tree->setRoot( 0 );
 }
 
 
@@ -441,21 +436,29 @@ KCacheReader::eof()
 }
 
 
-#if 0
-
 QString
 KCacheReader::firstDir()
 {
-    QString dir;
+    while ( ! gzeof( _cache ) && _ok )
+    {
+	if ( ! readLine() )
+	    return "";
 
-    // TO DO
-    // TO DO
-    // TO DO
+	splitLine();
 
-    return dir;
+	if ( fieldsCount() < 2 )
+	    return "";
+
+	int n = 0;
+	char * type = field( n++ );
+	char * path = field( n++ );
+
+	if ( strcasecmp( type, "D" ) == 0 )
+	    return QString( path );
+    }
+
+    return "";
 }
-
-#endif
 
 
 bool

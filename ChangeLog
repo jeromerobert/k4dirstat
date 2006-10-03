@@ -1,3 +1,11 @@
+2006-10-02  Stefan Hundhammer  <sh@suse.de>
+
+	* Use cache files (with default name .kdirstat.cache.gz) that are
+	  found during directory reading (with local directory reader)
+
+	* Bumped version to 2.5.4
+
+	
 2006-02-06  Stefan Hundhammer  <sh@suse.de>
 
 	* Now _really_ fixed crash on directory reading

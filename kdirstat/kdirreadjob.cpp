@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-06
+ *   Updated:	2006-10-02
  */
 
 
@@ -121,7 +121,8 @@ KLocalDirReadJob::startReading()
 {
     struct dirent *	entry;
     struct stat		statInfo;
-    QString		dirName	 = _dir->url();
+    QString		dirName		 = _dir->url();
+    QString		defaultCacheName = DEFAULT_CACHE_NAME;
 
     if ( ( _diskDir = opendir( dirName ) ) )
     {
@@ -168,9 +169,54 @@ KLocalDirReadJob::startReading()
 		    }
 		    else		// non-directory child
 		    {
-			KFileInfo *child = new KFileInfo( entryName, &statInfo, _tree, _dir );
-			_dir->insertChild( child );
-			childAdded( child );
+			if ( entryName == defaultCacheName )	// .kdirstat.cache.gz found?
+			{
+			    //
+			    // Read content of this subdirectory from cache file
+			    //
+
+			    
+			    KCacheReadJob * cacheReadJob = new KCacheReadJob( _tree, _dir->parent(), fullName );
+			    CHECK_PTR( cacheReadJob );
+			    QString firstDirInCache = cacheReadJob->reader()->firstDir();
+
+			    if ( firstDirInCache == dirName )	// Does this cache file match this directory?
+			    {
+				kdDebug() << "Using cache file " << fullName << " for " << dirName << endl;
+
+				cacheReadJob->reader()->rewind();	// Read offset was moved by firstDir()
+				_tree->addJob( cacheReadJob );	// Job queue will assume ownership of cacheReadJob
+
+				//
+				// Clean up partially read directory content
+				//
+
+				KDirTree * tree = _tree;	// Copy data members to local variables:
+				KDirInfo * dir  = _dir;		// This object will be deleted soon by killAll()
+
+				_queue->killAll( dir );		// Will delete this job as well!
+				// All data members of this object are invalid from here on!
+
+				tree->deleteSubtree( dir );
+
+				return;
+			    }
+			    else
+			    {
+				kdDebug() << "NOT using cache file " << fullName
+					  << " with dir " << firstDirInCache
+					  << " for " << dirName
+					  << endl;
+
+				delete cacheReadJob;
+			    }
+			}
+			else
+			{
+			    KFileInfo *child = new KFileInfo( entryName, &statInfo, _tree, _dir );
+			    _dir->insertChild( child );
+			    childAdded( child );
+			}
 		    }
 		}
 		else			// lstat() error
@@ -559,12 +605,17 @@ KDirReadJobQueue::abort()
 void
 KDirReadJobQueue::killAll( KDirInfo * subtree )
 {
+    if ( ! subtree )
+	return;
+    
     _queue.first();		// set _queue.current() to the first position
 
     while ( KDirReadJob * job = _queue.current() )
     {
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
+	    // kdDebug() << "Killing read job " << job->dir() << endl;
+	    
 	    _queue.remove();	// remove current() and move current() to next
 	    delete job;
 	}

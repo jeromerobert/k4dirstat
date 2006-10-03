@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-06
+ *   Updated:	2006-10-02
  */
 
 
@@ -21,11 +21,11 @@ using namespace KDirStat;
 KDirTree::KDirTree()
     : QObject()
 {
-    _root			= 0;
-    _selection			= 0;
-    _isFileProtocol		= false;
-    _isBusy			= false;
-    _readMethod			= KDirReadUnknown;
+    _root		= 0;
+    _selection		= 0;
+    _isFileProtocol	= false;
+    _isBusy		= false;
+    _readMethod		= KDirReadUnknown;
     
     readConfig();
 
@@ -119,6 +119,7 @@ KDirTree::startReading( const KURL & url )
 	// kdDebug() << "Using local directory reader for " << url.url() << endl;
 	_readMethod	= KDirReadLocal;
 	_root		= KLocalDirReadJob::stat( url, this );
+kdDebug() << "Created root: " << _root << endl;
     }
     else
     {
@@ -341,6 +342,12 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
     }
 
     delete subtree;
+
+    if ( subtree == _root )
+    {
+	selectItem( 0 );
+	_root = 0;
+    }
 
     emit childDeleted();
 }
