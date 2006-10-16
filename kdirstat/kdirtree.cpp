@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-10-02
+ *   Updated:	2006-10-16
  */
 
 
@@ -119,7 +119,6 @@ KDirTree::startReading( const KURL & url )
 	// kdDebug() << "Using local directory reader for " << url.url() << endl;
 	_readMethod	= KDirReadLocal;
 	_root		= KLocalDirReadJob::stat( url, this );
-kdDebug() << "Created root: " << _root << endl;
     }
     else
     {
