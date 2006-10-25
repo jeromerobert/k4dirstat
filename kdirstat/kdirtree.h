@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2006-10-25
  */
 
 
@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <limits.h>
 #include <dirent.h>
+#include <stdlib.h>
 #include <kdebug.h>
 #include "kdirinfo.h"
 #include "kdirreadjob.h"
