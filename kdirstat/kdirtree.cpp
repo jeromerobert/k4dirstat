@@ -30,7 +30,7 @@ KDirTree::KDirTree()
     _isFileProtocol	= false;
     _isBusy		= false;
     _readMethod		= KDirReadUnknown;
-    
+
     readConfig();
 
     connect( & _jobQueue, SIGNAL( finished()     ),
@@ -185,6 +185,12 @@ KDirTree::refresh( KFileInfo *subtree )
 	if ( _selection && _selection->isInSubtree( subtree ) )
 	    selectItem( 0 );
 
+
+	// Clear any old "excluded" status
+
+	subtree->setExcluded( false );
+
+
 	// Get rid of the old subtree.
 
 	emit deletingChild( subtree );
@@ -204,7 +210,9 @@ KDirTree::refresh( KFileInfo *subtree )
 	delete subtree;
 	emit childDeleted();
 
-
+	_isBusy = true;
+	emit startingReading();
+	
 	// Create new subtree root.
 
 	subtree = ( _readMethod == KDirReadLocal ) ?
@@ -247,7 +255,7 @@ KDirTree::abortReading()
 	return;
 
     _jobQueue.abort();
-    
+
     _isBusy = false;
     emit aborted();
 }

@@ -1,6 +1,6 @@
-2007-02-11  Stefan Hundhammer  <sh@suse.de>
+2007-02-12  Stefan Hundhammer  <sh@suse.de>
 
-	* Fixed large file problem on some systems:
+	* Bug fix: Fixed large files (> 2 GB) reported as 0 size on some systems
 	  Now consistently include config.h everywhere
 	  (avoid inconsistent use of lstat() and lstat64())
 
@@ -10,6 +10,8 @@
 
 	* Exclude a */.snapshot/ directory by default
 	  (some backup tools use this to replicate home directories 4 times)
+
+	* Bug fix: Fixed missing progress indicator when refreshing subtrees
 
 	* Bumped version to 2.5.5
 
