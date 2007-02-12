@@ -17,6 +17,7 @@
 #include <kdebug.h>
 #include "kdirtreecache.h"
 #include "kdirtree.h"
+#include "kexcluderules.h"
 
 #define KB 1024
 #define MB (1024*1024)
@@ -194,14 +195,15 @@ KCacheReader::KCacheReader( const QString &	fileName,
 			    KDirInfo *		parent )
     : QObject()
 {
-    _fileName	= fileName;
-    _buffer[0] 	= 0;
-    _line	= _buffer;
-    _lineNo	= 0;
-    _ok		= true;
-    _tree	= tree;
-    _lastItem	= parent;
-    _toplevel	= parent;
+    _fileName		= fileName;
+    _buffer[0] 		= 0;
+    _line		= _buffer;
+    _lineNo		= 0;
+    _ok			= true;
+    _tree		= tree;
+    _toplevel		= parent;
+    _lastDir		= 0;
+    _lastExcludedDir	= 0;
 
     _cache = gzopen( (const char *) fileName, "r" );
 
@@ -305,7 +307,8 @@ KCacheReader::addItem()
     // Path
 
     if ( *raw_path == '/' )
-	_lastItem = 0;
+	_lastDir = 0;
+
 
 
     // Size
@@ -361,7 +364,18 @@ KCacheReader::addItem()
     QString path = KURL::decode_string( QString::fromLatin1( raw_path ) );
     QString name = KURL::decode_string( QString::fromLatin1( raw_name ) );
 
-    KDirInfo * parent = _lastItem;
+    if ( _lastExcludedDir )
+    {
+	if ( path.startsWith( _lastExcludedDirUrl ) )
+	{
+	    // kdDebug() << "Excluding " << path << "/" << name << endl;
+	    return;
+	}
+    }
+
+    // Find parent in tree
+    
+    KDirInfo * parent = _lastDir;
 
     if ( ! parent && _tree->root() )
     {
@@ -369,6 +383,7 @@ KCacheReader::addItem()
 
 	if ( _toplevel )
 	    parent = dynamic_cast<KDirInfo *> ( _toplevel->locate( path ) );
+
 
 	// Fallback: Search the entire tree
 
@@ -378,8 +393,10 @@ KCacheReader::addItem()
 
 	if ( ! parent )	// Still nothing?
 	{
+#if 0
 	    kdError() << _fileName << ":" << _lineNo << ": "
 		      << "Could not locate parent " << path << endl;
+#endif
 
 	    return;	// Ignore this cache line completely
 	}
@@ -391,6 +408,7 @@ KCacheReader::addItem()
 	KDirInfo * dir = new KDirInfo( _tree, parent, name,
 				       mode, size, mtime );
 	dir->setReadState( KDirCached );
+	_lastDir = dir;
 
 	if ( parent )
 	    parent->insertChild( dir );
@@ -406,8 +424,21 @@ KCacheReader::addItem()
 
 	_tree->childAddedNotify( dir );
 
-	if ( ! _lastItem )
-	    _lastItem = dir;
+	if ( dir != _toplevel )
+	{
+	    if ( KExcludeRules::excludeRules()->match( dir->url() ) )
+	    {
+		// kdDebug() << "Excluding " << name << endl;
+		dir->setExcluded();
+		dir->setReadState( KDirOnRequestOnly );
+		_tree->sendFinalizeLocal( dir );
+		dir->finalizeLocal();
+
+		_lastExcludedDir   	= dir;
+		_lastExcludedDirUrl	= _lastExcludedDir->url();
+		_lastDir		= 0;
+	    }
+	}
     }
     else
     {

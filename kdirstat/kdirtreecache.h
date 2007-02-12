@@ -1,10 +1,10 @@
 /*
- *   File name:	kdirtreecache.h
+ *   File name: kdirtreecache.h
  *   Summary:	KDirStat cache reader / writer
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-10-02
+ *   Updated:	2007-02-12
  */
 
 
@@ -55,7 +55,7 @@ namespace KDirStat
 
 	/**
 	 * Format a file size as string - with trailing "G", "M", "K" for
- 	 * "Gigabytes", "Megabytes, "Kilobytes", respectively (provided there
+	 * "Gigabytes", "Megabytes, "Kilobytes", respectively (provided there
 	 * is no fractional part - 27M is OK, 27.2M is not).
 	 **/
 	QString formatSize( KFileSize size );
@@ -242,8 +242,10 @@ namespace KDirStat
 	char *		_fields[ MAX_FIELDS_PER_LINE ];
 	int		_fieldsCount;
 	bool		_ok;
-	KDirInfo *	_lastItem;
 	KDirInfo *	_toplevel;
+	KDirInfo * 	_lastDir;
+	KDirInfo *	_lastExcludedDir;
+	QString		_lastExcludedDirUrl;
     };
 
 }	// namespace KDirStat
