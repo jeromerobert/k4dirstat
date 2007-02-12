@@ -4,9 +4,13 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-02-04
+ *   Updated:	2007-02-11
  */
 
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 
 #include <kapp.h>
 #include <klocale.h>
@@ -96,6 +100,7 @@ KDirInfo::init()
     _totalFiles		= 0;
     _latestMtime	= _mtime;
     _isMountPoint	= false;
+    _isExcluded		= false;
     _summaryDirty	= false;
     _beingDestroyed	= false;
     _readState		= KDirQueued;

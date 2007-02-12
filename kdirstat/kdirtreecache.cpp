@@ -4,9 +4,13 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-10-02
+ *   Updated:	2007-02-12
  */
 
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 
 #include <ctype.h>
 #include <errno.h>

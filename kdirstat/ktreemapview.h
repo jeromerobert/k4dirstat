@@ -4,18 +4,19 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-02-02
+ *   Updated:	2007-02-11
  */
 
 
 #ifndef KTreemapView_h
 #define KTreemapView_h
 
-#include <qcanvas.h>
 
 #ifdef HAVE_CONFIG_H
 #   include <config.h>
 #endif
+
+#include <qcanvas.h>
 
 
 #define MinAmbientLight			0

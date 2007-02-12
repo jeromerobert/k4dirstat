@@ -3,7 +3,7 @@
 <!-- XML GUI description file for KDirStat		-->
 <!--							-->
 <!-- Author:	Stefan Hundhammer (sh@suse.de)		-->
-<!-- Updated:	2005-12-24				-->
+<!-- Updated:	2007-02-11				-->
 
 
 <!DOCTYPE kpartgui SYSTEM "/opt/kde3/share/apps/katexmltools/kpartgui.dtd.xml">
@@ -17,8 +17,11 @@
 	    <Action name="file_open" />
 	    <Action name="file_open_url" />
 	    <Action name="file_open_recent" />
+	    <Separator/>
 	    <Action name="file_refresh_all"/>
 	    <Action name="file_refresh_selected"/>
+	    <Separator/>
+	    <Action name="file_read_excluded_dir"/>
 	    <Action name="file_continue_reading_at_mount_point"/>
 	    <Action name="file_stop_reading"/>
 	    <Separator/>
@@ -119,6 +122,7 @@
 	<Separator/>
 	<Action name="file_refresh_all"/>
 	<Action name="file_refresh_selected"/>
+	<Action name="file_read_excluded_dir"/>
 	<Action name="file_continue_reading_at_mount_point"/>
 	<Separator/>
         <Action name="cleanup_open_with"/>

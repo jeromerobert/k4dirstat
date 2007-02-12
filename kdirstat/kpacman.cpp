@@ -1,13 +1,16 @@
-
 /*
  *   File name:	kpacman.cpp
  *   Summary:	PacMan animation
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2004-03-29
+ *   Updated:	2007-02-11
  */
 
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 
 #include <unistd.h>
 #include <stdlib.h>

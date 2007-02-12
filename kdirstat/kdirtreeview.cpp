@@ -4,9 +4,13 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-10-02
+ *   Updated:	2007-02-12
  */
 
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 
 #include <time.h>
 #include <stdlib.h>
@@ -201,6 +205,7 @@ KDirTreeView::idleDisplay()
     }
 #endif
 
+    setColumnAlignment ( _percentBarCol, AlignLeft );
     _readJobsCol = -1;
 }
 
@@ -1085,6 +1090,11 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	    }
 
 	    setText( view->ownSizeCol(), text );
+	    
+	    if ( _orig->isExcluded() )
+	    {
+		setText( _view->percentBarCol(), i18n( "[excluded]" ) );
+	    }
 	}
 
 	QListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
@@ -1212,7 +1222,14 @@ KDirTreeViewItem::updateSummary()
 	    QString text	= "";
 
 	    if ( jobs > 0 )
+	    {
 		text = i18n( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
+	    }
+	    else if ( _orig->isExcluded() )
+	    {
+		text = i18n( "[excluded]" );
+	    }
+	    
 	    setText( _view->readJobsCol(), text );
 #endif
 	}
@@ -1228,7 +1245,8 @@ KDirTreeViewItem::updateSummary()
 
     if ( _orig->parent() &&				// only if there is a parent as calculation base
 	 _orig->parent()->pendingReadJobs() < 1	&&	// not before subtree is finished reading
-	 _orig->parent()->totalSize() > 0 )		// avoid division by zero
+	 _orig->parent()->totalSize() > 0 &&		// avoid division by zero
+	 ! _orig->isExcluded() )			// not if this is an excluded object (dir)
     {
 	 _percent = ( 100.0 * _orig->totalSize() ) / (float) _orig->parent()->totalSize();
 	 setText( _view->percentNumCol(), formatPercent ( _percent ) );
@@ -1672,8 +1690,9 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 	    }
 	    else
 	    {
-		if ( _view->percentBarCol() == _view->readJobsCol()
-		     && ! _pacMan )
+		if ( ( _view->percentBarCol() == _view->readJobsCol()
+		       && ! _pacMan )
+		     || _orig->isExcluded() )
 		{
 		    QListViewItem::paintCell( painter,
 					      colorGroup,

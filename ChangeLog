@@ -1,3 +1,19 @@
+2007-02-11  Stefan Hundhammer  <sh@suse.de>
+
+	* Fixed large file problem on some systems:
+	  Now consistently include config.h everywhere
+	  (avoid inconsistent use of lstat() and lstat64())
+
+	* Imported latest admin/ subdir for compatibility with recent autoconf
+
+	* Added infrastructure for excluding directories
+
+	* Exclude a */.snapshot/ directory by default
+	  (some backup tools use this to replicate home directories 4 times)
+
+	* Bumped version to 2.5.5
+
+	
 2006-10-02  Stefan Hundhammer  <sh@suse.de>
 
 	* Use cache files (with default name .kdirstat.cache.gz) that are
@@ -10,8 +26,8 @@
 
 	* Now _really_ fixed crash on directory reading
 	  thanks to Dirk Mueller <dmueller@suse.de> & Michael Matz <matz@suse.de>
-	
 
+	
 2006-02-04  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed crash on reloading and (sometimes) initial directory reading

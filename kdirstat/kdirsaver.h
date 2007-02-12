@@ -4,15 +4,16 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2007-02-11
  */
 
 
 #ifndef KDirSaver_h
 #define KDirSaver_h
 
+
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#  include <config.h>
 #endif
 
 #include <kurl.h>

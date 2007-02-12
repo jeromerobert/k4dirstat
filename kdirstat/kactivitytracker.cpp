@@ -1,13 +1,16 @@
-
 /*
  *   File name:	kactivitytracker.cpp
  *   Summary:	Utility object to track user activity
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2007-02-11
  */
 
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 
 #include <kapp.h>
 #include <kdebug.h>

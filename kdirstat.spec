@@ -17,7 +17,7 @@ URL:		http://kdirstat.sourceforge.net
 License:	GPL
 Group:		Productivity/File utilities
 Summary:	Graphical Directory Statistics for Used Disk Space
-Version:	2.5.3
+Version:	2.5.5
 Release:	0
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 Source0:	kdirstat-%{version}.tar.bz2

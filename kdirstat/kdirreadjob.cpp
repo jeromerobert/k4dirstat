@@ -4,9 +4,13 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-10-02
+ *   Updated:	2007-02-12
  */
 
+
+#ifdef HAVE_CONFIG_H
+#   include <config.h>
+#endif
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -22,12 +26,10 @@
 #include "kdirtree.h"
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
-
-#define HAVE_STUPID_COMPILER 0
+#include "kexcluderules.h"
 
 
 using namespace KDirStat;
-
 
 
 KDirReadJob::KDirReadJob( KDirTree * tree,
@@ -146,24 +148,34 @@ KLocalDirReadJob::startReading()
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
-			if ( _dir->device() == subDir->device()	)	// normal case
+			if ( KExcludeRules::excludeRules()->match( fullName ) )
 			{
-			    _tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
+			    subDir->setExcluded();
+			    subDir->setReadState( KDirOnRequestOnly );
+			    _tree->sendFinalizeLocal( subDir );
+			    subDir->finalizeLocal();
 			}
-			else	// The subdirectory we just found is a mount point.
+			else // No exclude rule matched
 			{
-			    // kdDebug() << "Found mount point " << subDir << endl;
-			    subDir->setMountPoint();
-
-			    if ( _tree->crossFileSystems() )
+			    if ( _dir->device() == subDir->device()	)	// normal case
 			    {
 				_tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
 			    }
-			    else
+			    else	// The subdirectory we just found is a mount point.
 			    {
-				subDir->setReadState( KDirOnRequestOnly );
-				_tree->sendFinalizeLocal( subDir );
-				subDir->finalizeLocal();
+				// kdDebug() << "Found mount point " << subDir << endl;
+				subDir->setMountPoint();
+
+				if ( _tree->crossFileSystems() )
+				{
+				    _tree->addJob( new KLocalDirReadJob( _tree, subDir ) );
+				}
+				else
+				{
+				    subDir->setReadState( KDirOnRequestOnly );
+				    _tree->sendFinalizeLocal( subDir );
+				    subDir->finalizeLocal();
+				}
 			    }
 			}
 		    }
@@ -221,7 +233,7 @@ KLocalDirReadJob::startReading()
 		}
 		else			// lstat() error
 		{
-		    // kdWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
+		    kdWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
 
 		    /*
 		     * Not much we can do when lstat() didn't work; let's at
@@ -412,17 +424,6 @@ KioDirReadJob::stat( const KURL & 	url,
     }
     else	// remote stat() failed
 	return 0;
-
-
-#if HAVE_STUPID_COMPILER
-    /**
-     * This is stupid, but GCC 2.95.3 claims that "control reaches end of
-     * non-void function" without this - so let him have this stupid "return".
-     *
-     * Sigh.
-     **/
-    return 0;
-#endif
 }
 
 

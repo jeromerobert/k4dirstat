@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2007-02-11
  */
 
 
@@ -137,6 +137,16 @@ namespace KDirStat
 	 * Reimplemented - inherited from @ref KFileInfo.
 	 **/
 	virtual time_t		latestMtime();
+
+	/**
+	 * Returns 'true' if this had been excluded while reading.
+	 **/
+	virtual bool		isExcluded() const { return _isExcluded; }
+
+	/**
+	 * Set the 'excluded' status. 
+	 **/
+	virtual void		setExcluded( bool excl =true ) { _isExcluded = excl; }
 
 	/**
 	 * Returns whether or not this is a mount point.
@@ -332,15 +342,20 @@ namespace KDirStat
 	 **/
 	void		cleanupDotEntries();
 
+	
+	//
+	// Data members
+	//
 
-	bool		_isDotEntry;		// Flag: is this entry a "dot entry"?
-	bool		_isMountPoint;		// Flag: is this a mount point?
+	bool		_isDotEntry:1;		// Flag: is this entry a "dot entry"?
+	bool		_isMountPoint:1;	// Flag: is this a mount point?
+	bool		_isExcluded:1;		// Flag: was this directory excluded?
 	int		_pendingReadJobs;	// number of open directories in this subtree
 
 	// Children management
 
-	KFileInfo *	_firstChild;	// pointer to the first child
-	KFileInfo *	_dotEntry;	// pseudo entry to hold non-dir children
+	KFileInfo *	_firstChild;		// pointer to the first child
+	KFileInfo *	_dotEntry;		// pseudo entry to hold non-dir children
 
 	// Some cached values
 
@@ -351,8 +366,8 @@ namespace KDirStat
 	int		_totalFiles;
 	time_t		_latestMtime;
 
-	bool		_summaryDirty;	// dirty flag for the cached values
-	bool		_beingDestroyed;
+	bool		_summaryDirty:1;	// dirty flag for the cached values
+	bool		_beingDestroyed:1;
 	KDirReadState	_readState;
 
 

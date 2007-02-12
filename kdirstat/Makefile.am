@@ -21,6 +21,7 @@ kdirstat_SOURCES =				\
 	kdirinfo.cpp				\
 	kdirreadjob.cpp				\
 	kdirtreecache.cpp			\
+	kexcluderules.cpp			\
 	ktreemapview.cpp			\
 	ktreemaptile.cpp			\
 	kcleanup.cpp				\
@@ -42,6 +43,7 @@ noinst_HEADERS =				\
 	kdirinfo.h				\
 	kdirreadjob.h				\
 	kdirtreecache.h				\
+	kexcluderules.h				\
 	ktreemapview.h				\
 	ktreemaptile.h				\
 	kcleanup.h				\

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2007-02-11
  */
 
 
@@ -285,6 +285,21 @@ namespace KDirStat
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual time_t		latestMtime()	{ return _mtime;  }
+
+	/**
+	 * Returns 'true' if this had been excluded while reading.
+	 * Derived classes may want to overwrite this.
+	 **/
+	virtual bool		isExcluded() const { return false; }
+
+	/**
+	 * Set the 'excluded' status. 
+	 *
+	 * This default implementation silently ignores the value passed and
+	 * does nothing. Derived classes may want to overwrite this.
+	 **/
+	virtual void		setExcluded( bool excl )
+	    { ((void) excl); return; }
 
 	/**
 	 * Returns whether or not this is a mount point.

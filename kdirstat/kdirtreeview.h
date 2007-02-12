@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2006-01-06
+ *   Updated:	2007-02-11
  */
 
 
@@ -12,20 +12,9 @@
 #define KDirTreeView_h
 
 
-// Alternative parent class for KDirTreeView.
-//
-// If you change this, don't forget to change the KDirTreeView class
-// declaration also. Unfortunately there this 'define' can't be used -
-// it seems to confuse the 'moc' preprocessor.
-
-#define USE_KLISTVIEW		0
-#define DEBUG_COUNTERS		10
-
-
 #ifdef HAVE_CONFIG_H
 #   include <config.h>
 #endif
-
 
 #include <qdatetime.h>
 #include <qlistview.h>
@@ -33,12 +22,16 @@
 #include <klistview.h>
 #include "kdirtree.h"
 
+#define DEBUG_COUNTERS		10
+
 
 // Forward declarations
 class QWidget;
 class QTimer;
 class QPopupMenu;
 class KPacManAnimation;
+
+#define USE_KLISTVIEW 0
 
 
 // Open a new name space since KDE's name space is pretty much cluttered
