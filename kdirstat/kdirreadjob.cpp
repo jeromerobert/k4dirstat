@@ -374,7 +374,17 @@ KioDirReadJob::entries ( KIO::Job *			job,
 		_dir->insertChild( subDir );
 		childAdded( subDir );
 
-		_tree->addJob( new KioDirReadJob( _tree, subDir ) );
+		if ( KExcludeRules::excludeRules()->match( url.path() ) )
+		{
+		    subDir->setExcluded();
+		    subDir->setReadState( KDirOnRequestOnly );
+		    _tree->sendFinalizeLocal( subDir );
+		    subDir->finalizeLocal();
+		}
+		else // No exclude rule matched
+		{
+		    _tree->addJob( new KioDirReadJob( _tree, subDir ) );
+		}
 	    }
 	    else	// non-directory child
 	    {
