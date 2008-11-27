@@ -815,14 +815,13 @@ KGeneralSettingsPage::apply()
     
     QStringList excludeRulesStringList;
     KExcludeRules::excludeRules()->clear();
-    kdDebug() << "Clearing exclude rules" << endl;
     QListViewItem * item = _excludeRulesListView->firstChild();
     
     while ( item )
     {
 	QString ruleText = item->text(0);
 	excludeRulesStringList.append( ruleText );
-	kdDebug() << "Adding exclude rule " << ruleText << endl;
+	// kdDebug() << "Adding exclude rule " << ruleText << endl;
 	KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
 	item = item->nextSibling();
     }

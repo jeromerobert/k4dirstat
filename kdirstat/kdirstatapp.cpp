@@ -393,7 +393,6 @@ void KDirStatApp::readMainWinConfig()
 
     config->setGroup( "Exclude" );
     QStringList excludeRules = config->readListEntry ( "ExcludeRules" );
-    kdDebug() << "Clearing exclude rules" << endl;
     KExcludeRules::excludeRules()->clear();
     
     for ( QStringList::Iterator it = excludeRules.begin(); it != excludeRules.end(); ++it )
