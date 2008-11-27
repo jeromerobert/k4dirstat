@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2008-11-27
  */
 
 
@@ -18,7 +18,6 @@
 
 // Forward declarations
 class KActionCollection;
-class KDirStat::KCleanup;
 
 
 namespace KDirStat

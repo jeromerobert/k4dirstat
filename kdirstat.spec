@@ -1,7 +1,7 @@
 #
 # spec file for package kdirstat
 #
-# Copyright (c) 2006 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2008 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 #
@@ -17,7 +17,7 @@ URL:		http://kdirstat.sourceforge.net
 License:	GPL
 Group:		Productivity/File utilities
 Summary:	Graphical Directory Statistics for Used Disk Space
-Version:	2.5.5
+Version:	2.6.0
 Release:	0
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 Source0:	kdirstat-%{version}.tar.bz2

@@ -1,3 +1,11 @@
+2008-11-27  Stefan Hundhammer  <sh@suse.de>
+
+	* Applied patch from Christoph Thielecke for GUI support for exclude
+	  rules and tweaked that GUI support some
+
+	* Bumped version to 2.6.0
+
+
 2007-02-12  Stefan Hundhammer  <sh@suse.de>
 
 	* Bug fix: Fixed large files (> 2 GB) reported as 0 size on some systems
@@ -8,14 +16,11 @@
 
 	* Added infrastructure for excluding directories
 
-	* Exclude a */.snapshot/ directory by default
-	  (some backup tools use this to replicate home directories 4 times)
-
 	* Bug fix: Fixed missing progress indicator when refreshing subtrees
 
 	* Bumped version to 2.5.5
 
-	
+
 2006-10-02  Stefan Hundhammer  <sh@suse.de>
 
 	* Use cache files (with default name .kdirstat.cache.gz) that are
@@ -23,13 +28,13 @@
 
 	* Bumped version to 2.5.4
 
-	
+
 2006-02-06  Stefan Hundhammer  <sh@suse.de>
 
 	* Now _really_ fixed crash on directory reading
 	  thanks to Dirk Mueller <dmueller@suse.de> & Michael Matz <matz@suse.de>
 
-	
+
 2006-02-04  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed crash on reloading and (sometimes) initial directory reading

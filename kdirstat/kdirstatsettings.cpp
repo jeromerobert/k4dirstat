@@ -4,7 +4,7 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2007-02-11
+ *   Updated:	2008-11-27
  */
 
 
@@ -23,6 +23,11 @@
 #include <qhgroupbox.h>
 #include <qvgroupbox.h>
 #include <qspinbox.h>
+#include <qlistview.h>
+#include <qinputdialog.h>
+#include <qpushbutton.h>
+#include <qpopupmenu.h>
+#include <qmessagebox.h>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
@@ -31,6 +36,7 @@
 #include "kdirtreeview.h"
 #include "ktreemapview.h"
 #include "kdirstatsettings.h"
+#include "kexcluderules.h"
 
 
 using namespace KDirStat;
@@ -710,7 +716,6 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
 {
-
     // Create layout and widgets.
 
     QVBoxLayout * layout	= new QVBoxLayout( this, 5,			// border
@@ -718,6 +723,8 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 
     QVGroupBox * gbox		= new QVGroupBox( i18n( "Directory Reading" ), this );
     layout->addWidget( gbox );
+
+
 
     _crossFileSystems		= new QCheckBox( i18n( "Cross &File System Boundaries" ), gbox );
     _enableLocalDirReader	= new QCheckBox( i18n( "Use Optimized &Local Directory Read Methods" ), gbox );
@@ -732,12 +739,59 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 
     _enableToolBarAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Tool &Bar" ), gbox );
     _enableTreeViewAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Directory &Tree" ), gbox );
+    layout->addSpacing( 10 );
+    
+    QVGroupBox * excludeBox	= new QVGroupBox( i18n( "&Exclude Rules" ), this );
+    layout->addWidget( excludeBox );
+    
+    _excludeRulesListView	= new QListView( excludeBox );
+    _excludeRulesListView->addColumn( i18n( "Exclude Rule (Regular Expression)" ), 300 );
+    _excludeRuleContextMenu	= 0;
+
+    QGroupBox * buttonBox	= new QHGroupBox( excludeBox );
+    _addExcludeRuleButton	= new QPushButton( i18n( "&Add"    ), buttonBox );
+    _editExcludeRuleButton	= new QPushButton( i18n( "&Edit"   ), buttonBox );
+    _deleteExcludeRuleButton	= new QPushButton( i18n( "&Delete" ), buttonBox );
+    
+    connect( _excludeRulesListView,	SIGNAL( rightButtonClicked        ( QListViewItem *, const QPoint &, int ) ),
+	     this,			SLOT  ( showExcludeRuleContextMenu( QListViewItem *, const QPoint &, int ) ) );
+    
+    connect( _addExcludeRuleButton,	SIGNAL( clicked()        ),
+	     this,			SLOT  ( addExcludeRule() ) );
+    
+    connect( _editExcludeRuleButton,	SIGNAL( clicked()         ),
+	     this,			SLOT  ( editExcludeRule() ) );
+    
+    connect( _deleteExcludeRuleButton,	SIGNAL( clicked()           ),
+	     this,			SLOT  ( deleteExcludeRule() ) );
+
+    connect( _excludeRulesListView,	SIGNAL( doubleClicked( QListViewItem *, const QPoint &, int ) ),
+	     this, 			SLOT  ( editExcludeRule() ) );
 }
 
 
 KGeneralSettingsPage::~KGeneralSettingsPage()
 {
-    // NOP
+    if ( _excludeRuleContextMenu )
+	delete _excludeRuleContextMenu;
+}
+
+
+void
+KGeneralSettingsPage::showExcludeRuleContextMenu( QListViewItem *, const QPoint &pos, int )
+{
+    if ( ! _excludeRuleContextMenu )
+    {
+	_excludeRuleContextMenu = new QPopupMenu( 0 );
+	_excludeRuleContextMenu->insertItem( i18n( "&Edit"   ), this, SLOT( editExcludeRule  () ) );
+	_excludeRuleContextMenu->insertItem( i18n( "&Delete" ), this, SLOT( deleteExcludeRule() ) );
+    }
+
+    if ( _excludeRuleContextMenu && _excludeRulesListView->currentItem() )
+    {
+	_excludeRuleContextMenu->move( pos.x(), pos.y() );
+	_excludeRuleContextMenu->show();
+    }
 }
 
 
@@ -756,6 +810,24 @@ KGeneralSettingsPage::apply()
 
     _mainWin->initPacMan( _enableToolBarAnimation->isChecked() );
     _treeView->enablePacManAnimation( _enableTreeViewAnimation->isChecked() );
+
+    config->setGroup( "Exclude" );
+    
+    QStringList excludeRulesStringList;
+    KExcludeRules::excludeRules()->clear();
+    kdDebug() << "Clearing exclude rules" << endl;
+    QListViewItem * item = _excludeRulesListView->firstChild();
+    
+    while ( item )
+    {
+	QString ruleText = item->text(0);
+	excludeRulesStringList.append( ruleText );
+	kdDebug() << "Adding exclude rule " << ruleText << endl;
+	KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
+	item = item->nextSibling();
+    }
+
+    config->writeEntry( "ExcludeRules", excludeRulesStringList );
 }
 
 
@@ -767,6 +839,10 @@ KGeneralSettingsPage::revertToDefaults()
 
     _enableToolBarAnimation->setChecked( true );
     _enableTreeViewAnimation->setChecked( false );
+    
+    _excludeRulesListView->clear();
+    _editExcludeRuleButton->setEnabled( false );
+    _deleteExcludeRuleButton->setEnabled( false );
 }
 
 
@@ -782,6 +858,16 @@ KGeneralSettingsPage::setup()
     _enableToolBarAnimation->setChecked ( _mainWin->pacManEnabled() );
     _enableTreeViewAnimation->setChecked( _treeView->doPacManAnimation() );
 
+    _excludeRulesListView->clear();
+    KExcludeRule * excludeRule = KExcludeRules::excludeRules()->first();
+
+    while ( excludeRule )
+    {
+	// _excludeRulesListView->insertItem();
+	new QListViewItem( _excludeRulesListView, excludeRule->regexp().pattern() );
+	excludeRule = KExcludeRules::excludeRules()->next();
+    }
+    
     checkEnabledState();
 }
 
@@ -790,6 +876,79 @@ void
 KGeneralSettingsPage::checkEnabledState()
 {
     _crossFileSystems->setEnabled( _enableLocalDirReader->isChecked() );
+
+    int excludeRulesCount = _excludeRulesListView->childCount();
+    
+    _editExcludeRuleButton->setEnabled  ( excludeRulesCount > 0 );
+    _deleteExcludeRuleButton->setEnabled( excludeRulesCount > 0 );
+}
+
+
+void
+KGeneralSettingsPage::addExcludeRule()
+{
+    bool ok;
+    QString text = QInputDialog::getText( i18n( "New exclude rule" ),
+					  i18n( "Regular expression for new exclude rule:" ),
+					  QLineEdit::Normal,
+					  QString::null,
+					  &ok,
+					  this );
+    if ( ok && ! text.isEmpty() )
+    {
+	_excludeRulesListView->insertItem( new QListViewItem ( _excludeRulesListView, text ) );
+	
+    }
+    
+    checkEnabledState();
+}
+
+
+void
+KGeneralSettingsPage::editExcludeRule()
+{
+    QListViewItem * item = _excludeRulesListView->currentItem();
+
+    if ( item )
+    {
+	bool ok;
+	QString text = QInputDialog::getText( i18n( "Edit exclude rule" ),
+					      i18n( "Exclude rule (regular expression):" ),
+					      QLineEdit::Normal,
+					      item->text(0),
+					      &ok,
+					      this );
+	if ( ok )
+	{
+	    if ( text.isEmpty() )
+		_excludeRulesListView->removeItem( item );
+	    else
+		item->setText( 0, text );
+	}
+    }
+    
+    checkEnabledState();
+}
+
+
+void
+KGeneralSettingsPage::deleteExcludeRule()
+{
+    QListViewItem * item = _excludeRulesListView->currentItem();
+
+    if ( item )
+    {
+	QString excludeRule  = item->text(0);
+	int result = KMessageBox::questionYesNo( this,
+						 i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
+						 i18n( "Delete?" ) ); // Window title
+	if ( result == KMessageBox::Yes )
+	{
+	    _excludeRulesListView->removeItem( item );
+	}
+    }
+
+    checkEnabledState();
 }
 
 
@@ -903,8 +1062,8 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), vbox );
 
 
-    // Connections
 
+    // Connections
 
     connect( _ambientLight,		SIGNAL( valueChanged(int) ),
 	     _ambientLightSB,		SLOT  ( setValue    (int) ) );

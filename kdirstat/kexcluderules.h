@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2007-02-12
+ *   Updated:	2008-11-27
  */
 
 
@@ -148,6 +148,11 @@ namespace KDirStat
 	 * or 0 if there is none.
 	 **/
 	KExcludeRule * current() { return _rules.current(); }
+
+	/**
+	 * Clear (delete) all exclude rules.
+	 **/
+	void clear() { _rules.clear(); }
 
     private:
 

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2007-02-11
+ *   Updated:	2008-11-27
  */
 
 
@@ -17,7 +17,6 @@
 #endif
 
 #include <qdict.h>
-#include <qlist.h>
 #include <qintdict.h>
 #include <kaction.h>
 #include <kdebug.h>

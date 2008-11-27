@@ -4,7 +4,7 @@
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2003-01-07
+ *   Updated:	2008-11-27
  */
 
 
@@ -33,6 +33,8 @@ class QSlider;
 class QSpinBox;
 class QVGroupBox;
 class QWidget;
+class QListView;
+class QPopupMenu;
 
 class KColorButton;
 
@@ -610,6 +612,28 @@ namespace KDirStat
 	 **/
 	void checkEnabledState();
 
+				
+    protected slots:
+	
+	/**
+	 * Add a new exclude rule.
+	 **/
+	void addExcludeRule();
+
+	/**
+	 * Edit the currently selected exclude rule.
+	 **/
+	void editExcludeRule();
+
+	/**
+	 * Delete the currently selected exclude rule.
+	 **/
+	void deleteExcludeRule();
+
+	/**
+	 * Show a context menu for the currently selected exclude rule.
+	 **/
+	void showExcludeRuleContextMenu( QListViewItem *, const QPoint &, int );
 
     protected:
 
@@ -623,6 +647,12 @@ namespace KDirStat
 
 	QCheckBox *	_enableToolBarAnimation;
 	QCheckBox *	_enableTreeViewAnimation;
+
+	QListView *	_excludeRulesListView;
+	QPushButton * 	_addExcludeRuleButton;
+	QPushButton *	_editExcludeRuleButton;
+	QPushButton *	_deleteExcludeRuleButton;
+	QPopupMenu *	_excludeRuleContextMenu;
 
     }; // class KGeneralSettingsPage
 
@@ -723,7 +753,7 @@ namespace KDirStat
 	
     }; // class KTreemapPage
 
-}	// namespace KDirStat
+} // namespace KDirStat
 
 
 /**

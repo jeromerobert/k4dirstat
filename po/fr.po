@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kdirstat 2.3.6\n"
-"POT-Creation-Date: 2002-04-19 13:38+0900\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-22 15:47+0100\n"
 "PO-Revision-Date: 2003-04-25 21:45GMT\n"
 "Last-Translator: Michel Grentzinger <mic.grentz@online.fr>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -14,125 +15,299 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.1\n"
 
-#: kcleanup.cpp:171
-msgid ""
-"%1\n"
-"in directory %2"
+#. i18n: file kdirstatui.rc line 35
+#: rc.cpp:9
+#, no-c-format
+msgid "Clean &Up"
+msgstr "&Nettoyage"
+
+#. i18n: file kdirstatui.rc line 59
+#: rc.cpp:12
+#, no-c-format
+msgid "&Treemap"
 msgstr ""
-"%1\n"
-"dans le répertoire %2"
 
-#: kcleanup.cpp:175
-msgid ""
-"%1\n"
-"for file %2"
+#. i18n: file kdirstatui.rc line 78
+#: rc.cpp:18
+#, no-c-format
+msgid "&Report"
+msgstr "&Rapport"
+
+#: kstdcleanup.cpp:27
+msgid "Open in &Konqueror"
+msgstr "Ouvrir dans &Konqueror"
+
+#: kstdcleanup.cpp:47
+msgid "Open in &Terminal"
+msgstr "Ouvrir dans un &Terminal"
+
+#: kstdcleanup.cpp:66
+msgid "&Compress"
+msgstr "&Compresser"
+
+#: kstdcleanup.cpp:84
+msgid "&make clean"
+msgstr "&make clean"
+
+#: kstdcleanup.cpp:101
+msgid "Delete T&rash Files"
+msgstr "Supp&rimer les fichiers détruits"
+
+#: kstdcleanup.cpp:119
+msgid "Delete (to Trash &Bin)"
+msgstr "Supprimer (vers la cor&beille)"
+
+#: kstdcleanup.cpp:138
+msgid "&Delete (no way to undelete!)"
+msgstr "&Supprimer (aucune façon de restaurer !)"
+
+#: kfileinfo.cpp:442 kdirtreeview.cpp:873
+msgid "Bytes"
+msgstr "Octets"
+
+#: kfileinfo.cpp:451
+msgid "kB"
+msgstr "Ko"
+
+#: kfileinfo.cpp:460
+msgid "MB"
+msgstr "Mo"
+
+#: kfileinfo.cpp:467
+msgid "GB"
+msgstr "Go"
+
+#: kdirstatapp.cpp:166
+msgid "Open &URL..."
 msgstr ""
-"%1\n"
-"pour le fichier %2"
 
-#: kcleanup.cpp:180 kdirstatsettings.cpp:100
-msgid "Please confirm"
-msgstr "Veuillez confirmer"
-
-#: kcleanup.cpp:181
-msgid "Confirm"
-msgstr "Confirmation"
-
-#: kdirstatapp.cpp:126
+#: kdirstatapp.cpp:173
 msgid "Refresh &All"
 msgstr "Rafraîchir &tout"
 
-#: kdirstatapp.cpp:130
+#: kdirstatapp.cpp:177
 msgid "Refresh &Selected"
 msgstr "Rafraîchir la &sélection"
 
-#: kdirstatapp.cpp:134
+#: kdirstatapp.cpp:181
+#, fuzzy
+msgid "Read &Excluded Directory"
+msgstr "Ouvre un répertoire récemment utilisé"
+
+#: kdirstatapp.cpp:185
 msgid "Continue Reading at &Mount Point"
 msgstr "Continuer la lecture au point de &montage"
 
-#: kdirstatapp.cpp:144
+#: kdirstatapp.cpp:189
+msgid "Stop Rea&ding"
+msgstr ""
+
+#: kdirstatapp.cpp:193
+msgid "&Write to Cache File..."
+msgstr ""
+
+#: kdirstatapp.cpp:197
+msgid "&Read Cache File..."
+msgstr ""
+
+#: kdirstatapp.cpp:204
+msgid "Open With"
+msgstr ""
+
+#: kdirstatapp.cpp:208
+msgid "Zoom in"
+msgstr ""
+
+#: kdirstatapp.cpp:212
+msgid "Zoom out"
+msgstr ""
+
+#: kdirstatapp.cpp:216
+msgid "Select Parent"
+msgstr ""
+
+#: kdirstatapp.cpp:220
+msgid "Rebuild Treemap"
+msgstr ""
+
+#: kdirstatapp.cpp:224
+msgid "Show Treemap"
+msgstr ""
+
+#: kdirstatapp.cpp:228
+msgid "Help about Treemaps"
+msgstr ""
+
+#: kdirstatapp.cpp:234
 msgid "Send &Mail to Owner"
 msgstr "Envoyer un &courriel au propriétaire"
 
-#: kdirstatapp.cpp:148
+#: kdirstatapp.cpp:238
 msgid "Send &Feedback Mail..."
 msgstr "Envoyer une &remarque par courriel ..."
 
-#: kdirstatapp.cpp:153
+#: kdirstatapp.cpp:243
 msgid "Opens a directory"
 msgstr "Ouvre un répertoire"
 
-#: kdirstatapp.cpp:154
+#: kdirstatapp.cpp:244
+#, fuzzy
+msgid "Opens a (possibly remote) directory"
+msgstr "Ouvre un répertoire récemment utilisé"
+
+#: kdirstatapp.cpp:245
 msgid "Opens a recently used directory"
 msgstr "Ouvre un répertoire récemment utilisé"
 
-#: kdirstatapp.cpp:155
+#: kdirstatapp.cpp:246
 msgid "Closes the current directory"
 msgstr "Ferme le répertoire courant"
 
-#: kdirstatapp.cpp:156
+#: kdirstatapp.cpp:247
 msgid "Re-reads the entire directory tree"
 msgstr "Relire l'arborescence complète du répertoire"
 
-#: kdirstatapp.cpp:157
+#: kdirstatapp.cpp:248
 msgid "Re-reads the selected subtree"
 msgstr "Relire la sous-arborescence sélectionnée"
 
-#: kdirstatapp.cpp:158
+#: kdirstatapp.cpp:249
+msgid "Scan directory tree that was previously excluded"
+msgstr ""
+
+#: kdirstatapp.cpp:250
 msgid "Scan mounted file systems"
 msgstr "Examiner les systèmes de fichier montés"
 
-#: kdirstatapp.cpp:159
+#: kdirstatapp.cpp:251
+#, fuzzy
+msgid "Stops directory reading"
+msgstr "Ouvre un répertoire"
+
+#: kdirstatapp.cpp:252
+msgid ""
+"Writes the current directory tree to a cache file that can be loaded much "
+"faster"
+msgstr ""
+
+#: kdirstatapp.cpp:253
+msgid "Reads a directory tree from a cache file"
+msgstr ""
+
+#: kdirstatapp.cpp:254
 msgid "Quits the application"
 msgstr "Quitte l'application"
 
-#: kdirstatapp.cpp:160
+#: kdirstatapp.cpp:255
 msgid "Copies the URL of the selected item to the clipboard"
 msgstr "Copie l'URL de l'entrée sélectionnée vers le presse-papier"
 
-#: kdirstatapp.cpp:161
-msgid "Enables/disables the toolbar"
+#: kdirstatapp.cpp:256
+#, fuzzy
+msgid "Open file or directory with arbitrary application"
+msgstr "%n nom de fichier / répertoire sans chemin"
+
+#: kdirstatapp.cpp:257
+#, fuzzy
+msgid "Enables/disables the treemap view"
 msgstr "Active/désactive la barre d'outils"
 
-#: kdirstatapp.cpp:162
-msgid "Enables/disables the statusbar"
-msgstr "Active/désactive la barre d'état"
+#: kdirstatapp.cpp:258
+msgid "Zoom treemap in"
+msgstr ""
 
-#: kdirstatapp.cpp:163
+#: kdirstatapp.cpp:259
+msgid "Zoom treemap out"
+msgstr ""
+
+#: kdirstatapp.cpp:260
+msgid "Select parent"
+msgstr ""
+
+#: kdirstatapp.cpp:261
+msgid "Rebuild treemap to fit into available space"
+msgstr ""
+
+#: kdirstatapp.cpp:262
 msgid "Opens the preferences dialog"
 msgstr "Ouvre les préférences"
 
-#: kdirstatapp.cpp:164
+#: kdirstatapp.cpp:263
 msgid "Sends a mail to the owner of the selected subtree"
 msgstr "Envoie un courriel au propriétaire du sous-arbre sélectionné"
 
-#: kdirstatapp.cpp:216 kdirstatapp.cpp:250 kdirstatapp.cpp:349
-#: kdirstatapp.cpp:361 kdirstatapp.cpp:374 kdirstatapp.cpp:383
-#: kdirstatapp.cpp:395
+#: kdirstatapp.cpp:338 kdirstatapp.cpp:372 kdirstatapp.cpp:477
+#: kdirstatapp.cpp:492 kdirstatapp.cpp:504 kdirstatapp.cpp:517
+#: kdirstatapp.cpp:526 kdirstatapp.cpp:538
 msgid "Ready."
 msgstr "Prêt."
 
-#: kdirstatapp.cpp:243 kdirstatapp.cpp:342 kdirstatapp.cpp:356
+#: kdirstatapp.cpp:365 kdirstatapp.cpp:470 kdirstatapp.cpp:499
 msgid "Opening directory..."
 msgstr "Ouverture d'un répertoire..."
 
-#: kdirstatapp.cpp:344
+#: kdirstatapp.cpp:472
 msgid "Open Directory..."
 msgstr "Ouvrir un répertoire..."
 
-#: kdirstatapp.cpp:368
+#: kdirstatapp.cpp:484
+#, fuzzy
+msgid "Opening URL..."
+msgstr "Ouverture d'un répertoire..."
+
+#: kdirstatapp.cpp:487
+msgid "Open URL..."
+msgstr ""
+
+#: kdirstatapp.cpp:511
 msgid "Closing directory..."
 msgstr "Fermeture du répertoire..."
 
-#: kdirstatapp.cpp:381
+#: kdirstatapp.cpp:524
 msgid "Refreshing directory tree..."
 msgstr "Rafraîchissement de l'arborescence du répertoire..."
 
-#: kdirstatapp.cpp:393
+#: kdirstatapp.cpp:536
 msgid "Refreshing selected subtree..."
 msgstr "Rafraîchissement du sous-arbre sélectionné..."
 
-#: kdirstatapp.cpp:482
+#: kdirstatapp.cpp:560
+msgid "Write to Cache File"
+msgstr ""
+
+#: kdirstatapp.cpp:569
+msgid "File %1 exists. Overwrite?"
+msgstr ""
+
+#: kdirstatapp.cpp:570
+msgid "Overwrite?"
+msgstr ""
+
+#: kdirstatapp.cpp:577
+msgid "Writing cache file..."
+msgstr ""
+
+#: kdirstatapp.cpp:581
+msgid "Error writing cache file %1"
+msgstr ""
+
+#: kdirstatapp.cpp:584
+msgid "Write Error"
+msgstr ""
+
+#: kdirstatapp.cpp:587
+msgid "Wrote cache file %1"
+msgstr ""
+
+#: kdirstatapp.cpp:598
+msgid "Read Cache File"
+msgstr ""
+
+#: kdirstatapp.cpp:600
+msgid "Reading cache file..."
+msgstr ""
+
+#: kdirstatapp.cpp:781
 msgid ""
 "Now that you know this program for some time,\n"
 "wouldn't you like to tell the authors your opinion about it?\n"
@@ -146,534 +321,475 @@ msgstr ""
 "Le logiciel Open Source dépend de l'avis des utilisateurs.\n"
 "Vos remarques peuvent nous aider à améliorer le programme."
 
-#: kdirstatapp.cpp:487
+#: kdirstatapp.cpp:786
 msgid "Please tell us your opinion!"
 msgstr "Veuillez nous indiquer votre opinion !"
 
-#: kdirstatapp.cpp:488
+#: kdirstatapp.cpp:787
 msgid "Open &Feedback Form..."
 msgstr "Ouvrir le &formulaire de remarques..."
 
-#: kdirstatapp.cpp:489
+#: kdirstatapp.cpp:788
 msgid "&No, and don't ask again!"
 msgstr "&Non, et ne plus me demander !"
 
-#: kdirtreeview.cpp:59
-msgid "Name"
-msgstr "Nom"
-
-#: kdirtreeview.cpp:61
-msgid "Subtree Percentage"
-msgstr "Pourcentage du sous-arbre"
-
-#: kdirtreeview.cpp:62
-msgid "Percentage"
-msgstr "Pourcentage"
-
-#: kdirtreeview.cpp:63
-msgid "Subtree Total"
-msgstr "Total du sous-arbre"
-
-#: kdirtreeview.cpp:65
-msgid "Own Size"
-msgstr "Taille propre"
-
-#: kdirtreeview.cpp:66
-msgid "Items"
-msgstr "Entrées"
-
-#: kdirtreeview.cpp:67
-msgid "Files"
-msgstr "Fichiers"
-
-#: kdirtreeview.cpp:68
-msgid "Subdirs"
-msgstr "Sous-répertoires"
-
-#: kdirtreeview.cpp:69
-msgid "Last Change"
-msgstr "Modifié"
-
-#: kdirtreeview.cpp:156
-msgid "Read Jobs"
-msgstr "Lectures à faire"
-
-#: kdirtreeview.cpp:405
-#, c-format
-msgid "Finished. Elapsed time: %1"
-msgstr "Terminé. Temps écoulé : %1"
-
-#: kdirtreeview.cpp:440
-msgid "Elapsed time: %1   reading directory %2"
-msgstr "Temps écoulé: %1   lecture du répertoire %2 "
-
-#: kdirtreeview.cpp:704 kdirtreeview.cpp:1451
-msgid "Bytes"
-msgstr "Octets"
-
-#: kdirtreeview.cpp:803
-msgid "Disk usage"
-msgstr "Utilisation du disque"
-
-#: kdirtreeview.cpp:805
-msgid "Please check your disk usage and clean up if you can. Thank you."
-msgstr "Veuillez vérifier l'utilisation de votre disque et nettoyez-le si vous pouvez. Merci."
-
-#: kdirtreeview.cpp:809
-msgid "Disk usage report generated by KDirStat"
-msgstr "Rapport de l'utilisation du disque généré par KDirStat"
-
-#: kdirtreeview.cpp:868
-msgid "<Files>"
-msgstr "<Fichiers>"
-
-#: kdirtreeview.cpp:1460
-msgid "kB"
-msgstr "Ko"
-
-#: kdirtreeview.cpp:1469
-msgid "MB"
-msgstr "Mo"
-
-#: kdirtreeview.cpp:1476
-msgid "GB"
-msgstr "Go"
-
-#: kstdcleanup.cpp:26
-msgid "Open in &Konqueror"
-msgstr "Ouvrir dans &Konqueror"
-
-#: kstdcleanup.cpp:46
-msgid "Open in &Terminal"
-msgstr "Ouvrir dans un &Terminal"
-
-#: kstdcleanup.cpp:65
-msgid "&Compress"
-msgstr "&Compresser"
-
-#: kstdcleanup.cpp:83
-msgid "&make clean"
-msgstr "&make clean"
-
-#: kstdcleanup.cpp:100
-msgid "Delete T&rash Files"
-msgstr "Supp&rimer les fichiers détruits"
-
-#: kstdcleanup.cpp:118
-msgid "Delete (to Trash &Bin)"
-msgstr "Supprimer (vers la cor&beille)"
-
-#: kstdcleanup.cpp:137
-msgid "&Delete (no way to undelete!)"
-msgstr "&Supprimer (aucune façon de restaurer !)"
-
-#: kcleanupcollection.cpp:234
-#, c-format
-msgid "User Defined Cleanup #&%1"
-msgstr "Nettoyage défini par l'utilisateur #&%1"
-
-#: kcleanupcollection.cpp:237
-#, c-format
-msgid "User Defined Cleanup #%1"
-msgstr "Nettoyage défini par l'utilisateur #%1"
-
-#: kdirstatsettings.cpp:39
-msgid "Settings"
-msgstr "Paramètres"
-
-#: kdirstatsettings.cpp:68
-msgid "&Cleanups"
-msgstr "&Nettoyages"
-
-#: kdirstatsettings.cpp:72
-msgid "&Tree Colors"
-msgstr "&Couleurs de l'arborescence"
-
-#: kdirstatsettings.cpp:98
+#: kdirstatmain.cpp:25
 msgid ""
-"Really revert all settings to their default values?\n"
-"You will lose all changes you ever made!"
+"KDirStat - Directory statistics.\n"
+"\n"
+"Shows where all your disk space has gone\n"
+"and helps you clean it up.\n"
+"\n"
+"\n"
+"If you have any comments or if you would simply like to tell your opinion\n"
+"about this program, please use \"Send Feedback Mail\" from the \"Help\" "
+"menu.\n"
+"\n"
+"Any feedback (even negative!) is appreciated."
 msgstr ""
-"Revenir vraiment aux valeurs par défaut pour tous les paramètres ?\n"
-"Vous perdrez tous les changements déjà effectués !\""
 
-#: kdirstatsettings.cpp:101
-msgid "&Really revert to defaults"
-msgstr "&Revenir vraiment aux valeurs par défaut"
+#: kdirstatmain.cpp:41
+msgid "Directory or URL to open"
+msgstr ""
 
-#: kdirstatsettings.cpp:185
-#, c-format
-msgid "Tree level %1"
-msgstr "Niveau de l'arborescence %1"
+#: kdirstatmain.cpp:48
+msgid "KDirStat"
+msgstr ""
 
-#: kdirstatsettings.cpp:527
-msgid "&Enabled"
-msgstr "&Activé"
+#: kdirstatmain.cpp:54
+msgid ""
+"\n"
+"If you have any comments or if you would simply like to tell\n"
+"your opinion about this program, please use \n"
+"\"Send Feedback Mail\" from the \"Help\" menu.\n"
+"\n"
+"Any feedback (even negative!) is appreciated."
+msgstr ""
 
-#: kdirstatsettings.cpp:564
-msgid "&Title:"
-msgstr "&Titre : "
+#: kdirstatmain.cpp:63
+msgid "All the people who worked on SequoiaView"
+msgstr ""
 
-#: kdirstatsettings.cpp:565
-msgid "&Command line:"
-msgstr "Ligne de &commande : "
+#: kdirstatmain.cpp:64
+msgid "for showing just how useful treemaps really can be.\n"
+msgstr ""
 
-#: kdirstatsettings.cpp:567
-#, c-format
-msgid "%p full path"
-msgstr "%p chemin complet"
+#: kdirstatmain.cpp:68
+msgid "Jarke J. van Wijk, Huub van de Wetering, and Mark Bruls"
+msgstr ""
 
-#: kdirstatsettings.cpp:570
-#, c-format
-msgid "%n file / directory name without path"
-msgstr "%n nom de fichier / répertoire sans chemin"
+#: kdirstatmain.cpp:69
+msgid "for their papers about treemaps.\n"
+msgstr ""
 
-#: kdirstatsettings.cpp:576
-msgid "&Recurse into subdirectories"
-msgstr "&Traiter récursivement les sous-répertoires"
+#: kdirstatmain.cpp:74
+msgid ""
+"for his ingenious idea of treemaps -\n"
+"a truly intuitive way of visualizing tree contents.\n"
+msgstr ""
 
-#: kdirstatsettings.cpp:581
-msgid "&Ask for confirmation"
-msgstr "&Demander une confirmation"
+#: kdirstatmain.cpp:80
+msgid ""
+"for showing that all the work involved with such a project\n"
+"is really appreciated out there.\n"
+msgstr ""
 
-#: kdirstatsettings.cpp:587
-msgid "Works for..."
-msgstr "Fonctionne avec les..."
+#: kcleanup.cpp:173
+msgid ""
+"%1\n"
+"in directory %2"
+msgstr ""
+"%1\n"
+"dans le répertoire %2"
 
-#: kdirstatsettings.cpp:593
-msgid "&Directories"
-msgstr "&Répertoires"
+#: kcleanup.cpp:177
+msgid ""
+"%1\n"
+"for file %2"
+msgstr ""
+"%1\n"
+"pour le fichier %2"
 
-#: kdirstatsettings.cpp:594
-msgid "&Files"
-msgstr "&Fichiers"
+#: kcleanup.cpp:182 kdirstatsettings.cpp:116
+#, fuzzy
+msgid "Please Confirm"
+msgstr "Veuillez confirmer"
 
-#: kdirstatsettings.cpp:595
-msgid "<Files> p&seudo entries"
-msgstr "&Pseudos-entrées <Fichiers>"
+#: kcleanup.cpp:183
+msgid "Confirm"
+msgstr "Confirmation"
 
-#: kdirstatsettings.cpp:605
-msgid "On local machine only ('file:/' protocol)"
-msgstr "Uniquement sur la machine locale (protocole 'file:/')"
-
-#: kdirstatsettings.cpp:606
-msgid "Network transparent (ftp, smb, tar, ...)"
-msgstr "A travers le réseau (ftp, smb, tar, ...)"
-
-#: kdirstatsettings.cpp:626
-msgid "Refresh &Policy:"
-msgstr "Règl&es de rafraîchissement : "
-
-#: kdirstatsettings.cpp:637
-msgid "No refresh"
-msgstr "Pas de rafraîchissement"
-
-#: kdirstatsettings.cpp:638
-msgid "Refresh this entry"
-msgstr "Rafraîchir cette entrée"
-
-#: kdirstatsettings.cpp:639
-msgid "Refresh this entry's parent"
-msgstr "Rafraîchir le parent de cette entrée"
-
-#: kdirstatsettings.cpp:640
-msgid "Assume entry has been deleted"
-msgstr "S'assurer que l'entrée a été supprimée"
-
-#: kdirstatfeedback.cpp:36
+#: kdirstatfeedback.cpp:37
 msgid "What is your general opinion about this program?"
 msgstr "Quelle est votre impression générale sur ce programme ?"
 
-#: kdirstatfeedback.cpp:38
+#: kdirstatfeedback.cpp:39
 msgid "It's one of my favourites"
 msgstr "C'est l'un de mes préféré"
 
-#: kdirstatfeedback.cpp:39
+#: kdirstatfeedback.cpp:40
 msgid "I like it"
 msgstr "Je l'adore"
 
-#: kdirstatfeedback.cpp:40
+#: kdirstatfeedback.cpp:41
 msgid "It's sometimes useful"
 msgstr "Il est parfois utile"
 
-#: kdirstatfeedback.cpp:41
+#: kdirstatfeedback.cpp:42
 msgid "It's average"
 msgstr "Il est moyen"
 
-#: kdirstatfeedback.cpp:42
+#: kdirstatfeedback.cpp:43
 msgid "Nice try, but this could be done better"
 msgstr "Satisfaisant, mais celà pourrait être meilleur"
 
-#: kdirstatfeedback.cpp:43
+#: kdirstatfeedback.cpp:44
 msgid "It's poor"
 msgstr "Il est médiocre"
 
-#: kdirstatfeedback.cpp:44
+#: kdirstatfeedback.cpp:45
 msgid "It's useless"
 msgstr "Il est inutile"
 
-#: kdirstatfeedback.cpp:45
+#: kdirstatfeedback.cpp:46
 msgid "It's crap"
 msgstr "C'est de la merde"
 
-#: kdirstatfeedback.cpp:47
+#: kdirstatfeedback.cpp:48
 msgid "Which features of this program do you like?"
 msgstr "Quelles fonctionnalités de ce programme aimez-vous ?"
 
-#: kdirstatfeedback.cpp:50
+#: kdirstatfeedback.cpp:51
 msgid "Which features don't you like?"
 msgstr "Quelles fonctionnalités n'aimez-vous pas ?"
 
-#: kdirstatfeedback.cpp:53
+#: kdirstatfeedback.cpp:54
 msgid "Which features do you never use?"
 msgstr "Quelles fonctionnalités n'utilisez-vous jamais ?"
 
-#: kdirstatfeedback.cpp:56
+#: kdirstatfeedback.cpp:57
 msgid "What is your favourite feature?"
 msgstr "Quelle est votre fonctionnalité préférée ?"
 
-#: kdirstatfeedback.cpp:59
+#: kdirstatfeedback.cpp:60
 msgid "Are there features you are missing?"
 msgstr "Voyez-vous des fonctionnalités manquantes ?"
 
-#: kdirstatfeedback.cpp:60
+#: kdirstatfeedback.cpp:61
 msgid "Yes, a lot! (please add comment below)"
 msgstr "Oui, beaucoup ! (veuillez ajouter vos commentaires ci-dessous)"
 
 #: kdirstatfeedback.cpp:62
+msgid "Some (please add comment below)"
+msgstr "Quelques-unes (veuillez ajouter vos commentaires ci-dessous)"
+
+#: kdirstatfeedback.cpp:63
 msgid "None"
 msgstr "Aucune"
 
-#: kdirstatfeedback.cpp:63
+#: kdirstatfeedback.cpp:64
 msgid "It has too many features already!"
 msgstr "Il y a déjà trop de fonctionnalités !"
 
-#: kdirstatfeedback.cpp:65
+#: kdirstatfeedback.cpp:66
 msgid "How do you rate the stability of this program?"
 msgstr "Comment évaluez-vous la stabilité de ce programme ?"
 
-#: kdirstatfeedback.cpp:66
+#: kdirstatfeedback.cpp:67
 msgid "Rock solid"
 msgstr "Solide comme un roc"
 
-#: kdirstatfeedback.cpp:67 kdirstatfeedback.cpp:74
+#: kdirstatfeedback.cpp:68 kdirstatfeedback.cpp:75
 msgid "Good"
 msgstr "Bonne"
 
-#: kdirstatfeedback.cpp:68 kdirstatfeedback.cpp:75 kdirstatfeedback.cpp:82
-#: kdirstatfeedback.cpp:89
+#: kdirstatfeedback.cpp:69 kdirstatfeedback.cpp:76 kdirstatfeedback.cpp:83
+#: kdirstatfeedback.cpp:90
 msgid "Average"
 msgstr "Moyenne"
 
-#: kdirstatfeedback.cpp:69 kdirstatfeedback.cpp:76
+#: kdirstatfeedback.cpp:70 kdirstatfeedback.cpp:77
 msgid "Poor"
 msgstr "Médiocre"
 
-#: kdirstatfeedback.cpp:70
+#: kdirstatfeedback.cpp:71
 msgid "It keeps crashing all the time"
 msgstr "Il n'arrête pas de planter"
 
-#: kdirstatfeedback.cpp:72
+#: kdirstatfeedback.cpp:73
 msgid "How do you rate the performance of this program?"
 msgstr "Comment évaluez-vous la performance de ce programme ?"
 
-#: kdirstatfeedback.cpp:73
+#: kdirstatfeedback.cpp:74
 msgid "Great"
 msgstr "Excellente"
 
-#: kdirstatfeedback.cpp:77
+#: kdirstatfeedback.cpp:78
 msgid "It's so slow it drives me nuts"
 msgstr "Il est tellement lent qu'il me rend fou"
 
-#: kdirstatfeedback.cpp:79
+#: kdirstatfeedback.cpp:80
 msgid "What is your experience with computers in general?"
 msgstr "Quelle est votre expérience informatique globalement ?"
 
-#: kdirstatfeedback.cpp:80 kdirstatfeedback.cpp:87
+#: kdirstatfeedback.cpp:81 kdirstatfeedback.cpp:88
 msgid "Expert"
 msgstr "Expert"
 
-#: kdirstatfeedback.cpp:81 kdirstatfeedback.cpp:88
+#: kdirstatfeedback.cpp:82 kdirstatfeedback.cpp:89
 msgid "Fair"
 msgstr "Correct"
 
-#: kdirstatfeedback.cpp:83 kdirstatfeedback.cpp:90
+#: kdirstatfeedback.cpp:84 kdirstatfeedback.cpp:91
 msgid "Learning"
 msgstr "Apprenti"
 
-#: kdirstatfeedback.cpp:84 kdirstatfeedback.cpp:91
+#: kdirstatfeedback.cpp:85 kdirstatfeedback.cpp:92
 msgid "Newbie"
 msgstr "Débutant"
 
-#: kdirstatfeedback.cpp:86
+#: kdirstatfeedback.cpp:87
 msgid "What is your experience with Unix/Linux systems?"
 msgstr "Quelle est votre expérience avec les systèmes Unix/Linux ?"
 
-#: kdirstatfeedback.cpp:93
-msgid "Did you have trouble figuring out how to work with this program?"
+#: kdirstatfeedback.cpp:94
+#, fuzzy
+msgid ""
+"Did you have trouble figuring out how to work with this program in general?"
 msgstr "Avez-vous eu du mal à savoir comment travailler avec ce programme ?"
 
-#: kdirstatfeedback.cpp:95
+#: kdirstatfeedback.cpp:96
 msgid "No problem"
 msgstr "Aucun problème"
 
-#: kdirstatfeedback.cpp:96
+#: kdirstatfeedback.cpp:97
 msgid "Some"
 msgstr "Un peu"
 
-#: kdirstatfeedback.cpp:97
+#: kdirstatfeedback.cpp:98 kdirstatfeedback.cpp:136
 msgid "I'm still learning"
 msgstr "Je suis encore en train d'apprendre"
 
-#: kdirstatfeedback.cpp:98
+#: kdirstatfeedback.cpp:99
 msgid "I didn't have a clue what to do at first"
 msgstr "Je n'avais pas la moindre idée de ce qu'il fallait faire au début"
 
-#: kdirstatfeedback.cpp:99
+#: kdirstatfeedback.cpp:100 kdirstatfeedback.cpp:137
 msgid "I still don't have a clue what to do"
 msgstr "Je n'ai toujours pas la moindre idée de ce qu'il faut faire"
 
-#: kdirstatfeedback.cpp:101
+#: kdirstatfeedback.cpp:102
 msgid "Where do you use this program most?"
 msgstr "Où utilisez-vous ce programme le plus souvent ?"
 
-#: kdirstatfeedback.cpp:102
+#: kdirstatfeedback.cpp:103
 msgid "At work"
 msgstr "Au travail"
 
-#: kdirstatfeedback.cpp:103
+#: kdirstatfeedback.cpp:104
 msgid "At home"
 msgstr "A la maison"
 
-#: kdirstatfeedback.cpp:104
+#: kdirstatfeedback.cpp:105
 msgid "At university / school"
 msgstr "A l'université / à l'école"
 
-#: kdirstatfeedback.cpp:106
+#: kdirstatfeedback.cpp:107
 msgid "What is your primary role there?"
 msgstr "Quelle est votre fonction la-bàs ?"
 
-#: kdirstatfeedback.cpp:107 kdirstatfeedback.cpp:115
+#: kdirstatfeedback.cpp:108 kdirstatfeedback.cpp:116
 msgid "Home user"
 msgstr "Utilisateur personnel"
 
-#: kdirstatfeedback.cpp:108 kdirstatfeedback.cpp:116
+#: kdirstatfeedback.cpp:109 kdirstatfeedback.cpp:117
 msgid "Student"
 msgstr "Etudiant"
 
-#: kdirstatfeedback.cpp:109 kdirstatfeedback.cpp:117
+#: kdirstatfeedback.cpp:110 kdirstatfeedback.cpp:118
 msgid "Educational (teacher / professor)"
 msgstr "Education (enseignant / professeur)"
 
-#: kdirstatfeedback.cpp:110 kdirstatfeedback.cpp:118
+#: kdirstatfeedback.cpp:111 kdirstatfeedback.cpp:119
 msgid "Non-computer related work"
 msgstr "Travail non lié à l'informatique"
 
-#: kdirstatfeedback.cpp:111 kdirstatfeedback.cpp:119
+#: kdirstatfeedback.cpp:112 kdirstatfeedback.cpp:120
 msgid "Developer"
 msgstr "Développeur"
 
-#: kdirstatfeedback.cpp:112 kdirstatfeedback.cpp:120
+#: kdirstatfeedback.cpp:113 kdirstatfeedback.cpp:121
 msgid "System administrator"
 msgstr "Administrateur système"
 
-#: kdirstatfeedback.cpp:114
+#: kdirstatfeedback.cpp:115
 msgid "Do you have any other roles there?"
 msgstr "Avez-vous d'autres fonctions la-bàs ?"
 
-#: kdirstatfeedback.cpp:122
+#: kdirstatfeedback.cpp:123
 msgid "How did you get to know this program?"
 msgstr "Comment avez-vous connu ce programme ?"
 
-#: kdirstatfeedback.cpp:123
+#: kdirstatfeedback.cpp:124
 msgid "In a menu on my machine"
 msgstr "Dans un menu de ma machine"
 
-#: kdirstatfeedback.cpp:124
+#: kdirstatfeedback.cpp:125
 msgid "Somebody told me about it"
 msgstr "Quelqu'un m'en a parlé"
 
-#: kdirstatfeedback.cpp:125
+#: kdirstatfeedback.cpp:126
 msgid "On the internet"
 msgstr "Sur internet"
 
-#: kdirstatfeedback.cpp:126
+#: kdirstatfeedback.cpp:127
 msgid "Printed magazine / book"
 msgstr "Magazine imprimé / livre"
 
-#: kdirstatfeedback.cpp:127
+#: kdirstatfeedback.cpp:128
 msgid "Other (please add comment below)"
 msgstr "Autre (veuillez ajoutez vos commentaires ci-dessous)"
 
-#: kdirstatfeedback.cpp:129
-msgid "Did you ever get a KDirStat mail report telling you to clean up disk space?"
-msgstr "Avez-vous déjà recu un courriel de KDirStat vous indiquant de libérer de l'espace disque ?"
+#: kdirstatfeedback.cpp:130
+msgid ""
+"Did you ever get a KDirStat mail report telling you to clean up disk space?"
+msgstr ""
+"Avez-vous déjà recu un courriel de KDirStat vous indiquant de libérer de "
+"l'espace disque ?"
 
-#: kdirstatfeedback.cpp:132
+#: kdirstatfeedback.cpp:133
+#, fuzzy
+msgid "Could you figure yet out how to work with the treemaps?"
+msgstr "Avez-vous eu du mal à savoir comment travailler avec ce programme ?"
+
+#: kdirstatfeedback.cpp:134
+msgid "I became an expert at it"
+msgstr ""
+
+#: kdirstatfeedback.cpp:135
+msgid "I got a fairly good idea of it"
+msgstr ""
+
+#: kdirstatfeedback.cpp:138
+msgid "Treemaps? Huh? What the hell is that?"
+msgstr ""
+
+#: kdirstatfeedback.cpp:140
+msgid "What do you think about the treemaps?"
+msgstr ""
+
+#: kdirstatfeedback.cpp:141
+msgid "They are useless"
+msgstr ""
+
+#: kdirstatfeedback.cpp:142
+msgid "The display is confusing"
+msgstr ""
+
+#: kdirstatfeedback.cpp:143
+msgid "They look ugly"
+msgstr ""
+
+#: kdirstatfeedback.cpp:144
+msgid "They look nice"
+msgstr ""
+
+#: kdirstatfeedback.cpp:145
+msgid "They help finding large files"
+msgstr ""
+
+#: kdirstatfeedback.cpp:146
+msgid "I could do with the treemap view alone"
+msgstr ""
+
+#: kdirstatfeedback.cpp:147
+msgid "The combination of tree view and treemaps is great"
+msgstr ""
+
+#: kdirstatfeedback.cpp:148
+msgid "I want more info inside the treemap view"
+msgstr ""
+
+#: kdirstatfeedback.cpp:149
+msgid "Leave the treemaps as they are right now"
+msgstr ""
+
+#: kdirstatfeedback.cpp:151
 msgid "Would you recommend this program to a friend?"
 msgstr "Conseillerez-vous ce programme à un ami ?"
 
-#: kdirstatfeedback.cpp:143
+#: kdirstatfeedback.cpp:162
 msgid "The directory tree display in general"
 msgstr "L'affichage de l'arborescence des répertoires en général"
 
-#: kdirstatfeedback.cpp:144
+#: kdirstatfeedback.cpp:163
 msgid "Percentage bars as graphical display of relative sizes"
 msgstr "L'affichage en barres graphiques du pourcentage des tailles relatives"
 
-#: kdirstatfeedback.cpp:145
+#: kdirstatfeedback.cpp:164
 msgid "Files apart from directories in a separate <Files> item"
-msgstr "L'ensemble des fichiers d'un répertoire dans une entrée <Fichiers> séparée"
+msgstr ""
+"L'ensemble des fichiers d'un répertoire dans une entrée <Fichiers> séparée"
 
-#: kdirstatfeedback.cpp:147
+#: kdirstatfeedback.cpp:166
+#, fuzzy
+msgid "Treemaps in general"
+msgstr "Les actions de nettoyage en général"
+
+#: kdirstatfeedback.cpp:167
+msgid "The cushioned treemap rendering"
+msgstr ""
+
+#: kdirstatfeedback.cpp:169
 msgid "Cleanup actions in general"
 msgstr "Les actions de nettoyage en général"
 
-#: kdirstatfeedback.cpp:148
+#: kdirstatfeedback.cpp:170
 msgid "Predefined cleanup actions"
 msgstr "Les actions de nettoyage prédéfinies"
 
-#: kdirstatfeedback.cpp:149
+#: kdirstatfeedback.cpp:171
 msgid "User defined cleanup actions"
 msgstr "Les actions de nettoyage prédéfinies par l'utilisateur"
 
-#: kdirstatfeedback.cpp:150
+#: kdirstatfeedback.cpp:172
 msgid "Cleanup action configuration"
 msgstr "La configuration des actions de nettoyage"
 
-#: kdirstatfeedback.cpp:152
+#: kdirstatfeedback.cpp:174
 msgid "Different colors in percentage bars"
 msgstr "Les couleurs différentes dans les barres de pourcentage"
 
-#: kdirstatfeedback.cpp:153
+#: kdirstatfeedback.cpp:175
 msgid "Tree color configuration"
 msgstr "La configuration des couleurs de l'arborescence"
 
-#: kdirstatfeedback.cpp:154
+#: kdirstatfeedback.cpp:176
 msgid "Staying on one file system"
 msgstr "Le fait de rester sur un système de fichier"
 
-#: kdirstatfeedback.cpp:155
+#: kdirstatfeedback.cpp:177
 msgid "The \"mail to owner\" facility"
 msgstr "La fonction \"envoyer un courriel au propriétaire\""
 
-#: kdirstatfeedback.cpp:156
+#: kdirstatfeedback.cpp:178
 msgid "This \"feedback mail\" facility"
 msgstr "La fonction \"envoyer une remarque par courriel\""
 
-#: kdirstatfeedback.cpp:158
+#: kdirstatfeedback.cpp:180
 msgid "Human readable sizes (kB, MB, ...)"
 msgstr "Les tailles lisibles facilement (Ko, Mo, ...)"
 
-#: kdirstatfeedback.cpp:159
+#: kdirstatfeedback.cpp:181
 msgid "All the numbers in the tree display"
 msgstr "Tous les chiffres dans l'affichage de l'arborescence"
 
-#: kdirstatfeedback.cpp:160
+#: kdirstatfeedback.cpp:182
 msgid "Last change time of an entire directory tree"
-msgstr "Heure de la dernière modification de l'arborescence entière d'un répertoire"
+msgstr ""
+"Heure de la dernière modification de l'arborescence entière d'un répertoire"
 
-#: kdirstatfeedback.cpp:161
+#: kdirstatfeedback.cpp:183
 msgid "The PacMan animation"
 msgstr "L'animation PacMan"
 
@@ -690,7 +806,10 @@ msgid ""
 "<p><b>Please tell us your opinion about this program.</b></p><p>You will be "
 "able to review everything in your mailer before any mail is sent.<br>Nothing "
 "will be sent behind your back.</p>"
-msgstr "<p><b>Veuillez nous indiquer votre opinion à propos de ce programme.</b></p><p>Vous pourrez revoir toute chose dans votre client de courrier avant que le courriel ne soit envoyé <br>Rien ne sera envoyé à votre insu.</p>"
+msgstr ""
+"<p><b>Veuillez nous indiquer votre opinion à propos de ce programme.</b></"
+"p><p>Vous pourrez revoir toute chose dans votre client de courrier avant que "
+"le courriel ne soit envoyé <br>Rien ne sera envoyé à votre insu.</p>"
 
 #: kfeedback.cpp:116
 msgid "Questions marked with "
@@ -701,7 +820,8 @@ msgid " must be answered before a mail can be sent."
 msgstr "doivent être remplies avant qu'un courriel ne puisse être envoyé."
 
 #: kfeedback.cpp:136
-msgid "&Additional comments:"
+#, fuzzy
+msgid "&Additional Comments:"
 msgstr "Rem&arques supplémentaires"
 
 #: kfeedback.cpp:314
@@ -712,15 +832,390 @@ msgstr "oui"
 msgid "no"
 msgstr "non"
 
-#: kdirstatui.rc:32
-msgid "Clean &Up"
-msgstr "&Nettoyage"
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr ""
 
-#: kdirstatui.rc:60
-msgid "&Report"
-msgstr "&Rapport"
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""
 
-#~ #: kdirstatfeedback.cpp:61
-#~ msgid "Some (please add comment below)"
-#~ msgstr "Quelques-unes (veuillez ajouter vos commentaires ci-dessous)"
+#: kdirtreeview.cpp:68
+msgid "Name"
+msgstr "Nom"
 
+#: kdirtreeview.cpp:70
+msgid "Subtree Percentage"
+msgstr "Pourcentage du sous-arbre"
+
+#: kdirtreeview.cpp:71
+msgid "Percentage"
+msgstr "Pourcentage"
+
+#: kdirtreeview.cpp:72
+msgid "Subtree Total"
+msgstr "Total du sous-arbre"
+
+#: kdirtreeview.cpp:74
+msgid "Own Size"
+msgstr "Taille propre"
+
+#: kdirtreeview.cpp:75
+msgid "Items"
+msgstr "Entrées"
+
+#: kdirtreeview.cpp:77
+msgid "Subdirs"
+msgstr "Sous-répertoires"
+
+#: kdirtreeview.cpp:78
+msgid "Last Change"
+msgstr "Modifié"
+
+#: kdirtreeview.cpp:173
+msgid "Read Jobs"
+msgstr "Lectures à faire"
+
+#: kdirtreeview.cpp:466
+msgid "Finished. Elapsed time: %1"
+msgstr "Terminé. Temps écoulé : %1"
+
+#: kdirtreeview.cpp:508
+#, fuzzy
+msgid "Aborted. Elapsed time: %1"
+msgstr "Terminé. Temps écoulé : %1"
+
+#: kdirtreeview.cpp:544
+msgid "Elapsed time: %1   reading directory %2"
+msgstr "Temps écoulé: %1   lecture du répertoire %2 "
+
+#: kdirtreeview.cpp:548
+#, fuzzy
+msgid "Elapsed time: %1"
+msgstr "Terminé. Temps écoulé : %1"
+
+#: kdirtreeview.cpp:823
+msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
+msgstr ""
+
+#: kdirtreeview.cpp:831
+msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
+msgstr ""
+
+#: kdirtreeview.cpp:877
+msgid "%1 (%2 Bytes)"
+msgstr ""
+
+#: kdirtreeview.cpp:982
+#, fuzzy
+msgid "Disk Usage"
+msgstr "Utilisation du disque"
+
+#: kdirtreeview.cpp:984
+msgid "Please check your disk usage and clean up if you can. Thank you."
+msgstr ""
+"Veuillez vérifier l'utilisation de votre disque et nettoyez-le si vous "
+"pouvez. Merci."
+
+#: kdirtreeview.cpp:988
+msgid "Disk usage report generated by KDirStat"
+msgstr "Rapport de l'utilisation du disque généré par KDirStat"
+
+#: kdirtreeview.cpp:1051
+msgid "<Files>"
+msgstr "<Fichiers>"
+
+#: kdirtreeview.cpp:1066
+msgid "%1 / %2 Links (allocated: %3)"
+msgstr ""
+
+#: kdirtreeview.cpp:1073
+msgid "%1 / %2 Links"
+msgstr ""
+
+#: kdirtreeview.cpp:1082
+msgid "%1 (allocated: %2)"
+msgstr ""
+
+#: kdirtreeview.cpp:1096 kdirtreeview.cpp:1230
+msgid "[excluded]"
+msgstr ""
+
+#: kdirtreeview.cpp:1226
+#, fuzzy
+msgid "[%1 Read Jobs]"
+msgstr "Lectures à faire"
+
+#: kcleanupcollection.cpp:235
+msgid "User Defined Cleanup #&%1"
+msgstr "Nettoyage défini par l'utilisateur #&%1"
+
+#: kcleanupcollection.cpp:238
+msgid "User Defined Cleanup #%1"
+msgstr "Nettoyage défini par l'utilisateur #%1"
+
+#: kdirstatsettings.cpp:47
+msgid "Settings"
+msgstr "Paramètres"
+
+#: kdirstatsettings.cpp:76
+msgid "&Cleanups"
+msgstr "&Nettoyages"
+
+#: kdirstatsettings.cpp:80
+msgid "&Tree Colors"
+msgstr "&Couleurs de l'arborescence"
+
+#: kdirstatsettings.cpp:84
+msgid "Tree&map"
+msgstr ""
+
+#: kdirstatsettings.cpp:88
+msgid "&General"
+msgstr ""
+
+#: kdirstatsettings.cpp:114
+msgid ""
+"Really revert all settings to their default values?\n"
+"You will lose all changes you ever made!"
+msgstr ""
+"Revenir vraiment aux valeurs par défaut pour tous les paramètres ?\n"
+"Vous perdrez tous les changements déjà effectués !\""
+
+#: kdirstatsettings.cpp:117
+#, fuzzy
+msgid "&Really Revert to Defaults"
+msgstr "&Revenir vraiment aux valeurs par défaut"
+
+#: kdirstatsettings.cpp:203
+#, fuzzy
+msgid "Tree Level %1"
+msgstr "Niveau de l'arborescence %1"
+
+#: kdirstatsettings.cpp:539
+msgid "&Enabled"
+msgstr "&Activé"
+
+#: kdirstatsettings.cpp:576
+msgid "&Title:"
+msgstr "&Titre : "
+
+#: kdirstatsettings.cpp:577
+#, fuzzy
+msgid "&Command Line:"
+msgstr "Ligne de &commande : "
+
+#: kdirstatsettings.cpp:579
+#, fuzzy, c-format
+msgid "%p Full Path"
+msgstr "%p chemin complet"
+
+#: kdirstatsettings.cpp:582
+#, fuzzy, c-format
+msgid "%n File / Directory Name Without Path"
+msgstr "%n nom de fichier / répertoire sans chemin"
+
+#: kdirstatsettings.cpp:585
+msgid "%t KDE Trash Directory"
+msgstr ""
+
+#: kdirstatsettings.cpp:591
+#, fuzzy
+msgid "&Recurse into Subdirectories"
+msgstr "&Traiter récursivement les sous-répertoires"
+
+#: kdirstatsettings.cpp:596
+#, fuzzy
+msgid "&Ask for Confirmation"
+msgstr "&Demander une confirmation"
+
+#: kdirstatsettings.cpp:602
+msgid "Works for..."
+msgstr "Fonctionne avec les..."
+
+#: kdirstatsettings.cpp:608
+msgid "&Directories"
+msgstr "&Répertoires"
+
+#: kdirstatsettings.cpp:609
+msgid "&Files"
+msgstr "&Fichiers"
+
+#: kdirstatsettings.cpp:610
+#, fuzzy
+msgid "<Files> P&seudo Entries"
+msgstr "&Pseudos-entrées <Fichiers>"
+
+#: kdirstatsettings.cpp:620
+#, fuzzy
+msgid "On Local Machine Only ('file:/' Protocol)"
+msgstr "Uniquement sur la machine locale (protocole 'file:/')"
+
+#: kdirstatsettings.cpp:621
+#, fuzzy
+msgid "Network Transparent (ftp, smb, tar, ...)"
+msgstr "A travers le réseau (ftp, smb, tar, ...)"
+
+#: kdirstatsettings.cpp:641
+msgid "Refresh &Policy:"
+msgstr "Règl&es de rafraîchissement : "
+
+#: kdirstatsettings.cpp:652
+#, fuzzy
+msgid "No Refresh"
+msgstr "Pas de rafraîchissement"
+
+#: kdirstatsettings.cpp:653
+#, fuzzy
+msgid "Refresh This Entry"
+msgstr "Rafraîchir cette entrée"
+
+#: kdirstatsettings.cpp:654
+#, fuzzy
+msgid "Refresh This Entry's Parent"
+msgstr "Rafraîchir le parent de cette entrée"
+
+#: kdirstatsettings.cpp:655
+#, fuzzy
+msgid "Assume Entry Has Been Deleted"
+msgstr "S'assurer que l'entrée a été supprimée"
+
+#: kdirstatsettings.cpp:725
+#, fuzzy
+msgid "Directory Reading"
+msgstr "&Répertoires"
+
+#: kdirstatsettings.cpp:730
+msgid "Cross &File System Boundaries"
+msgstr ""
+
+#: kdirstatsettings.cpp:731
+msgid "Use Optimized &Local Directory Read Methods"
+msgstr ""
+
+#: kdirstatsettings.cpp:738
+#, fuzzy
+msgid "Animation"
+msgstr "&Demander une confirmation"
+
+#: kdirstatsettings.cpp:741
+msgid "P@cM@n Animation in Tool &Bar"
+msgstr ""
+
+#: kdirstatsettings.cpp:742
+msgid "P@cM@n Animation in Directory &Tree"
+msgstr ""
+
+#: kdirstatsettings.cpp:744
+msgid "Excludes"
+msgstr ""
+
+#: kdirstatsettings.cpp:746
+msgid "Exclude rules"
+msgstr ""
+
+#: kdirstatsettings.cpp:748
+msgid "Rule"
+msgstr ""
+
+#: kdirstatsettings.cpp:749
+#, fuzzy
+msgid "Add exclude rule..."
+msgstr "Ouverture d'un répertoire..."
+
+#: kdirstatsettings.cpp:839
+#, fuzzy
+msgid "New exclude rule"
+msgstr "Ouvre un répertoire récemment utilisé"
+
+#: kdirstatsettings.cpp:839
+msgid "Enter new rule to exclude:"
+msgstr ""
+
+#: kdirstatsettings.cpp:851
+msgid "Do you really want to delete the exclude rule \"%1\"?"
+msgstr ""
+
+#: kdirstatsettings.cpp:851
+msgid "Delete?"
+msgstr ""
+
+#: kdirstatsettings.cpp:865 kdirstatsettings.cpp:880
+msgid "&Delete..."
+msgstr ""
+
+#: kdirstatsettings.cpp:867 kdirstatsettings.cpp:885
+msgid "&Add..."
+msgstr ""
+
+#: kdirstatsettings.cpp:910
+msgid "S&quarify Treemap"
+msgstr ""
+
+#: kdirstatsettings.cpp:911
+msgid "Use C&ushion Shading"
+msgstr ""
+
+#: kdirstatsettings.cpp:916
+msgid "Cushion Parameters"
+msgstr ""
+
+#: kdirstatsettings.cpp:921
+msgid "Ambient &Light"
+msgstr ""
+
+#: kdirstatsettings.cpp:931
+msgid "&Height Scale"
+msgstr ""
+
+#: kdirstatsettings.cpp:941
+msgid "Draw Lines if Lo&w Contrast"
+msgstr ""
+
+#: kdirstatsettings.cpp:945
+msgid "Always Draw &Grid"
+msgstr ""
+
+#: kdirstatsettings.cpp:948
+msgid "Gr&id Color: "
+msgstr ""
+
+#: kdirstatsettings.cpp:958
+msgid "Colors for Plain Treemaps"
+msgstr ""
+
+#: kdirstatsettings.cpp:961
+#, fuzzy
+msgid "&Files: "
+msgstr "&Fichiers"
+
+#: kdirstatsettings.cpp:966
+#, fuzzy
+msgid "&Directories: "
+msgstr "&Répertoires"
+
+#: kdirstatsettings.cpp:971
+msgid "Gr&id: "
+msgstr ""
+
+#: kdirstatsettings.cpp:985
+msgid "Hi&ghlight R&ectangle: "
+msgstr ""
+
+#: kdirstatsettings.cpp:993
+msgid "Minim&um Treemap Tile Size: "
+msgstr ""
+
+#: kdirstatsettings.cpp:1000
+msgid "Auto-&Resize Treemap"
+msgstr ""
+
+#~ msgid "Enables/disables the statusbar"
+#~ msgstr "Active/désactive la barre d'état"
+
+#~ msgid "Files"
+#~ msgstr "Fichiers"
