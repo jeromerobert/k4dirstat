@@ -68,12 +68,8 @@ updatedir	= $(kde_datadir)/kconf_update
 update_DATA	= kdirstat.upd
 update_SCRIPTS	= fix_move_to_trash_bin.pl
 
-
 kdirstat_LDADD	= $(LIB_KFILE) $(LIBZ)
-
-# this is broken, but it doesn't work otherwise with KDE3's ever-changing
-# utterly broken build environment
-kdirstat_CXXFLAGS = -I /opt/kde3/include
+kdirstat_CXXFLAGS = $(KDE_INCLUDES)
 
 KDE_ICON = kdirstat
 
