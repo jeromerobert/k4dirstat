@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-17 18:37+0100\n"
-"PO-Revision-Date: 2008-12-17 18:37+0100\n"
+"PO-Revision-Date: 2008-12-17 18:46+0100\n"
 "Last-Translator: Stefan Hundhammer <sh@suse.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,7 +63,9 @@ msgstr "Alle, die an SequoiaView mitgearbeitet haben"
 
 #: ../kdirstat/kdirstatmain.cpp:67
 msgid "for showing just how useful treemaps really can be."
-msgstr "dafür, daß sie damit gezeigt haben, wie nützlich Treemaps sein können."
+msgstr ""
+"dafür, daß sie damit gezeigt haben, wie nützlich \n"
+"Treemaps sein können."
 
 #: ../kdirstat/kdirstatmain.cpp:71
 msgid "Jarke J. van Wijk, Huub van de Wetering, and Mark Bruls"
