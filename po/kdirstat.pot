@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-17 17:54+0100\n"
+"POT-Creation-Date: 2008-12-17 18:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,36 +44,44 @@ msgid ""
 "Any feedback (even negative!) is appreciated."
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:64
+#: ../kdirstat/kdirstatmain.cpp:63
 msgid "All the people who worked on SequoiaView"
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:65
+#: ../kdirstat/kdirstatmain.cpp:67
 msgid "for showing just how useful treemaps really can be."
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:69
+#: ../kdirstat/kdirstatmain.cpp:71
 msgid "Jarke J. van Wijk, Huub van de Wetering, and Mark Bruls"
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:70
+#: ../kdirstat/kdirstatmain.cpp:72
 msgid "for their papers about treemaps."
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:75
+#: ../kdirstat/kdirstatmain.cpp:77
 msgid ""
 "for his ingenious idea of treemaps -\n"
 "a truly intuitive way of visualizing tree contents."
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:80
+#: ../kdirstat/kdirstatmain.cpp:82
 msgid "All the users who gave feedback of any kind"
 msgstr ""
 
-#: ../kdirstat/kdirstatmain.cpp:81
+#: ../kdirstat/kdirstatmain.cpp:83
 msgid ""
 "for showing that all the work involved with such a project\n"
 "is really appreciated out there."
+msgstr ""
+
+#: ../kdirstat/kdirstatmain.cpp:86
+msgid "_: NAME OF TRANSLATORS\\nYour names"
+msgstr ""
+
+#: ../kdirstat/kdirstatmain.cpp:87
+msgid "_: EMAIL OF TRANSLATORS\\nYour emails"
 msgstr ""
 
 #: ../kdirstat/kstdcleanup.cpp:27
