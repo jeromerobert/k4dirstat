@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-22 15:47+0100\n"
-"PO-Revision-Date: 2008-11-22 15:48+0100\n"
-"Last-Translator: Christoph Thielecke <christoph.thielecke@gmx.de>\n"
-"Language-Team:  <de@li.org>\n"
+"PO-Revision-Date: 2008-12-17 16:21+0100\n"
+"Last-Translator: Stefan Hundhammer <sh@suse.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +25,7 @@ msgstr "A&ufräumen"
 #: rc.cpp:12
 #, no-c-format
 msgid "&Treemap"
-msgstr "&Baumkarte"
+msgstr ""
 
 #. i18n: file kdirstatui.rc line 78
 #: rc.cpp:18
@@ -104,11 +103,11 @@ msgstr "Lesen Ab&brechen"
 
 #: kdirstatapp.cpp:193
 msgid "&Write to Cache File..."
-msgstr "In Zwischenspeicherdatei &schreiben..."
+msgstr "In Cache-Datei &schreiben..."
 
 #: kdirstatapp.cpp:197
 msgid "&Read Cache File..."
-msgstr "Zwischenspeicherdatei &lesen..."
+msgstr "Cache-Datei &lesen..."
 
 #: kdirstatapp.cpp:204
 msgid "Open With"
@@ -172,7 +171,7 @@ msgstr "Liest den ausgewählten Teilbaum neu ein"
 
 #: kdirstatapp.cpp:249
 msgid "Scan directory tree that was previously excluded"
-msgstr "Verzeichnis durchsuchen, dass vorher ausgeschlossen war"
+msgstr "Verzeichnis durchsuchen, das vorher ausgeschlossen war"
 
 #: kdirstatapp.cpp:250
 msgid "Scan mounted file systems"
@@ -192,7 +191,7 @@ msgstr ""
 
 #: kdirstatapp.cpp:253
 msgid "Reads a directory tree from a cache file"
-msgstr "Liest ein Verzeichnisbaum von einer Zwischenspeicherdatei"
+msgstr "Liest einen Verzeichnisbaum von einer Cache-Datei"
 
 #: kdirstatapp.cpp:254
 msgid "Quits the application"
@@ -254,7 +253,7 @@ msgstr "URL wird geöffnet..."
 
 #: kdirstatapp.cpp:487
 msgid "Open URL..."
-msgstr "URL öffnen"
+msgstr "URL öffnen..."
 
 #: kdirstatapp.cpp:511
 msgid "Closing directory..."
@@ -270,7 +269,7 @@ msgstr "Ausgewählten Teilbaum neu einlesen..."
 
 #: kdirstatapp.cpp:560
 msgid "Write to Cache File"
-msgstr "In Zwischenspeicherdatei schreiben"
+msgstr "In Cache-Datei schreiben"
 
 #: kdirstatapp.cpp:569
 msgid "File %1 exists. Overwrite?"
@@ -282,11 +281,11 @@ msgstr "Überschreiben?"
 
 #: kdirstatapp.cpp:577
 msgid "Writing cache file..."
-msgstr "Zwischenspeicherdatei wird geschrieben..."
+msgstr "Cache-Datei wird geschrieben..."
 
 #: kdirstatapp.cpp:581
 msgid "Error writing cache file %1"
-msgstr "Fehler beim Schreiben der Zwischenspeicherdatei %1"
+msgstr "Fehler beim Schreiben der Cache-Datei %1"
 
 #: kdirstatapp.cpp:584
 msgid "Write Error"
@@ -294,15 +293,15 @@ msgstr "Schreibfehler"
 
 #: kdirstatapp.cpp:587
 msgid "Wrote cache file %1"
-msgstr "Zwischenspeicherdatei %1 wurde geschrieben"
+msgstr "Cache-Datei %1 wurde geschrieben"
 
 #: kdirstatapp.cpp:598
 msgid "Read Cache File"
-msgstr "Zwischenspeicherdatei lesen"
+msgstr "Cache-Datei lesen"
 
 #: kdirstatapp.cpp:600
 msgid "Reading cache file..."
-msgstr "Zwischenspeicherdatei wird gelesen"
+msgstr "Cache-Datei wird gelesen"
 
 #: kdirstatapp.cpp:781
 msgid ""
@@ -346,6 +345,18 @@ msgid ""
 "\n"
 "Any feedback (even negative!) is appreciated."
 msgstr ""
+"KDirStat - Directory-Statistik.\n"
+"\n"
+"Zeigt, wo all der Plattenplatz geblieben ist,\n"
+"und hilft beim Aufräumen.\n"
+"\n"
+"\n"
+"Wenn Sie irgendwelche Kommentare zu diesem Programm haben\n"
+"oder uns einfach Ihre Meinung darüber mitteilen möchten,\n"
+"benutzen Sie bitte die \"Feedback-Mail\"-Funktion aus dem\n"
+"\"Hilfe\"-Menü.\n"
+"\n"
+"Jedes Feedback (auch negativ!) ist willkommen."
 
 #: kdirstatmain.cpp:41
 msgid "Directory or URL to open"
@@ -364,35 +375,46 @@ msgid ""
 "\n"
 "Any feedback (even negative!) is appreciated."
 msgstr ""
+"\n"
+"Wenn Sie irgendwelche Kommentare zu diesem Programm haben\n"
+"oder uns einfach Ihre Meinung darüber mitteilen möchten,\n"
+"benutzen Sie bitte die \"Feedback-Mail\"-Funktion aus dem\n"
+"\"Hilfe\"-Menü.\n"
+"\n"
+"Jedes Feedback (auch negativ!) ist willkommen."
 
 #: kdirstatmain.cpp:63
 msgid "All the people who worked on SequoiaView"
-msgstr ""
+msgstr "Alle, die an SequoiaView mitgearbeitet haben"
 
 #: kdirstatmain.cpp:64
 msgid "for showing just how useful treemaps really can be.\n"
-msgstr ""
+msgstr "dafür, daß sie gezeigt haben, wie nützlich Treemaps sein können.\n"
 
 #: kdirstatmain.cpp:68
 msgid "Jarke J. van Wijk, Huub van de Wetering, and Mark Bruls"
-msgstr ""
+msgstr "Jarke J. van Wijk, Huub van de Wetering und Mark Bruls"
 
 #: kdirstatmain.cpp:69
 #, fuzzy
 msgid "for their papers about treemaps.\n"
-msgstr "Hilfe zu Treemaps"
+msgstr "für ihre Veröffentlichungen zu Treemaps."
 
 #: kdirstatmain.cpp:74
 msgid ""
 "for his ingenious idea of treemaps -\n"
 "a truly intuitive way of visualizing tree contents.\n"
 msgstr ""
+"für seine geniale Idee \"Treemaps\" -\n"
+"eine wirklich intuitive Art, Bauminhalte darzustellen.\n"
 
 #: kdirstatmain.cpp:80
 msgid ""
 "for showing that all the work involved with such a project\n"
 "is really appreciated out there.\n"
 msgstr ""
+"dafür, daß sie gezeigt haben, daß all die Arbeit, \n"
+"die in ein solches Projekt fließt, wirlich geschätzt wird.\n"
 
 #: kcleanup.cpp:173
 msgid ""
@@ -408,7 +430,7 @@ msgid ""
 "for file %2"
 msgstr ""
 "%1\n"
-"für die Datei %2"
+"für Datei %2"
 
 #: kcleanup.cpp:182 kdirstatsettings.cpp:116
 msgid "Please Confirm"
@@ -667,7 +689,7 @@ msgstr "Ich kenne mich so einigermaßen damit aus"
 
 #: kdirstatfeedback.cpp:138
 msgid "Treemaps? Huh? What the hell is that?"
-msgstr "Treemaps? Was ist das denn?"
+msgstr "Treemaps? Hä? Was ist das denn?"
 
 #: kdirstatfeedback.cpp:140
 msgid "What do you think about the treemaps?"
@@ -828,13 +850,16 @@ msgstr "Nein"
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
-msgstr "Christoph Thielecke"
+msgstr ""
+"Stefan Hundhammer\n"
+"\n"
+"Christoph Thielecke"
 
 #: _translatorinfo.cpp:3
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr "crissi99@gmx.de"
+msgstr ""
 
 #: kdirtreeview.cpp:68
 msgid "Name"
@@ -842,7 +867,7 @@ msgstr "Name"
 
 #: kdirtreeview.cpp:70
 msgid "Subtree Percentage"
-msgstr "Teilbaum Prozent"
+msgstr "Teilbaum-Prozent"
 
 #: kdirtreeview.cpp:71
 msgid "Percentage"
@@ -866,7 +891,7 @@ msgstr "Unterverz."
 
 #: kdirtreeview.cpp:78
 msgid "Last Change"
-msgstr "Geändert am"
+msgstr "Zuletzt geändert"
 
 #: kdirtreeview.cpp:173
 msgid "Read Jobs"
@@ -878,7 +903,7 @@ msgstr "Fertig. Gesamtdauer : %1"
 
 #: kdirtreeview.cpp:508
 msgid "Aborted. Elapsed time: %1"
-msgstr "Benutzerabbruch. Gesamtdauer : %1"
+msgstr "Benutzerabbruch. Gesamtdauer: %1"
 
 #: kdirtreeview.cpp:544
 msgid "Elapsed time: %1   reading directory %2"
@@ -886,7 +911,7 @@ msgstr "Zeit bisher: %1   Lese Verzeichnis %2"
 
 #: kdirtreeview.cpp:548
 msgid "Elapsed time: %1"
-msgstr "Verstrichene Zeit : %1"
+msgstr "Verstrichene Zeit: %1"
 
 #: kdirtreeview.cpp:823
 msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
@@ -894,7 +919,7 @@ msgstr "Sparse-Datei: %1 (%2 Byte) -- zugeordnet: %3 (%4 Byte)"
 
 #: kdirtreeview.cpp:831
 msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
-msgstr "%1 (%2 Byte) mit %3 Harten Verweisen=> effektive Größe: %4 (%5 Byte)"
+msgstr "%1 (%2 Byte) mit %3 Hard-Links => effektive Größe: %4 (%5 Byte)"
 
 #: kdirtreeview.cpp:877
 msgid "%1 (%2 Bytes)"
@@ -920,15 +945,15 @@ msgstr "<Dateien>"
 
 #: kdirtreeview.cpp:1066
 msgid "%1 / %2 Links (allocated: %3)"
-msgstr "%1 / %2 Verweise (zugewiesen: %3)"
+msgstr "%1 / %2 Links (verbraucht: %3)"
 
 #: kdirtreeview.cpp:1073
 msgid "%1 / %2 Links"
-msgstr "%1 / %2 Verweise"
+msgstr "%1 / %2 Links"
 
 #: kdirtreeview.cpp:1082
 msgid "%1 (allocated: %2)"
-msgstr "%1 (zugewiesen: %2)"
+msgstr "%1 (verbraucht: %2)"
 
 #: kdirtreeview.cpp:1096 kdirtreeview.cpp:1230
 msgid "[excluded]"
@@ -1110,7 +1135,7 @@ msgstr "Auschlussregel eingeben:"
 
 #: kdirstatsettings.cpp:851
 msgid "Do you really want to delete the exclude rule \"%1\"?"
-msgstr "Soll die Ausschlussregel \"%1\" gelöscht werden?"
+msgstr "Ausschlussregel \"%1\" wirklich löschen?"
 
 #: kdirstatsettings.cpp:851
 msgid "Delete?"
