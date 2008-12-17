@@ -5,7 +5,7 @@
 PROGNAME=kdirstat
 SRCDIR=../kdirstat
 
-extractrc --tag=cstring $SRCDIR /*ui.rc >ui_rc.cpp
+extractrc --tag=cstring $SRCDIR/*ui.rc >ui_rc.cpp
 
 
 # search for sourcecode-files
@@ -27,7 +27,7 @@ xgettext					\
     --keyword=N_				\
     --foreign-user				\
     --default-domain=$PROGNAME			\
-    --output=PROGNAME.pot			\
+    --output=$PROGNAME.pot			\
     $SRCFILES
 
 
