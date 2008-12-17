@@ -1,48 +1,33 @@
 #!/bin/bash
+#
+# Script to generate .pot file from C++ sources and XML GUI description file
 
-### You need a patched xgettext that is able to create kde-like pot files
-### See: http://developer.kde.org/documentation/other/makefile_am_howto/de/_translations_.html
-### ftp://ftp.kde.org/pub/kde/devel/gettext-kde/
+PROGNAME=kdirstat
+SRCDIR=../kdirstat
 
-extractrc --tag=cstring ../updater/*.ui ../updater/*.kcfg | grep -v kcfg | grep -v ConfigWidgetUI | grep -v BackendFrame | grep -v l1 | grep -v l2 | grep -v l3 | grep -v l4 > rc.cpp
+extractrc --tag=cstring $SRCDIR /*ui.rc >ui_rc.cpp
 
 
 # search for sourcecode-files
-SRCFILES=`find .. -type d -name testsuite -prune , \
-                           -type f -name "*.h" \
-                                -o -name "*.pm"  \
-                                -o -name "*.c"   \
-                                -o -name "*.cc"  \
-                                -o -name "*.cpp"`
+SRCFILES=$(find $SRCDIR . -type f   -name "*.h"   \
+                                -o -name "*.c"    \
+                                -o -name "*.cc"   \
+                                -o -name "*.cpp")
 
-echo $SRCFILES
-#calling xgettext with the sourcefiles
-xgettext --add-comments --add-location --keyword=i18n  --keyword=i18n:1,2 --keyword=_ --keyword=_:1,2 --keyword=__ --keyword=N_ --foreign-user --default-domain=opensuseupdater --output=opensuseupdater.pot $SRCFILES
+echo "$SRCFILES"
+
+xgettext					\
+    --add-comments				\
+    --add-location				\
+    --keyword=i18n				\
+    --keyword=i18n:1,2				\
+    --keyword=_					\
+    --keyword=_:1,2				\
+    --keyword=__				\
+    --keyword=N_				\
+    --foreign-user				\
+    --default-domain=$PROGNAME			\
+    --output=PROGNAME.pot			\
+    $SRCFILES
 
 
-#(
-#cat opensuseupdater.pot2 | while read line 
-#do
-#        if [ X$line == "Xmsgid \"\""  ]; then
-#        if [ `echo X$line` == "X "  ]; then
-#		echo -n "msgid "
-#        fi
-#done ) > opensuseupdater3.pot
-#
-#
-#
-#(
-#oldline=""
-#cat opensuseupdater.pot3 | while read line 
-#do
-#        if [ X`echo $line | cut -f1 -d" "` == "Xmsgid_plural"  ]; then
-#                echo $oldline | sed -e "s/^msgid \"/msgid \"_n: /" | sed -e "s/\"$/\\\n\"/"
-#                oldline=`echo $line | sed -e "s/msgid_plural //"`
-#        else
-#                echo $oldline | sed -e "s/msgstr\[0\] \"\"/\"\\\n\"/" | sed -e "s/msgstr\[1\] \"\"/\"\"/"
-#                oldline=$line
-#        fi
-#done ) > opensuseupdater.pot
-#
-#rm opensuseupdater.pot2
-##rm opensuseupdater.pot3
