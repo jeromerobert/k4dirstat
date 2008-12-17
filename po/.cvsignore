@@ -4,3 +4,4 @@ Makefile
 *.auto
 *.gmo
 *~
+ui_rc.cpp
