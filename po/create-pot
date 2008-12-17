@@ -21,6 +21,7 @@ xgettext					\
     --add-location				\
     --keyword=i18n				\
     --keyword=i18n:1,2				\
+    --keyword=I18N_NOOP				\
     --keyword=_					\
     --keyword=_:1,2				\
     --keyword=__				\
