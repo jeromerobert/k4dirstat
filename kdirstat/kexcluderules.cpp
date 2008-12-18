@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2007-02-12
+ *   Updated:	2008-12-18
  */
 
 
@@ -34,7 +34,6 @@ KExcludeRule::~KExcludeRule()
 }
 
 
-
 bool
 KExcludeRule::match( const QString & text )
 {
@@ -43,7 +42,6 @@ KExcludeRule::match( const QString & text )
 
     return _regexp.exactMatch( text );
 }
-
 
 
 
@@ -81,7 +79,8 @@ void KExcludeRules::add( KExcludeRule * rule )
 }
 
 
-bool KExcludeRules::match( const QString & text )
+bool
+KExcludeRules::match( const QString & text )
 {
     if ( text.isEmpty() )
 	return false;
@@ -106,6 +105,26 @@ bool KExcludeRules::match( const QString & text )
     }
 
     return false;
+}
+
+
+const KExcludeRule *
+KExcludeRules::matchingRule( const QString & text )
+{
+    if ( text.isEmpty() )
+	return false;
+
+    KExcludeRule * rule = _rules.first();
+
+    while ( rule )
+    {
+	if ( rule->match( text ) )
+	    return rule;
+
+	rule = _rules.next();
+    }
+
+    return 0;
 }
 
 

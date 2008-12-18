@@ -26,6 +26,7 @@
 #include <kglobalsettings.h>
 #include <kicontheme.h>
 #include <kiconloader.h>
+#include <kexcluderules.h>
 
 #include "kdirtreeview.h"
 #include "kdirreadjob.h"
@@ -792,18 +793,48 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
     if ( ! item )
 	return;
 
+    KFileInfo * orig = item->orig();
+
+    if ( ! orig )
+    {
+	kdError() << "NULL item->orig()" << endl;
+	return;
+    }
+
     if ( column == _nameCol 		||
 	 column == _percentBarCol	||
 	 column == _percentNumCol	  )
     {
-	// Make the item the context menu is popping up over the current
-	// selection - all user operations refer to the current selection.
-	// Just right-clicking on an item does not make it the current
-	// item!
-	selectItem( item );
+	if ( orig->isExcluded() && column == _percentBarCol )
+	{
+	    // Show with exclude rule caused the exclusion
 
-	// Let somebody from outside pop up the context menu, if so desired.
-	emit contextMenu( item, pos );
+	    const KExcludeRule * rule = KExcludeRules::excludeRules()->matchingRule( orig->url() );
+
+	    QString text;
+
+	    if ( rule )
+	    {
+		text = i18n( "Matching exclude rule:   %1" ).arg( rule->regexp().pattern() );
+	    }
+	    else
+	    {
+		text = i18n( "<Unknown exclude rule>" );
+	    }
+
+	    popupContextInfo( pos, text );
+	}
+	else
+	{
+	    // Make the item the context menu is popping up over the current
+	    // selection - all user operations refer to the current selection.
+	    // Just right-clicking on an item does not make it the current
+	    // item!
+	    selectItem( item );
+
+	    // Let somebody from outside pop up the context menu, if so desired.
+	    emit contextMenu( item, pos );
+	}
     }
 
 
@@ -812,8 +843,6 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
     if ( column == _ownSizeCol && ! item->orig()->isDotEntry() )
     {
-	KFileInfo * orig = item->orig();
-
 	if ( orig->isSparseFile() || ( orig->links() > 1 && orig->isFile() ) )
 	{
 	    QString text;
@@ -884,7 +913,7 @@ KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
 
 
 void
-KDirTreeView::popupContextInfo( const QPoint &	pos,
+KDirTreeView::popupContextInfo( const QPoint  &	pos,
 				const QString & info )
 {
     _contextInfo->changeItem( info, _idContextInfo );
@@ -1095,7 +1124,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	    // Never executed because during init() a read job for this
 	    // directory will still be pending. Only the read job will figure
 	    // out if an exclude rule applies.
-	    
+
 	    if ( _orig->isExcluded() )
 	    {
 		setText( _view->percentBarCol(), i18n( "[excluded]" ) );
@@ -1231,7 +1260,7 @@ KDirTreeViewItem::updateSummary()
 	    {
 		text = i18n( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
 	    }
-	    
+
 	    setText( _view->readJobsCol(), text );
 #endif
 	}
@@ -1240,7 +1269,7 @@ KDirTreeViewItem::updateSummary()
     if ( _orig->isDir() )
     {
 	setText( _view->totalSubDirsCol(),	" " + formatCount( _orig->totalSubDirs() ) );
-	
+
 	if ( _orig->isExcluded() )
 	    setText( _view->percentBarCol(),	i18n( "[excluded]" ) );
     }

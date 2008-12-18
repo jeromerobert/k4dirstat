@@ -1,3 +1,10 @@
+2008-12-18  Stefan Hundhammer  <sh@suse.de>
+
+	* Show matching exclude rule upon right click on [excluded] in tree view
+
+	* Bumped version to 2.6.0
+
+	
 2008-12-17  Stefan Hundhammer  <sh@suse.de>
 
 	* Fixed .pot file generation and added create-pot script (in po/)
@@ -6,14 +13,13 @@
 	  (if anybody does that to my own program again in my own language he
 	   will be shot on the spot)
 
-	* Bumped version to 2.6.0
-
 
 2008-11-27  Stefan Hundhammer  <sh@suse.de>
 
 	* Applied patch from Christoph Thielecke for GUI support for exclude
 	  rules and tweaked that GUI support some
 
+	
 2007-02-12  Stefan Hundhammer  <sh@suse.de>
 
 	* Bug fix: Fixed large files (> 2 GB) reported as 0 size on some systems

@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2008-11-27
+ *   Updated:	2008-12-18
  */
 
 
@@ -130,6 +130,14 @@ namespace KDirStat
 	 * Note that this operation will move current().
 	 **/
 	bool match( const QString & text );
+
+	/**
+	 * Find the exclude rule that matches 'text'.
+	 * Return 0 if there is no match.
+	 *
+	 * This is intended to explain to the user which rule matched.
+	 **/
+	const KExcludeRule * matchingRule( const QString & text );
 
 	/**
 	 * Returns the first exclude rule of this rule set
