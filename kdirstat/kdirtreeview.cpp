@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2007-02-12
+ *   Updated:	2008-12-18
  */
 
 
@@ -1090,11 +1090,17 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	    }
 
 	    setText( view->ownSizeCol(), text );
+
+#ifdef NEVER_EXECUTED
+	    // Never executed because during init() a read job for this
+	    // directory will still be pending. Only the read job will figure
+	    // out if an exclude rule applies.
 	    
 	    if ( _orig->isExcluded() )
 	    {
 		setText( _view->percentBarCol(), i18n( "[excluded]" ) );
 	    }
+#endif
 	}
 
 	QListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
@@ -1225,10 +1231,6 @@ KDirTreeViewItem::updateSummary()
 	    {
 		text = i18n( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
 	    }
-	    else if ( _orig->isExcluded() )
-	    {
-		text = i18n( "[excluded]" );
-	    }
 	    
 	    setText( _view->readJobsCol(), text );
 #endif
@@ -1238,6 +1240,9 @@ KDirTreeViewItem::updateSummary()
     if ( _orig->isDir() )
     {
 	setText( _view->totalSubDirsCol(),	" " + formatCount( _orig->totalSubDirs() ) );
+	
+	if ( _orig->isExcluded() )
+	    setText( _view->percentBarCol(),	i18n( "[excluded]" ) );
     }
 
 

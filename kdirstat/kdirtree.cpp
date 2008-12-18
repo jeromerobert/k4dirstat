@@ -4,7 +4,7 @@
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *
- *   Updated:	2007-02-12
+ *   Updated:	2008-12-18
  */
 
 
@@ -190,7 +190,7 @@ KDirTree::refresh( KFileInfo *subtree )
 
 	subtree->setExcluded( false );
 
-
+	
 	// Get rid of the old subtree.
 
 	emit deletingChild( subtree );
