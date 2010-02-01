@@ -100,7 +100,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
 #define loadIcon(ICON)	KIconLoader::global()->loadIcon( (ICON), KIconLoader::Small )
 
-    _openDirIcon	= loadIcon( "folder_open" 	);
+    _openDirIcon	= loadIcon( "folder-open" 	);
     _closedDirIcon	= loadIcon( "folder"		);
     _openDotEntryIcon	= loadIcon( "folder_orange_open");
     _closedDotEntryIcon	= loadIcon( "folder_orange"	);
@@ -111,7 +111,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _blockDevIcon	= loadIcon( "blockdevice"	);
     _charDevIcon	= loadIcon( "chardevice"	);
     _fifoIcon		= loadIcon( "socket"		);
-    _stopIcon		= loadIcon( "stop"		);
+    _stopIcon		= loadIcon( "process-stop"	);
     _readyIcon		= QPixmap();
 
 #undef loadIcon
