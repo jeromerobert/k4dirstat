@@ -17,16 +17,20 @@
 
 #include <qtimer.h>
 #include <qcolor.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
+#include <q3header.h>
+#include <q3popupmenu.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kicontheme.h>
 #include <kiconloader.h>
 #include <kexcluderules.h>
+#include <kconfiggroup.h>
+#include <kiconloader.h>
+#include <kcolorscheme.h>
+#include <ktoolinvocation.h>
 
 #include "kdirtreeview.h"
 #include "kdirreadjob.h"
@@ -82,19 +86,19 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _readJobsCol = _percentBarCol;
 #endif
 
-    setColumnAlignment ( _totalSizeCol,		AlignRight );
-    setColumnAlignment ( _percentNumCol,	AlignRight );
-    setColumnAlignment ( _ownSizeCol,		AlignRight );
-    setColumnAlignment ( _totalItemsCol,	AlignRight );
-    setColumnAlignment ( _totalFilesCol,	AlignRight );
-    setColumnAlignment ( _totalSubDirsCol,	AlignRight );
-    setColumnAlignment ( _readJobsCol,		AlignRight );
+    setColumnAlignment ( _totalSizeCol,		Qt::AlignRight );
+    setColumnAlignment ( _percentNumCol,	Qt::AlignRight );
+    setColumnAlignment ( _ownSizeCol,		Qt::AlignRight );
+    setColumnAlignment ( _totalItemsCol,	Qt::AlignRight );
+    setColumnAlignment ( _totalFilesCol,	Qt::AlignRight );
+    setColumnAlignment ( _totalSubDirsCol,	Qt::AlignRight );
+    setColumnAlignment ( _readJobsCol,		Qt::AlignRight );
 
 
     setSorting( _totalSizeCol );
 
 
-#define loadIcon(ICON)	KGlobal::iconLoader()->loadIcon( (ICON), KIcon::Small )
+#define loadIcon(ICON)	KIconLoader::global()->loadIcon( (ICON), KIconLoader::Small )
 
     _openDirIcon	= loadIcon( "folder_open" 	);
     _closedDirIcon	= loadIcon( "folder"		);
@@ -120,16 +124,16 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( kapp,	SIGNAL( kdisplayPaletteChanged()	),
 	     this,	SLOT  ( paletteChanged()		) );
 
-    connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
-	     this,	SLOT  ( selectItem		( QListViewItem * ) ) );
+    connect( this,	SIGNAL( selectionChanged	( Q3ListViewItem * ) ),
+	     this,	SLOT  ( selectItem		( Q3ListViewItem * ) ) );
 
-    connect( this,	SIGNAL( rightButtonPressed	( QListViewItem *, const QPoint &, int ) ),
-	     this,	SLOT  ( popupContextMenu	( QListViewItem *, const QPoint &, int ) ) );
+    connect( this,	SIGNAL( rightButtonPressed	( Q3ListViewItem *, const QPoint &, int ) ),
+	     this,	SLOT  ( popupContextMenu	( Q3ListViewItem *, const QPoint &, int ) ) );
 
     connect( header(),	SIGNAL( sizeChange   ( int, int, int ) ),
 	     this,	SLOT  ( columnResized( int, int, int ) ) );
 
-   _contextInfo	  = new QPopupMenu;
+   _contextInfo	  = new Q3PopupMenu;
    _idContextInfo = _contextInfo->insertItem ( "dummy" );
 
    createTree();
@@ -206,13 +210,13 @@ KDirTreeView::idleDisplay()
     }
 #endif
 
-    setColumnAlignment ( _percentBarCol, AlignLeft );
+    setColumnAlignment ( _percentBarCol, Qt::AlignLeft );
     _readJobsCol = -1;
 }
 
 
 void
-KDirTreeView::openURL( KURL url )
+KDirTreeView::openURL( KUrl url )
 {
     clear();
     _tree->clear();
@@ -481,7 +485,7 @@ KDirTreeView::slotFinished()
 	 _tree->root()->totalSubDirs() == 0 &&	// No subdirs
 	 _tree->root()->totalItems() > 0 )	// but file children
     {
-	QListViewItem * root = firstChild();
+	Q3ListViewItem * root = firstChild();
 
 	if ( root )
 	    root->setOpen( true );
@@ -589,7 +593,7 @@ KDirTreeView::openCount()
 
 
 void
-KDirTreeView::selectItem( QListViewItem *listViewItem )
+KDirTreeView::selectItem( Q3ListViewItem *listViewItem )
 {
     _selection = dynamic_cast<KDirTreeViewItem *>( listViewItem );
 
@@ -645,7 +649,7 @@ KDirTreeView::clearSelection()
 {
     // kdDebug() << k_funcinfo << endl;
     _selection = 0;
-    QListView::clearSelection();
+    Q3ListView::clearSelection();
 
     emit selectionChanged( (KDirTreeViewItem *) 0 );
     emit selectionChanged( (KFileInfo *) 0 );
@@ -727,7 +731,7 @@ KDirTreeView::setDefaultFillColors()
 
     for ( i=0; i < KDirTreeViewMaxFillColor; i++ )
     {
-	_fillColor[i] = blue;
+	_fillColor[i] = Qt::blue;
     }
 
     i = 0;
@@ -763,8 +767,8 @@ KDirTreeView::setTreeBackground( const QColor &color )
 void
 KDirTreeView::ensureContrast()
 {
-    if ( colorGroup().base() == white ||
-	 colorGroup().base() == black   )
+    if ( colorGroup().base() == Qt::white ||
+	 colorGroup().base() == Qt::black   )
     {
 	setTreeBackground( colorGroup().midlight() );
     }
@@ -778,13 +782,13 @@ KDirTreeView::ensureContrast()
 void
 KDirTreeView::paletteChanged()
 {
-    setTreeBackground( KGlobalSettings::baseColor() );
+    setTreeBackground( KColorScheme::ActiveBackground );
     ensureContrast();
 }
 
 
 void
-KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
+KDirTreeView::popupContextMenu( Q3ListViewItem *	listViewItem,
 				const QPoint &	pos,
 				int 		column )
 {
@@ -916,7 +920,7 @@ void
 KDirTreeView::popupContextInfo( const QPoint  &	pos,
 				const QString & info )
 {
-    _contextInfo->changeItem( info, _idContextInfo );
+    _contextInfo->changeItem( _idContextInfo, info );
     _contextInfo->popup( pos );
 }
 
@@ -924,9 +928,8 @@ KDirTreeView::popupContextInfo( const QPoint  &	pos,
 void
 KDirTreeView::readConfig()
 {
-    KConfig *config = kapp->config();
-    KConfigGroupSaver saver( config, "Tree Colors" );
-    _usedFillColors = config->readNumEntry( "usedFillColors", -1 );
+    KConfigGroup config = KGlobal::config()->group( "Tree Colors" );
+    _usedFillColors = config.readEntry( "usedFillColors", -1 );
 
     if ( _usedFillColors < 0 )
     {
@@ -941,13 +944,13 @@ KDirTreeView::readConfig()
     {
 	// Read the rest of the 'Tree Colors' section
 
-	QColor defaultColor( blue );
+	QColor defaultColor( Qt::blue );
 
 	for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
 	{
 	    QString name;
 	    name.sprintf( "fillColor_%02d", i );
-	    _fillColor [i] = config->readColorEntry( name, &defaultColor );
+	    _fillColor [i] = config.readEntry( name, defaultColor );
 	}
     }
 
@@ -959,16 +962,15 @@ KDirTreeView::readConfig()
 void
 KDirTreeView::saveConfig() const
 {
-    KConfig *config = kapp->config();
-    KConfigGroupSaver saver( config, "Tree Colors" );
+    KConfigGroup config = KGlobal::config()->group( "Tree Colors" );
 
-    config->writeEntry( "usedFillColors", _usedFillColors );
+    config.writeEntry( "usedFillColors", _usedFillColors );
 
     for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
     {
 	QString name;
 	name.sprintf( "fillColor_%02d", i );
-	config->writeEntry ( name, _fillColor [i] );
+	config.writeEntry ( name, _fillColor [i] );
     }
 }
 
@@ -977,7 +979,7 @@ void
 KDirTreeView::setSorting( int column, bool increasing )
 {
     _sortCol = column;
-    QListView::setSorting( column, increasing );
+    Q3ListView::setSorting( column, increasing );
 }
 
 
@@ -1021,11 +1023,11 @@ KDirTreeView::sendMailToOwner()
     // kdDebug() << "subject: " << subject << endl;
     // kdDebug() << "body:\n"   << body    << endl;
 
-    KURL mail;
+    KUrl mail;
     mail.setProtocol( "mailto" );
     mail.setPath( owner );
-    mail.setQuery( "?subject="	+ KURL::encode_string( subject ) +
-		   "&body="	+ KURL::encode_string( body ) );
+    mail.setQuery( "?subject="	+ KUrl::encode_string( subject ) +
+		   "&body="	+ KUrl::encode_string( body ) );
 
     // TODO: Check for maximum command line length.
     //
@@ -1033,7 +1035,7 @@ KDirTreeView::sendMailToOwner()
     // stuff into 'config.h' or some other include file without hardcoding
     // anything - this is too system dependent.
 
-    kapp->invokeMailer( mail );
+    KToolInvocation::invokeMailer(mail);
     logActivity( 10 );
 }
 
@@ -1044,7 +1046,7 @@ KDirTreeView::sendMailToOwner()
 
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 				    KFileInfo *		orig )
-    : QListViewItem( view )
+    : Q3ListViewItem( view )
 {
     init( view, 0, orig );
 }
@@ -1053,9 +1055,9 @@ KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 				    KDirTreeViewItem *	parent,
 				    KFileInfo *		orig )
-    : QListViewItem( parent )
+    : Q3ListViewItem( parent )
 {
-    CHECK_PTR( parent );
+    Q_CHECK_PTR( parent );
     init( view, parent, orig );
 }
 
@@ -1078,7 +1080,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     if ( _orig->isDotEntry() )
     {
        setText( view->nameCol(), i18n( "<Files>" ) );
-       QListViewItem::setOpen ( false );
+       Q3ListViewItem::setOpen ( false );
     }
     else
     {
@@ -1132,7 +1134,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 #endif
 	}
 
-	QListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
+	Q3ListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
 	/*
 	 * Don't use KDirTreeViewItem::setOpen() here since this might call
 	 * KDirTreeViewItem::deferredClone() which would confuse bookkeeping
@@ -1539,7 +1541,7 @@ KDirTreeViewItem::setOpen( bool open )
 	openNotify( open );
     }
 
-    QListViewItem::setOpen( open );
+    Q3ListViewItem::setOpen( open );
     setIcon();
 
     if ( open )
@@ -1647,7 +1649,7 @@ KDirTreeViewItem::asciiDump()
  * +1 if this >	 other
  **/
 int
-KDirTreeViewItem::compare( QListViewItem *	otherListViewItem,
+KDirTreeViewItem::compare( Q3ListViewItem *	otherListViewItem,
 			   int			column,
 			   bool			ascending ) const
 {
@@ -1681,12 +1683,12 @@ KDirTreeViewItem::compare( QListViewItem *	otherListViewItem,
 	}
     }
 
-    return QListViewItem::compare( otherListViewItem, column, ascending );
+    return Q3ListViewItem::compare( otherListViewItem, column, ascending );
 }
 
 
 void
-KDirTreeViewItem::paintCell( QPainter *			painter,
+KDirTreeViewItem::paintCell( Q3Painter *		painter,
 			     const QColorGroup &	colorGroup,
 			     int			column,
 			     int			width,
@@ -1728,7 +1730,7 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 		       && ! _pacMan )
 		     || _orig->isExcluded() )
 		{
-		    QListViewItem::paintCell( painter,
+		    Q3ListViewItem::paintCell( painter,
 					      colorGroup,
 					      column,
 					      width,
@@ -1748,7 +1750,7 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 	 * all the hassle of drawing strings and pixmaps, regarding
 	 * alignments etc.
 	 */
-	QListViewItem::paintCell( painter,
+	Q3ListViewItem::paintCell( painter,
 				  colorGroup,
 				  column,
 				  width,
@@ -1759,7 +1761,7 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 
 void
 KDirTreeViewItem::paintPercentageBar( float		percent,
-				      QPainter *	painter,
+				      Q3Painter *	painter,
 				      int		indent,
 				      int		width,
 				      const QColor &	fillColor,
@@ -1782,7 +1784,7 @@ KDirTreeViewItem::paintPercentageBar( float		percent,
 	QPen pen( painter->pen() );
 	pen.setWidth( 0 );
 	painter->setPen( pen );
-	painter->setBrush( NoBrush );
+	painter->setBrush( Qt::NoBrush );
 	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0);
 
 
@@ -1849,22 +1851,7 @@ KDirTreeViewItem::paintPercentageBar( float		percent,
 QString
 KDirStat::formatSizeLong( KFileSize size )
 {
-    QString sizeText;
-    int count = 0;
-
-    while ( size > 0 )
-    {
-	sizeText = ( ( size % 10 ) + '0' ) + sizeText;
-	size /= 10;
-
-	if ( ++count == 3 && size > 0 )
-	{
-	    sizeText = KGlobal::locale()->thousandsSeparator() + sizeText;
-	    count = 0;
-	}
-    }
-
-    return sizeText;
+    return KGlobal::locale()->formatLong(size);
 }
 
 
@@ -2007,7 +1994,7 @@ KDirStat::localeTimeDate( time_t rawTime )
     QDateTime timeDate;
     timeDate.setTime_t( rawTime );
     QString timeDateString =
-	KGlobal::locale()->formatDate( timeDate.date(), true ) + "  " +	// short format
+	KGlobal::locale()->formatDate( timeDate.date(), KLocale::LongDate) + "  " +	// short format
 	KGlobal::locale()->formatTime( timeDate.time(), true );		// include seconds
 
     return timeDateString;

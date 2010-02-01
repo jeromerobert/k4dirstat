@@ -196,7 +196,7 @@ void
 KFileInfoSortedIterator::delayedInit()
 {
     _childrenList = new KFileInfoList( _sortOrder, _ascending );
-    CHECK_PTR( _childrenList );
+    Q_CHECK_PTR( _childrenList );
 
     if ( _sortOrder == KSortByName )
     {
@@ -352,7 +352,7 @@ KFileInfoSortedBySizeIterator::makeChildrenList()
 
 
 KFileInfoList::KFileInfoList( KFileInfoSortOrder sortOrder, bool ascending )
-    : QPtrList<KFileInfo>()
+    : Q3PtrList<KFileInfo>()
 {
     _sortOrder	= sortOrder;
     _ascending	= ascending;
@@ -384,7 +384,7 @@ KFileInfoList::sumTotalSizes()
 
 
 int
-KFileInfoList::compareItems( QCollection::Item it1, QCollection::Item it2 )
+KFileInfoList::compareItems( Q3PtrCollection::Item it1, Q3PtrCollection::Item it2 )
 {
     if ( it1 == it2 )
 	return 0;

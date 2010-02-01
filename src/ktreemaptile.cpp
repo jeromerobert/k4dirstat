@@ -15,7 +15,7 @@
 #include <math.h>
 #include <algorithm>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <qimage.h>
@@ -37,7 +37,7 @@ KTreemapTile::KTreemapTile( KTreemapView *	parentView,
 			    KFileInfo *		orig,
 			    const QRect &	rect,
 			    KOrientation	orientation )
-    : QCanvasRectangle( rect, parentView->canvas() )
+    : Q3CanvasRectangle( rect, parentView->canvas() )
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )
@@ -57,7 +57,7 @@ KTreemapTile::KTreemapTile( KTreemapView *		parentView,
 			    const QRect &		rect,
 			    const KCushionSurface &	cushionSurface,
 			    KOrientation		orientation )
-    : QCanvasRectangle( rect, parentView->canvas() )
+    : Q3CanvasRectangle( rect, parentView->canvas() )
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )
@@ -89,7 +89,7 @@ KTreemapTile::init()
     setZ( _parentTile ? ( _parentTile->z() + 1.0 ) : 0.0 );
 
     setBrush( QColor( 0x60, 0x60, 0x60 ) );
-    setPen( NoPen );
+    setPen( Qt::NoPen );
 
     show();	// QCanvasItems are invisible by default!
 
@@ -153,7 +153,7 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 		childRect = QRect( rect.x(), rect.y() + offset, rect.width(), childSize );
 
 	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, childDir );
-	    CHECK_PTR( tile );
+	    Q_CHECK_PTR( tile );
 
 	    tile->cushionSurface().addRidge( dir,
 					     _cushionSurface.height() * _parentView->heightScaleFactor(),
@@ -325,7 +325,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 		childRect = QRect( rect.x(), rect.y() + offset, secondary, childSize );
 
 	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
-	    CHECK_PTR( tile );
+	    Q_CHECK_PTR( tile );
 
 	    tile->cushionSurface().addRidge( dir,
 					     rowCushionSurface.height() * _parentView->heightScaleFactor(),
@@ -366,14 +366,14 @@ KTreemapTile::drawShape( QPainter & painter )
     {
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-	    QCanvasRectangle::drawShape( painter );
+	    Q3CanvasRectangle::drawShape( painter );
 	}
 	else
 	{
 	    if ( _cushion.isNull() )
 		_cushion = renderCushion();
 
-	    QRect rect = QCanvasRectangle::rect();
+	    QRect rect = Q3CanvasRectangle::rect();
 
 	    if ( ! _cushion.isNull() )
 		painter.drawPixmap( rect, _cushion );
@@ -406,7 +406,7 @@ KTreemapTile::drawShape( QPainter & painter )
 #endif
 	}
 
-	QCanvasRectangle::drawShape( painter );
+	Q3CanvasRectangle::drawShape( painter );
     }
 }
 
@@ -414,7 +414,7 @@ KTreemapTile::drawShape( QPainter & painter )
 QPixmap
 KTreemapTile::renderCushion()
 {
-    QRect rect = QCanvasRectangle::rect();
+    QRect rect = Q3CanvasRectangle::rect();
 
     if ( rect.width() < 1 || rect.height() < 1 )
 	return QPixmap();

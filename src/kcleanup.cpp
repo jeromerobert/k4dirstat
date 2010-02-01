@@ -16,12 +16,13 @@
 #include <qapplication.h>
 #include <qregexp.h>
 
-#include <kapp.h>
-#include <kprocess.h>
+#include <kapplication.h>
+#include <k3process.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
+#include <kconfiggroup.h>
 
 #include "kcleanup.h"
 #include "kdirsaver.h"
@@ -38,9 +39,7 @@ KCleanup::KCleanup( QString		id,
 		    KActionCollection *	parent	)
     
     : KAction( title,
-	       0,	// accel
-	       parent,
-	       id )
+	       parent)
     
     , _id	( id	  )
     , _command	( command )
@@ -61,7 +60,7 @@ KCleanup::KCleanup( QString		id,
 
 
 KCleanup::KCleanup( const KCleanup &src )
-    : KAction()
+    : KAction(src.title(), src.parent())
 {
     copy( src );
 }
@@ -180,7 +179,7 @@ KCleanup::confirmation( KFileInfo * item )
     if ( KMessageBox::warningContinueCancel( 0,				// parentWidget
 					     msg,			// message
 					     i18n( "Please Confirm" ),	// caption
-					     i18n( "Confirm" )		// confirmButtonLabel
+					     KGuiItem(i18n( "Confirm" ))		// confirmButtonLabel
 					     ) == KMessageBox::Continue )
 	return true;
     else
@@ -320,10 +319,10 @@ KCleanup::expandVariables( const KFileInfo *	item,
     expanded.replace( QRegExp( "%n" ),
 		      "\"" + QString::fromLocal8Bit( item->name() ) + "\"" );
 
-    if ( KDE::versionMajor() >= 3 && KDE::versionMinor() >= 4 )
+   // if ( KDE::versionMajor() >= 3 && KDE::versionMinor() >= 4 )
 	expanded.replace( QRegExp( "%t" ), "trash:/" );
-    else
-	expanded.replace( QRegExp( "%t" ), KGlobalSettings::trashPath() );
+    //else
+	//expanded.replace( QRegExp( "%t" ), KGlobalSettings::trashPath() );
 
     return expanded;
 }
@@ -333,7 +332,7 @@ void
 KCleanup::runCommand ( const KFileInfo *	item,
 		       const QString &		command ) const
 {
-    KProcess	proc;
+    K3Process	proc;
     KDirSaver	dir( itemDir( item ) );
     QString	cmd( expandVariables( item, command ));
 
@@ -360,7 +359,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 	    // finish, so we are starting the command as a pure
 	    // background process.
 
-	    proc.start( KProcess::DontCare );
+	    proc.start( K3Process::DontCare );
 	    break;
 
 
@@ -372,8 +371,8 @@ KCleanup::runCommand ( const KFileInfo *	item,
 	    // performing the update prematurely, so we are starting this
 	    // process in blocking mode.
 
-	    QApplication::setOverrideCursor( waitCursor );
-	    proc.start( KProcess::Block );
+	    QApplication::setOverrideCursor( Qt::WaitCursor );
+	    proc.start( K3Process::Block );
 	    QApplication::restoreOverrideCursor();
 	    break;
     }
@@ -385,10 +384,9 @@ KCleanup::runCommand ( const KFileInfo *	item,
 void
 KCleanup::readConfig()
 {
-    KConfig *config = kapp->config();
-    KConfigGroupSaver saver( config, _id );
+    KConfigGroup config = KGlobal::config()->group(_id);
 
-    bool valid = config->readBoolEntry( "valid", false	);
+    bool valid = config.readEntry( "valid", false	);
 
     // If the config section requested exists, it should contain a
     // "valid" field with a true value. If not, there is no such
@@ -399,16 +397,16 @@ KCleanup::readConfig()
    
     if ( valid )
     {
-	_command		= config->readEntry	( "command"		);
-	_enabled		= config->readBoolEntry ( "enabled"		);
-	_worksForDir		= config->readBoolEntry ( "worksForDir"		);
-	_worksForFile		= config->readBoolEntry ( "worksForFile"	);
-	_worksForDotEntry	= config->readBoolEntry ( "worksForDotEntry"	);
-	_worksLocalOnly		= config->readBoolEntry ( "worksLocalOnly"	);
-	_recurse		= config->readBoolEntry ( "recurse"		, false	);
-	_askForConfirmation	= config->readBoolEntry ( "askForConfirmation"	, false	);
-	_refreshPolicy		= (KCleanup::RefreshPolicy) config->readNumEntry( "refreshPolicy" );
-	setTitle( config->readEntry( "title" ) );
+	_command		= config.readEntry ( "command"		);
+	_enabled		= config.readEntry ( "enabled"		, false );
+	_worksForDir		= config.readEntry ( "worksForDir"	, true  );
+	_worksForFile		= config.readEntry ( "worksForFile"	, true  );
+	_worksForDotEntry	= config.readEntry ( "worksForDotEntry"	, true  );
+	_worksLocalOnly		= config.readEntry ( "worksLocalOnly"	, true  );
+	_recurse		= config.readEntry ( "recurse"		, false	);
+	_askForConfirmation	= config.readEntry ( "askForConfirmation"	, false	);
+	_refreshPolicy		= (KCleanup::RefreshPolicy) config.readEntry( "refreshPolicy", 0);
+	setTitle( config.readEntry( "title" ) );
     }
 }
 
@@ -416,20 +414,19 @@ KCleanup::readConfig()
 void
 KCleanup::saveConfig() const
 {
-    KConfig *config = kapp->config();
-    KConfigGroupSaver saver( config, _id );
+    KConfigGroup config = KGlobal::config()->group(_id);
 
-    config->writeEntry( "valid",		true			);
-    config->writeEntry( "command",		_command		);
-    config->writeEntry( "title",		_title			);
-    config->writeEntry( "enabled",		_enabled		);
-    config->writeEntry( "worksForDir",		_worksForDir		);
-    config->writeEntry( "worksForFile",		_worksForFile		);
-    config->writeEntry( "worksForDotEntry",	_worksForDotEntry	);
-    config->writeEntry( "worksLocalOnly",	_worksLocalOnly		);
-    config->writeEntry( "recurse",		_recurse		);
-    config->writeEntry( "askForConfirmation",	_askForConfirmation	);
-    config->writeEntry( "refreshPolicy",	(int) _refreshPolicy	);
+    config.writeEntry( "valid",		true			);
+    config.writeEntry( "command",		_command		);
+    config.writeEntry( "title",		_title			);
+    config.writeEntry( "enabled",		_enabled		);
+    config.writeEntry( "worksForDir",		_worksForDir		);
+    config.writeEntry( "worksForFile",		_worksForFile		);
+    config.writeEntry( "worksForDotEntry",	_worksForDotEntry	);
+    config.writeEntry( "worksLocalOnly",	_worksLocalOnly		);
+    config.writeEntry( "recurse",		_recurse		);
+    config.writeEntry( "askForConfirmation",	_askForConfirmation	);
+    config.writeEntry( "refreshPolicy",	(int) _refreshPolicy	);
 }
 
 

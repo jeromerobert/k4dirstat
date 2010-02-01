@@ -165,7 +165,7 @@ KCleanupCollection::deepCopy( const KCleanupCollection &src )
 void
 KCleanupCollection::add( KCleanup *newCleanup )
 {
-    CHECK_PTR( newCleanup );
+    Q_CHECK_PTR( newCleanup );
     
     if ( _cleanupDict[ newCleanup->id() ] )	// Already there?
     {
@@ -240,7 +240,7 @@ KCleanupCollection::addUserCleanups( int number )
 	_nextUserCleanupNo++;
 	
 	KCleanup *cleanup = new KCleanup( id, "", title, _actionCollection );
-	CHECK_PTR( cleanup );
+	Q_CHECK_PTR( cleanup );
 	cleanup->setEnabled( false );
 
 	if ( i <= 9 )

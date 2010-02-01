@@ -16,6 +16,8 @@
 #   include <config.h>
 #endif
 
+#include <q3ptrlist.h>
+
 #include "kcleanup.h"
 
 // Forward declarations
@@ -24,11 +26,11 @@ class KActionCollection;
 
 namespace KDirStat
 {
-    typedef QDict<KCleanup>		KCleanupDict;
-    typedef QDictIterator<KCleanup>	KCleanupDictIterator;
+    typedef Q3Dict<KCleanup>		KCleanupDict;
+    typedef Q3DictIterator<KCleanup>	KCleanupDictIterator;
 
-    typedef QPtrList<KCleanup>		KCleanupList;
-    typedef QPtrListIterator<KCleanup>	KCleanupListIterator;
+    typedef Q3PtrList<KCleanup>		KCleanupList;
+    typedef Q3PtrListIterator<KCleanup>	KCleanupListIterator;
 
     
     /**

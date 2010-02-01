@@ -3,6 +3,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <KDE/KLocale>
+#include <KDE/KUrl>
 
 static const char description[] =
     I18N_NOOP("A KDE 4 Application");
@@ -17,11 +18,11 @@ int main(int argc, char **argv)
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
-    options.add("+[URL]", ki18n( "Document to open" ));
+    options.add("+[Dir/URL]", ki18n( "Directory or URL to open" ));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-    k4dirstat *widget = new k4dirstat;
+    k4dirstat *kdirstat = new k4dirstat;
 
     // see if we are starting with session management
     if (app.isSessionRestored())
@@ -30,21 +31,20 @@ int main(int argc, char **argv)
     }
     else
     {
+        kdirstat->show();
         // no session.. just start up normally
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();      
         if (args->count() == 0)
         {
-            //k4dirstat *widget = new k4dirstat;
-            widget->show();
+            kdirstat->fileAskOpenDir();
         }
         else
-        {
-            int i = 0;
-            for (; i < args->count(); i++)
-            {
-                //k4dirstat *widget = new k4dirstat;
-                widget->show();
-            }
+        {       
+            // Process command line arguments as URLs or paths to scan
+
+            KUrl url = args->url( 0 );
+            // kdDebug() << "Opening " << url.url() << endl;
+            kdirstat->openURL( url );
         }
         args->clear();
     }

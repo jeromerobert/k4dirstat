@@ -53,7 +53,10 @@ KCacheWriter::writeCache( const QString & fileName, KDirTree *tree )
 	return false;
     }
 
-    gzprintf( cache, "[kdirstat %s cache file]\n", VERSION );
+    // FIXME !!! XXX
+    const char* version = "4.0";
+
+    gzprintf( cache, "[kdirstat %s cache file]\n", version );
     gzprintf( cache,
 	     "# Do not edit!\n"
 	     "#\n"
@@ -126,13 +129,13 @@ KCacheWriter::writeItem( gzFile cache, KFileInfo * item )
     {
 	// Use absolute path
 
-	gzprintf( cache, " %s", (const char *) KURL::encode_string( item->url() ).latin1() );
+	gzprintf( cache, " %s", (const char *) KUrl::encode_string( item->url() ).latin1() );
     }
     else
     {
 	// Use relative path
 
-	gzprintf( cache, "\t%s", (const char *) KURL::encode_string( item->name() ).latin1() );
+	gzprintf( cache, "\t%s", (const char *) KUrl::encode_string( item->name() ).latin1() );
     }
 
 
@@ -361,8 +364,8 @@ KCacheReader::addItem()
 	    raw_name = raw_path;
     }
 
-    QString path = KURL::decode_string( QString::fromLatin1( raw_path ) );
-    QString name = KURL::decode_string( QString::fromLatin1( raw_name ) );
+    QString path = KUrl::decode_string( QString::fromLatin1( raw_path ) );
+    QString name = KUrl::decode_string( QString::fromLatin1( raw_name ) );
 
     if ( _lastExcludedDir )
     {

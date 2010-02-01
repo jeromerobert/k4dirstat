@@ -17,7 +17,7 @@
 #endif
 
 #include <qwidget.h>
-#include <qpainter.h>
+#include <q3painter.h>
 #include <qcolor.h>
 #include <qdatetime.h>
 
@@ -71,7 +71,7 @@ public:
      *
      * My, what is the sex of that thing? ;-)
      **/
-    void animate( QPainter *	painter,
+    void animate( Q3Painter *	painter,
 		  QRect		rect );
 
     /**
@@ -184,7 +184,7 @@ public:
      * methods. Change this painter in order to change the visual appearance of
      * the PacMan sprite.
      **/
-    QPainter *	painter() 		{ return _painter; }
+    Q3Painter *	painter() 		{ return _painter; }
 
     /**
      * Returns the animation interval in milliseconds.
@@ -252,7 +252,7 @@ protected:
 protected:
 
     KPacManAnimation *	_pacMan;
-    QPainter *		_painter;
+    Q3Painter *		_painter;
     QTimer *		_timer;
     int			_interval;	// millisec
     bool		_active;

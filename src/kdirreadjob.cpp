@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <sys/errno.h>
 #include <klocale.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
@@ -124,7 +124,7 @@ KLocalDirReadJob::startReading()
     struct dirent *	entry;
     struct stat		statInfo;
     QString		dirName		 = _dir->url();
-    QString		defaultCacheName = DEFAULT_CACHE_NAME;
+    QString		defaultCacheName = DEFAULT_CACHE_NAME.url();
 
     if ( ( _diskDir = opendir( dirName ) ) )
     {
@@ -189,7 +189,7 @@ KLocalDirReadJob::startReading()
 
 			    
 			    KCacheReadJob * cacheReadJob = new KCacheReadJob( _tree, _dir->parent(), fullName );
-			    CHECK_PTR( cacheReadJob );
+			    Q_CHECK_PTR( cacheReadJob );
 			    QString firstDirInCache = cacheReadJob->reader()->firstDir();
 
 			    if ( firstDirInCache == dirName )	// Does this cache file match this directory?
@@ -269,7 +269,7 @@ KLocalDirReadJob::startReading()
 
 
 KFileInfo *
-KLocalDirReadJob::stat( const KURL & 	url,
+KLocalDirReadJob::stat( const KUrl & 	url,
 			KDirTree  *	tree,
 			KDirInfo * 	parent )
 {
@@ -277,7 +277,7 @@ KLocalDirReadJob::stat( const KURL & 	url,
 
     if ( lstat( url.path(), &statInfo ) == 0 )		// lstat() OK
     {
-	QString name = parent ? url.filename() : url.path();
+	QString name = parent ? url.fileName() : url.path();
 
 	if ( S_ISDIR( statInfo.st_mode ) )		// directory?
 	{
@@ -320,7 +320,7 @@ KioDirReadJob::~KioDirReadJob()
 void
 KioDirReadJob::startReading()
 {
-    KURL url( _dir->url() );
+    KUrl url( _dir->url() );
 
     if ( ! url.isValid() )
     {
@@ -346,14 +346,14 @@ KioDirReadJob::entries ( KIO::Job *			job,
 			 const KIO::UDSEntryList &	entryList )
 {
     NOT_USED( job );
-    KURL url( _dir->url() );	// Cache this - it's expensive!
+    KUrl url( _dir->url() );	// Cache this - it's expensive!
 
     if ( ! url.isValid() )
     {
 	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
 
-    KIO::UDSEntryListConstIterator it = entryList.begin();
+    KIO::UDSEntryList::ConstIterator it = entryList.begin();
 
     while ( it != entryList.end() )
     {
@@ -418,7 +418,7 @@ KioDirReadJob::finished( KIO::Job * job )
 
 
 KFileInfo *
-KioDirReadJob::stat( const KURL & 	url,
+KioDirReadJob::stat( const KUrl & 	url,
 		      KDirTree  * 	tree,
 		      KDirInfo  * 	parent )
 {
@@ -438,7 +438,7 @@ KioDirReadJob::stat( const KURL & 	url,
 
 
 QString
-KioDirReadJob::owner( KURL url )
+KioDirReadJob::owner( KUrl url )
 {
     KIO::UDSEntry uds_entry;
 
@@ -477,7 +477,7 @@ KCacheReadJob::KCacheReadJob( KDirTree *	tree,
     : KObjDirReadJob( tree, parent )
 {
     _reader = new KCacheReader( cacheFileName, tree, parent );
-    CHECK_PTR( _reader );
+    Q_CHECK_PTR( _reader );
 
     init();
 }
@@ -538,7 +538,6 @@ KCacheReadJob::read()
 KDirReadJobQueue::KDirReadJobQueue()
     : QObject()
 {
-    _queue.setAutoDelete( false );
 
     connect( &_timer, SIGNAL( timeout() ),
 	     this,    SLOT  ( timeSlicedRead() ) );
@@ -572,7 +571,7 @@ KDirReadJobQueue::enqueue( KDirReadJob * job )
 KDirReadJob *
 KDirReadJobQueue::dequeue()
 {
-    KDirReadJob * job = _queue.getFirst();
+    KDirReadJob * job = _queue.first();
     _queue.removeFirst();
 
     if ( job )
@@ -586,13 +585,11 @@ void
 KDirReadJobQueue::clear()
 {
     _queue.first();		// set _queue.current() to the first position
-
-    while ( KDirReadJob * job = _queue.current() )
-    {
-	_queue.remove();	// remove current() and move current() to next
-	delete job;
-
-	_queue.next();		// move current() on
+    QMutableListIterator<KDirReadJob *> i(_queue);
+    while ( i.hasNext()){
+        KDirReadJob * job = i.next();
+        delete job;
+        i.remove();
     }
 }
 
@@ -602,7 +599,7 @@ KDirReadJobQueue::abort()
 {
     while ( ! _queue.isEmpty() )
     {
-	KDirReadJob * job = _queue.getFirst();
+	KDirReadJob * job = _queue.first();
 
 	if ( job->dir() )
 	    job->dir()->readJobAborted();
@@ -619,21 +616,20 @@ KDirReadJobQueue::killAll( KDirInfo * subtree )
     if ( ! subtree )
 	return;
     
-    _queue.first();		// set _queue.current() to the first position
+    QMutableListIterator<KDirReadJob *> i(_queue);
+    while (i.hasNext()){
+        KDirReadJob * job = i.next();
+        if (job->dir() && job->dir()->isInSubtree( subtree ) )
+        {
+            i.remove();
+            delete job;
+        }
+        else
+        {
 
-    while ( KDirReadJob * job = _queue.current() )
-    {
-	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
-	{
-	    // kdDebug() << "Killing read job " << job->dir() << endl;
-	    
-	    _queue.remove();	// remove current() and move current() to next
-	    delete job;
-	}
-	else
-	{
-	    _queue.next();	// move current() on
-	}
+        }
+
+
     }
 }
 
@@ -642,7 +638,7 @@ void
 KDirReadJobQueue::timeSlicedRead()
 {
     if ( ! _queue.isEmpty() )
-	_queue.getFirst()->read();
+	_queue.first()->read();
 }
 
 

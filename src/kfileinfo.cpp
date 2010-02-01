@@ -59,7 +59,7 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
     , _next( 0 )
     , _tree( tree )
 {
-    CHECK_PTR( statInfo );
+    Q_CHECK_PTR( statInfo );
 
     _isLocalFile = true;
     _name	 = filenameWithoutPath;
@@ -114,7 +114,7 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
     , _next( 0 )
     , _tree( tree )
 {
-    CHECK_PTR( fileItem );
+    Q_CHECK_PTR( fileItem );
 
     _isLocalFile = fileItem->isLocalFile();
     _name	 = parent ? fileItem->name() : fileItem->url().url();
@@ -147,7 +147,7 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 	_isSparseFile = false;
     }
 
-    _mtime	 = fileItem->time( KIO::UDS_MODIFICATION_TIME );
+    _mtime	 = fileItem->time( KIO::UDSEntry::UDS_MODIFICATION_TIME );
 }
 
 
@@ -386,14 +386,14 @@ KFileInfo::locate( QString url, bool findDotEntries )
 
 
 
-KURL
+KUrl
 KDirStat::fixedUrl( const QString & dirtyUrl )
 {
-    KURL url = dirtyUrl;
+    KUrl url = dirtyUrl;
 
     if ( ! url.isValid() )		// Maybe it's just a path spec?
     {
-	url = KURL();			// Start over with an empty, but valid URL
+	url = KUrl();			// Start over with an empty, but valid URL
 	url.setPath( dirtyUrl );	// and use just the path part.
     }
     else

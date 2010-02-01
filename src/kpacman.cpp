@@ -17,6 +17,7 @@
 #include <qtimer.h>
 #include <qpixmap.h>
 #include <kdebug.h>
+#include <QMouseEvent>
 
 #include "kpacman.h"
 
@@ -72,7 +73,7 @@ KPacManAnimation::restart()
 
 
 void
-KPacManAnimation::animate( QPainter *	painter,
+KPacManAnimation::animate( Q3Painter *	painter,
 			   QRect 	rect )
 {
     if ( _time.elapsed() < _interval )
@@ -143,7 +144,8 @@ KPacManAnimation::animate( QPainter *	painter,
     _pacManRect = QRect( 0, 0, size, size );
     QPixmap pixmap( size, size );
     pixmap.fill( painter->backgroundColor() );
-    QPainter p( &pixmap, _widget );
+    Q3Painter p( &pixmap);
+
     p.setBrush( _brush );
 
     if ( _goingRight )
@@ -214,7 +216,7 @@ KPacMan::KPacMan( QWidget * 	parent,
     _timer	= 0;
     _interval	= 100;	// millisec
     _active	= false;
-    _painter	= new QPainter( this );
+    _painter	= new Q3Painter( this );
     _margin	= 1;
 }
 

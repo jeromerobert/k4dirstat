@@ -40,7 +40,7 @@ public:
      * Constructor from a KURL. Will issue error messages on stdout for
      * non-local objects.
      **/
-    KDirSaver( const KURL & url );
+    KDirSaver( const KUrl & url );
     
     /**
      * Destructor. Restores the original working directory.

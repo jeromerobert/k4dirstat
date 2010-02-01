@@ -16,7 +16,8 @@
 #   include <config.h>
 #endif
 
-#include <qcanvas.h>
+#include <q3canvas.h>
+#include <kconfiggroup.h>
 
 
 #define MinAmbientLight			0
@@ -42,7 +43,7 @@ namespace KDirStat
     class KDirTree;
     class KFileInfo;
 
-    class KTreemapView:	public QCanvasView
+    class KTreemapView:	public Q3CanvasView
     {
 	Q_OBJECT
 
@@ -160,7 +161,7 @@ namespace KDirStat
 	 *
 	 * Strangely enough, QCanvas itself does not provide such a function.
 	 **/
-	static void deleteAllItems( QCanvas * canvas );
+	static void deleteAllItems( Q3Canvas * canvas );
 
 	/**
 	 * Notification that a dir tree node has been deleted.
@@ -373,7 +374,7 @@ namespace KDirStat
 	/**
 	 * Convenience method to read a color from 'config'.
 	 **/
-	QColor readColorEntry( KConfig * 	config,
+	QColor readColorEntry( KConfigGroup * 	config,
 			       const char * 	entryName,
 			       QColor 		defaultColor );
 
@@ -419,14 +420,14 @@ namespace KDirStat
      * on top (i.e., great z-height) of everything else. The rectangle is
      * transparent, so the treemap tile contents remain visible.
      **/
-    class KTreemapSelectionRect: public QCanvasRectangle
+    class KTreemapSelectionRect: public Q3CanvasRectangle
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	KTreemapSelectionRect( QCanvas * canvas, const QColor & color );
+	KTreemapSelectionRect( Q3Canvas * canvas, const QColor & color );
 
 	/**
 	 * Highlight the specified treemap tile: Resize this selection

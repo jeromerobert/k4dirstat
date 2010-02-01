@@ -16,7 +16,7 @@
 #   include <config.h>
 #endif
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qrect.h>
 #include "kdirtreeiterators.h"
 
@@ -130,7 +130,7 @@ namespace KDirStat
      *
      * @short Basic building block of a treemap
      **/
-    class KTreemapTile:	public QCanvasRectangle
+    class KTreemapTile:	public Q3CanvasRectangle
     {
     public:
 

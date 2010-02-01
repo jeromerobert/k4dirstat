@@ -15,10 +15,11 @@
 #include <qevent.h>
 #include <qregexp.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kconfiggroup.h>
 
 #include "kdirtree.h"
 #include "ktreemapview.h"
@@ -32,7 +33,7 @@ using namespace KDirStat;
 
 
 KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & initialSize )
-    : QCanvasView( parent )
+    : Q3CanvasView( parent )
     , _tree( tree )
     , _rootTile( 0 )
     , _selectedTile( 0 )
@@ -102,14 +103,14 @@ KTreemapView::clear()
 
 
 void
-KTreemapView::deleteAllItems( QCanvas * canvas )
+KTreemapView::deleteAllItems( Q3Canvas * canvas )
 {
     if ( ! canvas )
 	return;
 
-    QCanvasItemList all = canvas->allItems();
+    Q3CanvasItemList all = canvas->allItems();
 
-    for ( QCanvasItemList::Iterator it = all.begin(); it != all.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = all.begin(); it != all.end(); ++it )
 	delete *it;
 }
 
@@ -117,24 +118,23 @@ KTreemapView::deleteAllItems( QCanvas * canvas )
 void
 KTreemapView::readConfig()
 {
-    KConfig * config = kapp->config();
-    config->setGroup( "Treemaps" );
+    KConfigGroup config = KGlobal::config()->group( "Treemaps" );
 
-    _ambientLight	= config->readNumEntry( "AmbientLight"		,  DefaultAmbientLight );
+    _ambientLight	= config.readEntry( "AmbientLight"		,  DefaultAmbientLight );
 
-    _heightScaleFactor	= config->readDoubleNumEntry( "HeightScaleFactor" , DefaultHeightScaleFactor );
-    _autoResize		= config->readBoolEntry( "AutoResize"		, true	);
-    _squarify		= config->readBoolEntry( "Squarify"		, true	);
-    _doCushionShading	= config->readBoolEntry( "CushionShading"	, true	);
-    _ensureContrast	= config->readBoolEntry( "EnsureContrast"	, true	);
-    _forceCushionGrid	= config->readBoolEntry( "ForceCushionGrid"	, false	);
-    _minTileSize	= config->readNumEntry ( "MinTileSize"		, DefaultMinTileSize );
+    _heightScaleFactor	= config.readEntry( "HeightScaleFactor"         , DefaultHeightScaleFactor );
+    _autoResize		= config.readEntry( "AutoResize"		, true	);
+    _squarify		= config.readEntry( "Squarify"                  , true	);
+    _doCushionShading	= config.readEntry( "CushionShading"            , true	);
+    _ensureContrast	= config.readEntry( "EnsureContrast"            , true	);
+    _forceCushionGrid	= config.readEntry( "ForceCushionGrid"          , false	);
+    _minTileSize	= config.readEntry ( "MinTileSize"		, DefaultMinTileSize );
 
-    _highlightColor	= readColorEntry( config, "HighlightColor"	, red			     );
-    _cushionGridColor	= readColorEntry( config, "CushionGridColor"	, QColor( 0x80, 0x80, 0x80 ) );
-    _outlineColor	= readColorEntry( config, "OutlineColor"	, black			     );
-    _fileFillColor	= readColorEntry( config, "FileFillColor"	, QColor( 0xde, 0x8d, 0x53 ) );
-    _dirFillColor	= readColorEntry( config, "DirFillColor"	, QColor( 0x10, 0x7d, 0xb4 ) );
+    _highlightColor	= readColorEntry( &config, "HighlightColor"	, QColor(Qt::red)	     );
+    _cushionGridColor	= readColorEntry( &config, "CushionGridColor"	, QColor( 0x80, 0x80, 0x80 ) );
+    _outlineColor	= readColorEntry( &config, "OutlineColor"	, QColor(Qt::black)          );
+    _fileFillColor	= readColorEntry( &config, "FileFillColor"	, QColor( 0xde, 0x8d, 0x53 ) );
+    _dirFillColor	= readColorEntry( &config, "DirFillColor"	, QColor( 0x10, 0x7d, 0xb4 ) );
 
     if ( _autoResize )
     {
@@ -143,16 +143,16 @@ KTreemapView::readConfig()
     }
     else
     {
-	setHScrollBarMode( QScrollView::Auto );
-	setVScrollBarMode( QScrollView::Auto );
+	setHScrollBarMode( Q3ScrollView::Auto );
+	setVScrollBarMode( Q3ScrollView::Auto );
     }
 }
 
 
 QColor
-KTreemapView::readColorEntry( KConfig * config, const char * entryName, QColor defaultColor )
+KTreemapView::readColorEntry( KConfigGroup *  config, const char * entryName, QColor defaultColor )
 {
-    return config->readColorEntry( entryName, &defaultColor );
+    return config->readEntry( entryName, defaultColor );
 }
 
 
@@ -161,8 +161,8 @@ KTreemapView::tileAt( QPoint pos )
 {
     KTreemapTile * tile = 0;
 
-    QCanvasItemList coll = canvas()->collisions( pos );
-    QCanvasItemList::Iterator it = coll.begin();
+    Q3CanvasItemList coll = canvas()->collisions( pos );
+    Q3CanvasItemList::Iterator it = coll.begin();
 
     while ( it != coll.end() && tile == 0 )
     {
@@ -186,12 +186,12 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 
     switch ( event->button() )
     {
-	case LeftButton:
+	case Qt::LeftButton:
 	    selectTile( tile );
 	    emit userActivity( 1 );
 	    break;
 
-	case MidButton:
+	case Qt::MidButton:
 	    // Select clicked tile's parent, if available
 
 	    if ( _selectedTile &&
@@ -213,7 +213,7 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 	    emit userActivity( 1 );
 	    break;
 
-	case RightButton:
+	case Qt::RightButton:
 
 	    if ( tile )
 	    {
@@ -255,7 +255,7 @@ KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 
     switch ( event->button() )
     {
-	case LeftButton:
+	case Qt::LeftButton:
 	    if ( tile )
 	    {
 		selectTile( tile );
@@ -264,12 +264,12 @@ KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 	    }
 	    break;
 
-	case MidButton:
+	case Qt::MidButton:
 	    zoomOut();
 	    emit userActivity( 5 );
 	    break;
 
-	case RightButton:
+	case Qt::RightButton:
 	    // Double-clicking the right mouse button is pretty useless - the
 	    // first click opens the context menu: Single clicks are always
 	    // delivered first. Even if that would be caught by using timers,
@@ -417,8 +417,8 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
 
     if ( ! canvas() )
     {
-	QCanvas * canv = new QCanvas( this );
-	CHECK_PTR( canv );
+	Q3Canvas * canv = new Q3Canvas( this );
+	Q_CHECK_PTR( canv );
 	setCanvas( canv );
     }
 
@@ -498,7 +498,7 @@ KTreemapView::deleteNotify( KFileInfo * )
 void
 KTreemapView::resizeEvent( QResizeEvent * event )
 {
-    QCanvasView::resizeEvent( event );
+    Q3CanvasView::resizeEvent( event );
 
     if ( _autoResize )
     {
@@ -571,8 +571,8 @@ KTreemapView::findTile( KFileInfo * node )
     if ( ! node )
 	return 0;
 
-    QCanvasItemList itemList = canvas()->allItems();
-    QCanvasItemList::Iterator it = itemList.begin();
+    Q3CanvasItemList itemList = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = itemList.begin();
 
     while ( it != itemList.end() )
     {
@@ -597,8 +597,8 @@ KTreemapView::visibleSize()
     setHScrollBarMode( AlwaysOff );
     setVScrollBarMode( AlwaysOff );
 
-    QSize size = QSize( QCanvasView::visibleWidth(),
-			QCanvasView::visibleHeight() );
+    QSize size = QSize( Q3CanvasView::visibleWidth(),
+			Q3CanvasView::visibleHeight() );
 
     setHScrollBarMode( oldHMode );
     setVScrollBarMode( oldVMode );
@@ -719,8 +719,8 @@ KTreemapView::tileColor( KFileInfo * file )
 
 
 
-KTreemapSelectionRect::KTreemapSelectionRect( QCanvas * canvas, const QColor & color )
-    : QCanvasRectangle( canvas )
+KTreemapSelectionRect::KTreemapSelectionRect( Q3Canvas * canvas, const QColor & color )
+    : Q3CanvasRectangle( canvas )
 {
     setPen( QPen( color, 2 ) );
     setZ( 1e10 );		// Higher than everything else

@@ -12,8 +12,9 @@
 #   include <config.h>
 #endif
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include "kdirtree.h"
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
@@ -50,11 +51,10 @@ KDirTree::~KDirTree()
 void
 KDirTree::readConfig()
 {
-    KConfig * config = kapp->config();
-    config->setGroup( "Directory Reading" );
+    KConfigGroup config = KGlobal::config()->group("Directory Reading");
 
-    _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",     false );
-    _enableLocalDirReader	= config->readBoolEntry( "EnableLocalDirReader", true  );
+    _crossFileSystems		= config.readEntry( "CrossFileSystems",     false );
+    _enableLocalDirReader	= config.readEntry( "EnableLocalDirReader", true  );
 }
 
 
@@ -97,7 +97,7 @@ KDirTree::clear( bool sendSignals )
 
 
 void
-KDirTree::startReading( const KURL & url )
+KDirTree::startReading( const KUrl & url )
 {
     // kdDebug() << k_funcinfo << " " << url.url() << endl;
 
@@ -127,7 +127,7 @@ KDirTree::startReading( const KURL & url )
     else
     {
 	// kdDebug() << "Using KIO methods for " << url.url() << endl;
-	KURL cleanUrl( url );
+	KUrl cleanUrl( url );
 	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
 	_readMethod	= KDirReadKIO;
 	_root 		= KioDirReadJob::stat( cleanUrl, this );
@@ -176,7 +176,7 @@ KDirTree::refresh( KFileInfo *subtree )
     {
 	// Save some values from the old subtree.
 
-	KURL url		= subtree->url();
+	KUrl url		= subtree->url();
 	KDirInfo * parent	= subtree->parent();
 
 

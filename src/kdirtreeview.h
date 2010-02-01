@@ -17,9 +17,10 @@
 #endif
 
 #include <qdatetime.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpixmap.h>
-#include <klistview.h>
+#include <KDE/K3ListView>
+#include <q3painter.h>
 #include "kdirtree.h"
 
 #define DEBUG_COUNTERS		10
@@ -28,7 +29,7 @@
 // Forward declarations
 class QWidget;
 class QTimer;
-class QPopupMenu;
+class Q3PopupMenu;
 class KPacManAnimation;
 
 #define USE_KLISTVIEW 0
@@ -46,13 +47,13 @@ namespace KDirStat
 #if USE_KLISTVIEW
 #   define KDirTreeViewParentClass		KListView
 #else
-#   define KDirTreeViewParentClass		QListView
+#   define KDirTreeViewParentClass		Q3ListView
 #endif
 
     class KDirTreeViewItem;
 
 
-    class KDirTreeView:	public QListView
+    class KDirTreeView:	public Q3ListView
     // Using
     //		class KDirTreeView: public KDirTreeViewParentClass
     // or some other 'ifdef' ... construct seems to confuse "moc".
@@ -259,7 +260,7 @@ namespace KDirStat
 	/**
 	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
 	 **/
-	void openURL( KURL url );
+	void openURL( KUrl url );
 
 	/**
 	 * Refresh (i.e. re-read from disk) the entire tree.
@@ -284,13 +285,13 @@ namespace KDirStat
         /**
 	 * Select a (QListViewItem) item. Triggers selectionChanged() signals.
 	 **/
-        void selectItem( QListViewItem *item );
+        void selectItem( Q3ListViewItem *item );
 
         /**
 	 * Select an item. Triggers selectionChanged() signals.
 	 * Overloaded for convenience.
 	 **/
-        void selectItem( KDirTreeViewItem *item ) { selectItem( (QListViewItem *) item ); }
+        void selectItem( KDirTreeViewItem *item ) { selectItem( (Q3ListViewItem *) item ); }
 
 	/**
 	 * Select a KDirTree item. Used for connecting the @ref
@@ -435,7 +436,7 @@ namespace KDirStat
 	 * Pop up context menu (i.e. emit the contextMenu() signal) or open a
 	 * small info popup with exact information, depending on 'column'.
 	 **/
-	void 	popupContextMenu	( QListViewItem *	listViewItem,
+	void 	popupContextMenu	( Q3ListViewItem *	listViewItem,
 					  const QPoint &	pos,
 					  int 			column );
 
@@ -534,7 +535,7 @@ namespace KDirStat
 	QTime			_stopWatch;
 	QString			_currentDir;
 	KDirTreeViewItem *	_selection;
-	QPopupMenu *		_contextInfo;
+	Q3PopupMenu *		_contextInfo;
 	int			_idContextInfo;
 
 	int	_openLevel;
@@ -587,7 +588,7 @@ namespace KDirStat
 
 
 
-    class KDirTreeViewItem: public QListViewItem
+    class KDirTreeViewItem: public Q3ListViewItem
     {
     public:
 	/**
@@ -666,14 +667,14 @@ namespace KDirStat
 	 * Reimplemented from @ref QListViewItem.
 	 **/
 	KDirTreeViewItem * 	firstChild() const
-	    { return (KDirTreeViewItem *) QListViewItem::firstChild(); }
+	    { return (KDirTreeViewItem *) Q3ListViewItem::firstChild(); }
 
 	/**
 	 * Returns the next sibling of this item or 0 if there is none.
 	 * (Kind of) reimplemented from @ref QListViewItem.
 	 **/
 	KDirTreeViewItem * 	next() const
-	    { return (KDirTreeViewItem *) QListViewItem::nextSibling(); }
+	    { return (KDirTreeViewItem *) Q3ListViewItem::nextSibling(); }
 
 	/**
 	 * Comparison function used for sorting the list.
@@ -688,7 +689,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented from QListViewItem
 	 **/
-	virtual int compare( QListViewItem *	other,
+	virtual int compare( Q3ListViewItem *	other,
 			     int		col,
 			     bool		ascending ) const;
 
@@ -764,7 +765,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented from @ref QListViewItem.
 	 **/
-	virtual void paintCell 	( QPainter *		painter,
+	virtual void paintCell 	( Q3Painter *		painter,
 				  const QColorGroup &	colorGroup,
 				  int			column,
 				  int			width,
@@ -776,7 +777,7 @@ namespace KDirStat
 	 * 'indent' is the number of pixels to indent the bar.
 	 **/
 	void paintPercentageBar	( float			percent,
-				  QPainter *		painter,
+				  Q3Painter *		painter,
 				  int			indent,
 				  int			width,
 				  const QColor &	fillColor,

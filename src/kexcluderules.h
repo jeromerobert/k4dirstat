@@ -18,7 +18,7 @@
 
 #include <qstring.h>
 #include <qregexp.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 namespace KDirStat
@@ -164,7 +164,7 @@ namespace KDirStat
 
     private:
 
-	QPtrList<KExcludeRule>    _rules;
+	Q3PtrList<KExcludeRule>    _rules;
     };
 
 }	// namespace KDirStat

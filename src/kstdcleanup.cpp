@@ -26,13 +26,13 @@ KStdCleanup::openInKonqueror( KActionCollection *parent )
 				      "kfmclient openURL %p",
 				      i18n( "Open in &Konqueror" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
     cleanup->setWorksForFile    ( true );
     cleanup->setWorksForDotEntry( true );
     cleanup->setWorksLocalOnly	( false );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
-    cleanup->setIcon( "konqueror.png" );
+    cleanup->setIcon(KIcon("konqueror.png" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_K );
     
     return cleanup;
@@ -46,12 +46,12 @@ KStdCleanup::openInTerminal( KActionCollection *parent )
 				      "konsole",
 				      i18n( "Open in &Terminal" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
     cleanup->setWorksForFile    ( true );
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
-    cleanup->setIcon( "konsole.png" );
+    cleanup->setIcon(KIcon("konsole.png" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
 
     return cleanup;
@@ -65,12 +65,12 @@ KStdCleanup::compressSubtree( KActionCollection *parent )
 				      "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
 				      i18n( "&Compress" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( false );
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::refreshParent );
-    cleanup->setIcon( "ark.png" );
+    cleanup->setIcon(KIcon( "ark.png" ));
 
     return cleanup;
 }
@@ -83,7 +83,7 @@ KStdCleanup::makeClean( KActionCollection *parent )
 				      "make clean",
 				      i18n( "&make clean" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( false );
     cleanup->setWorksForDotEntry( true  );
@@ -100,7 +100,7 @@ KStdCleanup::deleteTrash( KActionCollection *parent )
 				      "rm -f *.o *~ *.bak *.auto core",
 				      i18n( "Delete T&rash Files" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( false );
     cleanup->setWorksForDotEntry( true  );
@@ -118,12 +118,12 @@ KStdCleanup::moveToTrashBin( KActionCollection *parent )
 				      "kfmclient move %p %t",
 				      i18n( "Delete (to Trash &Bin)" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( true  );
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
-    cleanup->setIcon( "edittrash.png" );
+    cleanup->setIcon(KIcon( "edittrash.png" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_X );
 
     return cleanup;
@@ -137,13 +137,13 @@ KStdCleanup::hardDelete( KActionCollection *parent )
 				      "rm -rf %p",
 				      i18n( "&Delete (no way to undelete!)" ),
 				      parent );
-    CHECK_PTR( cleanup );
+    Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( true  );
     cleanup->setWorksForDotEntry( false );
     cleanup->setAskForConfirmation( true );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
-    cleanup->setIcon( "editdelete.png" );
+    cleanup->setIcon(KIcon( "editdelete.png" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_Delete );
 
     return cleanup;

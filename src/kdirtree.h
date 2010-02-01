@@ -89,7 +89,7 @@ namespace KDirStat
 	 * constructor must return before any signals are sent, i.e. before
 	 * anything is read.
 	 **/
-	void startReading( const KURL & url );
+	void startReading( const KUrl & url );
 
 	/**
 	 * Forcefully stop a running read process.

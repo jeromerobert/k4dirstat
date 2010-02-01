@@ -17,7 +17,7 @@
 #endif
 
 #include <dirent.h>
-#include <qptrlist.h>
+#include <qlist.h>
 #include <qtimer.h>
 #include <kdebug.h>
 #include <kio/jobclasses.h>
@@ -212,7 +212,7 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * stat( const KURL &	url,
+	static KFileInfo * stat( const KUrl &	url,
 				 KDirTree  *	tree,
 				 KDirInfo *	parent = 0 );
 
@@ -266,7 +266,7 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo *	stat( const KURL &	url,
+	static KFileInfo *	stat( const KUrl &	url,
 				      KDirTree	*	tree,
 				      KDirInfo *	parent = 0 );
 
@@ -276,7 +276,7 @@ namespace KDirStat
 	 * This is a moderately expensive operation since it involves a network
 	 * transparent stat() call.
 	 **/
-	static QString		owner( KURL url );
+	static QString		owner( KUrl url );
 
 
     protected slots:
@@ -404,7 +404,7 @@ namespace KDirStat
 	/**
 	 * Get the head of the queue (the next job that is due for processing).
 	 **/
-	KDirReadJob * head()	const	{ return _queue.getFirst();	}
+	KDirReadJob * head()	const	{ return _queue.first();	}
 
 	/**
 	 * Count the number of pending jobs in the queue.
@@ -469,7 +469,7 @@ namespace KDirStat
 
     protected:
 
-	QPtrList<KDirReadJob>	_queue;
+	QList<KDirReadJob *>	_queue;
 	QTimer			_timer;
     };
 

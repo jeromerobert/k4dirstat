@@ -25,7 +25,7 @@
 #endif
 
 
-#define DEFAULT_CACHE_NAME	".kdirstat.cache.gz"
+#define DEFAULT_CACHE_NAME	KUrl(".kdirstat.cache.gz")
 #define MAX_CACHE_LINE_LEN	1024
 #define MAX_FIELDS_PER_LINE	32
 

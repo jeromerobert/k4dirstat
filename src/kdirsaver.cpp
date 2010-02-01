@@ -29,7 +29,7 @@ KDirSaver::KDirSaver( const QString & newPath )
 }
 
 
-KDirSaver::KDirSaver( const KURL & url )
+KDirSaver::KDirSaver( const KUrl & url )
 {
     if ( url.isLocalFile() )
     {

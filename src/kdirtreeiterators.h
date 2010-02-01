@@ -17,6 +17,7 @@
 #endif
 
 #include "kdirtree.h"
+#include <q3ptrlist.h>
 
 
 namespace KDirStat
@@ -324,7 +325,7 @@ namespace KDirStat
     /**
      * Internal helper class for sorting iterators.
      **/
-    class KFileInfoList: public QPtrList<KFileInfo>
+    class KFileInfoList: public Q3PtrList<KFileInfo>
     {
     public:
 
@@ -349,14 +350,14 @@ namespace KDirStat
 	/**
 	 * Comparison function. This is why this class is needed at all.
 	 **/
-	virtual int compareItems( QCollection::Item it1, QCollection::Item it2 );
+	virtual int compareItems( Q3PtrCollection::Item it1, Q3PtrCollection::Item it2 );
 
 	KFileInfoSortOrder 	_sortOrder;
 	bool			_ascending;
     };
 
 
-    typedef QPtrListIterator<KFileInfo> KFileInfoListIterator;
+    typedef Q3PtrListIterator<KFileInfo> KFileInfoListIterator;
 
 
 

@@ -12,7 +12,7 @@
 #   include <config.h>
 #endif
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include "kdirinfo.h"
 #include "kdirtreeiterators.h"
@@ -274,7 +274,7 @@ KDirInfo::isBusy()
 void
 KDirInfo::insertChild( KFileInfo *newChild )
 {
-    CHECK_PTR( newChild );
+    Q_CHECK_PTR( newChild );
 
     if ( newChild->isDir() || _dotEntry == 0 || _isDotEntry )
     {

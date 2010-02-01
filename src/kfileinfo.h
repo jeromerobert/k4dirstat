@@ -613,7 +613,7 @@ namespace KDirStat
      * Make a valid, fixed and cleaned URL from a (possibly dirty) URL or maybe
      * a path.
      **/
-    KURL fixedUrl( const QString & dirtyUrl );
+    KUrl fixedUrl( const QString & dirtyUrl );
 
 
     /**
