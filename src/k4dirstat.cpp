@@ -4,7 +4,7 @@
  * Copyright (C) 2008 %{AUTHOR} <%{EMAIL}>
  */
 #include "k4dirstat.h"
-#include "k4dirstatview.h"
+//#include "k4dirstatview.h"
 #include "settings.h"
 
 #include <QtGui/QDropEvent>

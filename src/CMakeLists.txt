@@ -1,7 +1,7 @@
 set(k4dirstat_SRCS
    k4dirstat.cpp
    main.cpp
-   k4dirstatview.cpp
+   #k4dirstatview.cpp
    ktreemapview.cpp
    kcleanupcollection.cpp
    kfileinfo.cpp
@@ -21,7 +21,7 @@ set(k4dirstat_SRCS
    kdirstatsettings.cpp
  )
 
-kde4_add_ui_files(k4dirstat_SRCS k4dirstatview_base.ui prefs_base.ui)
+#kde4_add_ui_files(k4dirstat_SRCS k4dirstatview_base.ui prefs_base.ui)
 
 kde4_add_kcfg_files(k4dirstat_SRCS settings.kcfgc )
 
