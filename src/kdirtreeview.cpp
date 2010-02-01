@@ -1994,7 +1994,7 @@ KDirStat::localeTimeDate( time_t rawTime )
     QDateTime timeDate;
     timeDate.setTime_t( rawTime );
     QString timeDateString =
-	KGlobal::locale()->formatDate( timeDate.date(), KLocale::LongDate) + "  " +	// short format
+	KGlobal::locale()->formatDate( timeDate.date(), KLocale::ShortDate) + "  " +	// short format
 	KGlobal::locale()->formatTime( timeDate.time(), true );		// include seconds
 
     return timeDateString;
