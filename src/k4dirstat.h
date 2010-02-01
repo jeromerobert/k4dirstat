@@ -208,12 +208,12 @@ public slots:
     /**
      * Read configuration for the main window.
      **/
-    //void readMainWinConfig();
+    void readMainWinConfig();
 
     /**
      * Save the main window's configuration.
      **/
-    //void saveMainWinConfig();
+    void saveMainWinConfig();
 
     /**
      * Revert all cleanups to default values.

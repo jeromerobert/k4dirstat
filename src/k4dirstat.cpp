@@ -32,6 +32,7 @@
 #include <ktoggleaction.h>
 #include <kconfigdialog.h>
 #include <ktoolbar.h>
+#include <kxmlguifactory.h>
 
 #include <Qt/qclipboard.h>
 #include <q3popupmenu.h>
@@ -132,6 +133,19 @@ k4dirstat::k4dirstat()
     // mainwindow to automatically save settings if changed: window size,
     // toolbar position, icon size, etc.
     setupGUI();
+    \
+    _treeViewContextMenu = (Q3PopupMenu *) factory()->container( "treeViewContextMenu", this );
+    _treemapContextMenu	 = (Q3PopupMenu *) factory()->container( "treemapContextMenu",  this );
+
+    readMainWinConfig();
+
+    // Disable certain actions at startup
+
+    _editCopy->setEnabled( false );
+    _reportMailToOwner->setEnabled( false );
+    _fileRefreshAll->setEnabled( false );
+    _fileRefreshSelected->setEnabled( false );
+    updateActions();
 }
 
 k4dirstat::~k4dirstat()
@@ -327,6 +341,70 @@ void k4dirstat::openURL( const KUrl& url )
 
     statusMsg( i18n( "Ready." ) );
 }
+
+void k4dirstat::readMainWinConfig()
+{
+
+    KConfigGroup config = KGlobal::config()->group("General Options");
+
+    // Status settings of the various bars and views
+
+    _showTreemapView->setChecked( config.readEntry( "Show Treemap", true ) );
+    toggleTreemapView();
+
+
+    // Position settings of the various bars
+
+   // KToolBar::BarPosition toolBarPos;
+    //toolBarPos = ( KToolBar::BarPosition ) config->readEntry( "ToolBarPos", KToolBar::Top );
+    //toolBar( "mainToolBar" )->setBarPos( toolBarPos );
+
+    _treemapViewHeight = config.readEntry( "TreemapViewHeight", 250 );
+
+    // initialize the recent file list
+    _fileOpenRecent->loadEntries( config);
+
+    QSize size = config.readEntry( "Geometry", QSize() );
+
+    if( ! size.isEmpty() )
+        resize( size );
+
+    config = KGlobal::config()->group("Animation");
+    initPacMan( config.readEntry( "ToolbarPacMan", true ) );
+    _treeView->enablePacManAnimation( config.readEntry( "DirTreePacMan", false ) );
+
+    config = KGlobal::config()->group("Exclude");
+    QStringList excludeRules = config.readEntry ( "ExcludeRules", QStringList() );
+    KExcludeRules::excludeRules()->clear();
+
+    for ( QStringList::Iterator it = excludeRules.begin(); it != excludeRules.end(); ++it )
+    {
+        QString ruleText = *it;
+        KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
+        kdDebug() << "Adding exclude rule: " << ruleText << endl;
+    }
+
+    if ( excludeRules.size() == 0 )
+        kdDebug() << "No exclude rules defined" << endl;
+}
+
+
+void k4dirstat::saveMainWinConfig()
+{
+    KConfigGroup config = KGlobal::config()->group("General Options");
+
+
+    config.writeEntry( "Geometry", 		size() );
+    config.writeEntry( "Show Treemap",		_showTreemapView->isChecked() );
+    // Config entries for 2.0? seriously?
+    //config.writeEntry( "ToolBarPos", 		(int) toolBar( "mainToolBar" )->pos() );
+
+    if ( _treemapView )
+        config.writeEntry( "TreemapViewHeight", _treemapView->height() );
+
+    _fileOpenRecent->saveEntries( config );
+}
+
 
 //============================================================================
 //				     Slots
