@@ -232,7 +232,7 @@ void k4dirstat::setupActions()
 
     _reportMailToOwner = actionCollection()->addAction("report_mail_to_owner", _treeView, SLOT(sendMailToOwner()));
     _reportMailToOwner->setText(i18n("Send &Mail to Owner"));
-    _reportMailToOwner->setIcon(KIcon("mail"));
+    _reportMailToOwner->setIcon(KIcon("mail-message-new"));
 
     _helpSendFeedbackMail = actionCollection()->addAction("help_send_feedback_mail",this, SLOT(sendFeedbackMail()));
     _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));

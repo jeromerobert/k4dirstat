@@ -123,7 +123,7 @@ KStdCleanup::moveToTrashBin( KActionCollection *parent )
     cleanup->setWorksForFile    ( true  );
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
-    cleanup->setIcon(KIcon( "edittrash.png" ));
+    cleanup->setIcon(KIcon( "edit-trash" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_X );
 
     return cleanup;
@@ -143,7 +143,7 @@ KStdCleanup::hardDelete( KActionCollection *parent )
     cleanup->setWorksForDotEntry( false );
     cleanup->setAskForConfirmation( true );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
-    cleanup->setIcon(KIcon( "editdelete.png" ));
+    cleanup->setIcon(KIcon( "edit-delete" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_Delete );
 
     return cleanup;

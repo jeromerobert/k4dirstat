@@ -102,12 +102,12 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
     _openDirIcon	= loadIcon( "folder-open" 	);
     _closedDirIcon	= loadIcon( "folder"		);
-    _openDotEntryIcon	= loadIcon( "folder_orange_open");
-    _closedDotEntryIcon	= loadIcon( "folder_orange"	);
-    _unreadableDirIcon	= loadIcon( "folder_locked" 	);
-    _mountPointIcon	= loadIcon( "hdd_mount"		);
+    _openDotEntryIcon	= loadIcon( "folder-orange"     );
+    _closedDotEntryIcon	= loadIcon( "folder-orange"	);
+    _unreadableDirIcon	= loadIcon( "folder-locked" 	);
+    _mountPointIcon	= loadIcon( "drive-harddisk"	);
     _fileIcon		= loadIcon( "mime_empty"	);
-    _symLinkIcon	= loadIcon( "symlink"		);	// The KDE standard link icon is ugly!
+    _symLinkIcon	= loadIcon( "emblem-symbolic-link");	// The KDE standard link icon is ugly!
     _blockDevIcon	= loadIcon( "blockdevice"	);
     _charDevIcon	= loadIcon( "chardevice"	);
     _fifoIcon		= loadIcon( "socket"		);
