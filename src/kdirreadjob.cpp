@@ -584,7 +584,6 @@ KDirReadJobQueue::dequeue()
 void
 KDirReadJobQueue::clear()
 {
-    _queue.first();		// set _queue.current() to the first position
     QMutableListIterator<KDirReadJob *> i(_queue);
     while ( i.hasNext()){
         KDirReadJob * job = i.next();
