@@ -182,7 +182,7 @@ void k4dirstat::setupActions()
     _fileContinueReadingAtMountPoint = actionCollection()->addAction( "file_continue_reading_at_mount_point" ,
                                                                       this, SLOT(refreshSelected()));
     _fileContinueReadingAtMountPoint->setText( i18n( "Continue Reading at &Mount Point" ));
-    _fileContinueReadingAtMountPoint->setIcon(KIcon("hdd_mount"));
+    _fileContinueReadingAtMountPoint->setIcon(KIcon("drive-harddisk"));
 
     _fileStopReading = actionCollection()->addAction("file_stop_reading", this, SLOT(stopReading()));
     _fileStopReading->setText(i18n( "Stop Rea&ding" ));
