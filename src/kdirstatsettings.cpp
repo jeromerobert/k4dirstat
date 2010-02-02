@@ -49,15 +49,7 @@ using namespace KDirStat;
 
 KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
     : KPageDialog(mainWin)
-
-    /*( Tabbed,					// dialogFace
-		   i18n( "Settings" ),				// caption
-		   Ok | Apply | Default | Cancel | Help,	// buttonMask
-		   Ok,						// defaultButton
-		   0,						// parent
-		   0,						// name
-		   false )					// modal
-    , _mainWin( mainWin )*/
+    , _mainWin( mainWin )
 {
     /**
      * This may seem like overkill, but I didn't find any other way to get
