@@ -51,7 +51,7 @@ KStdCleanup::openInTerminal( KActionCollection *parent )
     cleanup->setWorksForFile    ( true );
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
-    cleanup->setIcon(KIcon("konsole.png" ));
+    cleanup->setIcon(KIcon("utilities-terminal" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
 
     return cleanup;
@@ -70,7 +70,7 @@ KStdCleanup::compressSubtree( KActionCollection *parent )
     cleanup->setWorksForFile    ( false );
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::refreshParent );
-    cleanup->setIcon(KIcon( "ark.png" ));
+    cleanup->setIcon(KIcon( "utilities-file-archiver" ));
 
     return cleanup;
 }
@@ -123,7 +123,12 @@ KStdCleanup::moveToTrashBin( KActionCollection *parent )
     cleanup->setWorksForFile    ( true  );
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
-    cleanup->setIcon(KIcon( "edit-trash" ));
+    /* The icon standard says the action should be "edit-trash"
+       However, Oxygen doesn't have that icon, so I'm setting
+       "user-trash" which will probably be the same in most
+       icon sets. */
+    //cleanup->setIcon(KIcon( "edit-trash" ));
+    cleanup->setIcon(KIcon( "user-trash" ));
     cleanup->setShortcut( Qt::CTRL + Qt::Key_X );
 
     return cleanup;
