@@ -124,6 +124,9 @@ k4dirstat::k4dirstat()
     // then, setup our actions
     setupActions();
 
+    // setup the cleanup actions
+    initCleanups();
+
     // add a status bar
     statusBar()->show();
 
