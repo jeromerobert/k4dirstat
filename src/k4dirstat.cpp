@@ -35,7 +35,7 @@
 #include <kxmlguifactory.h>
 
 #include <Qt/qclipboard.h>
-#include <q3popupmenu.h>
+#include <Qt/qmenu.h>
 #include <Qt/qsplitter.h>
 
 #include "kdirtree.h"
@@ -134,8 +134,8 @@ k4dirstat::k4dirstat()
     // toolbar position, icon size, etc.
     setupGUI();
     \
-    _treeViewContextMenu = (Q3PopupMenu *) factory()->container( "treeViewContextMenu", this );
-    _treemapContextMenu	 = (Q3PopupMenu *) factory()->container( "treemapContextMenu",  this );
+    _treeViewContextMenu = static_cast<QMenu*> (factory()->container( "treeViewContextMenu", this ));
+    _treemapContextMenu	 = static_cast<QMenu*> (factory()->container( "treemapContextMenu",  this ));
 
     readMainWinConfig();
 
@@ -800,4 +800,3 @@ void k4dirstat::optionsPreferences()
     dialog->show();
 }*/
 
-#include "k4dirstat.moc"

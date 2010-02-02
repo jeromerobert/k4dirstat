@@ -9,14 +9,9 @@
 
 #include <kxmlguiwindow.h>
 
-#include "ui_prefs_base.h"
-
-class k4dirstatView;
 class QPrinter;
-class KToggleAction;
 class KUrl;
 
-class Q3PopupMenu;
 class QSplitter;
 class KActivityTracker;
 class KFeedbackDialog;
@@ -295,8 +290,8 @@ protected:
     KTreemapView *		    _treemapView;
     KPacMan *			_pacMan;
     QWidget *			_pacManDelimiter;
-    Q3PopupMenu *		_treeViewContextMenu;
-    Q3PopupMenu *		_treemapContextMenu;
+    QMenu *			_treeViewContextMenu;
+    QMenu *			_treemapContextMenu;
     KDirStat::KSettingsDialog *	_settingsDialog;
     KFeedbackDialog *		_feedbackDialog;
     KActivityTracker *		_activityTracker;
@@ -332,12 +327,8 @@ private:
     void setupActions();
 
 private:
-    Ui::prefs_base ui_prefs_base ;
-    k4dirstatView *m_view;
 
     QPrinter   *m_printer;
-    KToggleAction *m_toolbarAction;
-    KToggleAction *m_statusbarAction;
 };
 
 #endif // _K4DIRSTAT_H_
