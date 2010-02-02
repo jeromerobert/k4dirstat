@@ -56,6 +56,7 @@ KCleanup::KCleanup( QString		id,
     _refreshPolicy	= noRefresh;
     
     KAction::setEnabled( false );
+    parent->addAction(id,this);
 }
 
 
