@@ -222,7 +222,7 @@ void k4dirstat::setupActions()
     _treemapRebuild->setText(i18n("Rebuild Treemap"));
 
     _showTreemapView = new KToggleAction(i18n("Show Treemap"),actionCollection());
-            actionCollection()->addAction("options_show_treemap", this, SLOT(toggleTreemapView()));
+    actionCollection()->addAction("options_show_treemap", _showTreemapView);
     //_showTreemapView->set
     connect(_showTreemapView,SIGNAL(triggered()),this, SLOT(toggleTreemapView()));
     _showTreemapView->setShortcut(Qt::Key_F9);
