@@ -23,7 +23,7 @@
 #include <q3hgroupbox.h>
 #include <q3vgroupbox.h>
 #include <qspinbox.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qinputdialog.h>
 #include <qpushbutton.h>
 #include <q3popupmenu.h>

@@ -35,6 +35,8 @@ class Q3VGroupBox;
 class QWidget;
 class QListView;
 class Q3PopupMenu;
+class Q3ListViewItem;
+class Q3ListView;
 
 class KColorButton;
 
