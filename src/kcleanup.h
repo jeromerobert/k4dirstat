@@ -51,10 +51,10 @@ namespace KDirStat
 	 * for 'parent' so the menus and toolbars can be created using the XML
 	 * UI description ('kdirstatui.rc' for KDirStat).
 	 **/
-	KCleanup( QString		id		= "",
-		  QString		command 	= "",
-		  QString		title 		= "",
-		  KActionCollection *	parent		= 0 );
+	KCleanup( QString		id,
+		  QString		command,
+		  QString		title,
+		  KActionCollection *	parent);
 
 	/**
 	 * Copy Constructor.

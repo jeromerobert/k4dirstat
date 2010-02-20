@@ -695,11 +695,9 @@ KCleanupPropertiesPage::setFields( const KCleanup * cleanup )
 KCleanup
 KCleanupPropertiesPage::fields() const
 {
-    KCleanup cleanup( _id );
+    KCleanup cleanup( _id , _command->text(), _title->text(), _mainWin->actionCollection());
 
     cleanup.setEnabled			( _enabled->isChecked()		   );
-    cleanup.setTitle			( _title->text()		   );
-    cleanup.setCommand			( _command->text()		   );
     cleanup.setRecurse			( _recurse->isChecked()		   );
     cleanup.setAskForConfirmation	( _askForConfirmation->isChecked() );
     cleanup.setWorksForDir		( _worksForDir->isChecked()	   );
