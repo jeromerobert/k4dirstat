@@ -121,6 +121,9 @@ k4dirstat::k4dirstat()
     // tell the KXmlGuiWindow that this is indeed the main widget
     //setCentralWidget(m_view);
 
+    // set up the elements of the status bar
+    initStatusBar();
+
     // then, setup our actions
     setupActions();
 
@@ -331,7 +334,10 @@ void k4dirstat::initPacMan( bool enablePacMan )
     }
 }
 
-
+void k4dirstat::initStatusBar()
+{
+    statusBar()->insertItem( i18n( "Ready." ), ID_STATUS_MSG );
+}
 
 void k4dirstat::openURL( const KUrl& url )
 {

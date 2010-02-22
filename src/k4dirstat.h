@@ -283,6 +283,11 @@ protected:
      **/
     void initCleanups();
 
+    /**
+     * Set up status bar for the main window by initializing a status label.
+     **/
+    void initStatusBar();
+
     // Widgets
 
     QSplitter *			_splitter;
