@@ -240,8 +240,8 @@ void k4dirstat::setupActions()
     _reportMailToOwner->setText(i18n("Send &Mail to Owner"));
     _reportMailToOwner->setIcon(KIcon("mail-message-new"));
 
-    _helpSendFeedbackMail = actionCollection()->addAction("help_send_feedback_mail",this, SLOT(sendFeedbackMail()));
-    _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));
+   // _helpSendFeedbackMail = actionCollection()->addAction("help_send_feedback_mail",this, SLOT(sendFeedbackMail()));
+   // _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));
 
     _fileAskOpenDir->setStatusTip	( i18n( "Opens a directory"	 		) );
     _fileAskOpenUrl->setStatusTip	( i18n( "Opens a (possibly remote) directory"	) );
