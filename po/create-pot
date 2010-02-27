@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Script to generate .pot file from C++ sources and XML GUI description file
+
+PROGNAME=k4dirstat
+SRCDIR=../src
+
+extractrc --tag=cstring $SRCDIR/*ui.rc >ui_rc.cpp
+
+
+# search for sourcecode-files
+SRCFILES=$(find $SRCDIR . -type f   -name "*.h"   \
+                                -o -name "*.c"    \
+                                -o -name "*.cc"   \
+                                -o -name "*.cpp")
+
+echo "$SRCFILES"
+
+xgettext					\
+    --add-comments				\
+    --add-location				\
+    --keyword=i18n				\
+    --keyword=i18n:1,2				\
+    --keyword=I18N_NOOP				\
+    --keyword=_					\
+    --keyword=_:1,2				\
+    --keyword=__				\
+    --keyword=N_				\
+    --foreign-user				\
+    --default-domain=$PROGNAME			\
+    --output=$PROGNAME.pot			\
+    $SRCFILES ui_rc.cpp
+
+catalogs=`find . -name '*.po'`
+for ct in $catalogs; do
+	echo $ct
+	msgmerge -o $ct.net $ct $PROGNAME.pot
+	mv $ct.net $ct
+done
+
+
+rm ui_rc.cpp

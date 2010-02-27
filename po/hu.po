@@ -1,0 +1,1097 @@
+# translation of hu.po to Hungarian
+# translation of fr.po to hungarian
+# translation of fr.po to français
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# Michel Grentzinger <mic.grentz@online.fr>, 2003
+# Marcel Hilzinger <hili@suselinux.hu>, 2003
+# Peter Breuer <comp@suselinux.hu>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hu\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-26 23:31-0500\n"
+"PO-Revision-Date: 2003-09-05 15:43+0200\n"
+"Last-Translator: Peter Breuer <comp@suselinux.hu>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.1\n"
+
+#: ../src/main.cpp:23
+msgid ""
+"KDirStat - Directory statistics.\n"
+"\n"
+"Shows where all your disk space has gone\n"
+"and helps you clean it up."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:167
+msgid "Open &URL..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:175
+msgid "Refresh &All"
+msgstr "Összes &frissítése"
+
+#: ../src/k4dirstat.cpp:180
+msgid "Refresh &Selected"
+msgstr "&Kiválasztottak frissítése"
+
+#: ../src/k4dirstat.cpp:183
+#, fuzzy
+msgid "Read &Excluded Directory"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/k4dirstat.cpp:187
+msgid "Continue Reading at &Mount Point"
+msgstr "Az olvasás folytatása a &csatolási ponttól"
+
+#: ../src/k4dirstat.cpp:191
+msgid "Stop Rea&ding"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:196
+msgid "&Write to Cache File..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:200
+msgid "&Read Cache File..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:207
+msgid "Open With"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:210
+msgid "Zoom in"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:215
+msgid "Zoom out"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:220
+msgid "Select Parent"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:225
+msgid "Rebuild Treemap"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:227
+msgid "Show Treemap"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:234
+msgid "Help about Treemaps"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:240
+msgid "Send &Mail to Owner"
+msgstr "&Levélküldés a tulajdonosnak"
+
+#. _helpSendFeedbackMail = actionCollection()->addAction("help_send_feedback_mail",this, SLOT(sendFeedbackMail()));
+#. _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));
+#: ../src/k4dirstat.cpp:246
+msgid "Opens a directory"
+msgstr "Könyvtár megnyitása"
+
+#: ../src/k4dirstat.cpp:247
+#, fuzzy
+msgid "Opens a (possibly remote) directory"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/k4dirstat.cpp:248
+msgid "Opens a recently used directory"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/k4dirstat.cpp:249
+msgid "Closes the current directory"
+msgstr "A jelenlegi könyvtár bezárása"
+
+#: ../src/k4dirstat.cpp:250
+msgid "Re-reads the entire directory tree"
+msgstr "A teljes könyvtárfa újraolvasása"
+
+#: ../src/k4dirstat.cpp:251
+msgid "Re-reads the selected subtree"
+msgstr "A kiválasztott alkönyvtárfa újraolvasása"
+
+#: ../src/k4dirstat.cpp:252
+msgid "Scan directory tree that was previously excluded"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:253
+msgid "Scan mounted file systems"
+msgstr "Csatolt fájlrendszerek ellenőrzése"
+
+#: ../src/k4dirstat.cpp:254
+#, fuzzy
+msgid "Stops directory reading"
+msgstr "Könyvtár megnyitása"
+
+#: ../src/k4dirstat.cpp:255
+msgid ""
+"Writes the current directory tree to a cache file that can be loaded much "
+"faster"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:256
+msgid "Reads a directory tree from a cache file"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:257
+msgid "Quits the application"
+msgstr "Kilépés az alkalmazásból"
+
+#: ../src/k4dirstat.cpp:258
+msgid "Copies the URL of the selected item to the clipboard"
+msgstr "A kiválasztott elem URL címének vágólapra másolása"
+
+#: ../src/k4dirstat.cpp:259
+#, fuzzy
+msgid "Open file or directory with arbitrary application"
+msgstr "%n fájl / könyvtárnév útvonal nélkül"
+
+#: ../src/k4dirstat.cpp:260
+#, fuzzy
+msgid "Enables/disables the treemap view"
+msgstr "Az eszköztár ki/bekapcsolása"
+
+#: ../src/k4dirstat.cpp:261
+msgid "Zoom treemap in"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:262
+msgid "Zoom treemap out"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:263
+msgid "Select parent"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:264
+msgid "Rebuild treemap to fit into available space"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:265
+msgid "Opens the preferences dialog"
+msgstr "A beállítási párbeszédablak megnyitása"
+
+#: ../src/k4dirstat.cpp:266
+msgid "Sends a mail to the owner of the selected subtree"
+msgstr "Levélküldés a kiválasztott alkönyvtárak tulajdonosának"
+
+#: ../src/k4dirstat.cpp:339 ../src/k4dirstat.cpp:351 ../src/k4dirstat.cpp:432
+#: ../src/k4dirstat.cpp:445 ../src/k4dirstat.cpp:455 ../src/k4dirstat.cpp:466
+#: ../src/k4dirstat.cpp:474 ../src/k4dirstat.cpp:485
+msgid "Ready."
+msgstr "Kész."
+
+#: ../src/k4dirstat.cpp:344 ../src/k4dirstat.cpp:425 ../src/k4dirstat.cpp:450
+msgid "Opening directory..."
+msgstr "Könyvtár megnyitása..."
+
+#: ../src/k4dirstat.cpp:427
+msgid "Open Directory..."
+msgstr "Könyvtár megnyitása..."
+
+#: ../src/k4dirstat.cpp:437
+#, fuzzy
+msgid "Opening URL..."
+msgstr "Könyvtár megnyitása..."
+
+#. startDir
+#: ../src/k4dirstat.cpp:440
+msgid "Open URL..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:460
+msgid "Closing directory..."
+msgstr "Könyvtár bezárása..."
+
+#: ../src/k4dirstat.cpp:472
+msgid "Refreshing directory tree..."
+msgstr "A könyvtárfa frissítése..."
+
+#: ../src/k4dirstat.cpp:483
+msgid "Refreshing selected subtree..."
+msgstr "A kiválasztott könyvtárfa frissítése..."
+
+#. startDir
+#. filter
+#. parent
+#: ../src/k4dirstat.cpp:504
+msgid "Write to Cache File"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:513
+msgid "File %1 exists. Overwrite?"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:514
+msgid "Overwrite?"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:521
+msgid "Writing cache file..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:525
+msgid "Error writing cache file %1"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:528
+msgid "Write Error"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:531
+msgid "Wrote cache file %1"
+msgstr ""
+
+#. startDir
+#. filter
+#. parent
+#: ../src/k4dirstat.cpp:541
+msgid "Read Cache File"
+msgstr ""
+
+#. caption
+#: ../src/k4dirstat.cpp:543
+msgid "Reading cache file..."
+msgstr ""
+
+#: ../src/kstdcleanup.cpp:28
+msgid "Open in &Konqueror"
+msgstr "Megnyitás &Konquerorban"
+
+#: ../src/kstdcleanup.cpp:48
+msgid "Open in &Terminal"
+msgstr "Megnyitás &terminálban"
+
+#: ../src/kstdcleanup.cpp:67
+msgid "&Compress"
+msgstr "&Tömörítés"
+
+#: ../src/kstdcleanup.cpp:85
+msgid "&make clean"
+msgstr "&Tisztítás"
+
+#: ../src/kstdcleanup.cpp:102
+msgid "Delete T&rash Files"
+msgstr "KDirStat &szemétkosár ürítése"
+
+#: ../src/kstdcleanup.cpp:120
+msgid "Delete (to Trash &Bin)"
+msgstr "Kidobás a KDirStat &szemétkosárba)"
+
+#: ../src/kstdcleanup.cpp:144
+msgid "&Delete (no way to undelete!)"
+msgstr "&Törlés (nem lehet visszavonni!)"
+
+#: ../src/kcleanup.cpp:173
+msgid ""
+"%1\n"
+"in directory %2"
+msgstr ""
+"%1\n"
+"ebben a könyvtárban: %2"
+
+#: ../src/kcleanup.cpp:177
+msgid ""
+"%1\n"
+"for file %2"
+msgstr ""
+"%1\n"
+"ehhez a fájlhoz: %2"
+
+#. parentWidget
+#. message
+#: ../src/kcleanup.cpp:182 ../src/kdirstatsettings.cpp:122
+#, fuzzy
+msgid "Please Confirm"
+msgstr "Kérem, erősítse meg"
+
+#. caption
+#: ../src/kcleanup.cpp:183
+msgid "Confirm"
+msgstr "Megerősítés"
+
+#. Provide a keyboard shortcut for cleanup #0..#9
+#: ../src/kcleanupcollection.cpp:235
+msgid "User Defined Cleanup #&%1"
+msgstr "Felhasználó által megadott tisztítás: #&%1"
+
+#. No keyboard shortcuts for cleanups #10.. - they would be duplicates
+#: ../src/kcleanupcollection.cpp:238
+msgid "User Defined Cleanup #%1"
+msgstr "Felhasználó által megadott tisztítás: #%1"
+
+#: ../src/kdirstatsettings.cpp:75
+msgid "Settings"
+msgstr "Beállítások"
+
+#: ../src/kdirstatsettings.cpp:82
+msgid "&Cleanups"
+msgstr "&Tisztítások"
+
+#: ../src/kdirstatsettings.cpp:87
+msgid "&Tree Colors"
+msgstr "&Könyvtárfa színek"
+
+#: ../src/kdirstatsettings.cpp:91
+msgid "Tree&map"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:95
+msgid "&General"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:120
+msgid ""
+"Really revert all settings to their default values?\n"
+"You will lose all changes you ever made!"
+msgstr ""
+"Valóban vissza szeretné állítani az összes értéket az alapértelmezett "
+"értékre?\n"
+"Minden beállítást el fog veszteni!"
+
+#. caption
+#: ../src/kdirstatsettings.cpp:123
+#, fuzzy
+msgid "&Really Revert to Defaults"
+msgstr "&Alapértelmezett értékek visszaállítása"
+
+#: ../src/kdirstatsettings.cpp:209
+#, fuzzy
+msgid "Tree Level %1"
+msgstr "Könyvtárszint %1"
+
+#. border, spacing
+#. The topmost check box: "Enabled".
+#: ../src/kdirstatsettings.cpp:545
+msgid "&Enabled"
+msgstr "&Aktív"
+
+#: ../src/kdirstatsettings.cpp:582
+msgid "&Title:"
+msgstr "&Cím : "
+
+#: ../src/kdirstatsettings.cpp:583
+#, fuzzy
+msgid "&Command Line:"
+msgstr "&Parancssor: "
+
+#: ../src/kdirstatsettings.cpp:585
+#, fuzzy, c-format
+msgid "%p Full Path"
+msgstr "%p teljes útvonal"
+
+#: ../src/kdirstatsettings.cpp:588
+#, fuzzy, c-format
+msgid "%n File / Directory Name Without Path"
+msgstr "%n fájl / könyvtárnév útvonal nélkül"
+
+#: ../src/kdirstatsettings.cpp:591
+msgid "%t KDE Trash Directory"
+msgstr ""
+
+#. "Recurse into subdirs" check box
+#: ../src/kdirstatsettings.cpp:597
+#, fuzzy
+msgid "&Recurse into Subdirectories"
+msgstr "&Belépés az alkönyvtárakba is"
+
+#. "Ask for confirmation" check box
+#: ../src/kdirstatsettings.cpp:602
+#, fuzzy
+msgid "&Ask for Confirmation"
+msgstr "&Kérdezzen rá a jóváhagyáshoz"
+
+#. The "Works for..." check boxes, grouped together in a button group.
+#: ../src/kdirstatsettings.cpp:608
+msgid "Works for..."
+msgstr "Működik az alábbinál..."
+
+#: ../src/kdirstatsettings.cpp:614
+msgid "&Directories"
+msgstr "&Könyvtárak"
+
+#: ../src/kdirstatsettings.cpp:615
+msgid "&Files"
+msgstr "&Fájlok"
+
+#: ../src/kdirstatsettings.cpp:616
+#, fuzzy
+msgid "<Files> P&seudo Entries"
+msgstr "<Fájlok> &Pszeudo-bejegyzések"
+
+#: ../src/kdirstatsettings.cpp:626
+#, fuzzy
+msgid "On Local Machine Only ('file:/' Protocol)"
+msgstr "Csak a helyi gépen ('file:/' protokoll)"
+
+#: ../src/kdirstatsettings.cpp:627
+#, fuzzy
+msgid "Network Transparent (ftp, smb, tar, ...)"
+msgstr "Transzparens hálózat (ftp, smb, tar, ...)"
+
+#: ../src/kdirstatsettings.cpp:647
+msgid "Refresh &Policy:"
+msgstr "Frissítési &Szabályok: "
+
+#. Caution: The order of those entries must match the order of
+#. 'enum RefreshPolicy' in 'kcleanup.h'!
+#.
+#. I don't like this one bit. The ComboBox should provide something better
+#. than mere numeric IDs. One of these days I'm going to rewrite this
+#. thing!
+#: ../src/kdirstatsettings.cpp:658
+#, fuzzy
+msgid "No Refresh"
+msgstr "Nincs frissítés"
+
+#: ../src/kdirstatsettings.cpp:659
+#, fuzzy
+msgid "Refresh This Entry"
+msgstr "Frissítse ezt a bejegyzést"
+
+#: ../src/kdirstatsettings.cpp:660
+#, fuzzy
+msgid "Refresh This Entry's Parent"
+msgstr "Frissítse a bejegyzés szülőjét"
+
+#: ../src/kdirstatsettings.cpp:661
+#, fuzzy
+msgid "Assume Entry Has Been Deleted"
+msgstr "Feltételezett törölt bejegyzés"
+
+#. Create layout and widgets.
+#. border
+#. spacing
+#: ../src/kdirstatsettings.cpp:728
+#, fuzzy
+msgid "Directory Reading"
+msgstr "&Könyvtárak"
+
+#: ../src/kdirstatsettings.cpp:733
+msgid "Cross &File System Boundaries"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:734
+msgid "Use Optimized &Local Directory Read Methods"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:741
+#, fuzzy
+msgid "Animation"
+msgstr "&Kérdezzen rá a jóváhagyáshoz"
+
+#: ../src/kdirstatsettings.cpp:744
+msgid "P@cM@n Animation in Tool &Bar"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:745
+msgid "P@cM@n Animation in Directory &Tree"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:748
+#, fuzzy
+msgid "&Exclude Rules"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/kdirstatsettings.cpp:752
+msgid "Exclude Rule (Regular Expression)"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:756
+msgid "&Add"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:757 ../src/kdirstatsettings.cpp:790
+msgid "&Edit"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:758 ../src/kdirstatsettings.cpp:791
+msgid "&Delete"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:894
+#, fuzzy
+msgid "New exclude rule"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/kdirstatsettings.cpp:895
+msgid "Regular expression for new exclude rule:"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:918
+#, fuzzy
+msgid "Edit exclude rule"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/kdirstatsettings.cpp:919
+msgid "Exclude rule (regular expression):"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:946
+msgid "Really delete exclude rule \"%1\"?"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:947
+msgid "Delete?"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:975
+msgid "S&quarify Treemap"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:976
+msgid "Use C&ushion Shading"
+msgstr ""
+
+#. Cushion parameters
+#: ../src/kdirstatsettings.cpp:981
+msgid "Cushion Parameters"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:986
+msgid "Ambient &Light"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:996
+msgid "&Height Scale"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:1006
+msgid "Draw Lines if Lo&w Contrast"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:1010
+msgid "Always Draw &Grid"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:1013
+msgid "Gr&id Color: "
+msgstr ""
+
+#. addVStretch( vbox );
+#. Plain treemaps parameters
+#: ../src/kdirstatsettings.cpp:1023
+msgid "Colors for Plain Treemaps"
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:1026
+#, fuzzy
+msgid "&Files: "
+msgstr "&Fájlok"
+
+#: ../src/kdirstatsettings.cpp:1031
+#, fuzzy
+msgid "&Directories: "
+msgstr "&Könyvtárak"
+
+#: ../src/kdirstatsettings.cpp:1036
+msgid "Gr&id: "
+msgstr ""
+
+#. rows, cols, spacing
+#. (col, stretch) don't stretch this column
+#. don't stretch
+#. stretch this as you like
+#: ../src/kdirstatsettings.cpp:1050
+msgid "Hi&ghlight R&ectangle: "
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:1058
+msgid "Minim&um Treemap Tile Size: "
+msgstr ""
+
+#: ../src/kdirstatsettings.cpp:1065
+msgid "Auto-&Resize Treemap"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:73 ../src/kdirinfomodel.cpp:106
+msgid "Name"
+msgstr "Név"
+
+#: ../src/kdirtreeview.cpp:75 ../src/kdirinfomodel.cpp:108
+msgid "Subtree Percentage"
+msgstr "Alkönyvtárfa százalékban"
+
+#: ../src/kdirtreeview.cpp:76 ../src/kdirinfomodel.cpp:110
+msgid "Percentage"
+msgstr "Százalék"
+
+#: ../src/kdirtreeview.cpp:77 ../src/kdirinfomodel.cpp:112
+msgid "Subtree Total"
+msgstr "Alkönyvtárfa összesen"
+
+#: ../src/kdirtreeview.cpp:79 ../src/kdirinfomodel.cpp:114
+msgid "Own Size"
+msgstr "Egyéni méret"
+
+#: ../src/kdirtreeview.cpp:80 ../src/kdirinfomodel.cpp:116
+msgid "Items"
+msgstr "Elemek"
+
+#: ../src/kdirtreeview.cpp:81 ../src/kdirinfomodel.cpp:118
+msgid "Files"
+msgstr "Fájlok"
+
+#: ../src/kdirtreeview.cpp:82 ../src/kdirinfomodel.cpp:120
+msgid "Subdirs"
+msgstr "Alkönyvtárak"
+
+#: ../src/kdirtreeview.cpp:83 ../src/kdirinfomodel.cpp:122
+msgid "Last Change"
+msgstr "Utolsó módosítás"
+
+#: ../src/kdirtreeview.cpp:178
+msgid "Read Jobs"
+msgstr "Beolvasott feladatok"
+
+#: ../src/kdirtreeview.cpp:471
+msgid "Finished. Elapsed time: %1"
+msgstr "Végrehajtva. Eltelt idő : %1"
+
+#: ../src/kdirtreeview.cpp:513
+#, fuzzy
+msgid "Aborted. Elapsed time: %1"
+msgstr "Végrehajtva. Eltelt idő : %1"
+
+#: ../src/kdirtreeview.cpp:549
+msgid "Elapsed time: %1   reading directory %2"
+msgstr "Eltelt idő: %1   %2 könyvtár olvasása "
+
+#: ../src/kdirtreeview.cpp:553
+#, fuzzy
+msgid "Elapsed time: %1"
+msgstr "Végrehajtva. Eltelt idő : %1"
+
+#: ../src/kdirtreeview.cpp:824
+#, fuzzy
+msgid "Matching exclude rule:   %1"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/kdirtreeview.cpp:828
+#, fuzzy
+msgid "<Unknown exclude rule>"
+msgstr "A legutóbb használt könyvtár megnyitása"
+
+#: ../src/kdirtreeview.cpp:858
+msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:866
+msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:908 ../src/kfileinfo.cpp:456
+msgid "Bytes"
+msgstr "bájt(ok)"
+
+#: ../src/kdirtreeview.cpp:912
+msgid "%1 (%2 Bytes)"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:1015
+#, fuzzy
+msgid "Disk Usage"
+msgstr "Lemezhasználat"
+
+#: ../src/kdirtreeview.cpp:1017
+msgid "Please check your disk usage and clean up if you can. Thank you."
+msgstr ""
+"Kérem ellenőrizze a lemez kihasználtságát és tisztítsa meg a felesleges "
+"fájloktól, ha akarja. Köszönöm."
+
+#: ../src/kdirtreeview.cpp:1021
+msgid "Disk usage report generated by KDirStat"
+msgstr "Lemezhasználat jelentés a KDirStat programtól"
+
+#: ../src/kdirtreeview.cpp:1084
+msgid "<Files>"
+msgstr "<Fájlok>"
+
+#: ../src/kdirtreeview.cpp:1099
+msgid "%1 / %2 Links (allocated: %3)"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:1106
+msgid "%1 / %2 Links"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:1115
+msgid "%1 (allocated: %2)"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:1134 ../src/kdirtreeview.cpp:1278
+msgid "[excluded]"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:1265
+#, fuzzy
+msgid "[%1 Read Jobs]"
+msgstr "Beolvasott feladatok"
+
+#: ../src/kfileinfo.cpp:465
+msgid "kB"
+msgstr "KB"
+
+#: ../src/kfileinfo.cpp:474
+msgid "MB"
+msgstr "MB"
+
+#: ../src/kfileinfo.cpp:481
+msgid "GB"
+msgstr "GB"
+
+#. i18n: file: ../src/k4dirstatui.rc:16
+#. i18n: ectx: Menu (file)
+#: ui_rc.cpp:3
+#, fuzzy
+msgid "&File"
+msgstr "&Fájlok"
+
+#. i18n: file: ../src/k4dirstatui.rc:35
+#. i18n: ectx: Menu (cleanup)
+#: ui_rc.cpp:6
+msgid "Clean &Up"
+msgstr "&Tisztítás"
+
+#. i18n: file: ../src/k4dirstatui.rc:59
+#. i18n: ectx: Menu (treemap)
+#: ui_rc.cpp:9
+msgid "&Treemap"
+msgstr ""
+
+#. i18n: file: ../src/k4dirstatui.rc:71
+#. i18n: ectx: Menu (settings)
+#: ui_rc.cpp:12
+#, fuzzy
+msgid "&Settings"
+msgstr "Beállítások"
+
+#. i18n: file: ../src/k4dirstatui.rc:78
+#. i18n: ectx: Menu (report)
+#: ui_rc.cpp:15
+msgid "&Report"
+msgstr "&Jelentés"
+
+#. i18n: file: ../src/k4dirstatui.rc:83
+#. i18n: ectx: Menu (help)
+#: ui_rc.cpp:18
+msgid "&Help"
+msgstr ""
+
+#. i18n: file: ../src/k4dirstatui.rc:97
+#. i18n: ectx: ToolBar (mainToolBar)
+#: ui_rc.cpp:21
+msgid "Main Toolbar"
+msgstr ""
+
+#~ msgid "Send &Feedback Mail..."
+#~ msgstr "&Válaszlevél küldése..."
+
+#~ msgid ""
+#~ "Now that you know this program for some time,\n"
+#~ "wouldn't you like to tell the authors your opinion about it?\n"
+#~ "\n"
+#~ "Open Source software depends on user feedback.\n"
+#~ "Your opinion can help us make the software better."
+#~ msgstr ""
+#~ "Ha gyakran használja a programot,\n"
+#~ "megosztaná velünk tapasztalatait?\n"
+#~ "\n"
+#~ "A nyílt forráskódú szoftver minősége a felhasználói visszajelzésektől "
+#~ "függ.\n"
+#~ "A megjegyzései segíthetnek jobbá tenni a szoftvert."
+
+#~ msgid "Please tell us your opinion!"
+#~ msgstr "Kérjük tudassa velünk véleményét!"
+
+#~ msgid "Open &Feedback Form..."
+#~ msgstr "Vála&sz űrlap megnyitása..."
+
+#~ msgid "&No, and don't ask again!"
+#~ msgstr "&Nem és ne is kérdezzen újból!"
+
+#~ msgid "What is your general opinion about this program?"
+#~ msgstr "Mik az általános észrevételei a programmal kapcsolatban?"
+
+#~ msgid "It's one of my favourites"
+#~ msgstr "Egyike a kedvenceimnek"
+
+#~ msgid "I like it"
+#~ msgstr "Kedvelem"
+
+#~ msgid "It's sometimes useful"
+#~ msgstr "Néha hasznos"
+
+#~ msgid "It's average"
+#~ msgstr "Közepes"
+
+#~ msgid "Nice try, but this could be done better"
+#~ msgstr "Szép próbálkozás, de lehetne jobb is"
+
+#~ msgid "It's poor"
+#~ msgstr "Szegényes"
+
+#~ msgid "It's useless"
+#~ msgstr "Használhatatlan"
+
+#~ msgid "It's crap"
+#~ msgstr "Rossz"
+
+#~ msgid "Which features of this program do you like?"
+#~ msgstr "Mely tulajdonságokat kedvel a programban?"
+
+#~ msgid "Which features don't you like?"
+#~ msgstr "Mely tulajdonságokat nem kedvel a programban?"
+
+#~ msgid "Which features do you never use?"
+#~ msgstr "Mely tulajdonságokat nem használ a programban?"
+
+#~ msgid "What is your favourite feature?"
+#~ msgstr "Melyek a kedvenc tulajdonságai?"
+
+#~ msgid "Are there features you are missing?"
+#~ msgstr "Mik a hiányos vagy hiányzó tulajdonságok?"
+
+#~ msgid "Yes, a lot! (please add comment below)"
+#~ msgstr "Igen, nagyon! (kérjük töltse ki a megjegyzés rovatot is)"
+
+#~ msgid "Some (please add comment below)"
+#~ msgstr "Quelques-unes (veuillez ajouter vos commentaires ci-dessous)"
+
+#~ msgid "None"
+#~ msgstr "Semmi"
+
+#~ msgid "It has too many features already!"
+#~ msgstr "Túl sok tulajdonsága van már most is!"
+
+#~ msgid "How do you rate the stability of this program?"
+#~ msgstr "Hogyan osztályozná a program stabilitását? "
+
+#~ msgid "Rock solid"
+#~ msgstr "Sziklaszilárd"
+
+#~ msgid "Good"
+#~ msgstr "Jó"
+
+#~ msgid "Average"
+#~ msgstr "Közepes"
+
+#~ msgid "Poor"
+#~ msgstr "Szegényes"
+
+#~ msgid "It keeps crashing all the time"
+#~ msgstr "Mindig lefagy"
+
+#~ msgid "How do you rate the performance of this program?"
+#~ msgstr "Hogyan osztályozza a program teljesítményét?"
+
+#~ msgid "Great"
+#~ msgstr "Kitűnő"
+
+#~ msgid "It's so slow it drives me nuts"
+#~ msgstr "Túl lassú"
+
+#~ msgid "What is your experience with computers in general?"
+#~ msgstr "Mi a gyakorlata általában a számítógépekkel?"
+
+#~ msgid "Expert"
+#~ msgstr "Szakértő"
+
+#~ msgid "Fair"
+#~ msgstr "Megfelelő"
+
+#~ msgid "Learning"
+#~ msgstr "Tanuló"
+
+#~ msgid "Newbie"
+#~ msgstr "Újonc"
+
+#~ msgid "What is your experience with Unix/Linux systems?"
+#~ msgstr "Mi a gyakorlata Unix/Linux rendszerek terén?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Did you have trouble figuring out how to work with this program in "
+#~ "general?"
+#~ msgstr "Vázolná nekünk, hogyan dolgozik a programmal?"
+
+#~ msgid "No problem"
+#~ msgstr "Nincs probléma"
+
+#~ msgid "Some"
+#~ msgstr "Néha"
+
+#~ msgid "I'm still learning"
+#~ msgstr "Jelenleg még tanulok"
+
+#~ msgid "I didn't have a clue what to do at first"
+#~ msgstr "Nincs ötletem mit tegyek elsőként"
+
+#~ msgid "I still don't have a clue what to do"
+#~ msgstr "Nincs továbbra sem ötletem, mit tehetnék"
+
+#~ msgid "Where do you use this program most?"
+#~ msgstr "Hol használja legtöbbet a programot?"
+
+#~ msgid "At work"
+#~ msgstr "Munkahelyen"
+
+#~ msgid "At home"
+#~ msgstr "Otthon"
+
+#~ msgid "At university / school"
+#~ msgstr "Iskolában"
+
+#~ msgid "What is your primary role there?"
+#~ msgstr "Mi az elsődleges célja?"
+
+#~ msgid "Home user"
+#~ msgstr "Otthoni felhasználó"
+
+#~ msgid "Student"
+#~ msgstr "Diák"
+
+#~ msgid "Educational (teacher / professor)"
+#~ msgstr "Oktató (tanársegéd / tanár)"
+
+#~ msgid "Non-computer related work"
+#~ msgstr "Nem számítógépes munka"
+
+#~ msgid "Developer"
+#~ msgstr "Fejlesztő"
+
+#~ msgid "System administrator"
+#~ msgstr "Rendszeradminisztrátor"
+
+#~ msgid "Do you have any other roles there?"
+#~ msgstr "Vannak egyéb feladatai itt?"
+
+#~ msgid "How did you get to know this program?"
+#~ msgstr "Hol találta meg a programot?"
+
+#~ msgid "In a menu on my machine"
+#~ msgstr "A gépemen található menüből"
+
+#~ msgid "Somebody told me about it"
+#~ msgstr "Valaki mesélt róla"
+
+#~ msgid "On the internet"
+#~ msgstr "Az interneten"
+
+#~ msgid "Printed magazine / book"
+#~ msgstr "Nyomtatott újságban / könyvben"
+
+#~ msgid "Other (please add comment below)"
+#~ msgstr "Egyéb (Kérjük részletezze alább)"
+
+#~ msgid ""
+#~ "Did you ever get a KDirStat mail report telling you to clean up disk "
+#~ "space?"
+#~ msgstr ""
+#~ "Kapott már valaha KDirStat levél jelentést a lemezhely tisztításáról?"
+
+#, fuzzy
+#~ msgid "Could you figure yet out how to work with the treemaps?"
+#~ msgstr "Vázolná nekünk, hogyan dolgozik a programmal?"
+
+#~ msgid "Would you recommend this program to a friend?"
+#~ msgstr "Ajánlaná a programot egy barátjának?"
+
+#~ msgid "The directory tree display in general"
+#~ msgstr "Az általános könyvtárfa megjelenítés"
+
+#~ msgid "Percentage bars as graphical display of relative sizes"
+#~ msgstr "A százalékjelzők grafikusak relatív méretezéssel"
+
+#~ msgid "Files apart from directories in a separate <Files> item"
+#~ msgstr "A könyvtárakban eltérő fájlok, külön <Fájlok> bejegyzéssel "
+
+#, fuzzy
+#~ msgid "Treemaps in general"
+#~ msgstr "Általános akciók törlése"
+
+#~ msgid "Cleanup actions in general"
+#~ msgstr "Általános akciók törlése"
+
+#~ msgid "Predefined cleanup actions"
+#~ msgstr "Előre megadott akciók törlése"
+
+#~ msgid "User defined cleanup actions"
+#~ msgstr "Felhasználó által megadott akciók törlése"
+
+#~ msgid "Cleanup action configuration"
+#~ msgstr "Az akció beállítások törlése"
+
+#~ msgid "Different colors in percentage bars"
+#~ msgstr "Eltérő színek a százalékjelzőkben"
+
+#~ msgid "Tree color configuration"
+#~ msgstr "Könyvtárfa színek beállítása"
+
+#~ msgid "Staying on one file system"
+#~ msgstr "Maradjon egyetlen fájlrendszeren"
+
+#~ msgid "The \"mail to owner\" facility"
+#~ msgstr "A \"levél a felhasználónak\" lehetőség"
+
+#~ msgid "This \"feedback mail\" facility"
+#~ msgstr "A \"válaszlevél\" lehetőség"
+
+#~ msgid "Human readable sizes (kB, MB, ...)"
+#~ msgstr "Emberi mértékegységű méretek (KB, MB, ...)"
+
+#~ msgid "All the numbers in the tree display"
+#~ msgstr "Az összes szám a könyvtárfa nézetben"
+
+#~ msgid "Last change time of an entire directory tree"
+#~ msgstr "A teljes könyvtárba utolsó módosításának ideje"
+
+#~ msgid "The PacMan animation"
+#~ msgstr "A PacMan animáció"
+
+#~ msgid "Feedback"
+#~ msgstr "Visszajelzés"
+
+#~ msgid "&Mail this..."
+#~ msgstr "&Levél küldése..."
+
+#~ msgid ""
+#~ "<p><b>Please tell us your opinion about this program.</b></p><p>You will "
+#~ "be able to review everything in your mailer before any mail is sent."
+#~ "<br>Nothing will be sent behind your back.</p>"
+#~ msgstr ""
+#~ "<p><b>Kérjük ossza meg velünk a programmal kapcsolatos észrevételeit.</"
+#~ "b></p> <p>Minden küldendő adatot lehetősége lesz mégegyszer átolvasni a "
+#~ "levelezőprogramjában.<br>Semmit sem küldünk az Ön háta mögött.</p>"
+
+#~ msgid "Questions marked with "
+#~ msgstr "A csillaggal jelölt kérdéseket "
+
+#~ msgid " must be answered before a mail can be sent."
+#~ msgstr " meg kell válaszolni mielőtt a levél küldésre kerülne."
+
+#, fuzzy
+#~ msgid "&Additional Comments:"
+#~ msgstr "További &megjegyzések:"
+
+#~ msgid "yes"
+#~ msgstr "igen"
+
+#~ msgid "no"
+#~ msgstr "nem"
+
+#, fuzzy
+#~ msgid "Add exclude rule..."
+#~ msgstr "Könyvtár megnyitása..."
+
+#~ msgid "Enables/disables the statusbar"
+#~ msgstr "Az állapotsor ki/bekapcsolása"
