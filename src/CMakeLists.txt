@@ -19,6 +19,7 @@ set(k4dirstat_SRCS
    kpacman.cpp
    #kpacman_dummy.cpp
    kdirstatsettings.cpp
+   kdirinfomodel.cpp
  )
 
 #kde4_add_ui_files(k4dirstat_SRCS k4dirstatview_base.ui prefs_base.ui)

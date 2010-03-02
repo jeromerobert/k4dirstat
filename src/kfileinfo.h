@@ -124,6 +124,8 @@ namespace KDirStat
 		   KFileSize		blocks = -1,
 		   nlink_t		links  = 1 );
 
+	KFileInfo( KFileInfo *          fileInfo);
+
 	/**
 	 * Destructor.
 	 *
@@ -522,6 +524,16 @@ namespace KDirStat
 	 **/
 	bool isSparseFile() const { return _isSparseFile; }
 
+	/**
+	 *
+	 */
+	virtual int row() const { return _row; }
+
+	/**
+	 *
+	 */
+	virtual void setRow(int newRow) { _row = newRow; }
+
 
 	//
 	// File type / mode convenience methods.
@@ -600,6 +612,8 @@ namespace KDirStat
 	KDirInfo *	_parent;		// pointer to the parent entry
 	KFileInfo *	_next;			// pointer to the next entry
 	KDirTree  *	_tree;			// pointer to the parent tree
+
+	int		_row;			// row in model
 	
     };	// class KFileInfo
 

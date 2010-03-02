@@ -188,6 +188,20 @@ KFileInfo::KFileInfo( KDirTree * 	tree,
 }
 
 
+KFileInfo::KFileInfo(KFileInfo *fileInfo){
+    _name		= fileInfo->name();
+    _isLocalFile	= fileInfo->isLocalFile();
+    _mode		= fileInfo->mode();
+    _size	 	= fileInfo->size();
+    _mtime	 	= fileInfo->mtime();
+    _links	 	= fileInfo->links();
+    _isSparseFile       = fileInfo->isSparseFile();
+    _blocks		= fileInfo->blocks();
+    _parent		= fileInfo->parent();
+    _next		= fileInfo->next();
+    _tree		= fileInfo->tree();
+}
+
 KFileInfo::~KFileInfo()
 {
     // NOP

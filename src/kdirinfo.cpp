@@ -293,7 +293,11 @@ KDirInfo::insertChild( KFileInfo *newChild )
 	 * none of our business; the corresponding "view" object for this tree
 	 * will take care of such niceties.
 	 **/
+
+	int newRow = 0;
 	newChild->setNext( _firstChild );
+	if(_firstChild) newRow = _firstChild->row() + 1;
+	newChild->setRow(newRow);
 	_firstChild = newChild;
 	newChild->setParent( this );	// make sure the parent pointer is correct
 
