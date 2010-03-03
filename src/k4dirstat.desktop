@@ -11,4 +11,4 @@ Comment=Directory statistics and disk usage
 Comment[de]=Verzeichnisstatistik und Platzverbrauch
 Comment[hu]=Könyvtárstatisztikák és szabad hely
 Terminal=false
-MimeType=inode/directory
+MimeType=inode/directory;
