@@ -8,7 +8,7 @@
 
 <!DOCTYPE kpartgui SYSTEM "/opt/kde3/share/apps/katexmltools/kpartgui.dtd.xml">
 
-<kpartgui name="kdirstat" version="2.5.1">
+<kpartgui name="kdirstat" version="270">
 
 
     <MenuBar>
