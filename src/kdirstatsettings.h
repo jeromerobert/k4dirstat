@@ -3,8 +3,9 @@
  *   Summary:	Settings dialog for KDirStat
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
+ *              Joshua Hodosh <kdirstat@grumpypenguin.org>
  *
- *   Updated:	2008-11-27
+ *   Updated:	2010-02-19
  */
 
 

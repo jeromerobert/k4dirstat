@@ -33,8 +33,6 @@ int main(int argc, char **argv)
 		     KAboutData::License_GPL,
 		     ki18n("(c) 1999-2008 Stefan Hundhammer, (c) 2010 Joshua Hodosh"),
 		     KLocalizedString(), 0, "kdirstat@grumpypenguin.org");
-    about.addAuthor( ki18n("Joshua Hodosh"), ki18n("Ported to KDE4"),
-		     "kdirstat@grumpypenguin.org" );
 
     about.addAuthor( ki18n("Stefan Hundhammer"),
 		      ki18n("\n"
@@ -45,6 +43,9 @@ int main(int argc, char **argv)
 				"Any feedback (even negative!) is appreciated." ),
 		      "kdirstat@gmx.de",
 		      "http://kdirstat.sourceforge.net/" );
+
+    about.addAuthor( ki18n("Joshua Hodosh"), ki18n("Ported to KDE4"),
+                     "kdirstat@grumpypenguin.org" );
 
     about.addCredit( ki18n("SequoiaView Team"),
 		      ki18n( "for showing just how useful treemaps really can be." ),

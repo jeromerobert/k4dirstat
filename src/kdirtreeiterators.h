@@ -3,8 +3,9 @@
  *   Summary:	Support classes for KDirStat - KDirTree iterators
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
+ *              Joshua Hodosh <kdirstat@grumpypenguin.org>
  *
- *   Updated:	2005-12-26
+ *   Updated:	2010-02-01
  */
 
 

@@ -3,8 +3,9 @@
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
+ *              Joshua Hodosh <kdirstat@grumpypenguin.org>
  *
- *   Updated:	2006-01-07
+ *   Updated:	2010-02-01
  */
 
 

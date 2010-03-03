@@ -1,0 +1,17 @@
+We would like to thank the following people:
+
+- Ben Shneiderman for his ingenious idea of treemaps as an alternative and
+  truly intuitive way of visualizing trees.
+
+- All the people at the TU Eindhoven who worked on SequoiaView that gave us the
+  inspiration for including treemaps in KDirStat and numerous papers describing
+  the algorithms behind it.
+
+- Toyohiro Asukai <toyohiro@ksmplus.com> for Asian support patches.
+
+- Alexander Rawass <alexannika@users.sourceforge.net> for implementing the
+  first version of treemaps for KDirStat (this version has been completely
+  replaced beginning May 2002).
+
+- Christoph Thielecke <christoph.thielecke@gmx.de> for a nice patch that
+  provided GUI support for exclude rules (Nov 2008).
