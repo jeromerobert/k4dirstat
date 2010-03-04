@@ -58,6 +58,9 @@ KCleanup::KCleanup( QString		id,
     
     KAction::setEnabled( false );
     parent->addAction(id,this);
+
+    connect(this, SIGNAL(triggered()),
+            this, SLOT(executeWithSelection()));
 }
 
 
