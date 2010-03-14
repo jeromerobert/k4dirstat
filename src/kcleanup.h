@@ -219,7 +219,7 @@ namespace KDirStat
 	 * The heart of the matter: Perform the cleanup with the KFileInfo
 	 * specified.
 	 **/
-        void execute( KFileInfo *item );
+	virtual void execute( KFileInfo *item );
 
 	/**
 	 * Perform the cleanup with the current KDirTree selection if there is

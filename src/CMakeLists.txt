@@ -30,7 +30,8 @@ kde4_add_executable(k4dirstat ${k4dirstat_SRCS})
 target_link_libraries(k4dirstat ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
     ${QT_QTGUI_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
-    ${KDE4_KDE3SUPPORT_LIBRARY})
+    ${KDE4_KDE3SUPPORT_LIBRARY}
+    ${LIBKONQ_LIBRARY})
 
 install(TARGETS k4dirstat ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

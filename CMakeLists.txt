@@ -4,6 +4,7 @@ SET(QT_USE_QT3SUPPORT true)
 
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
+find_package(LibKonq REQUIRED)
 
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${QT_GUI_INCLUDES} ${QT_QT3SUPPORT_INCLUDES} )
 

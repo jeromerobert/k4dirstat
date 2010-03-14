@@ -3,8 +3,9 @@
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
+ *              Joshua Hodosh <kdirstat@grumpypenguin.org>
  *
- *   Updated:	2008-11-27
+ *   Updated:	2010-03-14
  */
 
 
@@ -15,6 +16,8 @@
 #ifdef HAVE_CONFIG_H
 #   include <config.h>
 #endif
+
+#include "kcleanup.h"
 
 // Forward declarations
 class KActionCollection;
@@ -53,6 +56,16 @@ namespace KDirStat
 	 **/
 	KStdCleanup()	{}
 	~KStdCleanup()	{}
+    };
+
+    class TrashBinCleanup: public KCleanup
+    {
+	Q_OBJECT
+
+    public:
+	TrashBinCleanup(KActionCollection *parent);
+    public slots:
+	virtual void execute( KFileInfo *item );
     };
 
 }	// namespace KDirStat

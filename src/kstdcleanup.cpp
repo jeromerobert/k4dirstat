@@ -5,7 +5,7 @@
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
  *
- *   Updated:	2010-02-02
+ *   Updated:	2010-03-14
  */
 
 
@@ -14,6 +14,8 @@
 #endif
 
 #include <klocale.h>
+#include <konq_operations.h>
+#include <kdebug.h>
 #include "kcleanup.h"
 #include "kstdcleanup.h"
 
@@ -115,10 +117,7 @@ KStdCleanup::deleteTrash( KActionCollection *parent )
 KCleanup *
 KStdCleanup::moveToTrashBin( KActionCollection *parent )
 {
-    KCleanup *cleanup = new KCleanup( "cleanup_move_to_trash_bin",
-				      "kfmclient move %p %t",
-				      i18n( "Delete (to Trash &Bin)" ),
-				      parent );
+    KCleanup *cleanup = new TrashBinCleanup(parent);
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( true  );
@@ -155,6 +154,33 @@ KStdCleanup::hardDelete( KActionCollection *parent )
     return cleanup;
 }
 	
+
+TrashBinCleanup::TrashBinCleanup(KActionCollection *parent):
+    KCleanup("cleanup_move_to_trash_bin","",
+	     i18n( "Delete (to Trash &Bin)"),
+	     parent)
+{
+}
+
+
+void
+TrashBinCleanup::execute( KFileInfo* item ){
+    if (worksFor( item )){
+	KUrl url;
+	url.setPath(item->url());
+	kdDebug() << "trashing url  " <<_selection->url() << endl;
+	KUrl::List urls;
+	urls.append(url);
+	KActionCollection *collection = static_cast<KActionCollection*>(parent());
+	kdDebug() << collection->associatedWidgets().length() << endl;
+	KonqOperations::del( collection->associatedWidgets()[0],KonqOperations::TRASH,
+			    urls);
+	item->tree()->deleteSubtree( _selection );
+    }
+
+    emit executed();
+}
+
 
 
 // EOF
