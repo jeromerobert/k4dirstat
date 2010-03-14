@@ -1,0 +1,1954 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY kdirstat '<application>KDirStat</application>'>
+  <!ENTITY kapp "&kdirstat;"><!-- replace |NAMELITTLE| here -->
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+
+
+  <!-- Do not define any other entities; instead, use the entities
+       from kde-genent.entities and $LANG/user.entities. -->
+]>
+<!-- kdoctemplate v0.8 October 1 1999
+     Minor update to "Credits and Licenses" section on August 24, 2000
+     Removed "Revision history" section on 22 January 2001   -->
+
+<!--
+This template was designed by: David Rugge davidrugge@mindspring.com
+with lots of help from: Eric Bischoff ebisch@cybercable.tm.fr
+and Frederik Fouvry fouvry@sfs.nphil.uni-tuebingen.de
+of the KDE DocBook team.
+
+You may freely use this template for writing any sort of KDE documentation.
+If you have any changes or improvements, please let us know.
+
+In the future, we may want to change from SGML-based DocBook to XML-based
+DocBook. To make this change easier, please be careful :
+- in XML, the case of the <tags> and attributes is relevant ;
+- also, quote all attributes.
+
+Please don't forget to remove all these comments in your final documentation,
+thanks ;-).
+-->
+
+<!-- ................................................................ -->
+
+<!-- The language must NOT be changed here. -->
+
+<book lang="&language;">
+
+<!-- This header contains all of the meta-information for the document such
+as Authors, publish date, the abstract, and Keywords -->
+
+<bookinfo>
+<title>The KDirStat Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Stefan</firstname>
+<surname>Hundhammer</surname>
+<affiliation>
+<address><email>sh@suse.de</email></address>
+</affiliation>
+</author>
+</authorgroup>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+<copyright>
+<year>1999-2005</year>
+<holder>Stefan Hundhammer</holder>
+</copyright>
+<!-- Translators: put here the copyright notice of the translation -->
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook
+     and in the FDL itself on how to use it. -->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(V.MM.LL), it could be used by automation scripts.
+Do NOT change these in the translation. -->
+
+<date>2002-02-22</date>
+<releaseinfo>2.4.4</releaseinfo>
+
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&kdirstat; is a graphical disk usage utility, very much like the Unix "du" command,
+plus some cleanup facilities to reclaim disk space.
+</para>
+</abstract>
+
+<!-- This is a set of Keywords for indexing by search engines.
+Please at least include KDE, the KDE package it is in, the name
+ of your application, and a few relevant keywords. -->
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kdeutils</keyword>
+<keyword>utilities</keyword>
+<keyword>file system</keyword>
+<keyword>disk usage</keyword>
+<keyword>cleanup</keyword>
+</keywordset>
+
+</bookinfo>
+
+<!-- The contents of the documentation begin here.  Label
+each chapter so with the id attribute. This is necessary for two reasons: it
+allows you to easily reference the chapter from other chapters of your
+document, and if there is no ID, the name of the generated HTML files will vary
+from time to time making it hard to manage for maintainers and for the CVS
+system. Any chapter labelled (OPTIONAL) may be left out at the author's
+discretion. Other chapters should not be left out in order to maintain a
+consistent documentation style across all KDE apps. -->
+
+
+
+
+<chapter id="overview">
+<title>Overview</title>
+
+<!-- The introduction chapter contains a brief introduction for the
+application that explains what it does and where to report
+problems. Basically a long version of the abstract.  Don't include a
+revision history. (see installation appendix comment) -->
+
+<para>
+&kapp; is a graphical disk usage utility. It shows you where all your disk
+space has gone and tries to help clean it up.
+</para>
+
+
+<sect1 id="screenshot">
+<title>Screen Shot</title>
+
+<para>
+
+<screenshot>
+<screeninfo>The &kapp; main window</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-main.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Main window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+</sect1>
+
+
+
+
+<sect1 id="features">
+<title>Features</title>
+
+
+<sect2><title>Display Features</title>
+<itemizedlist>
+
+<listitem><para>
+Graphical and numeric display of used disk space
+</para></listitem>
+
+<listitem><para>
+Treemap display of used disk space
+</para></listitem>
+
+<listitem><para>
+Files kept apart from directories in separate &lt;Files&gt; items to prevent
+cluttering the display
+</para></listitem>
+
+
+<listitem><para>
+All numbers displayed human readable - e.g., 34.4 MB instead of 36116381 Bytes
+</para></listitem>
+
+
+<listitem><para>
+Reasonable handling of sparse files - only blocks that are actually allocated
+are added up to the total sums.
+</para></listitem>
+
+
+<listitem><para>
+Reasonable handling of (regular) files with multiple hard links - their size is
+divided by their number of hard links, thus evenly distributing their size over
+the directories they are linked to -- and, more importantly, not adding the same
+file up several times.
+</para></listitem>
+
+
+<listitem><para>
+Different colors in the directory tree display to keep the different tree
+levels visually apart
+</para></listitem>
+
+
+<listitem><para>
+Display of latest change time within an entire directory tree - you can easily
+see what object was changed last and when.
+</para></listitem>
+
+</itemizedlist>
+</sect2>
+
+
+<sect2><title>Directory Reading</title>
+<itemizedlist>
+
+<listitem>
+<para>
+Stays on one file system by default - reads mounted file systems only on
+request.
+</para>
+<para>
+You don't care about a mounted /usr file system if the root file
+system is full and you need to find out why in a hurry, nor do you want to scan
+everybody's home directory on the NFS server when your local disk is full.
+</para>
+</listitem>
+
+
+<listitem><para>
+Network transparency: Scan FTP or Samba directories - or whatever else
+protocols KDE support.
+</para></listitem>
+
+<listitem><para>
+PacMan animation while directories are being read.
+OK, this is not exactly essential, but it's fun.
+</para></listitem>
+
+
+</itemizedlist>
+</sect2>
+
+
+<sect2><title>Cleaning up</title>
+<itemizedlist>
+
+<listitem><para>
+Predefined cleanup actions: Easily delete a file or a directory tree, move it
+to the KDE trash bin, compress it to a .tar.bz2 archive or simply open a shell
+or a Konqueror window there.
+</para></listitem>
+
+
+<listitem><para>
+User-defined cleanup actions: Add your own cleanup commands or edit the
+existing ones.
+</para></listitem>
+
+<listitem><para>
+"Send mail to owner" report facility: Send a mail requesting the owner
+of a large directory tree to please clean up unused files.
+</para></listitem>
+
+
+</itemizedlist>
+</sect2>
+
+
+<sect2><title>Misc</title>
+<itemizedlist>
+
+<listitem><para>
+Feedback mail facility: Rate the program and tell the authors your opinion
+about it.
+</para></listitem>
+
+</itemizedlist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="more-screen-shots">
+<title>More Sceen Shots</title>
+
+
+<sect2><title>Configuring cleanup actions</title>
+<para>
+<screenshot>
+<screeninfo>Configuring cleanup actions</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-config-cleanups.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Configure cleanup actions window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+</sect2>
+
+
+<sect2><title>Configuring tree colors</title>
+<para>
+<screenshot>
+<screeninfo>Configuring tree colors</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-config-tree-colors.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Configure tree colors window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+</sect2>
+
+<sect2><title>Feedback mail</title>
+<para>
+<screenshot>
+<screeninfo>Feedback mail</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="feedback-mail.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Feedback mail window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+</sect2>
+
+</sect1>
+</chapter>
+
+
+
+
+<chapter id="basic_usage">
+<title>Basic Usage</title>
+
+<sect1 id="invoking">
+<title>Invoke &kdirstat;</title>
+
+<para>
+Start &kdirstat; from the KDE menu, right-click a directory in a
+Konqueror window or type
+<userinput>kdirstat</userinput> or
+<userinput>kdirstat &lt;directory-name&gt;</userinput> in a shell
+window or at KDE's <guibutton>Run command</guibutton> prompt
+(<keycap>Alt-F2</keycap>).
+</para>
+</sect1>
+
+<sect1 id="select_dir">
+<title>Select a Directory</title>
+
+<para>
+&kdirstat; will prompt for a directory if you didn't specify one when starting
+it. You can specify local directories as well as URLs of remote locations -
+<userinput>kdirstat /usr/lib</userinput> works as well as
+<userinput>kdirstat ftp:/ftp.myserver.org/pub</userinput>.
+</para>
+<para>
+In any case, &kdirstat; will start reading that directory. That might take a
+while, but you can work with the program during all that time.
+</para>
+</sect1>
+
+<sect1 id="find_out_where">
+<title>Find out what Uses up all the Disk Space</title>
+
+<para>
+Look at the "Subtree Total" column or wait until a subtree is finished reading
+and look at the graphical percentage bar display to find out what directory
+subtee takes up how much disk space. Use the open / close icons (plus and minus
+signs or small arrows, depending on how you set up your KDE) or double-click an
+item to open or close it.
+</para>
+<para>
+Notice how files at any directory level are kept apart from subdirectories -
+there is a separate &lt;Files&gt; entry for them. This way, you can easily tell
+how much disk space the files are using up in relation to the subdirectories
+and their respective files.
+</para>
+</sect1>
+
+<sect1 id="do_something">
+<title>Do Something about it</title>
+
+<para>
+Once you found out where all your disk space goes, do something about it - this
+is probably why you are using this program in the first place. You have several
+options:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Go to a computer hardware store and buy a new hard disk.
+This is probably not what you want. ;-)
+</para>
+</listitem>
+
+<listitem>
+<para>Tell the owner of that file or directory to please clean up.
+You can use &kdirstat; for that: Mark that file or directory (i.e., left-click
+on it) and select <guibutton>Send Mail to Owner</guibutton>
+from the context menu (right-click), from the tool bar (the envelope icon) or
+from the <guibutton>Report</guibutton> menu.
+</para>
+<para>
+A precomposed message will open in your
+<link linkend="mail_client">favourite mail client</link>.
+You can edit that text before actually sending it. The recipient of
+the mail is the user who owns the file or directory you marked - but of course
+you can edit that, too in the mail client.
+</para>
+<para>
+The mail will contain those items that are currently displayed open from the
+marked item on. If you want to include more items, open the respective
+directories; if you want less, close them. Of course you can always delete
+lines in the mail client if you find them irrelevant - there is no use
+complaining about some 367 byte files along with others that take several
+megabytes.
+</para>
+
+</listitem>
+
+<listitem>
+<para>
+Invoke a "cleanup" action. There are several predefined ones, and you can
+define your own. Use the context menu, the tool bar or the <guibutton>Clean
+Up</guibutton> menu to find out which are available.
+</para>
+<para>
+For some cleanup actions you will have to wait until the directory
+tree is completely read until you can activate them. If a cleanup action
+doesn't get enabled even then, the type of item you selected is inappropriate
+for that kind of action: Some actions can only performed on directories, while
+others can only be performed on files. Only very few actions work for
+&lt;Files&gt; pseudo entries since they don't have a real counterpart in the
+file system.
+</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="treemaps">
+<title>Treemaps</title>
+
+
+<sect1 id="treemap_intro">
+<title>Quick Introduction to Treemaps</title>
+
+
+<sect2 id="what_are_treemaps">
+<title>What is it?</title>
+
+<para>
+The shaded rectangles you can see in the lower half of the &kdirstat; main
+window are called a "treemap". This is just another way of displaying items in
+a tree that each have a numerical value, such as a file size.
+</para>
+
+<para>
+Each rectangle corresponds to a file or directory on your hard disk. The larger
+the rectangle (or, rather, the larger its area), the larger the file.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="how_to_use_treemaps">
+<title>How to Use Treemaps</title>
+
+<para>
+Look at the largest rectangles. Click on one, and it is selected - both in
+the treemap view and above in the tree view (the list above). You can now see
+what file or directory that is - both in the tree view above and in the status
+line below.
+</para>
+
+<para>
+Find the largest rectangles, identify them, ant decide what to do with them:
+Keep them, delete them, whatever. Use the cleanup actions like in the tree
+view. The right mouse button opens a context menu that contains cleanup actions.
+</para>
+
+<para>
+The shading gives hints about which files belong together in directories. The
+bright spots indicate about where the center of parent directories is.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="treemap_advantages">
+<title>Pros and Cons of Treemaps</title>
+
+<para>
+Treemaps are good for finding single large files, possibly very deeply nested
+in the directory hierarchy. They don't help very much if lots of small files
+clutter up a directory - use the tree view (the list) above the treemap for
+that.
+</para>
+
+<para>
+The treemap by itself view doesn't give away very much information other than
+relative file sizes. It can tell you where large files are, even if they are
+very deeply hidden in subdirectories. You always see all files at once, not
+only the relative sizes of subdirectories against each other like in the tree
+view. Click on a file to see more details in the tree view above.
+</para>
+
+<para>
+Bottom line: Both the treemap and the tree view have their strenghs and
+weaknesses. Use a combination of both to make best use of either's benefits.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="getting_rid_of_treemaps">
+<title>How to Get Rid of it</title>
+
+<para>
+If you need the screen space for the tree view (the list) or if you find it
+takes too long to update the tree view each time you delete a file, you can
+drag the splitter between the tree view and the treemap all the way down. The
+treemap doesn't get rebuilt below a certain minimum size, thus it doesn't eat
+performance any more. Alternatively, uncheck "show treemap" in the "treemap"
+menu or simply hit <keycap>F9</keycap>.
+</para>
+
+</sect2>
+</sect1>
+
+
+
+<sect1 id="treemap_actions">
+<title>Treemap Related Actions</title>
+
+
+<sect2 id="treemap_mouse_actions">
+<title>Mouse Actions in the Treemap</title>
+
+<itemizedlist>
+
+<listitem><para>
+A single click with the left mouse button selects the clicked file or directory
+both in the treemap and in the tree view.
+</para></listitem>
+
+<listitem><para>
+A single click with the middle mouse button selects the parent of the clicked
+file or directory.
+</para></listitem>
+
+<listitem><para>
+A single click with the right mouse button opens the context menu.
+</para></listitem>
+
+<listitem><para>
+A double click with the left mouse button zooms the treemap in at the clicked
+file or directory: The treemap is redisplayed with the near-topmost ancestor of
+the clicked file or directory as the root.
+</para></listitem>
+
+<listitem><para>
+A double click with the middle mouse button zooms out after zooming in.
+</para>
+<para>
+If the treemap is not zoomed in at all, it is simply rebuilt to fit into the
+available screen space without the need for scrollbars. This is mainly useful
+if automatic treemap resizing (the default) is switched off.
+</para></listitem>
+
+<listitem><para>
+Dragging the splitter above the treemap not only resizes the treemap subwindow,
+it also rebuilds the treemap and makes it fit into the available space.
+</para></listitem>
+
+<listitem><para>
+You can drag the splitter all the way down to deactivate the treemap
+alltogether. Below a minimum size the treemap will not be updated any more, so
+it doesn't cost any performance.
+</para></listitem>
+
+</itemizedlist>
+
+</sect2>
+
+
+<sect2 id="treemap_menu_actions">
+<title>Treemap Menu Actions</title>
+
+<para>
+Most treemap mouse actions have counterparts in the "treemap" menu.
+</para>
+
+<para>
+In addition to that, "show treemap" in the "treemap" menu toggles display of
+the treemap subwindow. If disabled, the treemap is really inactive and doesn't
+cost any performance.
+</para>
+
+</sect2>
+</sect1>
+
+
+<sect1 id="treemap_in_depth">
+<title>More Information about Treemaps</title>
+
+<sect2 id="simple_treemap_construction">
+<title>How a Simple Treemap is Constructed</title>
+
+<para>
+In its most basic form, construction of a treemap is very easy:
+</para>
+
+<para>
+First, you need a tree where each node has an associated value. Directory trees
+with their accumulated file sizes are a very natural example. However, the tree
+needs to be complete with all accumulated values before anything can be done -
+that's why &kdirstat; doesn't display a treemap while directories are being
+read.
+</para>
+
+<para>
+Decide upon an direcion in which to split the available area initially. Since
+normally the treemap subwindow is wider than it is high, we first split
+horizontally.
+</para>
+
+<para>
+Split the area so each toplevel directory gets an area proportional to its
+accumulated size (i.e., its own size plus the size of all its children,
+grandchildren etc.).
+</para>
+
+<para>
+For each rectangle thus constructed, repeat the process for each directory
+level, but change direction for each level. For example, the second level will
+be split vertically, the third again horizontally etc.
+</para>
+
+<para>
+This basic algorithm as well as the idea of treemaps at all was introduced by
+Ben Shneiderman quite some years ago.
+</para>
+
+</sect2>
+
+
+
+<sect2 id="squarified_treemaps">
+<title>Squarified Treemaps</title>
+
+<para>
+One major drawback of the simple treemap algorithm is that it usually results
+in lots of very thin, elongated rectangles that are hard to point at with the
+mouse and hard to compare visually against each other. This is why &kdirstat;
+uses "squarified" treemaps as described by Mark Bruls, Kees Huizing, and Jarke
+J. van Wijk of the Technical University of Eindhoven in the Netherlands. The
+basic idea is to improve the aspect ratio of the resulting rectangles, thus to
+make them more "square-like". Even though this doesn't always work out
+perfectly, it usually improves things a lot: There are normally very few (if
+any) thin, elongated rectangles in such a squarified treemap.
+</para>
+
+</sect2>
+
+
+<sect2 id="cushioned_treemaps">
+<title>The Shading: Cushioned Treemaps</title>
+
+<para>
+Squarifying a treemap comes at a cost: It makes the structure of the underlying
+tree even less obvious for the user. Where simple treemaps change direction for
+each level of subdivision, sqarified treemaps change direction within each
+level. The result are clusters of more or less square-like rectangles. The only
+hint about the tree structure that is given is that larger rectangles are near
+the left and at the top of each level.
+</para>
+
+<para>
+Thus, &kdirstat; uses a technique described by Jarke J. van Wijk and Huub van
+de Wetering of the TU Eindhoven, NL: "Cushioned" treemaps. This is the 3D-like
+shading you can see in &kdirstat;'s treemaps: It gives each rectangle within
+the treemap (each "tile") a cushion-like impression. This is not just for
+pretty looks, its main purpose is to group files optically together.
+</para>
+
+</sect2>
+
+
+<sect2 id="treemaps_optimizations">
+<title>&kdirstat;'s own Treemap Improvements</title>
+
+<para>
+The squarification algorithm requires items to be sorted by size. A Linux/Unix
+directory tree, however, usually has lots of items; a full-blown Linux
+installation can easily consist of 150,000+ (!) files and directories. The best
+sort algorithms (heap sort, quick sort) still have a cost in the order of
+n*ln(n), i.e. they are proportional to the product of the number of items times
+their logarithm.
+</para>
+
+<para>
+Likewise, the cushion shading algorithm requires relatively expensive
+floating-point arithmetics for each individual pixel of each treemap tile (even
+though, by the way, it is very efficient for a 3D-shading algorithm - no
+expensive sinus/cosinus etc. calculation required).
+</para>
+
+<para>
+On the other hand, most items in large directory trees are so tiny they cannot
+be seen at all. &kdirstat; simply omits everything that will result in treemap
+tiles less than a predefined (3*3 pixels) size - they are pretty useless for
+the purposes of &kdirstat;'s users anyway. Those tiny thingies may end up in
+some featureless grey space in the treemap display.
+</para>
+
+<para>
+So don't wonder if you click on some grey pixels and &kdirstat; insists they
+belong to a rather high-level directory: &kdirstat; simply means to tell you
+that those pixels correspond to some small stuff in that directory. Use the
+tree view (the list) above the treemap for more detailed information.
+</para>
+
+</sect2>
+
+<sect2 id="treemaps_credits">
+<title>Credits and Further Reading about Treemaps</title>
+
+<itemizedlist>
+
+<listitem><para>
+SequoiaView gave the inspiration for treemaps within &kdirstat;. SequoiaView is
+a MS Windows (that's the bad part) program created at the TU Eindhoven, NL. It
+introduced cushion treemaps and later squarified cushion treemaps. Its purpose
+is very close to &kdirstat;'s. If you are looking for a &kdirstat;-like program
+on that "other" ;-) platform, go for SequoiaView:
+
+<ulink url="http://www.win.tue.nl/sequoiaview">
+http://www.win.tue.nl/sequoiaview
+</ulink>.
+
+</para>
+<para>
+Needless to say, &kdirstat; users should easily be able to simply mount their
+MS Windows partitions and use &kdirstat; to clean up those as well. The only
+acceptable excuse ;-) for not doing this might be NTFS partitions (no reliable
+write access from Linux to those yet) or single-OS MS Windows machines.
+</para></listitem>
+
+<listitem><para>
+Ben Shneiderman invented treemaps - a truly intuitive way of visualizing
+numerical contents of a tree. For more information, see
+
+<ulink url="http://www.cs.umd.edu/hcil/treemaps/">
+http://www.cs.umd.edu/hcil/treemaps/
+</ulink>.
+</para></listitem>
+
+<listitem><para>
+Jarke J. van Wijk and Huub van de Wetering from the TU Eindhoven, NL wrote a
+paper called "Cushion Treemaps: Visualization of Hierarchical Information". It
+is available in PDF format at
+
+<ulink url="http://www.win.tue.nl/~vanwijk/">
+http://www.win.tue.nl/~vanwijk/
+</ulink>.
+</para></listitem>
+
+<listitem><para>
+Mark Bruls, Kees Huizing and Jarke J. van Wijk from the TU Eindhoven wrote a
+paper called "Squarified Treemaps". It is also available in PDF format at
+<ulink url="http://www.win.tue.nl/~vanwijk/">
+http://www.win.tue.nl/~vanwijk/
+</ulink>.
+</para></listitem>
+
+<listitem><para>
+Alexander Rawass had written a previous implementation of treemaps for
+&kdirstat;. Even that part has been completely replaced for various reasons
+(performance, integration into the &kdirstat; main application, memory
+consumption, stability, user interface conformance, lack of maintenance), it
+had proven that treemaps are a useful addition for a program like &kdirstat;.
+</para></listitem>
+
+<listitem><para>
+Frederic Vernier and Laurence Nigay from the University of Grenoble, France
+wrote a paper called "Modifiable Treemaps Containing Variable-Shaped Units"
+(URL unknown, sorry). They also wrote a MS Windows programm called "parent"
+that uses a mixture of treemaps and file lists within individual treemap
+tiles.
+</para><para>
+Personally, I don't like that approach very much - I find that display very
+cluttered and confusing (that is why I didn't adopt anything like that for
+&kdirstat;). But this is just my personal opinion that others may or may not
+share.
+</para></listitem>
+
+</itemizedlist>
+
+</sect2>
+</sect1>
+</chapter>
+
+
+
+<chapter id="predefined_cleanups">
+<title>Predefined Cleanup Actions</title>
+
+<para>
+&kdirstat; comes with a number of predefined cleanup actions. You can configure
+them all to your personal preference, and you can add your own. Here is what
+the predefined cleanup actions do:
+</para>
+
+<sect1 id="cleanup_open_in_konqueror">
+<title>Open in Konqueror</title>
+
+<para>
+This opens the selected item in a Konqueror window.
+</para>
+<para>
+You can use Konqueror to delete it (but then, you can also do that more easily
+from within &kdirstat;), you can move it to another place or you can examine it
+more closely.
+</para>
+<para>
+If the selected item is a known MIME type, this will open the appropriate
+application. For example, if you invoke
+<guibutton>Open in Konqueror</guibutton> on a PNG image, Konqueror will
+immediately start an image viewer and display that image.
+</para>
+<para>
+This is the Swiss army knife of cleanup actions: You can do a lot of different
+things with it. Thus, &kdirstat; cannot know if and when it makes sense to
+re-read that directory - you will have to do that manually:
+Select <guibutton>Refresh selected</guibutton> from the context menu
+(right-click) or from the <guibutton>File</guibutton> menu.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_open_in_terminal">
+<title>Open in Terminal</title>
+
+<para>
+This opens a terminal window in the directory of the selected item.
+</para>
+
+<para>
+Use this to issue a few shell commands in that directory, then simply close
+that shell window. You can easily open a new one in a different directory if
+you need one, so you might want not to bother to repeatedly type
+<userinput>cd</userinput> with lenghty paths - simply close that shell and open
+a new one at the new location (type <keycap>Ctrl</keycap>-<keysym>T</keysym>.
+</para>
+<para>
+As with the <guibutton>Open in Konqueror</guibutton> cleanup action described
+above, you must manually re-read the directory's contents if you make
+changes. Otherwise they will not be reflected in &kdirstat;'s display.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_compress">
+<title>Compress</title>
+
+<para>
+This compresses the selected directory to a .tar.bz2 archive.
+</para>
+
+<para>
+For example, a subdirectory
+<userinput>/work/home/kilroy/loveletters</userinput> will become a compressed
+archive <userinput>/work/home/kilroy/loveletters.tar.bz2</userinput>.
+The directory is removed once the compressed archive is successfully created
+(but of course not if that failed).
+</para>
+<para>
+Any existing archive of the same name will silently be overwritten.
+</para>
+<para>
+Remember that Konqueror and related utilities can use that kind of archive
+transparently; there is no need to unpack it if you want to read a file in that
+archive. Simply click into the archive in Konqueror.
+</para>
+
+<para>
+If you prefer .tgz archives to .tar.bz2, change the command line in the
+<link linkend="configuring_cleanups">cleanup settings</link>. With .tar.bz2,
+this is
+</para>
+<para>
+<userinput>
+cd ..; tar cjvf &percnt;n.tar.bz2 &percnt;n &amp;&amp; rm -rf &percnt;n
+</userinput>
+</para>
+<para>
+For .tgz archives, change this to
+</para>
+<para>
+<userinput>
+cd ..; tar czvf &percnt;n.tgz &percnt;n &amp;&amp; rm -rf &percnt;n
+</userinput>
+</para>
+<para>
+But you might think twice before doing that: "bzip2" (for .tar.bz2) compresses
+a lot more efficient than ordinary "gzip" (for .tgz or .tar.gz), and most
+systems support that just as well. It's just a matter of getting used to typing
+<userinput>tar cjvf</userinput> rather than <userinput>tar czvf</userinput> for
+creating an archive or <userinput>tar xjvf</userinput> rather than <userinput>tar
+xzvf</userinput> for unpacking it.
+</para>
+
+</sect1>
+
+
+<sect1 id="cleanup_make_clean">
+<title>make clean</title>
+
+<para>
+This issues a <userinput>make clean</userinput> command in the selected
+directory.
+</para>
+<para>
+This is useful if you build software from source frequently. After successfully
+installing the software (<userinput>make install</userinput>), there is no
+need to keep the built binaries around in the source directory any longer. On
+the other hand, people frequently forget to clean up those directories, so you
+can do that from within &kdirstat; with a few mouse clicks.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_clean_trash">
+<title>Delete Trash Files</title>
+
+<para>
+This deletes files that are usually superfluous, such as editor backup files or
+core dumps in the selected directory and in any of its subdirectories.
+</para>
+<para>
+By default, the following types of files are deleted:
+</para>
+<itemizedlist>
+<listitem><para>Object files left over from compiling software: *.o</para></listitem>
+<listitem><para>Editor backup files: *~ *.bak *.auto</para></listitem>
+<listitem><para>Core dump files: core</para></listitem>
+</itemizedlist>
+
+<para>
+Of course, you can <link linkend="configuring_cleanups">configure this</link>
+to suit your personal preferences.
+</para>
+
+</sect1>
+
+
+<sect1 id="cleanup_delete_to_trash_bin">
+<title>Delete (to Trash Bin)</title>
+
+<para>
+This invokes the KDE standard "delete" operation, i.e. the selected file or
+directory is moved to the KDE trash bin.
+</para>
+<para>
+Even though this doesn't help to reclaim disk space right away, it is a safe
+method of deleting. Use this action for anything you want to get rid of and
+then review your actions by looking into the KDE trash bin. If you are really
+sure, select <guibutton>Empty Trash Bin</guibutton> there. Until that point,
+you can always move those items back to where they came from.
+</para>
+<para>
+You might consider not using this cleanup action if you are cleaning up a
+directory on a different file system than your home directory: In that case
+that "moving to trash" involves copying the items (and then deleting them at
+the original location) which might take a while.
+</para>
+<para>
+Notice that when moving an item to trash is not successful, &kdirstat; will
+still falsely display that item as deleted even though it's still there. Use
+<guibutton>Refresh selected</guibutton> from the context menu to update the
+display manually. Read <link linkend="assume_deleted">here</link> why.
+</para>
+</sect1>
+
+
+<sect1 id="cleanup_hard_delete">
+<title>Delete (no way to undelete!)</title>
+
+<para>
+This is a real delete, not simply moving something to the trash bin. It's
+quicker, and disk space is reclaimed immediately, but there is no way to
+recover if you made a mistake. You will be prompted for confirmation when you
+invoke this.
+</para>
+<para>
+You can <link linkend="confirmation">change the configuration to not prompt for
+confirmation</link>, but don't blame me if anything goes wrong after you did that.
+</para>
+<para>
+As with <guibutton>Delete (to Trash Bin)</guibutton>, you will need to manually
+re-read a directory if this went wrong (usually due to insufficient permissions)
+- &kdirstat;'s display is out of sync with the hard disk if that happens.
+Read <link linkend="assume_deleted">here</link> why.
+</para>
+</sect1>
+
+
+</chapter>
+
+<chapter id="configuring_cleanups">
+<title>Configuring Cleanup Actions</title>
+
+
+<para>
+Select <guibutton>Configure &kdirstat;...</guibutton> from the
+<guibutton>Settings</guibutton> menu and switch to the
+<guibutton>Cleanups</guibutton> page:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>Configuring cleanup actions</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kdirstat-config-cleanups.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Configure cleanup actions window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<sect1 id="config_cleanups_reference">
+<title>Reference</title>
+
+<para>
+Select the cleanup action you want to configure from the list at the left
+side. You might need to check <guibutton>Enabled</guibutton> before you can
+make any changes.
+</para>
+
+<para>
+Enter a title in the <guibutton>Title</guibutton> field. You should mark one of
+the characters in the title with an ampersand ('&amp;') to provide a keyboard
+shortcut in the menus.
+</para>
+
+<para>
+Enter a shell command in the <guibutton>Command line</guibutton> field. The
+command will be invoked with <userinput>/bin/sh</userinput>, so you can use
+everything the default shell provides - including pipelines, logical 'and' or
+'or' ('&amp;&amp;' or '||', respectively) or multiple commands separated by
+semicolons. Use '%p' for the full path (or URL) of the currently selected file
+or directory or '%n' for the name without path. '%t' will be expanded to the
+full path name of the KDE trash directory (usually ${HOME}/Desktop/Trash, but
+since this tends to change between different KDE versions it is safer to use
+'%t').
+</para>
+<para>
+&kdirstat;
+will always change directory to the selected item, so there is no need to
+manually add a <userinput>cd</userinput> command to the command line.
+</para>
+<para>
+Commands are started in the background if possible, so don't add an extra
+ampersand '&amp;'.
+</para>
+
+<para>
+Check <guibutton>Recurse into subdirectories</guibutton> if the command should
+be called for each subdirectory of the selected directory. Whether or not this
+is useful depends on the kind of command you entered: A <userinput>make
+clean</userinput> command usually takes care of that internally, while it's a
+lot easier to use <userinput>rm -f *.bak</userinput> and let &kdirstat; handle
+subdirectories rather than using a more complex <userinput>find ... | xargs
+...</userinput> command.
+</para>
+
+<para id="confirmation">
+Check <guibutton>Ask for confirmation</guibutton> if you want to prompt the
+user for confirmation every time he invokes that cleanup action (but not for
+each recursive subdirectory!). But beware: Having to confirm a lot of such
+prompts tends to make users unattentive. They begin to blindly confirm
+everything out of habit. Thus, use confirmations only when really necessary.
+</para>
+
+<para>
+Check the category of objects this cleanup action works for. Not all commands
+make sense for both files and directories. &lt;Files&gt; pseudo entries are a
+very special case: They don't have a real counterpart on the hard disk. You can
+safely check the &lt;Files&gt; category for actions that require changing
+directory to somewhere and then execute a command there, but there is no use
+trying to delete such a &lt;Files&gt; entry.
+</para>
+
+<para>
+Choose between <guibutton>On local machine only ('file:/' protocol)</guibutton>
+and <guibutton>Network transparent (ftp, smb, tar, ...)</guibutton>.
+Most commands run locally only. There are only a few exceptions: For example,
+you can open a remote location in many KDE applications, e.g., Konqueror.
+</para>
+
+<para>
+Select a <guibutton>Refresh Policy</guibutton> to tell &kdirstat; how to update
+its display after the cleanup action has been invoked:
+</para>
+
+<itemizedlist>
+
+<listitem>
+<para>
+<guibutton>No refresh</guibutton>: Don't refresh the display. Either the
+cleanup action doesn't change the directory tree anyway or it is unknown when
+or how - or you don't care.
+</para>
+<para>
+Cleanup actions with this refresh policy are the only ones that can be invoked
+while the respective directory subtree is being read. All others can only be
+started once reading is finished.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<guibutton>Refresh this entry</guibutton>: Refresh the directory branch the
+cleanup action was selected with. This is the most useful refresh policy for
+cleanup actions that delete a number of items from a directory tree, for
+example <guibutton>Delete Trash Files</guibutton>.
+</para>
+<para>
+If this refresh policy is selected, the command is not started in the
+background: &kdirstat; has to wait for it to finish so the directory display
+can be refreshed at the proper time.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<guibutton>Refresh this entry's parent</guibutton>: Similar to
+<guibutton>Refresh this entry</guibutton>, but one level higher up. Useful for
+cleanup actions that delete the selected item but create a new one on the same
+level, for example the <guibutton>Compress</guibutton> standard cleanup: The
+original directory is deleted, but a .tar.bz2 file is created instead.
+</para>
+<para>
+If this refresh policy is selected, the command is not started in the
+background: &kdirstat; has to wait for it to finish so the directory display
+can be refreshed at the proper time.
+</para>
+</listitem>
+
+<listitem>
+<para id="assume_deleted">
+<guibutton>Asume entry has been deleted</guibutton>: Don't really re-read
+anything from disk, but assume the cleanup action deletes the selected
+item, thus simply remove that item from the directory tree's representation in
+&kdirstat;'s internal data structures.
+</para>
+<para>
+This is much faster than any real refresh, but it might cause the internal data
+structures to get out of sync with the hard disk if the cleanup action fails and
+doesn't really delete the selected item. In this case, the user will have to
+manually re-read that directory branch.
+</para>
+</listitem>
+</itemizedlist>
+
+
+</sect1>
+
+<sect1 id="config_cleanups_example">
+<title>Examples</title>
+
+<sect2>
+<title>Open in Emacs</title>
+
+<para>
+This is a trivial example that shows you how to add a new cleanup action that
+opens a file in Emacs (or any other editor of your choice).
+</para>
+
+<para>
+Select one of the unused user-defined cleanup actions from the list. Make sure
+<guibutton>Enabled</guibutton> is checked.
+</para>
+
+<para>
+Enter <userinput>Open in &amp;Emacs</userinput> in the
+<guibutton>Title</guibutton> field. Notice the '&amp;': This marks the letter
+'E' as this cleanup action's keyboard shortcut.
+</para>
+
+<para>
+Enter <userinput>emacs &percnt;p</userinput> in the <guibutton>Command
+line</guibutton> field.
+</para>
+
+<para>
+Leave both <guibutton>Recurse into subdirectories</guibutton> and
+<guibutton>Ask for confirmation</guibutton> unchecked.
+</para>
+
+<para>
+Make sure only <guibutton>Files</guibutton> is checked in the <guibutton>Works
+for...</guibutton> section and <guibutton>Directories</guibutton> and
+<guibutton>&lt;Files&gt; pseudo entries</guibutton> are unchecked. If you like
+Emacs' "dired" mode very much, you can also leave
+<guibutton>Directories</guibutton> checked, but it definitely doesn't make any
+sense trying to open an editor with a &lt;Files&gt; entry.
+</para>
+
+<para>
+Leave <guibutton>On local machine only</guibutton> selected. If you feel like
+experimenting a lot, you can try setting up Emacs so it fetches files from
+remote locations, but even then most likely only the 'ftp' protocol will work.
+</para>
+
+<para>
+Leave the <guibutton>Refresh Policy</guibutton> at
+<guibutton>No refresh</guibutton>. This ensures Emacs is started
+in the background and you can continue working with &kdirstat; while Emacs
+runs. It wouldn't make too much sense to change the command line to
+<userinput>emacs &percnt;p &amp;</userinput> and change the refresh policy to, say,
+<guibutton>Refresh this entry</guibutton>: The refresh would take place
+immediately after Emacs starts, and this is probably not what you want.
+</para>
+
+
+</sect2>
+
+<sect2>
+<title>Compress</title>
+
+<para>
+This example explains the predefined <guibutton>Compress</guibutton> cleanup
+action in more detail. Remember, this cleanup action makes a compressed
+.tar.bz2 archive from a directory.
+</para>
+
+<para>
+The <guibutton>Command line</guibutton> for this cleanup action is:
+</para>
+
+<para>
+<userinput>
+cd ..; tar cjvf &percnt;n.tar.bz2 &percnt;n &amp;&amp; rm -rf &percnt;n
+</userinput>
+</para>
+
+<para>
+<userinput>cd ..</userinput> changes directory one level up. We don't
+want to do something in the selected directory, but one level higher.
+</para>
+
+<para>
+The semicolon <userinput>;</userinput> tells the shell to execute one more
+command - unconditionally, no matter if the previous command succeeded or
+failed.
+</para>
+
+<para>
+<userinput>tar cjvf &percnt;n.tar.bz2 &percnt;n &amp;&amp;</userinput>
+is where the compressed .tar.bz2 archive is created. "c" is the tar command for
+"create", "j" means "use bzip2 compression", "v" is "verbose" (even though this
+is strictly spoken unnecessary here), "f" means use the next argument as the
+target file name rather than some default tape device (which nowadays nobody
+uses any more anyway). "&percnt;n.tar.bz2" will be expanded to the name of the
+selected directory without path plus "tar.bz2", "&percnt;n" will be expanded to
+the name without anything else. For a directory
+<userinput>/usr/lib/something</userinput> all this will result in a command
+</para>
+<para>
+<userinput>tar cjvf something.tar.bz2 something</userinput>
+</para>
+
+<para>
+<userinput>&amp;&amp;</userinput> makes the shell execute the rest only if the
+previous command (the <userinput>tar</userinput> command) is executed
+successfully. This is used here to make sure the directory only is deleted if
+we really have a .tar.bz2 archive with the same contents so we can easily
+restore it when necessary. This is crucial in case there insufficient disk
+space to create the archive or should we have insufficient permissions to
+create the archive.
+</para>
+
+<para>
+<userinput>rm -rf &percnt;n</userinput> recursively deletes the directory
+without asking or complaining.
+</para>
+
+<para>
+<guibutton>Works for...</guibutton> is enabled for directories only. Note it
+wouldn't be a good idea to enable it for &lt;Files&gt; entries, too: The user
+would rightfully expect the .tar.bz2 archive to contain the contents of the
+&lt;Files&gt; entry only, i.e. only the files on that directory level. The
+command would, however, pack the entire directory tree from the parent level on
+into the .tar.bz2 file.
+</para>
+
+<para>
+The <guibutton>Refresh Policy</guibutton> is set to
+<guibutton>Refresh this entry's parent</guibutton> since not only the selected
+item is changed, but its parent also: It loses one child (the directory) but
+gets another one (the .tar.bz2 archive).
+</para>
+
+<para>
+Please note that <guibutton>Recurse into subdirectories</guibutton> is not
+checked here: the <userinput>tar</userinput> command and <userinput>rm
+-rf</userinput> take care of any subdirectories.
+</para>
+
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="feedback_mail">
+<title>Feedback Mail</title>
+
+<sect1 id="feedback_mail_description">
+<title>Description</title>
+
+<para>
+<guibutton>Send Feedback Mail...</guibutton> from the
+<guibutton>Help</guibutton> menu opens this dialog:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>Feedback mail</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="feedback-mail.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Feedback mail window screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You answer the questions (at least those marked as required) and add your personal
+comments (in English, if you can, or in the special case of &kdirstat;
+alternatively in German).
+</para>
+
+<para>
+Upon clicking on the <guibutton>Mail this...</guibutton> button, your
+<link linkend="mail_client">mail client</link> opens with a
+<link linkend="mail_example">precomposed mail</link>.
+You can review that mail to make sure it doesn't contain anything you
+don't like. When you are convinced the mail is okay and doesn't contain
+anything you don't like, send it.
+</para>
+
+<para>
+With your opinion and your personal comments, you can make a contribution to
+the Open Source movement - even if you are not a developer, even if you don't
+have a clue how to improve or change the software. Your opinion is important,
+even if you decide you don't like the program and send the mail off with "this
+program is crap" checked.
+</para>
+
+<para>
+Open Source softare lives and breathes with user feedback. If you miss a
+feature, tell us about it. If you consider an existing feature confusing, tell
+us about it. If you find an application overloaded with features so you can't
+find the ones you really need, tell us about it.
+</para>
+
+<para>
+On the other hand, if you like the program the way it is and you wouldn't like
+to see it changed in any way, tell us about that, too. If you simply want to
+thank those who go through the trouble writing all that software, do it. Your
+input is appreciated, be it positive or negative.
+</para>
+
+<para>
+There is nothing more frustrating for an Open Source software author than that
+lingering uncertainty if there is anybody out there who actually uses his
+program. He may not get any response from users - does that mean nobody
+uses the software, or does it mean it simply runs so good nobody has reason to
+complain? You can contribute by telling him he is doing all right and he should
+keep up the good work.
+</para>
+
+<para>
+In the opposite case, why not tell the author of a particular annoying program
+just how annoying it is? This may shake him sober and make him reconsider his
+work.
+</para>
+
+<para>
+Open Source is one of the world's greatest democracies. Make your vote!
+</para>
+
+</sect1>
+
+
+
+<sect1 id="privacy">
+<title>Privacy</title>
+
+<para>
+Your mail sent with <guibutton>Send Feedback Mail...</guibutton> is sent to the
+authors of this program, to nobody else. No company or government institution
+will get your mail address or any personal data. You might have noticed no
+personal data are requested in the feedback form. In particular, you will never
+receive spam e-mail of any kind because of sending feedback mail.
+</para>
+
+<para>
+We, the authors of this program, loathe spam probably even more than the
+average KDE user since we get so much of it - spam robots tend to extract
+e-mail addresses from source code and from web pages, so you can be sure we do
+our best to make life as hard as we can on the spammers and certainly not help
+them in any way.
+</para>
+
+<para>
+The purpose of all this feedback mail is to gather information about average
+user satisfaction, about average opinions about an application's feature set,
+an application's stability and learning curve. It's all about averages, thus no
+specific user's data will ever be made available to the public - only
+statistical averages over a large number of users, if at all.
+</para>
+
+</sect1>
+
+<sect1 id="mail_example">
+<title>Feedback Mail Example</title>
+
+<para>
+A typical feedback mail looks about like that:
+</para>
+
+<para>
+<screen width="60">
+<userinput>[kde-feedback] KDirStat-2.4.4 user feedback</userinput>
+
+<userinput>&lt;comment&gt;</userinput>
+<userinput>This is where the personal comments go.</userinput>
+<userinput>You may enter virtually any number of lines.</userinput>
+<userinput>&lt;/comment&gt;</userinput>
+
+<userinput>general_opinion="5/8_nice_try"</userinput>
+
+<userinput>features_liked="stay_on_one_filesys"</userinput>
+<userinput>features_liked="feedback"</userinput>
+<userinput>features_liked="pacman"</userinput>
+
+<userinput>stability="5/5_keeps_crashing"</userinput>
+<userinput>learning_curve="5/5_still_no_clue"</userinput>
+<userinput>recommend="yes"</userinput>
+</screen>
+</para>
+
+
+<para>
+Notice it's all plain ASCII. There is no attachment, no hidden header fields,
+no information about your machine or yourself - only what you would send to
+anybody else when you send a mail.
+</para>
+
+<para>
+By the way, this is also why we kept the format that simple. Many developers
+today prefer XML for all kinds of data, but the end user (you) should be able
+to read and understand what you send - just so you can make sure you don't send
+any information you'd rather keep to yourself.
+</para>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="developers_guide">
+<title>Developer's Guide to KDirStat</title>
+
+<para>
+Most of what you can see of &kdirstat; is one separate KDE widget that can be
+used in other applications, too. Those parts of &kdirstat; are even licensed
+under the LGPL, so you are even allowed to use it in commercial applications.
+</para>
+
+<para>
+The &kdirstat; sources are extensively documented. Read the documentation in
+the header files for more details or use "kdoc" to generate HTML documentation
+from them.
+</para>
+
+
+</chapter>
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+
+&reporting.bugs;
+
+
+<qandaset id="faqlist">
+
+<qandaentry id="ftp_server">
+<question>
+<para>
+Can I use &kdirstat; to sum up a directory on an FTP server?
+</para>
+</question>
+<answer>
+<para>
+Yes. Simply specify the URL at the command line or even in &kdirstat;'s
+directory selection box:
+<userinput>kdirstat ftp:/ftp.myserver.org/pub</userinput> (command line) or
+<userinput>ftp:/ftp.myserver.org/pub</userinput> (directory selection box).
+</para>
+<para>
+&kdirstat; supports all protocols that KDE supports. You can even use the "tar"
+protocol (does it make any sense to do that? You decide). The only restriction
+is that the protocol needs to support the "list directory" service - which not
+all protocols do.
+</para>
+<para>
+If you are unsure about the syntax to use, try it in Konqueror first and look
+at Konqueror's URL line. For example, to figure out how to specify a "tar" URL,
+click into a "tar" archive in Konqueror and look at the resulting URL to get an
+idea of what it looks like.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="exact_byte_size">
+<question>
+<para>
+How do I get the exact byte size of an entry rather than Megabytes or
+Kilobytes?
+</para>
+</question>
+<answer>
+<para>
+Right-click the number in the list.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="du_reports_different_total">
+<question>
+<para>
+Why does the "du" command sometimes report different
+sizes than &kdirstat;?
+</para>
+</question>
+<answer>
+<para>
+There are different kinds of sizes reported by different kinds of system calls
+or KDE services: The byte size and the block size.
+</para>
+<para>
+The byte size is the exact number of bytes of a file or directory. This is what
+&kdirstat; uses.
+</para>
+<para>
+The block size is the number of disk blocks allocated by a file or
+directory. Most "du" commands use that.
+Depending on the type of file system, parts of the last block of a
+file or directory may be unused, yet reserved for it anyway. If such a file system
+uses 1024 byte blocks, a file will at least need those 1024 bytes, no matter if
+it is 1024, 200 or even just one byte large. That depends on the file system type
+and sometimes even on how this is set up - i.e., this is highly system
+specific.
+</para>
+<para>
+&kdirstat; uses the byte size since this the only size that is reliably
+returned by all kinds of system calls and KDE services alike. It only really
+makes a difference in very pathological situations anyway, for example if you
+have subdirectories with a large number of tiny files.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="sparse_files">
+<question>
+<para>
+What does this display mean:
+<userinput>
+6.3 MB (allocated: 1.3 MB)
+</userinput>
+</para>
+</question>
+
+<answer>
+<para>
+This is a so-called "sparse file" (also known as "file with holes").
+This means that the file really is 6.3 MB  large, but only 1.3 MB of that are
+actually allocated - the rest are just zeroes.
+</para>
+<para>
+This is typical for core dumps (memory images of crashed programs written to a
+file named <userinput>core</userinput> or <userinput>core.*</userinput>)
+or binary database files: The kernel writes those files in a way so only real
+data content is allocated on disk and not the large amount of zeroes.
+</para>
+<para>
+Technically, a sparse file is created with the regular open() system call to
+open the file for writing, then using lseek() to extend the file size beyond
+its previous size and then writing at least one byte. The area between the old
+and the new file size becomes a "hole" in the file - it is not actually
+allocated on the disk. Upon reading this area, a value of zero is returned for
+each byte read. When bytes are written to that area, file system blocks are
+actually allocated, possibly creating two smaller holes before and after the
+area written to.
+</para>
+<para>
+Please note that most file utilities do not deal graciously with sparse
+files. Those that support them at all normally need special command line
+arguments. Otherwise they tend to simply reading all bytes (including all the
+zeroes from the holes) and writing them to a new location - which of course
+means that the resulting file is no longer sparse, but really occupies all the
+space its size indicates. This may mean that you can blow up the above 6.3 MB
+core dump file from 1.3 MB disk usage (and 5 MB zeroes in holes) to really
+6.3 MB disk usage.
+</para>
+<para>
+GNU file system utilities like
+<userinput>tar</userinput> and <userinput>rsync</userinput> at least support
+command line options to prevent that.
+GNU <userinput>cp</userinput> is a notable exception - it has a heuristic that
+seems to work very well.
+GUI driven file managers on the other hand tend to simply ignore this - even
+the most modern and cool looking ones.
+</para>
+<para>
+If in doubt, check your favourite file tools. Produce a core dump - they are
+normally sparse files. The more memory a program uses, the more likely it is to
+have large sections of zeroes in its memory image. Try this (in a shell):
+<itemizedlist>
+
+<listitem><para>
+Enable core dumps - they are usually disabled in most Linux distributions:
+</para>
+<para>
+<userinput>ulmit -c 128000</userinput>
+</para>
+<para>
+This sets the limit of core dump files to 128000 blocks (512 bytes each), i.e.,
+to 64 MB. This should be sufficient.
+</para></listitem>
+
+<listitem><para>
+Start a program with considerable memory consumption - in the background:
+</para>
+<para>
+<userinput>xmms &amp;</userinput>
+</para></listitem>
+
+<listitem><para>
+Make the program dump core:
+</para>
+<para>
+<userinput>kill -ABRT %xmms</userinput>
+</para>
+<para>
+This sends the ABORT signal to this process, terminating it with a core dump.
+</para></listitem>
+
+<listitem><para>
+Look at the core dump:
+</para>
+<para>
+<userinput>kdirstat .</userinput>
+</para>
+<para>
+or, for a neutral third-party program (from the Linux coreutils package):
+</para>
+<para>
+<userinput>/usr/bin/stat core*</userinput>
+</para>
+<para>
+(You need to multiply the "blocks" output with 512 to find out allocated disk space)
+</para></listitem>
+
+<listitem><para>
+Copy that core dump (e.g. to another directory) and look at it again. You will
+be surprised how "heavy" all those zeroes suddenly have become. Try that with
+several copy utilities (<userinput>/bin/cp</userinput>, file managers of your
+choice). Remember to always use the sparse original, not any blown-up copies!
+</para>
+<para>
+Moving files should always be safe (unless a file manager is really, really
+stupid), but copying can easily blow up sparse files to huge assemblies of
+meaningless zeroes.
+</para></listitem>
+
+</itemizedlist>
+</para>
+<para>
+Agreed, sparse files are rather uncommon these days, so this is usually not a
+problem. Just remember &kdirstat; knows how to deal with them. ;-)
+</para>
+<para>
+Please note that this special handling is only in effect if &kdirstat;'s
+optimized read methods for local files are used (you can turn this on and off
+in the <guibutton>Settings -&gt; General</guibutton> dialog) - KDE's KIO
+methods do not return this kind of information.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="hard_links">
+<question>
+<para>
+What does this display mean:
+<userinput>
+878.5 KB / 21 Links
+</userinput>
+</para>
+</question>
+<answer>
+<para>
+This means that this file has a number of hard links. &kdirstat; uses only the
+respective portion of its size for its statistics - in the above case, 878.5 KB
+/ 21 = 41.8 KB. When another link to this file is processed, the next 875.5/21
+KB are added to the total - and so on.
+</para>
+<para>
+The rationale is that is makes no sense to count such a file 21 times with its
+full size  - this would greatly distort the statistics. For example, look at
+<userinput>/usr/lib/locale</userinput> on a (SuSE) Linux system - many files
+there have multiple hard links to save disk space. The total sum of that
+directory on a SuSE Linux 9.2-i386 system is 40.5 MB -- as opposed to 205.6 MB
+that the added-up output of <userinput>/bin/ls -lR</userinput> would suggest
+(or &kdirstat; with <guibutton>use optimized local read methods</guibutton>
+turned off in the <guibutton>Settings -&gt; General</guibutton> dialog)
+- sometimes, as in this example, this really makes a difference!
+</para>
+<para>
+Technical background: In Unix/Linux file systems, files primarily have a
+numeric ID, their "i-number", the index of the corresponding "i-node", the file
+system's administrative information. Each directory entry of a file really is
+no more than a link to that i-node. You can have the very same file under
+several distinct names this way - even in different directories. The only
+limitation is that this is restricted to one file system (i.e. to one disk
+partition) because those i-numbers are unique only per file system.
+</para>
+<para>
+Hard links can also introduce a whole new dimenstion of problems with
+applications that create backup copies of working files - they usually only
+rename the original file to a backup name and write their content to a new
+file. Editors usually work that way. This however means that any additional
+hard links to that file now point to the outdated backup copy - which is
+normally not what is desired. Only very few applications handle this
+reasonably. So the bottom line is: Use hard links only if you know very well
+what you are doing.
+</para>
+<para>
+All this is probably why symbolic links have become so much more popular in recent
+years: They can also point to different file systems, even (via NFS) to
+different hosts in the network. On the downside, symlinks can also be stale -
+pointing into nothingness. This cannot happen with hard links: A file is only
+really deleted when the last of its links is deleted (this includes open
+i-nodes in memory - i.e., processes still having an open file handle to that
+i-node).
+</para>
+<para>
+Directories rely completely on hard links (this is also why &kdirstat; does not
+attempt to try anything smart with multiple-hard-link directories - it would
+make no sense): The ".." entries in each directory pointing to its parent is
+nothing else than another hard link to that parent (named ".."), and "." is
+nothing else than a hard link to itself. This is also why even a completely
+empty directory has a link count of 2 - one for "." in its own directory, one
+for its name in its parent directory.
+</para>
+<para>
+Like sparse files above, regular files with multiple hard links are pretty
+uncommon these days - but they are still used, and sometimes they can make a
+difference, and this is why &kdirstat; has special handling for them.
+</para>
+<para>
+Please note that this special handling is only in effect if &kdirstat;'s
+optimized read methods for local files are used (you can turn this on and off
+in the <guibutton>Settings -&gt; General</guibutton> dialog) - KDE's KIO
+methods do not return this kind of information.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="mail_client">
+<question>
+<para>
+I don't want to use KMail every time I send a mail with &kdirstat;.
+How do I tell &kdirstat; to use a different mail client?
+</para>
+</question>
+<answer>
+<para>
+Start <userinput>kcontrol</userinput> or select
+<guibutton>Preferences</guibutton> in the KDE menu, then select
+<guibutton>Network</guibutton> -&gt; <guibutton>Email</guibutton> and enter
+your favourite mail client in the <guibutton>Preferred Email client</guibutton>
+field.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry id="tree_colors">
+<question>
+<para>
+How do I get rid of those many percentage bar colors? I want them all displayed
+in the same color.
+</para>
+</question>
+<answer>
+<para>
+Select <guibutton>Configure &kdirstat;...</guibutton> from the
+<guibutton>Settings</guibutton> menu, switch to the <guibutton>Tree
+colors</guibutton> page and drag the slider all the way up.
+</para>
+</answer>
+</qandaentry>
+
+
+</qandaset>
+
+</chapter>
+
+
+<chapter id="credits">
+
+<!-- Include credits for the programmers, documentation writers, and
+contributors here. The license for your software should then be included below
+the credits with a reference to the appropriate license file included in the KDE
+distribution. -->
+
+<title>Credits and License</title>
+
+<para>
+&kapp;
+</para>
+<para>
+Program copyright 1999-2002 Stefan Hundhammer <email>sh@suse.de</email>
+</para>
+
+<para>
+Contributors:
+<itemizedlist>
+<listitem>
+	<para>Alexander Rawawss <email>alexannika@users.sourceforge.net</email>
+	Initial treemaps (those who currently don't work any more)
+	</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation copyright 2002 Stefan Hundhammer <email>sh@suse.de</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove. Commercial development should -->
+<!-- replace this with their copyright and either remove it or re-set this.-->
+
+&underGPL;        	 <!-- GPL License -->
+
+</chapter>
+
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kdirstat">
+<title>How to obtain KDirStat</title>
+
+<para>
+&kdirstat; is part of the KDE project
+<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
+
+&kdirstat; can be found on the &kdirstat; home page at
+<ulink url="http://kdirstat.sourceforge.net/">http://kdirstat.sourceforge.net/</ulink>
+or at the mirror site at
+<ulink url="http://www.suse.de/~sh/kdirstat/">http://www.suse.de/~sh/kdirstat/</ulink>
+.</para>
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<itemizedlist>
+<listitem>
+<para>Linux or any other Unix-type operating system.</para>
+<para>As stupid as this sounds: There were quite some people complaining that
+they couldn't get &kdirstat; installed on their Win9x system. Many people seem
+to believe that if it has windows, it has to run on MS Windows...
+</para>
+</listitem>
+
+<listitem><para>KDE 3.x</para></listitem>
+
+</itemizedlist>
+
+<para>
+All required libraries as well as &kdirstat; itself can be found on
+<ulink url="http://kdirstat.sourceforge.net/">The &kdirstat; home page</ulink>.
+</para>
+</sect1>
+
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<para>
+See file "build-howto.html" in the distribution tarball.
+</para>
+
+</sect1>
+
+
+</appendix>
+
+&documentation.index;
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+
