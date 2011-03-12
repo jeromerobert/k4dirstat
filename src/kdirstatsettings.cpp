@@ -378,10 +378,9 @@ KCleanupPage::setup()
     KCleanupList cleanupList = _workCleanupCollection.cleanupList();
     KCleanupListIterator it( cleanupList );
 
-    while ( *it )
+    while ( it.hasNext() )
     {
-	_listBox->insert( *it );
-	++it;
+	_listBox->insert( it.next() );
     }
 
 
