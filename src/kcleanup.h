@@ -17,8 +17,6 @@
 #   include <config.h>
 #endif
 
-#include <q3dict.h>
-#include <q3intdict.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>

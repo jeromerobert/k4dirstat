@@ -27,11 +27,11 @@ class KActionCollection;
 
 namespace KDirStat
 {
-    typedef Q3Dict<KCleanup>		KCleanupDict;
-    typedef Q3DictIterator<KCleanup>	KCleanupDictIterator;
+    typedef QHash<QString,KCleanup*>		KCleanupDict;
+    typedef QHashIterator<QString,KCleanup*>	KCleanupDictIterator;
 
-    typedef Q3PtrList<KCleanup>		KCleanupList;
-    typedef Q3PtrListIterator<KCleanup>	KCleanupListIterator;
+    typedef QList<KCleanup*>			KCleanupList;
+    typedef QMutableListIterator<KCleanup*>	KCleanupListIterator;
 
     
     /**

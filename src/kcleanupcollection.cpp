@@ -33,8 +33,6 @@ KCleanupCollection::KCleanupCollection( KActionCollection * actionCollection )
      * QList is the master collection, the QDict the slave.
      **/
     
-    _cleanupList.setAutoDelete( true  );
-    _cleanupDict.setAutoDelete( false );
     
     _nextUserCleanupNo	= 0;
 }
@@ -122,12 +120,10 @@ KCleanupCollection::operator= ( const KCleanupCollection &src )
 	KCleanupListIterator srcIt( srcList );
 	KCleanupListIterator destIt( _cleanupList );
 
-	while ( *srcIt && *destIt )
+	while ( srcIt.hasNext() && destIt.hasNext() )
 	{
 	    // kdDebug() << "Assigning " << *srcIt << endl;
-	    **destIt = **srcIt;
-	    ++srcIt;
-	    ++destIt;
+	    srcIt.next() = destIt.next();
 	}
     }
 
@@ -153,12 +149,11 @@ KCleanupCollection::deepCopy( const KCleanupCollection &src )
     KCleanupList srcList = src.cleanupList();
     KCleanupListIterator it( srcList );
 
-    while ( *it )
+    while ( it.hasNext() )
     {
 	// kdDebug() << k_funcinfo << "Creating new " << *it << endl;
 	
-	add( new KCleanup( **it ) );
-	++it;
+	add( new KCleanup( *it.next() ) );
     }
 }
 
@@ -175,20 +170,21 @@ KCleanupCollection::add( KCleanup *newCleanup )
 	// The instance in the dict will be deleted automatically by inserting
 	// the new one.
 
+	KCleanupListIterator i(_cleanupList);
 	_cleanupList.first();	// Moves _cleanupList.current() to beginning
 	
-	while ( _cleanupList.current() )
+	while ( i.hasNext() )
 	{
-	    if ( _cleanupList.current()->id() == newCleanup->id() )
+	    KCleanup* current = i.next();
+	    if ( current->id() == newCleanup->id() )
 	    {
 		// Found a cleanup with the same ID -
 		// remove the current list item, delete it (autoDelete!) and
 		// move _cleanupList.current() to the next item.
 		
-		_cleanupList.remove();
+		delete current;
+		i.remove();
 	    }
-	    else
-		_cleanupList.next();
 	}
     }
     
