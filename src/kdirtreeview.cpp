@@ -777,6 +777,8 @@ KDirTreeView::ensureContrast()
     {
 	setTreeBackground( colorGroup().base() );
     }
+    QColor color = KColorScheme( QPalette::Active, KColorScheme::View).background().color();
+    setTreeBackground(color);
 }
 
 
