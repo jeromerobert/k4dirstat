@@ -41,6 +41,25 @@ KStdCleanup::openInKonqueror( KActionCollection *parent )
     return cleanup;
 }
 
+/*KCleanup *
+KStdCleanup::openInFileManager( KActionCollection * parent)
+{
+    KCleanup *cleanup = new KCleanup( "cleanup_open_in_file_manager",
+				      "dolphin p",
+				      i18n( "Open in Dolphin" ),
+				      parent );
+    Q_CHECK_PTR( cleanup );
+    cleanup->setWorksForDir(true);
+    cleanup->setWorksForFile(false);
+    cleanup->setWorksForDotEntry(true);
+    cleanup->setWorksLocalOnly(false);
+    cleanup->setRefreshPolicy(KCleanup::noRefresh);
+    cleanup->setIcon(KIcon("system-file-manager"));
+
+    return cleanup;
+
+}*/
+
 
 KCleanup *
 KStdCleanup::openInTerminal( KActionCollection *parent )
