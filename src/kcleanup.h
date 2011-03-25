@@ -261,7 +261,7 @@ namespace KDirStat
 	 * Inherited from @ref KAction : Perform the action.
 	 * In this case, execute the cleanup with the current selection.
 	 **/
-        virtual void slotActivated() { executeWithSelection(); }
+	//virtual void slotActivated() { executeWithSelection(); }
 
     
     protected:
