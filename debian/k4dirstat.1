@@ -1,0 +1,153 @@
+.TH k4dirstat "1" "Jun 2011"
+.SH NAME
+k4dirstat \- Directory statistics
+.SH SYNOPSIS
+.B k4dirstat
+[\fIQt-options\fR] [\fIKDE-options\fR] [\fIFile\fR]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B k4dirstat
+application.
+This manual page was written for the Debian GNU/Linux distribution
+because the original program does not have a manual page.
+.PP
+Shows where all your disk space has gone and helps you clean it up.
+.SH OPTIONS
+.SS "Arguments:"
+.TP
+Dir/URL
+Directory or URL to open
+.SS "Generic Options"
+.B \-\-help
+Show help about options
+.TP
+.B \-\-help\-qt
+Show Qt specific options
+.TP
+.B \-\-help\-kde
+Show KDE specific options
+.TP
+.B \-\-help\-all
+Show all options
+.TP
+.B \-\-author
+Show author information
+.TP
+.B \-v\fR, \fB\-\-version
+Show version information
+.TP
+.B \-\-license
+Show license information
+.TP
+.B \-\-
+End of options
+.SS "Qt options:"
+.TP
+.BI \-\-display \ displayname
+Use the X-server display \fIdisplayname\fP.
+.TP
+.BI \-\-session \ sessionId
+Restore the application for the given \fIsessionId\fP.
+.TP
+.B \-\-cmap
+Causes the application to install a private color
+map on an 8-bit display.
+.TP
+.BI \-\-ncols \ count
+Limits the number of colors allocated in the color
+cube on an 8-bit display, if the application is
+using the QApplication::ManyColor color
+specification.
+.TP
+.B \-\-nograb
+tells Qt to never grab the mouse or the keyboard.
+.TP
+.B \-\-dograb
+running under a debugger can cause an implicit
+.B \-nograb, use \fB\-dograb\fR to override.
+.TP
+.B \-\-sync
+switches to synchronous mode for debugging.
+.TP
+.BI "\-\-fn\fR, \fP\-\-font" \ fontname
+defines the application font.
+.TP
+.BI "-\-bg\fR, \fB\-\-background"  \ color
+sets the default background color and an
+application palette (light and dark shades are
+calculated).
+.TP
+.BI "\-\-fg\fR, \fB\-\-foreground"  \ color
+sets the default foreground color.
+.TP
+.BI \-\-btn\fR, \fB\-\-button \ color
+sets the default button color.
+.TP
+.BI \-\-name \ name
+sets the application name.
+.TP
+.BI \-\-title \ title
+sets the application title (caption).
+.TP
+.B \-\-visual TrueColor
+forces the application to use a TrueColor visual on
+an 8-bit display.
+.TP
+.BI \-\-inputstyle \ inputstyle
+sets XIM (X Input Method) input style. Possible
+values are 
+.BR onthespot ", " overthespot ", " offthespot and root .
+.TP
+.BI \-\-im " XIM-server"
+set XIM server.
+.TP
+.B \-\-noxim
+disable XIM.
+.TP
+.B \-\-reverse
+mirrors the whole layout of widgets.
+.TP
+.BI \-\-stylesheet \ file.qss
+applies the Qt stylesheet to the application widgets
+.TP
+.BI \-\-graphicssystem \ system
+use a different graphics system instead of the default one, options are raster and opengl (experimental)
+.SS "KDE options:"
+.TP
+.BI \-\-caption \ caption
+Use \fIcaption\fP as name in the titlebar.
+.TP
+.BI \-\-icon \ icon
+Use \fIicon\fP as the application icon.
+.TP
+.BI \-\-config \ filename
+Use alternative configuration file.
+.TP
+.B \-\-nocrashhandler
+Disable crash handler, to get core dumps.
+.TP
+.B \-\-waitforwm
+Waits for a WM_NET compatible windowmanager.
+.TP
+.BI \-\-style \ style
+sets the application GUI style.
+.TP
+.BI \-\-geometry \ geometry
+sets the client geometry of the main widget - see man X for the argument format (usually WidthxHeight+XPos+YPos)
+.SH AUTHOR
+k4dirstat was written by
+.nh
+.ad l
+Stefan Hundhammer <sh@suse.de> and
+Joshua Hodosh <kdirstat@grumpypenguin.org>
+.hy
+.br
+Please report bugs to kdirstat@grumpypenguin.org.
+.br
+This manual page was prepared by
+.nh
+.ad l
+Jerome Robert <jeromerobert@gmx.com>
+.hy
+for the Debian GNU/Linux system (but may be used by others).
+

@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+%:
+	dh $@ --with kde
+
+override_dh_auto_install:
+	dh_auto_install --buildsystem=kde --destdir=debian/k4dirstat
+
+get-orig-source:
+	$(dir $(lastword $(MAKEFILE_LIST)))/get-orig-source.sh 6c0a9e6
+

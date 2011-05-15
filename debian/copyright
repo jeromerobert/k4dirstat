@@ -1,0 +1,51 @@
+Format-Specification: http://dep.debian.net/deps/dep5/
+Upstream-Contact: http://grumpypenguin.org
+Source: http://grumpypenguin.org
+
+Files: *
+Copyright: 1999-2008, Stefan Hundhammer <sh@suse.de>
+           2010-2011, Joshua Hodosh <kdirstat@grumpypenguin.org>
+License: LGPL
+ This library is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License as published
+ by the Free Software Foundation.
+ .
+ This library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ On Debian systems, the complete text of a recent release of the GNU
+ Library General Public License (LGPL) can be found in file
+ "/usr/share/common-licenses/LGPL".
+ .
+ You should have received a copy of the GNU Lesser General Public
+ License along with this program.  If not, see
+ <http://www.gnu.org/licenses/>.
+
+Files: src/k4dirstat.cpp src/k4dirstat.h src/kdirstatsettings.cpp src/kdirstatsettings.h src/main.cpp
+Copyright: 1999-2008, Stefan Hundhammer <sh@suse.de>
+           2010-2011, Joshua Hodosh <kdirstat@grumpypenguin.org>
+License: GPL
+
+Files: debian/*
+Copyright: 2011 Jerome Robert <jeromerobert@gmx.com>
+License: GPL
+
+License: GPL
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation.
+ .
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ General Public License for more details.
+ .
+ On Debian systems, the complete text of a recent release of the GNU
+ General Public License (GPL) can be found in the file
+ "/usr/share/common-licenses/GPL".
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
