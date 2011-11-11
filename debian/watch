@@ -1,2 +1,2 @@
-#The upstream doesn't currently provide any tarball. The sources are downloaded
-#from the git repository which currently doesn't contains any tags.
+version=3
+http://bitbucket.org/jeromerobert/k4dirstat/downloads get/k4dirstat-([0-9\.]+)\.tar\.bz2

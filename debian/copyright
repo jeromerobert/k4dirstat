@@ -1,6 +1,7 @@
 Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?revision=174
-Upstream-Contact: http://grumpypenguin.org
-Source: http://grumpypenguin.org
+Upstream-Name: Jerome Robert
+Upstream-Contact: Jerome Robert <jeromerobert@gmx.com>
+Source: https://bitbucket.org/jeromerobert/k4dirstat
 
 Files: *
 Copyright: 1999-2008, Stefan Hundhammer <sh@suse.de>

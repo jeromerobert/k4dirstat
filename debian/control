@@ -4,8 +4,8 @@ Priority: optional
 Maintainer: Jerome Robert <jeromerobert@gmx.com>
 Build-Depends: debhelper (>= 7.3.16), pkg-kde-tools (>= 0.6.2), cmake, zlib1g-dev, libkonq5-dev, kdelibs5-dev
 Standards-Version: 3.9.2
-Vcs-Git: http://grumpypenguin.org/~josh/kdirstat.git/
-Homepage: http://grumpypenguin.org/
+Vcs-Git: http://bitbucket.org/jeromerobert/k4dirstat.git
+Homepage: http://bitbucket.org/jeromerobert/k4dirstat
 
 Package: k4dirstat
 Architecture: any
