@@ -478,8 +478,8 @@ KDirTreeView::slotFinished()
 	_updateTimer = 0;
     }
 
-    idleDisplay();
     updateSummary();
+    idleDisplay();
     logActivity( 30 );
 
     if ( _tree->root() &&
