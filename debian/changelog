@@ -1,3 +1,9 @@
+k4dirstat (2.7.0~git20101011-2) UNRELEASED; urgency=low
+
+  * Fixed unversioned-copyright-format-url lintian message
+
+ -- Jerome Robert <jeromerobert@gmx.com>  Fri, 11 Nov 2011 11:58:49 +0100
+
 k4dirstat (2.7.0~git20101011-1) unstable; urgency=low
 
   * Initial release. (closes: #626986)
