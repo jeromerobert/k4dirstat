@@ -72,7 +72,7 @@ public:
      *
      * My, what is the sex of that thing? ;-)
      **/
-    void animate( Q3Painter *	painter,
+    void animate( QPainter *	painter,
 		  QRect		rect );
 
     /**

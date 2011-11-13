@@ -74,7 +74,7 @@ KPacManAnimation::restart()
 
 
 void
-KPacManAnimation::animate( Q3Painter *	painter,
+KPacManAnimation::animate( QPainter *	painter,
 			   QRect 	rect )
 {
     if ( _time.elapsed() < _interval )

@@ -313,7 +313,7 @@ void k4dirstat::initPacMan( bool enablePacMan )
         {
             _pacMan = new KPacMan( toolBar(), 16, false, "kde toolbar widget" );
             _pacMan->setInterval( PACMAN_INTERVAL );	// millisec
-            int id = ID_PACMAN;
+            //int id = ID_PACMAN;
             //toolBar()->insertWidget( id, PACMAN_WIDTH, _pacMan );
             //toolBar()->  setItemAutoSized( id, false );
 

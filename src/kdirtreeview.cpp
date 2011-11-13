@@ -252,7 +252,7 @@ KDirTreeView::createTree()
 	     this,  SLOT  ( sendProgressInfo( const QString & ) ) );
 
     connect( _tree, SIGNAL( childAdded( KFileInfo * ) ),
-	     this,  SLOT  ( addChild  ( KFileInfo * ) ) );
+	     this,  SLOT  ( slotAddChild  ( KFileInfo * ) ) );
 
     connect( _tree, SIGNAL( deletingChild( KFileInfo * ) ),
 	     this,  SLOT  ( deleteChild  ( KFileInfo * ) ) );
@@ -372,7 +372,7 @@ KDirTreeView::readCache( const QString & cacheFileName )
 
 
 void
-KDirTreeView::addChild( KFileInfo *newChild )
+KDirTreeView::slotAddChild( KFileInfo *newChild )
 {
     if ( newChild->parent() )
     {
@@ -1689,7 +1689,7 @@ KDirTreeViewItem::compare( Q3ListViewItem *	otherListViewItem,
 
 
 void
-KDirTreeViewItem::paintCell( Q3Painter *		painter,
+KDirTreeViewItem::paintCell( QPainter *		painter,
 			     const QColorGroup &	colorGroup,
 			     int			column,
 			     int			width,
@@ -1762,7 +1762,7 @@ KDirTreeViewItem::paintCell( Q3Painter *		painter,
 
 void
 KDirTreeViewItem::paintPercentageBar( float		percent,
-				      Q3Painter *	painter,
+				      QPainter *	painter,
 				      int		indent,
 				      int		width,
 				      const QColor &	fillColor,

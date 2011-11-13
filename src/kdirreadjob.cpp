@@ -328,8 +328,7 @@ KioDirReadJob::startReading()
 	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
 
-    _job = KIO::listDir( url,
-			 false );	// showProgressInfo
+    _job = KIO::listDir( url );
 
     connect( _job, SIGNAL( entries( KIO::Job *, const KIO::UDSEntryList& ) ),
              this, SLOT  ( entries( KIO::Job *, const KIO::UDSEntryList& ) ) );

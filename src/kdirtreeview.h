@@ -367,7 +367,7 @@ namespace KDirStat
 	 * Add a child as a clone of original tree item "newChild" to this view
 	 * tree.
 	 **/
-	void	addChild	( KFileInfo *newChild );
+	void	slotAddChild	( KFileInfo *newChild );
 
 	/**
 	 * Delete a cloned child.
@@ -766,7 +766,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented from @ref QListViewItem.
 	 **/
-	virtual void paintCell 	( Q3Painter *		painter,
+	virtual void paintCell 	( QPainter *		painter,
 				  const QColorGroup &	colorGroup,
 				  int			column,
 				  int			width,
@@ -778,7 +778,7 @@ namespace KDirStat
 	 * 'indent' is the number of pixels to indent the bar.
 	 **/
 	void paintPercentageBar	( float			percent,
-				  Q3Painter *		painter,
+				  QPainter *		painter,
 				  int			indent,
 				  int			width,
 				  const QColor &	fillColor,
