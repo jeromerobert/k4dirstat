@@ -1,8 +1,14 @@
-k4dirstat (2.7.0~git20101011-2) UNRELEASED; urgency=low
+k4dirstat (2.7.2-1) unstable; urgency=low
 
+  * New upstream release
+    - Fix wrong read job report (closes: #647052)
+    - Do not delete the whole parent directory when deleting a file
+      containing a $ in its name.
+    - Fix subtree percentage column rendering
+  * Change upstream URL and owner
   * Fixed unversioned-copyright-format-url lintian message
 
- -- Jerome Robert <jeromerobert@gmx.com>  Fri, 11 Nov 2011 11:58:49 +0100
+ -- Jerome Robert <jeromerobert@gmx.com>  Fri, 11 Nov 2011 22:20:49 +0100
 
 k4dirstat (2.7.0~git20101011-1) unstable; urgency=low
 
