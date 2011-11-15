@@ -645,8 +645,10 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( ext == "a"		)	return QColor( 0xff, 0xa0, 0x00 );
 		if ( ext == "rpm"	)	return QColor( 0xff, 0xa0, 0x00 );
 
+		// archives
 		if ( lowerExt == "tar.bz2" )	return Qt::green;
 		if ( lowerExt == "tar.gz"  )	return Qt::green;
+		if ( lowerExt == "tar.xz"  )	return Qt::green;
 		if ( lowerExt == "tgz"	)	return Qt::green;
 		if ( lowerExt == "bz2"	)	return Qt::green;
 		if ( lowerExt == "bz"	)	return Qt::green;
@@ -656,6 +658,9 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( lowerExt == "htm"	)	return Qt::blue;
 		if ( lowerExt == "txt"	)	return Qt::blue;
 		if ( lowerExt == "doc"	)	return Qt::blue;
+		if ( lowerExt == "php"	)	return Qt::blue;
+		if ( lowerExt == "odt"	)	return Qt::blue;
+		if ( lowerExt == "ods"	)	return Qt::blue;
 
 		if ( lowerExt == "png"	)	return Qt::cyan;
 		if ( lowerExt == "jpg"	)	return Qt::cyan;
@@ -666,6 +671,7 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( lowerExt == "bmp"	)	return Qt::cyan;
 		if ( lowerExt == "xpm"	)	return Qt::cyan;
 		if ( lowerExt == "tga"	)	return Qt::cyan;
+		if ( lowerExt == "xcf"	)	return Qt::cyan;
 
 		if ( lowerExt == "wav"	)	return Qt::yellow;
 		if ( lowerExt == "mp3"	)	return Qt::yellow;
@@ -674,9 +680,20 @@ KTreemapView::tileColor( KFileInfo * file )
 		if ( lowerExt == "mov"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mpg"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mpeg"	)	return QColor( 0xa0, 0xff, 0x00 );
+		if ( lowerExt == "wmv"	)	return QColor( 0xa0, 0xff, 0x00 );
 
 		if ( lowerExt == "pdf"	)	return Qt::blue;
 		if ( lowerExt == "ps"	)	return Qt::cyan;
+
+		// databases
+		if ( lowerExt == "db"	)	return QColor( 0, 0, 127 );
+		if ( lowerExt == "sqlite"	)	return QColor( 0, 0, 127 );
+		if ( lowerExt == "sql"	)	return QColor( 0, 0, 127 );
+
+		// other
+		if ( lowerExt == "jar"	)	return QColor( 255, 255, 0 );
+		if ( lowerExt == "cb"	)	return QColor( 190, 160, 100 );
+		if ( lowerExt == "dat"	)	return QColor( 255, 255, 255 );
 
 
 		// Some DOS/Windows types
