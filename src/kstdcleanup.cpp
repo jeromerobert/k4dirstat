@@ -65,7 +65,7 @@ KCleanup *
 KStdCleanup::compressSubtree( KActionCollection *parent )
 {
     KCleanup *cleanup = new KCleanup( "cleanup_compress_subtree",
-				      "cd ..; tar cjvf '%n.tar.bz2' '%n' && rm -rf '%n'",
+				      "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
 				      i18n( "&Compress" ),
 				      parent );
     Q_CHECK_PTR( cleanup );
@@ -139,7 +139,7 @@ KCleanup *
 KStdCleanup::hardDelete( KActionCollection *parent )
 {
     KCleanup *cleanup = new KCleanup( "cleanup_hard_delete",
-				      "rm -rf '%p'",
+				      "rm -rf %p",
 				      i18n( "&Delete (no way to undelete!)" ),
 				      parent );
     Q_CHECK_PTR( cleanup );

@@ -320,9 +320,9 @@ KCleanup::expandVariables( const KFileInfo *	item,
     QString expanded = unexpanded;
 
     expanded.replace( QRegExp( "%p" ),
-		      "\"" + QString::fromLocal8Bit( item->url() )  + "\"" );
+		      "'" + QString::fromLocal8Bit( item->url() )  + "'" );
     expanded.replace( QRegExp( "%n" ),
-		      "\"" + QString::fromLocal8Bit( item->name() ) + "\"" );
+		      "'" + QString::fromLocal8Bit( item->name() ) + "'" );
 
    // if ( KDE::versionMajor() >= 3 && KDE::versionMinor() >= 4 )
 	expanded.replace( QRegExp( "%t" ), "trash:/" );
