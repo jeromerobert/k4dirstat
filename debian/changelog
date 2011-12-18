@@ -1,3 +1,12 @@
+k4dirstat (2.7.3-1) unstable; urgency=low
+
+  * New upstream release
+    - Fix "delete (no way to undelete)" action
+    - Add translation
+    - Add a couple of file types to have a bit more color in the treemap
+
+ -- Jerome Robert <jeromerobert@gmx.com>  Sat, 17 Dec 2011 12:35:50 +0100
+
 k4dirstat (2.7.2-1) unstable; urgency=low
 
   * New upstream release
