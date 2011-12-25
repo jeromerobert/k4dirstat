@@ -87,6 +87,7 @@ k4dirstat::k4dirstat()
     _treemapView	= 0;
     _pacMan		= 0;
     _pacManDelimiter	= 0;
+    _treemapViewHeight	= 0;
 
 
     // Set up internal (mainWin -> mainWin) connections
