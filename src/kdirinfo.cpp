@@ -316,7 +316,7 @@ KDirInfo::childAdded( KFileInfo *newChild )
 {
     if ( ! _summaryDirty )
     {
-	_totalSize	+= newChild->size();
+	_totalSize	+= newChild->totalSize();
 	_totalBlocks	+= newChild->blocks();
 	_totalItems++;
 
