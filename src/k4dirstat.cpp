@@ -387,7 +387,7 @@ void k4dirstat::readMainWinConfig()
         resize( size );
 
     config = KGlobal::config()->group("Animation");
-    initPacMan( config.readEntry( "ToolbarPacMan", true ) );
+    initPacMan( false );
     _treeView->enablePacManAnimation( config.readEntry( "DirTreePacMan", false ) );
 
     config = KGlobal::config()->group("Exclude");

@@ -740,6 +740,8 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     layout->addSpacing( 10 );
 
     gbox			= new Q3VGroupBox( i18n( "Animation" ), this );
+    //PacMan is broken and useless so we hide the associated widgets
+    gbox->setVisible(false);
     layout->addWidget( gbox );
 
     _enableToolBarAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Tool &Bar" ), gbox );
@@ -842,7 +844,7 @@ KGeneralSettingsPage::revertToDefaults()
     _crossFileSystems->setChecked( false );
     _enableLocalDirReader->setChecked( true );
 
-    _enableToolBarAnimation->setChecked( true );
+    _enableToolBarAnimation->setChecked( false );
     _enableTreeViewAnimation->setChecked( false );
     
     _excludeRulesListView->clear();
