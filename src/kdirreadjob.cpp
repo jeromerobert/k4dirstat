@@ -518,7 +518,10 @@ KCacheReadJob::read()
      */
 
     if ( ! _reader )
-	finished();
+    {
+        finished();
+        return;
+    }
 
     // kdDebug() << "Reading 1000 cache lines" << endl;
     _reader->read( 1000 );
