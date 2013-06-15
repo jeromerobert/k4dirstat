@@ -113,7 +113,7 @@ const KExcludeRule *
 KExcludeRules::matchingRule( const QString & text )
 {
     if ( text.isEmpty() )
-	return false;
+	return NULL;
 
     KExcludeRule * rule = _rules.first();
 
