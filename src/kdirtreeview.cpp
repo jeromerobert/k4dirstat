@@ -122,7 +122,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     ensureContrast();
 
 
-    connect( kapp,	SIGNAL( kdisplayPaletteChanged()	),
+    connect( KGlobalSettings::self(),	SIGNAL( kdisplayPaletteChanged()	),
 	     this,	SLOT  ( paletteChanged()		) );
 
     connect( this,	SIGNAL( selectionChanged	( Q3ListViewItem * ) ),
