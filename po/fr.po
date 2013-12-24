@@ -49,7 +49,7 @@ msgstr "Continuer la lecture au point de &montage"
 
 #: ../src/k4dirstat.cpp:191
 msgid "Stop Rea&ding"
-msgstr ""
+msgstr "Arrêter la lecture"
 
 #: ../src/k4dirstat.cpp:196
 msgid "&Write to Cache File..."
@@ -61,7 +61,7 @@ msgstr ""
 
 #: ../src/k4dirstat.cpp:207
 msgid "Open With"
-msgstr ""
+msgstr "Ouvrir avec"
 
 #: ../src/k4dirstat.cpp:210
 msgid "Zoom in"
@@ -73,15 +73,15 @@ msgstr "Dézoomer"
 
 #: ../src/k4dirstat.cpp:220
 msgid "Select Parent"
-msgstr ""
+msgstr "Selectionner le parent"
 
 #: ../src/k4dirstat.cpp:225
 msgid "Rebuild Treemap"
-msgstr ""
+msgstr "Reconstruire la treemap"
 
 #: ../src/k4dirstat.cpp:227
 msgid "Show Treemap"
-msgstr ""
+msgstr "Montrer la treemap"
 
 #: ../src/k4dirstat.cpp:234
 msgid "Help about Treemaps"
@@ -120,7 +120,7 @@ msgstr "Relire la sous-arborescence sélectionnée"
 
 #: ../src/k4dirstat.cpp:252
 msgid "Scan directory tree that was previously excluded"
-msgstr ""
+msgstr "Scanner les répertoires précédement exclus"
 
 #: ../src/k4dirstat.cpp:253
 msgid "Scan mounted file systems"
@@ -255,12 +255,12 @@ msgstr ""
 #. parent
 #: ../src/k4dirstat.cpp:541
 msgid "Read Cache File"
-msgstr ""
+msgstr "Ouvrir un fichier de cache"
 
 #. caption
 #: ../src/k4dirstat.cpp:543
 msgid "Reading cache file..."
-msgstr ""
+msgstr "Ouverture du fichier de cache..."
 
 #: ../src/kstdcleanup.cpp:28
 msgid "Open in &Konqueror"
