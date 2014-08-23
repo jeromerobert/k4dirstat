@@ -111,7 +111,7 @@ msgstr "Besta&nden"
 
 #: ../src/kdirstatsettings.cpp:617
 msgid "<Files> P&seudo Entries"
-msgstr "&Pseudo ingangen"
+msgstr "<Bestanden> &Pseudo ingangen"
 
 #: ../src/kdirstatsettings.cpp:627
 msgid "On Local Machine Only ('file:/' Protocol)"
