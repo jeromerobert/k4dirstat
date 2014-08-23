@@ -599,7 +599,7 @@ msgstr ""
 #. don't stretch
 #. stretch this as you like
 #: ../src/kdirstatsettings.cpp:1050
-msgid ""Highlight R&ectangle: "
+msgid "Highlight R&ectangle: "
 msgstr ""
 
 #: ../src/kdirstatsettings.cpp:1058
