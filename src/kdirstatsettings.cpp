@@ -1050,7 +1050,7 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     grid->setColStretch( 1, 0 ); // don't stretch
     grid->setColStretch( 2, 1 ); // stretch this as you like
 
-    label		= new QLabel( i18n( "Hi&ghlight R&ectangle: " ), gridBox );
+    label		= new QLabel( i18n( "Highlight R&ectangle: " ), gridBox );
     _highlightColor	= new KColorButton( gridBox );
     label->setBuddy( _highlightColor );
 

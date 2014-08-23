@@ -567,7 +567,7 @@ msgstr "G&itter:"
 #. don't stretch
 #. stretch this as you like
 #: ../src/kdirstatsettings.cpp:1050
-msgid "Hi&ghlight R&ectangle: "
+msgid ""Highlight R&ectangle: "
 msgstr "Markierungs&rahmen:"
 
 #: ../src/kdirstatsettings.cpp:1058
