@@ -324,10 +324,6 @@ msgstr "Pulizia personalizzata N. %1"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: ../src/kdirstatsettings.cpp:82
-msgid "&Cleanups"
-msgstr "&Pulizia"
-
 #: ../src/kdirstatsettings.cpp:87
 msgid "&Tree Colors"
 msgstr "&Colori"

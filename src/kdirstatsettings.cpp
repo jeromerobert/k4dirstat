@@ -80,7 +80,7 @@ KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
     KVBox * page = new KVBox();
     KPageWidgetItem *item;
 
-    item = addPage(page, i18n( "&Cleanups" ) );
+    item = addPage(page, i18n( "&Actions" ) );
     _cleanupsPageIndex = item;
     new KCleanupPage( this, page, _mainWin );
 

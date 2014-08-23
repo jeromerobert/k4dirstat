@@ -322,10 +322,6 @@ msgstr "Benutzerdefinierte Aufräumaktion #%1"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../src/kdirstatsettings.cpp:82
-msgid "&Cleanups"
-msgstr "&Aufräumen"
-
 #: ../src/kdirstatsettings.cpp:87
 msgid "&Tree Colors"
 msgstr "&Verzeichnisfarben"

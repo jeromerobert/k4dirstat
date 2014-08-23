@@ -334,10 +334,6 @@ msgstr "Felhasználó által megadott tisztítás: #%1"
 msgid "Settings"
 msgstr "Beállítások"
 
-#: ../src/kdirstatsettings.cpp:82
-msgid "&Cleanups"
-msgstr "&Tisztítások"
-
 #: ../src/kdirstatsettings.cpp:87
 msgid "&Tree Colors"
 msgstr "&Könyvtárfa színek"

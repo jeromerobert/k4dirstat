@@ -326,10 +326,6 @@ msgstr "ユーザ・クリーンアップを定義しました #%1"
 msgid "Settings"
 msgstr "設定"
 
-#: ../src/kdirstatsettings.cpp:82
-msgid "&Cleanups"
-msgstr "クリーンアップ(&C)"
-
 #: ../src/kdirstatsettings.cpp:87
 msgid "&Tree Colors"
 msgstr "ツリー色(&T)"

@@ -332,10 +332,6 @@ msgstr "Nettoyage défini par l'utilisateur #%1"
 msgid "Settings"
 msgstr "Paramètres"
 
-#: ../src/kdirstatsettings.cpp:82
-msgid "&Cleanups"
-msgstr "&Nettoyages"
-
 #: ../src/kdirstatsettings.cpp:87
 msgid "&Tree Colors"
 msgstr "&Couleurs de l'arborescence"
