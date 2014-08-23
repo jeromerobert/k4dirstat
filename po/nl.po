@@ -358,7 +358,7 @@ msgstr "<Onbekende uitsluitingsregel>"
 
 #: ../src/kdirtreeview.cpp:857
 msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
-msgstr "Sparse file: %1 (%2 Bytes) -- toegewezen: %3 (%4 Bytes)"
+msgstr "Schaars bestand: %1 (%2 Bytes) -- toegewezen: %3 (%4 Bytes)"
 
 #: ../src/kdirtreeview.cpp:865
 msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
