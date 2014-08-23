@@ -20,19 +20,19 @@
 #include <KDE/KUrl>
 
 static const char description[] =
-    I18N_NOOP("KDirStat - Directory statistics.\n"
+    I18N_NOOP("k4dirstat - Directory statistics.\n"
 		"\n"
 		"Shows where all your disk space has gone\n"
 		"and helps you clean it up.");
 
-static const char version[] = "2.7.0";
+static const char version[] = "2.7.5";
 
 int main(int argc, char **argv)
 {
     KAboutData about("k4dirstat", 0, ki18n("k4dirstat"), version, ki18n(description),
 		     KAboutData::License_GPL,
 		     ki18n("(c) 1999-2008 Stefan Hundhammer, (c) 2010 Joshua Hodosh"),
-		     KLocalizedString(), 0, "kdirstat@grumpypenguin.org");
+		     KLocalizedString(), 0, "jeromerobert@gmx.com");
 
     about.addAuthor( ki18n("Stefan Hundhammer"),
 		      ki18n("\n"
@@ -41,8 +41,8 @@ int main(int argc, char **argv)
 				"\"Send Feedback Mail\" from the \"Help\" menu.\n"
 				"\n"
 				"Any feedback (even negative!) is appreciated." ),
-		      "kdirstat@gmx.de",
-		      "http://kdirstat.sourceforge.net/" );
+		      "jeromerobert@gmx.com",
+		      "https://bitbucket.org/jeromerobert/k4dirstat" );
 
     about.addAuthor( ki18n("Joshua Hodosh"), ki18n("Ported to KDE4"),
                      "kdirstat@grumpypenguin.org" );
