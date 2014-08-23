@@ -32,7 +32,7 @@
 	    <Action name="file_quit"/>
 	</Menu>
 
-	<Menu name="cleanup" noMerge="1"> <text>Clean &amp;Up</text>
+	<Menu name="cleanup" noMerge="1"> <text>&amp;Actions</text>
 	    <TearOffHandle/>
 	    <Action name="cleanup_open_with"/>
 	    <Separator/>

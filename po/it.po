@@ -728,7 +728,7 @@ msgstr "&Files"
 #. i18n: file: ../src/k4dirstatui.rc:35
 #. i18n: ectx: Menu (cleanup)
 #: ui_rc.cpp:6
-msgid "Clean &Up"
+msgid "&Actions"
 msgstr "&Pulizia"
 
 #. i18n: file: ../src/k4dirstatui.rc:59

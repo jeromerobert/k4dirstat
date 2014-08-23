@@ -754,8 +754,8 @@ msgstr "&Fichier"
 #. i18n: file: ../src/k4dirstatui.rc:35
 #. i18n: ectx: Menu (cleanup)
 #: ui_rc.cpp:6
-msgid "Clean &Up"
-msgstr "&Nettoyage"
+msgid "&Actions"
+msgstr "&Actions"
 
 #. i18n: file: ../src/k4dirstatui.rc:59
 #. i18n: ectx: Menu (treemap)
