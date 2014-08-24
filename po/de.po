@@ -736,7 +736,7 @@ msgstr "&Einstellungen"
 #. i18n: ectx: Menu (report)
 #: ui_rc.cpp:15
 msgid "&Report"
-msgstr "&Report"
+msgstr "&Bericht"
 
 #. i18n: file: ../src/k4dirstatui.rc:83
 #. i18n: ectx: Menu (help)
