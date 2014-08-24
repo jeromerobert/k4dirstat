@@ -84,7 +84,6 @@
 	    <Action name="help_contents"/>
 	    <Action name="help_whats_this"/>
 	    <Separator/>
-	    <Action name="help_report_bug"/>
 	    <Action name="help_send_feedback_mail"/>
 	    <Separator/>
 	    <Action name="help_about_app"/>

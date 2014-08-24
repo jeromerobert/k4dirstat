@@ -32,18 +32,15 @@ int main(int argc, char **argv)
     KAboutData about("k4dirstat", 0, ki18n("k4dirstat"), version, ki18n(description),
 		     KAboutData::License_GPL,
 		     ki18n("(c) 1999-2008 Stefan Hundhammer, (c) 2010 Joshua Hodosh"),
-		     KLocalizedString(), 0, "jeromerobert@gmx.com");
+		     KLocalizedString(), "https://bitbucket.org/jeromerobert/k4dirstat",
+		     "https://bitbucket.org/jeromerobert/k4dirstat/issues");
 
-    about.addAuthor( ki18n("Stefan Hundhammer"),
-		      ki18n("\n"
-				"If you have any comments or if you would simply like to tell\n"
-				"your opinion about this program, please use \n"
-				"\"Send Feedback Mail\" from the \"Help\" menu.\n"
-				"\n"
-				"Any feedback (even negative!) is appreciated." ),
-		      "jeromerobert@gmx.com",
+    about.addAuthor( ki18n("Jerome Robert"),
+		      ki18n("Current maintainer." ), 0,
 		      "https://bitbucket.org/jeromerobert/k4dirstat" );
-
+    about.addAuthor( ki18n("Stefan Hundhammer"),
+		      ki18n("Original kdirstat author." ), "kdirstat@gmx.de",
+		      "http://kdirstat.sourceforge.net/" );
     about.addAuthor( ki18n("Joshua Hodosh"), ki18n("Ported to KDE4"),
                      "kdirstat@grumpypenguin.org" );
 
