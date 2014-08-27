@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/sh -e
 #
 # Script to generate .pot file from C++ sources and XML GUI description file
 
