@@ -25,7 +25,9 @@ static const char description[] =
 		"Shows where all your disk space has gone\n"
 		"and helps you clean it up.");
 
-static const char version[] = "2.7.5";
+#define STRINGIFY(x) #x
+#define EXPAND(x) STRINGIFY(x)
+static const char version[] = EXPAND(K4DIRSTAT_VERSION);
 
 int main(int argc, char **argv)
 {
