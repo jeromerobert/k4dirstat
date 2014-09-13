@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k4dirstat\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-27 21:42+0200\n"
-"PO-Revision-Date: 2014-08-28 05:52+0000\n"
+"PO-Revision-Date: 2014-09-01 10:15+0000\n"
 "Last-Translator: pieterk <pieterkristensen@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/k4dirstat/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -97,7 +97,7 @@ msgstr "Ook &subdirectories"
 #. "Ask for confirmation" check box
 #: ../src/kdirstatsettings.cpp:603
 msgid "&Ask for Confirmation"
-msgstr "%Vraag bevestiging"
+msgstr "&Vraag bevestiging"
 
 #. The "Works for..." check boxes, grouped together in a button group.
 #: ../src/kdirstatsettings.cpp:609
