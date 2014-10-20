@@ -130,13 +130,13 @@ KCacheWriter::writeItem( gzFile cache, KFileInfo * item )
     {
 	// Use absolute path
 
-	gzprintf( cache, " %s", (const char *) KUrl::encode_string( item->url() ).latin1() );
+	gzprintf( cache, " %s", QUrl::toPercentEncoding(item->url(), "/").constData());
     }
     else
     {
 	// Use relative path
 
-	gzprintf( cache, "\t%s", (const char *) KUrl::encode_string( item->name() ).latin1() );
+	gzprintf( cache, "\t%s", QUrl::toPercentEncoding(item->name()).constData());
     }
 
 
