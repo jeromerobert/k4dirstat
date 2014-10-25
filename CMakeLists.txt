@@ -37,7 +37,7 @@ include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${QT_GUI_INCLUDES} ${QT_QT3
 ADD_DEFINITIONS(-DQT3_SUPPORT -D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
 
-git_version(K4DIRSTAT_VERSION 2.7.6 k4dirstat-)
+git_version(K4DIRSTAT_VERSION 2.7.8 k4dirstat-)
 add_subdirectory( doc )
 add_subdirectory( src )
 add_subdirectory( icons )
