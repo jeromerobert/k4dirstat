@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k4dirstat\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-27 21:42+0200\n"
-"PO-Revision-Date: 2014-09-03 14:46+0000\n"
+"PO-Revision-Date: 2014-11-27 13:22+0000\n"
 "Last-Translator: francescogramazio <francescograma@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/k4dirstat/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -293,7 +293,7 @@ msgid ""
 "\n"
 "Shows where all your disk space has gone\n"
 "and helps you clean it up."
-msgstr ""
+msgstr "k4dirstat - Dati sulle cartelle\n\nMostra la locazione della memoria del disco\ne ti aiuta a pulirlo."
 
 #: ../src/kdirtreeview.cpp:74
 msgid "Name"
@@ -353,7 +353,7 @@ msgstr "Tempo impiegato: %1"
 
 #: ../src/kdirtreeview.cpp:823
 msgid "Matching exclude rule:   %1"
-msgstr ""
+msgstr "Regola di esclusione corrispondente: %1"
 
 #: ../src/kdirtreeview.cpp:827
 msgid "<Unknown exclude rule>"
@@ -405,7 +405,7 @@ msgstr "&1 (allocati: %2)"
 
 #: ../src/kdirtreeview.cpp:1133 ../src/kdirtreeview.cpp:1277
 msgid "[excluded]"
-msgstr ""
+msgstr "[escluso]"
 
 #: ../src/kdirtreeview.cpp:1264
 msgid "[%1 Read Jobs]"
@@ -602,7 +602,7 @@ msgstr "Copia l'URL selezionato negli appunti"
 
 #: ../src/k4dirstat.cpp:267
 msgid "Open file or directory with arbitrary application"
-msgstr ""
+msgstr "Apri un file o una cartella con un'applicazione a tua scelta"
 
 #: ../src/k4dirstat.cpp:268
 msgid "Enables/disables the treemap view"
@@ -703,7 +703,7 @@ msgstr "Scritto sul file di cache %1"
 #. parent
 #: ../src/k4dirstat.cpp:549
 msgid "Read Cache File"
-msgstr ""
+msgstr "Leggi la Cache"
 
 #. caption
 #: ../src/k4dirstat.cpp:551
