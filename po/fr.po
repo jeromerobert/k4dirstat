@@ -32,7 +32,7 @@ msgstr "&Couleurs de l'arborescence"
 
 #: ../src/kdirstatsettings.cpp:92
 msgid "Tree&map"
-msgstr "Carte&arborescence"
+msgstr "Carte &arborescente"
 
 #: ../src/kdirstatsettings.cpp:96
 msgid "&General"
@@ -746,7 +746,7 @@ msgstr "&Fichier"
 #. i18n: ectx: Menu (treemap)
 #: ui_rc.cpp:9 ui_rc.cpp:9
 msgid "&Treemap"
-msgstr "%Carte d’arborescence"
+msgstr "&Carte d’arborescence"
 
 #. i18n: file: ../src/k4dirstatui.rc:71
 #. i18n: ectx: Menu (settings)
