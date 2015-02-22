@@ -289,7 +289,7 @@ KDirTreeView::prepareReading()
 
     if ( _updateTimer )
     {
-	_updateTimer->changeInterval( _updateInterval );
+	_updateTimer->setInterval(_updateInterval);
 	connect( _updateTimer,	SIGNAL( timeout() ),
 		 this,   	SLOT  ( updateSummary() ) );
 
@@ -1085,7 +1085,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     }
     else
     {
-	setText( view->nameCol(), QString::fromLocal8Bit(_orig->name()) );
+	setText(view->nameCol(), QString::fromLocal8Bit(_orig->name().toAscii()));
 
 	if ( ! _orig->isDevice() )
 	{
@@ -1624,8 +1624,8 @@ KDirTreeViewItem::asciiDump()
     QString dump;
 
     dump.sprintf( "%10s  %s\n",
-		  (const char *) formatSize( _orig->totalSize() ),
-		  (const char *) _orig->debugUrl() );
+		  formatSize( _orig->totalSize() ).toAscii().data(),
+		  _orig->debugUrl().toAscii().data() );
 
     if ( isOpen() )
     {
@@ -1699,7 +1699,7 @@ KDirTreeViewItem::paintCell( QPainter *		painter,
 
     if ( column == _view->percentBarCol() )
     {
-	painter->setBackgroundColor( colorGroup.base() );
+	painter->setBackground(colorGroup.base());
 
 	if ( _percent > 0.0 )
 	{
