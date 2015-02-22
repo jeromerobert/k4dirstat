@@ -2,14 +2,14 @@
 # This file is put in the public domain.
 # 
 # Translators:
-# francescogramazio <francescograma@gmail.com>, 2014
+# francescogramazio <francescograma@gmail.com>, 2014-2015
 # Giuliano Colla <colla@copeca.it>, 2003
 msgid ""
 msgstr ""
 "Project-Id-Version: k4dirstat\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-27 21:42+0200\n"
-"PO-Revision-Date: 2014-11-27 13:22+0000\n"
+"PO-Revision-Date: 2015-02-22 09:54+0000\n"
 "Last-Translator: francescogramazio <francescograma@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/k4dirstat/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -190,7 +190,7 @@ msgstr "&Aggiungi"
 
 #: ../src/kdirstatsettings.cpp:760 ../src/kdirstatsettings.cpp:793
 msgid "&Edit"
-msgstr ""
+msgstr "&Personalizza"
 
 #: ../src/kdirstatsettings.cpp:761 ../src/kdirstatsettings.cpp:794
 msgid "&Delete"
@@ -748,7 +748,7 @@ msgstr "&File"
 #. i18n: ectx: Menu (treemap)
 #: ui_rc.cpp:9 ui_rc.cpp:9
 msgid "&Treemap"
-msgstr ""
+msgstr "& Mappa degli alberi"
 
 #. i18n: file: ../src/k4dirstatui.rc:71
 #. i18n: ectx: Menu (settings)
@@ -772,4 +772,4 @@ msgstr "&Aiuto"
 #. i18n: ectx: ToolBar (mainToolBar)
 #: ui_rc.cpp:21 ui_rc.cpp:21
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Toolbar principale"
