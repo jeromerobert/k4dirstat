@@ -1081,7 +1081,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     if ( _orig->isDotEntry() )
     {
        setText( view->nameCol(), i18n( "<Files>" ) );
-       Q3ListViewItem::setOpen ( false );
+       setExpanded(false);
     }
     else
     {
@@ -1135,7 +1135,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 #endif
 	}
 
-	Q3ListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
+	setExpanded( _orig->treeLevel() < _view->openLevel());
 	/*
 	 * Don't use KDirTreeViewItem::setOpen() here since this might call
 	 * KDirTreeViewItem::deferredClone() which would confuse bookkeeping
@@ -1174,7 +1174,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	setIcon();
     }
 
-    _openCount = isOpen() ? 1 : 0;
+    _openCount = isExpanded() ? 1 : 0;
 }
 
 
@@ -1195,7 +1195,7 @@ KDirTreeViewItem::setIcon()
 
     if ( _orig->isDotEntry() )
     {
-	icon = isOpen() ? _view->openDotEntryIcon() : _view->closedDotEntryIcon();
+	icon = isExpanded() ? _view->openDotEntryIcon() : _view->closedDotEntryIcon();
     }
     else if ( _orig->isDir() )
     {
