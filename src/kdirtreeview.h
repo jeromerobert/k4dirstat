@@ -83,6 +83,8 @@ namespace KDirStat
 					bool		lazy	= true,
 					bool		doClone	= true );
 
+	KDirTreeViewItem *topLevelItem(int index) const;
+
 	/**
 	 * Return the currently selected item or 0, if none is selected.
 	 **/
@@ -247,6 +249,7 @@ namespace KDirStat
 	 **/
 	void	incDebugCount( int i );
 
+        void setColumnAlignment(QTreeWidgetItem & item);
 
     public slots:
 
@@ -511,7 +514,6 @@ namespace KDirStat
 	 **/
 	void userActivity( int points );
 
-
     protected:
 
 	/**
@@ -653,6 +655,11 @@ namespace KDirStat
 	 * tree where all the important information resides.
 	 **/
 	KFileInfo *		orig()		{ return _orig;	}
+
+	/** Specialization of QTreeWidgetItem::child */
+	inline KDirTreeViewItem *child(int index) const {
+	    return static_cast<KDirTreeViewItem *>(this->QTreeWidgetItem::child(index));
+	}
 
 	/**
 	 * Comparison function used for sorting the list.

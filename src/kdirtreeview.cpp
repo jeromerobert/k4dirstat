@@ -18,7 +18,7 @@
 
 #include <qtimer.h>
 #include <qcolor.h>
-#include <q3header.h>
+#include <QHeaderView>
 #include <qmenu.h>
 
 #include <kapplication.h>
@@ -71,30 +71,24 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     setRootIsDecorated( false );
 
     int numCol = 0;
-    addColumn( i18n( "Name"			) ); _nameCol		= numCol;
+    QStringList colLabels;
+    colLabels << i18n( "Name"			); _nameCol		= numCol;
     _iconCol = numCol++;
-    addColumn( i18n( "Subtree Percentage" 	) ); _percentBarCol	= numCol++;
-    addColumn( i18n( "Percentage"		) ); _percentNumCol	= numCol++;
-    addColumn( i18n( "Subtree Total"		) ); _totalSizeCol	= numCol++;
+    colLabels << i18n( "Subtree Percentage" 	); _percentBarCol	= numCol++;
+    colLabels << i18n( "Percentage"		); _percentNumCol	= numCol++;
+    colLabels << i18n( "Subtree Total"		); _totalSizeCol	= numCol++;
     _workingStatusCol = _totalSizeCol;
-    addColumn( i18n( "Own Size"			) ); _ownSizeCol	= numCol++;
-    addColumn( i18n( "Items"			) ); _totalItemsCol	= numCol++;
-    addColumn( i18n( "Files"			) ); _totalFilesCol	= numCol++;
-    addColumn( i18n( "Subdirs"			) ); _totalSubDirsCol	= numCol++;
-    addColumn( i18n( "Last Change"		) ); _latestMtimeCol	= numCol++;
+    colLabels << i18n( "Own Size"		); _ownSizeCol	= numCol++;
+    colLabels << i18n( "Items"			); _totalItemsCol	= numCol++;
+    colLabels << i18n( "Files"			); _totalFilesCol	= numCol++;
+    colLabels << i18n( "Subdirs"		); _totalSubDirsCol	= numCol++;
+    colLabels << i18n( "Last Change"		); _latestMtimeCol	= numCol++;
+    setColumnCount(numCol);
+    setHeaderLabels(colLabels);
 
 #if ! SEPARATE_READ_JOBS_COL
     _readJobsCol = _percentBarCol;
 #endif
-
-    setColumnAlignment ( _totalSizeCol,		Qt::AlignRight );
-    setColumnAlignment ( _percentNumCol,	Qt::AlignRight );
-    setColumnAlignment ( _ownSizeCol,		Qt::AlignRight );
-    setColumnAlignment ( _totalItemsCol,	Qt::AlignRight );
-    setColumnAlignment ( _totalFilesCol,	Qt::AlignRight );
-    setColumnAlignment ( _totalSubDirsCol,	Qt::AlignRight );
-    setColumnAlignment ( _readJobsCol,		Qt::AlignRight );
-
 
     setSorting( _totalSizeCol );
 
@@ -140,6 +134,15 @@ KDirTreeView::KDirTreeView( QWidget * parent )
    createTree();
 }
 
+void KDirTreeView::setColumnAlignment(QTreeWidgetItem & item) {
+    item.setTextAlignment(_totalSizeCol,	Qt::AlignRight);
+    item.setTextAlignment(_percentNumCol,	Qt::AlignRight);
+    item.setTextAlignment(_ownSizeCol,		Qt::AlignRight);
+    item.setTextAlignment(_totalItemsCol,	Qt::AlignRight);
+    item.setTextAlignment(_totalFilesCol,	Qt::AlignRight);
+    item.setTextAlignment(_totalSubDirsCol,	Qt::AlignRight);
+    item.setTextAlignment(_readJobsCol,	Qt::AlignRight);
+}
 
 KDirTreeView::~KDirTreeView()
 {
@@ -382,7 +385,7 @@ KDirTreeView::slotAddChild( KFileInfo *newChild )
 
 	if ( cloneParent )
 	{
-	    if ( isOpen( cloneParent ) || ! _doLazyClone )
+	    if ( cloneParent->isExpanded() || ! _doLazyClone )
 	    {
 		// kdDebug() << "Immediately cloning " << newChild << endl;
 		new KDirTreeViewItem( this, cloneParent, newChild );
@@ -456,13 +459,8 @@ KDirTreeView::deleteChild( KFileInfo *child )
 void
 KDirTreeView::updateSummary()
 {
-    KDirTreeViewItem *child = firstChild();
-
-    while ( child )
-    {
-	child->updateSummary();
-	child = child->next();
-    }
+    for(int i = 0; i < topLevelItemCount(); i++)
+        topLevelItem(i)->updateSummary();
 }
 
 
@@ -486,10 +484,10 @@ KDirTreeView::slotFinished()
 	 _tree->root()->totalSubDirs() == 0 &&	// No subdirs
 	 _tree->root()->totalItems() > 0 )	// but file children
     {
-	Q3ListViewItem * root = firstChild();
+	QTreeWidgetItem * root = topLevelItem(0);
 
 	if ( root )
-	    root->setOpen( true );
+	    root->setExpanded(true);
     }
 
 
@@ -1040,14 +1038,13 @@ KDirTreeView::sendMailToOwner()
     logActivity( 10 );
 }
 
-
-
-
-
+KDirTreeViewItem *KDirTreeView::topLevelItem(int index) const {
+    return dynamic_cast<KDirTreeViewItem *>(this->QTreeWidget::topLevelItem(index));
+}
 
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 				    KFileInfo *		orig )
-    : Q3ListViewItem( view )
+    : QTreeWidgetItem( view )
 {
     init( view, 0, orig );
 }
@@ -1056,7 +1053,7 @@ KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 				    KDirTreeViewItem *	parent,
 				    KFileInfo *		orig )
-    : Q3ListViewItem( parent )
+    : QTreeWidgetItem( parent )
 {
     Q_CHECK_PTR( parent );
     init( view, parent, orig );
@@ -1175,6 +1172,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     }
 
     _openCount = isExpanded() ? 1 : 0;
+    view->setColumnAlignment(*this);
 }
 
 
@@ -1584,13 +1582,8 @@ KDirTreeViewItem::closeSubtree()
 
     if ( _openCount > 0 )
     {
-	KDirTreeViewItem * child = firstChild();
-
-	while ( child )
-	{
-	    child->closeSubtree();
-	    child = child->next();
-	}
+        for(int i = 0; i < childCount(); i++)
+            child(i)->closeSubtree();
     }
 
     _openCount = 0;	// just to be sure
@@ -1601,14 +1594,12 @@ void
 KDirTreeViewItem::closeAllExceptThis()
 {
     KDirTreeViewItem *sibling = _parent ?
-	_parent->firstChild() : _view->firstChild();
+	_parent : _view->topLevelItem(0);
 
-    while ( sibling )
+    for(int i = 0; i < sibling->childCount(); i++)
     {
-	if ( sibling != this )
-	    sibling->closeSubtree();	// Recurse down
-
-	sibling = sibling->next();
+        if(sibling->child(i) != this)
+            sibling->child(i)->closeSubtree();
     }
 
     setOpen( true );
@@ -1629,13 +1620,8 @@ KDirTreeViewItem::asciiDump()
 
     if ( isOpen() )
     {
-	KDirTreeViewItem *child = firstChild();
-
-	while ( child )
-	{
-	    dump += child->asciiDump();
-	    child = child->next();
-	}
+        for(int i = 0; i < childCount(); i++)
+            dump += child(i)->asciiDump();
     }
 
     return dump;
@@ -1773,7 +1759,7 @@ KDirTreeViewItem::paintPercentageBar( float		percent,
     int x = _view->itemMargin();
     int y = extraMargin;
     int w = width    - 2 * _view->itemMargin();
-    int h = height() - 2 * extraMargin;
+    int h = _view->visualItemRect (this).height() - 2 * extraMargin;
     int fillWidth;
 
     painter->eraseRect( 0, 0, width, height() );
