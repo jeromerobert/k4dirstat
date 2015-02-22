@@ -30,7 +30,7 @@
 // Forward declarations
 class QWidget;
 class QTimer;
-class Q3PopupMenu;
+class QMenu;
 class KPacManAnimation;
 
 #define USE_KLISTVIEW 0
@@ -536,8 +536,8 @@ namespace KDirStat
 	QTime			_stopWatch;
 	QString			_currentDir;
 	KDirTreeViewItem *	_selection;
-	Q3PopupMenu *		_contextInfo;
-	int			_idContextInfo;
+	QMenu *			_contextInfo;
+	QAction	*		infoAction;
 
 	int	_openLevel;
 	bool	_doLazyClone;

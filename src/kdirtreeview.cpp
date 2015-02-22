@@ -19,7 +19,7 @@
 #include <qtimer.h>
 #include <qcolor.h>
 #include <q3header.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -134,9 +134,9 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( header(),	SIGNAL( sizeChange   ( int, int, int ) ),
 	     this,	SLOT  ( columnResized( int, int, int ) ) );
 
-   _contextInfo	  = new Q3PopupMenu;
-   _idContextInfo = _contextInfo->insertItem ( "dummy" );
-
+   _contextInfo	  = new QMenu();
+   infoAction = new QAction(_contextInfo);
+   _contextInfo->addAction(infoAction);
    createTree();
 }
 
@@ -921,7 +921,7 @@ void
 KDirTreeView::popupContextInfo( const QPoint  &	pos,
 				const QString & info )
 {
-    _contextInfo->changeItem( _idContextInfo, info );
+    infoAction->setText(info);
     _contextInfo->popup( pos );
 }
 
