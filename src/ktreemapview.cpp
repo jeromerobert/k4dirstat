@@ -620,7 +620,7 @@ KTreemapView::tileColor( KFileInfo * file )
 
 	    while ( ! ext.isEmpty() )
 	    {
-		QString lowerExt = ext.lower();
+	        QString lowerExt = ext.toLower();
 
 		// Try case sensitive comparisions first
 

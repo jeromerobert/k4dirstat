@@ -604,7 +604,7 @@ void k4dirstat::selectionChanged( KFileInfo *selection )
         else
             _fileContinueReadingAtMountPoint->setEnabled( false );
 
-        statusMsg( QString::fromLocal8Bit(selection->url()) );
+        statusMsg( QString::fromLocal8Bit(selection->url().toAscii()) );
     }
     else
     {

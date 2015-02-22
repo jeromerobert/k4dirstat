@@ -1817,25 +1817,25 @@ KDirTreeViewItem::paintPercentageBar( float		percent,
 	// Draw 3D shadows.
 
 	pen.setColor( contrastingColor ( Qt::black,
-					 painter->backgroundColor() ) );
+					 painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x, y, x+w, y );
 	painter->drawLine( x, y, x, y+h );
 
 	pen.setColor( contrastingColor( barBackground.dark(),
-					painter->backgroundColor() ) );
+					painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x+1, y+1, x+w-1, y+1 );
 	painter->drawLine( x+1, y+1, x+1, y+h-1 );
 
 	pen.setColor( contrastingColor( barBackground.light(),
-					painter->backgroundColor() ) );
+					painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x+1, y+h, x+w, y+h );
 	painter->drawLine( x+w, y, x+w, y+h );
 
 	pen.setColor( contrastingColor( Qt::white,
-					painter->backgroundColor() ) );
+					painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x+2, y+h-1, x+w-1, y+h-1 );
 	painter->drawLine( x+w-1, y+1, x+w-1, y+h-1 );

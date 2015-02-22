@@ -32,10 +32,15 @@ include (KDE4Defaults)
 find_package(LibKonq REQUIRED)
 find_package(ZLIB)
 
-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${QT_GUI_INCLUDES} ${QT_QT3SUPPORT_INCLUDES} )
+include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${QT_GUI_INCLUDES})
 
-ADD_DEFINITIONS(-DQT3_SUPPORT -D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
+ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
+
+if(QT_USE_QT3SUPPORT)
+  add_definitions(-DQT3_SUPPORT)
+  include_directories(${QT_QT3SUPPORT_INCLUDES})
+endif()
 
 git_version(K4DIRSTAT_VERSION 2.7.8 k4dirstat-)
 add_subdirectory( doc )
