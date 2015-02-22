@@ -18,7 +18,7 @@
 #endif
 
 #include <qdatetime.h>
-#include <q3listview.h>
+#include <QTreeWidget>
 #include <qpixmap.h>
 #include <KDE/K3ListView>
 #include <q3painter.h>
@@ -48,13 +48,13 @@ namespace KDirStat
 #if USE_KLISTVIEW
 #   define KDirTreeViewParentClass		KListView
 #else
-#   define KDirTreeViewParentClass		Q3ListView
+#   define KDirTreeViewParentClass		QTreeWidget
 #endif
 
     class KDirTreeViewItem;
 
 
-    class KDirTreeView:	public Q3ListView
+    class KDirTreeView:	public QTreeWidget
     // Using
     //		class KDirTreeView: public KDirTreeViewParentClass
     // or some other 'ifdef' ... construct seems to confuse "moc".
@@ -82,14 +82,6 @@ namespace KDirStat
 	KDirTreeViewItem *	locate( KFileInfo *	wanted,
 					bool		lazy	= true,
 					bool		doClone	= true );
-
-	/**
-	 * Get the first child of this view or 0 if there is none.
-	 * Use the child's next() method to get the next child.
-	 * Reimplemented from @ref QListView.
-	 **/
-	KDirTreeViewItem *	firstChild() const
-	    { return (KDirTreeViewItem *) KDirTreeViewParentClass::firstChild(); }
 
 	/**
 	 * Return the currently selected item or 0, if none is selected.
@@ -589,7 +581,7 @@ namespace KDirStat
 
 
 
-    class KDirTreeViewItem: public Q3ListViewItem
+    class KDirTreeViewItem: public QTreeWidgetItem
     {
     public:
 	/**
@@ -661,21 +653,6 @@ namespace KDirStat
 	 * tree where all the important information resides.
 	 **/
 	KFileInfo *		orig()		{ return _orig;	}
-
-	/**
-	 * Returns the first child of this item or 0 if there is none.
-	 * Use the child's next() method to get the next child.
-	 * Reimplemented from @ref QListViewItem.
-	 **/
-	KDirTreeViewItem * 	firstChild() const
-	    { return (KDirTreeViewItem *) Q3ListViewItem::firstChild(); }
-
-	/**
-	 * Returns the next sibling of this item or 0 if there is none.
-	 * (Kind of) reimplemented from @ref QListViewItem.
-	 **/
-	KDirTreeViewItem * 	next() const
-	    { return (KDirTreeViewItem *) Q3ListViewItem::nextSibling(); }
 
 	/**
 	 * Comparison function used for sorting the list.
