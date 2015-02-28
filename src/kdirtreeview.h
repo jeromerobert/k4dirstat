@@ -248,6 +248,7 @@ namespace KDirStat
 	void	incDebugCount( int i );
 
         void setColumnAlignment(QTreeWidgetItem & item);
+        void triggerUpdate();
 
     public slots:
 

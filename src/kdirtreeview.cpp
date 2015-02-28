@@ -948,6 +948,9 @@ KDirTreeView::readConfig()
 	triggerUpdate();
 }
 
+void KDirTreeView::triggerUpdate() {
+    qCritical() << "KDirTreeView::triggerUpdate not yet implemented";
+}
 
 void
 KDirTreeView::saveConfig() const
