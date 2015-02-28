@@ -20,8 +20,6 @@
 #include <qdatetime.h>
 #include <QTreeWidget>
 #include <qpixmap.h>
-#include <KDE/K3ListView>
-#include <q3painter.h>
 #include "kdirtree.h"
 
 #define DEBUG_COUNTERS		10
@@ -281,13 +279,13 @@ namespace KDirStat
         /**
 	 * Select a (QListViewItem) item. Triggers selectionChanged() signals.
 	 **/
-        void selectItem( Q3ListViewItem *item );
+        void selectItem( QTreeWidgetItem *item );
 
         /**
 	 * Select an item. Triggers selectionChanged() signals.
 	 * Overloaded for convenience.
 	 **/
-        void selectItem( KDirTreeViewItem *item ) { selectItem( (Q3ListViewItem *) item ); }
+        void selectItem( KDirTreeViewItem *item ) { selectItem( (QTreeWidgetItem *) item ); }
 
 	/**
 	 * Select a KDirTree item. Used for connecting the @ref
@@ -432,7 +430,7 @@ namespace KDirStat
 	 * Pop up context menu (i.e. emit the contextMenu() signal) or open a
 	 * small info popup with exact information, depending on 'column'.
 	 **/
-	void 	popupContextMenu	( Q3ListViewItem *	listViewItem,
+	void 	popupContextMenu	( QTreeWidgetItem *	listViewItem,
 					  const QPoint &	pos,
 					  int 			column );
 

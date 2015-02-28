@@ -583,7 +583,7 @@ KDirTreeView::openCount()
 
 
 void
-KDirTreeView::selectItem( Q3ListViewItem *listViewItem )
+KDirTreeView::selectItem( QTreeWidgetItem *listViewItem )
 {
     _selection = dynamic_cast<KDirTreeViewItem *>( listViewItem );
 
@@ -639,7 +639,7 @@ KDirTreeView::clearSelection()
 {
     // kdDebug() << k_funcinfo << endl;
     _selection = 0;
-    Q3ListView::clearSelection();
+    QTreeWidget::clearSelection();
 
     emit selectionChanged( (KDirTreeViewItem *) 0 );
     emit selectionChanged( (KFileInfo *) 0 );
@@ -778,7 +778,7 @@ KDirTreeView::paletteChanged()
 
 
 void
-KDirTreeView::popupContextMenu( Q3ListViewItem *	listViewItem,
+KDirTreeView::popupContextMenu( QTreeWidgetItem *	listViewItem,
 				const QPoint &	pos,
 				int 		column )
 {
