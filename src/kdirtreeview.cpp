@@ -142,6 +142,7 @@ void KDirTreeView::setColumnAlignment(QTreeWidgetItem & item) {
     item.setTextAlignment(_totalFilesCol,	Qt::AlignRight);
     item.setTextAlignment(_totalSubDirsCol,	Qt::AlignRight);
     item.setTextAlignment(_readJobsCol,	Qt::AlignRight);
+    item.setTextAlignment(_percentBarCol, Qt::AlignLeft );
 }
 
 KDirTreeView::~KDirTreeView()
@@ -213,8 +214,6 @@ KDirTreeView::idleDisplay()
 	setSorting( _percentNumCol );
     }
 #endif
-
-    setColumnAlignment ( _percentBarCol, Qt::AlignLeft );
     _readJobsCol = -1;
 }
 

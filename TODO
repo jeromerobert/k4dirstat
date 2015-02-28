@@ -12,6 +12,7 @@
   * https://github.com/dtjm/kcachegrind/commit/76c07a9c044fff1d8cb27bc0de42b31e8f4caa49
   * https://cadswes2.colorado.edu/~philw/2010/Qt4Port/guide/Q3ListView/
   * https://qt.gitorious.org/qt/qt/source/4.8:src/qt3support/itemviews/q3listview.cpp
+  * Check alignment of percent column during reading and after
 
 - Reintroduce Pacman animation
 
