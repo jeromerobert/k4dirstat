@@ -435,9 +435,12 @@ KDirTreeView::deleteChild( KFileInfo *child )
 	     * that deleted an item: It makes sense to implicitly select the
 	     * next item so he can clean up many items in a row.
 	     **/
-
-	    nextSelection = clone->next() ? clone->next() : clone->parent();
-	    // kdDebug() << k_funcinfo << " Next selection: " << nextSelection << endl;
+	    KDirTreeViewItem * parent = clone->parent();
+	    if(parent)
+	    {
+		int ip = parent->indexOfChild(clone);
+		nextSelection = parent->child(ip + 1);
+	    }
 	}
 
 	KDirTreeViewItem *parent = clone->parent();
@@ -557,19 +560,14 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
 KDirTreeViewItem *
 KDirTreeView::locate( KFileInfo *wanted, bool lazy, bool doClone )
 {
-    KDirTreeViewItem *child = firstChild();
-
-    while ( child )
+    for(int i = 0; i < topLevelItemCount(); i++)
     {
-	KDirTreeViewItem *wantedChild = child->locate( wanted, lazy, doClone, 0 );
-
+        KDirTreeViewItem *wantedChild = topLevelItem(i)->locate( wanted, lazy, doClone, 0 );
 	if ( wantedChild )
 	    return wantedChild;
-	else
-	    child = child->next();
     }
 
-    return 0;
+    return NULL;
 }
 
 
@@ -578,14 +576,8 @@ int
 KDirTreeView::openCount()
 {
     int count = 0;
-    KDirTreeViewItem *child = firstChild();
-
-    while ( child )
-    {
-	count += child->openCount();
-	child  = child->next();
-    }
-
+    for(int i = 0; i < topLevelItemCount(); i++)
+        count += topLevelItem(i)->openCount();
     return count;
 }
 
@@ -1466,22 +1458,7 @@ KDirTreeViewItem::cleanupDotEntries()
     if ( ! _orig->firstChild() )
     {
 	// kdDebug() << "Removing solo dot entry clone " << _orig << endl;
-	KDirTreeViewItem *child = dotEntry->firstChild();
-
-	while ( child )
-	{
-	    KDirTreeViewItem *nextChild = child->next();
-
-
-	    // Reparent this child
-
-	    // kdDebug() << "Reparenting clone " << child << endl;
-	    dotEntry->removeItem( child );
-	    insertItem( child );
-
-	    child = nextChild;
-	}
-
+	addChildren(dotEntry->takeChildren());
 	/*
 	 * Immediately delete the (now emptied) dot entry. The algorithm for
 	 * the original tree doesn't quite fit here - there, the dot entry is
@@ -1511,17 +1488,11 @@ KDirTreeViewItem::cleanupDotEntries()
 KDirTreeViewItem *
 KDirTreeViewItem::findDotEntry() const
 {
-    KDirTreeViewItem *child = firstChild();
-
-    while ( child )
-    {
-	if ( child->orig()->isDotEntry() )
-	    return child;
-
-	child = child->next();
+    for(int i = 0; i < childCount(); i++) {
+        if(child(i)->orig()->isDotEntry())
+            return child(i);
     }
-
-    return 0;
+    return NULL;
 }
 
 
