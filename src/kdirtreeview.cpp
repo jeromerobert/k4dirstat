@@ -1600,6 +1600,11 @@ KDirTreeViewItem::asciiDump()
     return dump;
 }
 
+bool KDirTreeViewItem::operator<(const QTreeWidgetItem &other) const
+{
+    int column = treeWidget() ? treeWidget()->sortColumn() : 0;
+    return compare(&other, column, true) < 0;
+}
 
 /**
  * Comparison function used for sorting the list.
@@ -1609,12 +1614,12 @@ KDirTreeViewItem::asciiDump()
  * +1 if this >	 other
  **/
 int
-KDirTreeViewItem::compare( Q3ListViewItem *	otherListViewItem,
+KDirTreeViewItem::compare( const QTreeWidgetItem *	otherListViewItem,
 			   int			column,
 			   bool			ascending ) const
 {
     // _view->incDebugCount(4);
-    KDirTreeViewItem * other = dynamic_cast<KDirTreeViewItem *> (otherListViewItem);
+    const KDirTreeViewItem * other = dynamic_cast<const KDirTreeViewItem *> (otherListViewItem);
 
     if ( other )
     {

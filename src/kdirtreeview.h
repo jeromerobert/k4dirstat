@@ -660,23 +660,7 @@ namespace KDirStat
 	    return static_cast<KDirTreeViewItem *>(this->QTreeWidgetItem::child(index));
 	}
 
-	/**
-	 * Comparison function used for sorting the list.
-	 *
-	 * Using this function is much more efficient than overwriting
-	 * QListViewItem::key() which operates on QStrings.
-	 *
-	 * Returns:
-	 * -1 if this <  other
-	 *  0 if this == other
-	 * +1 if this >  other
-	 *
-	 * Reimplemented from QListViewItem
-	 **/
-	virtual int compare( Q3ListViewItem *	other,
-			     int		col,
-			     bool		ascending ) const;
-
+	virtual bool operator<(const QTreeWidgetItem &other) const;
 	/**
 	 * Perform any necessary pending updates when a branch is opened.
 	 * Reimplemented from @ref QListViewItem.
@@ -779,6 +763,21 @@ namespace KDirStat
 	}
 
     private:
+	/**
+	 * Comparison function used for sorting the list.
+	 *
+	 * Using this function is much more efficient than overwriting
+	 * QListViewItem::key() which operates on QStrings.
+	 *
+	 * Returns:
+	 * -1 if this <  other
+	 *  0 if this == other
+	 * +1 if this >  other
+	 *
+	 **/
+	int compare( const QTreeWidgetItem *	other,
+			     int		col,
+			     bool		ascending ) const;
 
 	/**
 	 * Initializations common to all constructors.
