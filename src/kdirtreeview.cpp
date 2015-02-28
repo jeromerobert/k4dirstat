@@ -1289,14 +1289,8 @@ KDirTreeViewItem::updateSummary()
 
 
     // Update all children
-
-    KDirTreeViewItem *child = firstChild();
-
-    while ( child )
-    {
-	child->updateSummary();
-	child = child->next();
-    }
+    for(int i = 0; i < childCount(); i++)
+        child(i)->updateSummary();
 }
 
 
@@ -1340,24 +1334,12 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
     if ( wanted->urlPart( level ) == _orig->name() )
     {
 	// Search all children
-
-	KDirTreeViewItem *child = firstChild();
-
-	if ( ! child && _orig->hasChildren() && doClone )
-	{
-	    // kdDebug() << "Deferred cloning " << this << " for children search of " << wanted << endl;
+	if(!childCount()  && _orig->hasChildren() && doClone )
 	    deferredClone();
-	    child = firstChild();
-	}
-
-	while ( child )
-	{
-	    KDirTreeViewItem *foundChild = child->locate( wanted, lazy, doClone, level+1 );
-
-	    if ( foundChild )
+	for(int i = 0; i < childCount(); i++) {
+	    KDirTreeViewItem *foundChild = child(i)->locate( wanted, lazy, doClone, level+1 );
+	    if(foundChild)
 		return foundChild;
-	    else
-		child = child->next();
 	}
     }
 
