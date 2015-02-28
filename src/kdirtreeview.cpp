@@ -54,7 +54,6 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _doLazyClone	= true;
     _doPacManAnimation	= false;
     _updateInterval	= 333;	// millisec
-    _sortCol		= -1;
 
     for ( int i=0; i < DEBUG_COUNTERS; i++ )
 	_debugCount[i]	= 0;
@@ -89,8 +88,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 #if ! SEPARATE_READ_JOBS_COL
     _readJobsCol = _percentBarCol;
 #endif
-
-    setSorting( _totalSizeCol );
+    sortByColumn(_totalSizeCol);
 
 
 #define loadIcon(ICON)	KIconLoader::global()->loadIcon( (ICON), KIconLoader::Small )
@@ -198,7 +196,7 @@ KDirTreeView::idleDisplay()
 	removeColumn( _readJobsCol );
     }
 #else
-    if ( _sortCol == _readJobsCol && _sortCol >= 0 )
+    if ( sortColumn() == _readJobsCol && sortColumn() >= 0 )
     {
 	// A pathological case: The user requested sorting by read jobs, and
 	// now that everything is read, the items are still in that sort order.
@@ -211,7 +209,7 @@ KDirTreeView::idleDisplay()
 	// semantics like the percentage bar column (that had doubled as the
 	// read job column while reading) now has.
 
-	setSorting( _percentNumCol );
+	sortByColumn(_percentNumCol );
     }
 #endif
     _readJobsCol = -1;
@@ -302,7 +300,7 @@ KDirTreeView::prepareReading()
 
     // Change display to busy state
 
-    setSorting( _totalSizeCol );
+    sortByColumn(_totalSizeCol );
     busyDisplay();
     emit startingReading();
 
@@ -590,7 +588,7 @@ KDirTreeView::selectItem( QTreeWidgetItem *listViewItem )
     if ( _selection )
     {
 	// kdDebug() << k_funcinfo << " Selecting item " << _selection << endl;
-	setSelected( _selection, true );
+	setCurrentItem(_selection);
     }
     else
     {
@@ -624,9 +622,9 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
 	{
 	    closeAllExcept( _selection );
 	    _selection->setOpen( false );
-	    ensureItemVisible( _selection );
+	    scrollToItem( _selection );
 	    emit selectionChanged( _selection );
-	    setSelected( _selection, true );
+	    setCurrentItem(_selection);
 	}
 	else
 	    kdError() << "Couldn't clone item " << newSelection << endl;
@@ -966,15 +964,6 @@ KDirTreeView::saveConfig() const
 	config.writeEntry ( name, _fillColor [i] );
     }
 }
-
-
-void
-KDirTreeView::setSorting( int column, bool increasing )
-{
-    _sortCol = column;
-    Q3ListView::setSorting( column, increasing );
-}
-
 
 void
 KDirTreeView::logActivity( int points )

@@ -193,13 +193,6 @@ namespace KDirStat
 	void ensureContrast();
 
 	/**
-	 * Set the sort column.
-	 *
-	 * Reimplemented from QListView so we can keep track of the sort column.
-	 **/
-	virtual void setSorting( int column, bool increasing = TRUE );
-
-	/**
 	 * Returns the internal @ref KDirTree this view works on.
 	 * Handle with caution: This might be short-lived information.
 	 * The view might choose to create a new tree shortly after returning
@@ -219,7 +212,6 @@ namespace KDirStat
 	int	totalSubDirsCol()	const	{ return _totalSubDirsCol;	}
 	int	latestMtimeCol()	const	{ return _latestMtimeCol;	}
 	int	readJobsCol()		const	{ return _readJobsCol;		}
-	int	sortCol()		const   { return _sortCol;		}
 
 	QPixmap	openDirIcon()		const	{ return _openDirIcon;		}
 	QPixmap	closedDirIcon()		const	{ return _closedDirIcon;	}
@@ -556,7 +548,6 @@ namespace KDirStat
 	int	_totalSubDirsCol;
 	int	_latestMtimeCol;
 	int	_readJobsCol;
-	int	_sortCol;
 
 	int 	_debugCount[ DEBUG_COUNTERS ];
 	QString	_debugFunc [ DEBUG_COUNTERS ];
