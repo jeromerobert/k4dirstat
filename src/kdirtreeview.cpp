@@ -1141,11 +1141,12 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	     _orig->readState() == KDirReading ||
 	     _orig->readState() == KDirCached    )
 	{
-	    setExpandable( true );
+	    setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 	}
 	else	// KDirFinished, KDirError, KDirAborted
 	{
-	    setExpandable( _orig->hasChildren() );
+	    setChildIndicatorPolicy(_orig->hasChildren() ?
+		QTreeWidgetItem::ShowIndicator : QTreeWidgetItem::DontShowIndicator);
 	}
     }
 
@@ -1187,7 +1188,7 @@ KDirTreeViewItem::setIcon()
 	else if ( _orig->readState() == KDirError   )
 	{
 	    icon = _view->unreadableDirIcon();
-	    setExpandable( false );
+	    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	}
 	else
 	{
@@ -1355,8 +1356,7 @@ KDirTreeViewItem::deferredClone()
     if ( ! _orig->hasChildren() )
     {
 	// kdDebug() << k_funcinfo << "Oops, no children - sorry for bothering you!" << endl;
-	setExpandable( false );
-
+	setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	return;
     }
 
@@ -1410,7 +1410,7 @@ KDirTreeViewItem::finalizeLocal()
 	// _orig->hasChildren() would give a wrong answer here since it counts
 	// the dot entry, too - which might be removed a moment later.
     {
-	setExpandable( false );
+        setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     }
 }
 
