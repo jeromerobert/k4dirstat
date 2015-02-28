@@ -644,7 +644,7 @@ namespace KDirStat
 	 * Returns the corresponding original item of the "real" (vs. view)
 	 * tree where all the important information resides.
 	 **/
-	KFileInfo *		orig()		{ return _orig;	}
+	KFileInfo *		orig()	const { return _orig;	}
 
 	/** Specialization of QTreeWidgetItem::child */
 	inline KDirTreeViewItem *child(int index) const {
