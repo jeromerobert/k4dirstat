@@ -1150,7 +1150,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	}
     }
 
-    if ( ! parent || parent->isOpen() )
+    if ( ! parent || parent->isExpanded() )
     {
 	setIcon();
     }
@@ -1198,7 +1198,7 @@ KDirTreeViewItem::setIcon()
 	    }
 	    else
 	    {
-		icon = isOpen() ? _view->openDirIcon() : _view->closedDirIcon();
+		icon = isExpanded() ? _view->openDirIcon() : _view->closedDirIcon();
 	    }
 	}
     }
@@ -1285,7 +1285,7 @@ KDirTreeViewItem::updateSummary()
     }
 
 
-    if ( ! isOpen() )	// Lazy update: Nobody can see the children
+    if ( ! isExpanded() )	// Lazy update: Nobody can see the children
 	return;		// -> don't update them.
 
 
@@ -1301,7 +1301,7 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 			  bool		doClone,
 			  int 		level )
 {
-    if ( lazy && ! isOpen() )
+    if ( lazy && ! isExpanded() )
     {
 	/*
 	 * In "lazy" mode, we don't bother searching all the children of this
@@ -1364,7 +1364,7 @@ KDirTreeViewItem::deferredClone()
     // Clone all normal children
 
     int level		 = _orig->treeLevel();
-    bool startingClean	 = ! firstChild();
+    bool startingClean	 = childCount() == 0;
     KFileInfo *origChild = _orig->firstChild();
 
     while ( origChild )
@@ -1479,7 +1479,7 @@ KDirTreeViewItem::setOpen( bool open )
 	deferredClone();
     }
 
-    if ( isOpen() != open )
+    if ( isExpanded() != open )
     {
 	openNotify( open );
     }
@@ -1562,7 +1562,7 @@ KDirTreeViewItem::asciiDump()
 		  formatSize( _orig->totalSize() ).toAscii().data(),
 		  _orig->debugUrl().toAscii().data() );
 
-    if ( isOpen() )
+    if ( isExpanded() )
     {
         for(int i = 0; i < childCount(); i++)
             dump += child(i)->asciiDump();
