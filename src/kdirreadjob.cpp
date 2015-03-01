@@ -28,7 +28,7 @@
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
 #include "kexcluderules.h"
-
+#include "k4dirstat.h"
 
 using namespace KDirStat;
 
@@ -127,7 +127,7 @@ KLocalDirReadJob::startReading()
     QString		dirName		 = _dir->url();
     QString		defaultCacheName = DEFAULT_CACHE_NAME.url();
 
-    if ( ( _diskDir = opendir( dirName ) ) )
+    if ( ( _diskDir = opendir( dirName.toAscii() ) ) )
     {
 	_tree->sendProgressInfo( dirName );
 	_dir->setReadState( KDirReading );
@@ -141,7 +141,7 @@ KLocalDirReadJob::startReading()
 	    {
 		QString fullName = dirName + "/" + entryName;
 
-		if ( lstat( fullName, &statInfo ) == 0 )	// lstat() OK
+		if ( lstat( fullName.toAscii(), &statInfo ) == 0 )	// lstat() OK
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
@@ -276,7 +276,7 @@ KLocalDirReadJob::stat( const KUrl & 	url,
 {
     struct stat statInfo;
 
-    if ( lstat( url.path(), &statInfo ) == 0 )		// lstat() OK
+    if ( lstat( url.path().toAscii(), &statInfo ) == 0 )		// lstat() OK
     {
 	QString name = parent ? url.fileName() : url.path();
 
@@ -424,7 +424,7 @@ KioDirReadJob::stat( const KUrl & 	url,
 {
     KIO::UDSEntry uds_entry;
 
-    if ( KIO::NetAccess::stat( url, uds_entry, qApp->mainWidget() ) )	// remote stat() OK?
+    if ( KIO::NetAccess::stat( url, uds_entry, k4dirstat::instance()) )	// remote stat() OK?
     {
 	KFileItem entry( uds_entry, url,
 			 true,		// determine MIME type on demand
@@ -442,7 +442,7 @@ KioDirReadJob::owner( KUrl url )
 {
     KIO::UDSEntry uds_entry;
 
-    if ( KIO::NetAccess::stat( url, uds_entry, qApp->mainWidget() ) )	// remote stat() OK?
+    if ( KIO::NetAccess::stat( url, uds_entry, k4dirstat::instance()) )	// remote stat() OK?
     {
 	KFileItem entry( uds_entry, url,
 			 true,		// determine MIME type on demand

@@ -57,6 +57,8 @@ public:
      */
     k4dirstat();
 
+    static k4dirstat * instance() { return instance_; }
+
     /**
      * Default Destructor
      */
@@ -337,6 +339,7 @@ protected:
 
 private:
     void setupActions();
+    static k4dirstat * instance_;
 
 private:
 

@@ -450,7 +450,7 @@ KTreemapTile::renderCushion()
     int		maxGreen	= max( 0, color.green() - ambientLight );
     int		maxBlue		= max( 0, color.blue()  - ambientLight );
 
-    QImage image( rect.width(), rect.height(), 32 );
+    QImage image( rect.width(), rect.height(), QImage::Format_RGB32);
 
     for ( y = 0; y < rect.height(); y++ )
     {
@@ -479,7 +479,7 @@ KTreemapTile::renderCushion()
     if ( _parentView->ensureContrast() )
 	ensureContrast( image );
 
-    return QPixmap( image );
+    return QPixmap::fromImage(image);
 }
 
 

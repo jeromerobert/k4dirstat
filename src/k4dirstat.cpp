@@ -67,11 +67,15 @@
 
 using namespace KDirStat;
 
+k4dirstat * k4dirstat::instance_ = NULL;
+
 k4dirstat::k4dirstat()
     : KXmlGuiWindow(),
      // m_view(new k4dirstatView(this)),
       m_printer(0)
 {
+    Q_ASSERT(instance_ == NULL);
+    instance_ = this;
     // accept dnd
     setAcceptDrops(true);
 

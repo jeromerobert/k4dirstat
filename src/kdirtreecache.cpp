@@ -46,7 +46,7 @@ KCacheWriter::writeCache( const QString & fileName, KDirTree *tree )
     if ( ! tree || ! tree->root() )
 	return false;
 
-    gzFile cache = gzopen( (const char *) fileName, "w" );
+    gzFile cache = gzopen(fileName.toAscii(), "w" );
 
     if ( cache == 0 )
     {
@@ -142,7 +142,7 @@ KCacheWriter::writeItem( gzFile cache, KFileInfo * item )
 
     // Write size
 
-    gzprintf( cache, "\t%s", (const char *) formatSize( item->size() ) );
+    gzprintf( cache, "\t%s", formatSize( item->size() ).toAscii().constData() );
 
 
     // Write mtime
@@ -209,7 +209,7 @@ KCacheReader::KCacheReader( const QString &	fileName,
     _lastDir		= 0;
     _lastExcludedDir	= 0;
 
-    _cache = gzopen( (const char *) fileName, "r" );
+    _cache = gzopen(fileName.toAscii(), "r" );
 
     if ( _cache == 0 )
     {

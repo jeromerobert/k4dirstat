@@ -54,7 +54,7 @@ KDirSaver::cd( const QString & newPath )
 {
     if ( ! newPath.isEmpty() )
     {
-	chdir( newPath );
+        chdir( newPath.toAscii() );
     }
 }
 
@@ -62,14 +62,14 @@ KDirSaver::cd( const QString & newPath )
 QString
 KDirSaver::currentDirPath() const
 {
-    return QDir::currentDirPath();
+    return QDir::currentPath();
 }
 
 
 void
 KDirSaver::restore()
 {
-    chdir( oldWorkingDir.path() );
+    chdir( oldWorkingDir.path().toAscii() );
 }
 
 
