@@ -144,7 +144,7 @@ KPacManAnimation::animate( QPainter *	painter,
 
     _pacManRect = QRect( 0, 0, size, size );
     QPixmap pixmap( size, size );
-    pixmap.fill( painter->backgroundColor() );
+    pixmap.fill( painter->background().color() );
     Q3Painter p( &pixmap);
 
     p.setBrush( _brush );
@@ -210,7 +210,7 @@ KPacMan::KPacMan( QWidget * 	parent,
 		  int 		pacManSize,
 		  bool		randomStart,
 		  const char *	widgetName )
-    : QWidget( parent, widgetName )
+    : QWidget( parent )
 {
     _pacManSize	= pacManSize;
     _pacMan 	= new KPacManAnimation( this, _pacManSize, randomStart );
@@ -219,6 +219,7 @@ KPacMan::KPacMan( QWidget * 	parent,
     _active	= false;
     _painter	= new Q3Painter( this );
     _margin	= 1;
+    setObjectName(QString::fromAscii(widgetName));
 }
 
 
@@ -267,7 +268,7 @@ KPacMan::stop()
 void
 KPacMan::animate()
 {
-    repaint( false );
+    repaint();
 }
 
 
@@ -278,7 +279,7 @@ KPacMan::setInterval( int intervalMilliSec )
     _pacMan->setInterval( _interval );
 
     if ( _timer )
-	_timer->changeInterval( _interval );
+    _timer->setInterval( _interval );
 }
 
 
