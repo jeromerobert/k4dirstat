@@ -777,6 +777,10 @@ namespace KDirStat
 			  KDirTreeViewItem *	parent,
 			  KFileInfo *		orig );
 
+    int height() {
+        return _view->visualItemRect (this).height();
+    }
+
     protected:
 
 	// Data members
