@@ -717,31 +717,6 @@ namespace KDirStat
 	 **/
 	KDirTreeViewItem * findDotEntry() const;
 
-
-	/**
-	 * Paint method. Reimplemented from @ref QListViewItem so different
-	 * colors can be used - and of course for painting percentage bars.
-	 *
-	 * Reimplemented from @ref QListViewItem.
-	 **/
-	virtual void paintCell 	( QPainter *		painter,
-				  const QColorGroup &	colorGroup,
-				  int			column,
-				  int			width,
-				  int			alignment );
-
-	/**
-	 * Paint a percentage bar into a @ref QListViewItem cell.
-	 * 'width' is the width of the entire cell.
-	 * 'indent' is the number of pixels to indent the bar.
-	 **/
-	void paintPercentageBar	( float			percent,
-				  QPainter *		painter,
-				  int			indent,
-				  int			width,
-				  const QColor &	fillColor,
-				  const QColor &	barBackground	);
-
 	/**
 	 * Generic comparison function.
 	 **/
@@ -766,9 +741,8 @@ namespace KDirStat
 	 * +1 if this >  other
 	 *
 	 **/
-	int compare( const QTreeWidgetItem *	other,
-			     int		col,
-			     bool		ascending ) const;
+	 int compare( const KDirTreeViewItem *	other,
+				 int		col) const;
 
 	/**
 	 * Initializations common to all constructors.

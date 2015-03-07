@@ -747,7 +747,7 @@ KDirTreeView::setTreeBackground( const QColor &color )
     _percentageBarBackground = _treeBackground.dark( 115 );
 
     QPalette pal = kapp->palette();
-    pal.setBrush( QColorGroup::Base, _treeBackground );
+    pal.setBrush(QPalette::Base, _treeBackground );
     setPalette( pal );
 }
 
@@ -755,15 +755,10 @@ KDirTreeView::setTreeBackground( const QColor &color )
 void
 KDirTreeView::ensureContrast()
 {
-    if ( colorGroup().base() == Qt::white ||
-	 colorGroup().base() == Qt::black   )
-    {
-	setTreeBackground( colorGroup().midlight() );
-    }
+    if (palette().base() == Qt::white || palette().base() == Qt::black)
+        setTreeBackground( palette().midlight().color() );
     else
-    {
-	setTreeBackground( colorGroup().base() );
-    }
+        setTreeBackground( palette().base().color() );
 }
 
 
@@ -1208,7 +1203,7 @@ KDirTreeViewItem::setIcon()
     else if ( _orig->isCharDevice() 	)	icon = _view->charDevIcon();
     else if ( _orig->isSpecial() 	)	icon = _view->fifoIcon();
 
-    setPixmap( _view->iconCol(), icon );
+    QTreeWidgetItem::setIcon( _view->iconCol(), icon);
 }
 
 
@@ -1275,15 +1270,6 @@ KDirTreeViewItem::updateSummary()
 	_percent = 0.0;
 	setText( _view->percentNumCol(), "" );
     }
-
-    if ( _view->doPacManAnimation() && _orig->isBusy() )
-    {
-	if ( ! _pacMan )
-	    _pacMan = new KPacManAnimation( _view, height()-4, true );
-
-	repaint();
-    }
-
 
     if ( ! isExpanded() )	// Lazy update: Nobody can see the children
 	return;		// -> don't update them.
@@ -1484,7 +1470,7 @@ KDirTreeViewItem::setOpen( bool open )
 	openNotify( open );
     }
 
-    Q3ListViewItem::setOpen( open );
+    setExpanded( open );
     setIcon();
 
     if ( open )
@@ -1571,10 +1557,17 @@ KDirTreeViewItem::asciiDump()
     return dump;
 }
 
-bool KDirTreeViewItem::operator<(const QTreeWidgetItem &other) const
+bool KDirTreeViewItem::operator<(const QTreeWidgetItem &otherListViewItem) const
 {
     int column = treeWidget() ? treeWidget()->sortColumn() : 0;
-    return compare(&other, column, true) < 0;
+    const KDirTreeViewItem * other = dynamic_cast<const KDirTreeViewItem *> (&otherListViewItem);
+    if(other)
+    {
+        int r = compare(other, column);
+        if(r >= -1)
+            return r;
+    }
+    return QTreeWidgetItem::operator<(otherListViewItem);
 }
 
 /**
@@ -1585,15 +1578,9 @@ bool KDirTreeViewItem::operator<(const QTreeWidgetItem &other) const
  * +1 if this >	 other
  **/
 int
-KDirTreeViewItem::compare( const QTreeWidgetItem *	otherListViewItem,
-			   int			column,
-			   bool			ascending ) const
+KDirTreeViewItem::compare( const KDirTreeViewItem *	other,
+               int			column) const
 {
-    // _view->incDebugCount(4);
-    const KDirTreeViewItem * other = dynamic_cast<const KDirTreeViewItem *> (otherListViewItem);
-
-    if ( other )
-    {
 	KFileInfo * otherOrig = other->orig();
 
 #if ! SEPARATE_READ_JOBS_COL
@@ -1617,172 +1604,8 @@ KDirTreeViewItem::compare( const QTreeWidgetItem *	otherListViewItem,
 	    if ( otherOrig->isDotEntry() )
 		return -1;
 	}
-    }
-
-    return Q3ListViewItem::compare( otherListViewItem, column, ascending );
+    return -2;
 }
-
-
-void
-KDirTreeViewItem::paintCell( QPainter *		painter,
-			     const QColorGroup &	colorGroup,
-			     int			column,
-			     int			width,
-			     int			alignment )
-{
-    // _view->incDebugCount(5);
-
-    if ( column == _view->percentBarCol() )
-    {
-	painter->setBackground(colorGroup.base());
-
-	if ( _percent > 0.0 )
-	{
-	    if ( _pacMan )
-	    {
-		delete _pacMan;
-		_pacMan = 0;
-	    }
-
-	    int level = _orig->treeLevel();
-	    paintPercentageBar ( _percent,
-				 painter,
-				 _view->treeStepSize() * ( level-1 ),
-				 width,
-				 _view->fillColor( level-1 ),
-				 _view->percentageBarBackground() );
-	}
-	else
-	{
-	    if ( _pacMan && _orig->isBusy() )
-	    {
-		// kdDebug() << "Animating PacMan for " << _orig << endl;
-		// painter->setBackgroundColor( _view->treeBackground() );
-		_pacMan->animate( painter, QRect( 0, 0, width, height() ) );
-	    }
-	    else
-	    {
-		if ( ( _view->percentBarCol() == _view->readJobsCol()
-		       && ! _pacMan )
-		     || _orig->isExcluded() )
-		{
-		    Q3ListViewItem::paintCell( painter,
-					      colorGroup,
-					      column,
-					      width,
-					      alignment );
-		}
-		else
-		{
-		    painter->eraseRect( 0, 0, width, height() );
-		}
-	    }
-	}
-    }
-    else
-    {
-	/*
-	 * Call the parent's paintCell() method.  We don't want to do
-	 * all the hassle of drawing strings and pixmaps, regarding
-	 * alignments etc.
-	 */
-	Q3ListViewItem::paintCell( painter,
-				  colorGroup,
-				  column,
-				  width,
-				  alignment );
-    }
-}
-
-
-void
-KDirTreeViewItem::paintPercentageBar( float		percent,
-				      QPainter *	painter,
-				      int		indent,
-				      int		width,
-				      const QColor &	fillColor,
-				      const QColor &	barBackground )
-{
-    int penWidth = 2;
-    int extraMargin = 3;
-    int x = _view->itemMargin();
-    int y = extraMargin;
-    int w = width    - 2 * _view->itemMargin();
-    int h = _view->visualItemRect (this).height() - 2 * extraMargin;
-    int fillWidth;
-
-    painter->eraseRect( 0, 0, width, height() );
-    w -= indent;
-    x += indent;
-
-    if ( w > 0 )
-    {
-	QPen pen( painter->pen() );
-	pen.setWidth( 0 );
-	painter->setPen( pen );
-	painter->setBrush( Qt::NoBrush );
-	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0);
-
-
-	// Fill bar background.
-
-	painter->fillRect( x + penWidth, y + penWidth,
-			   w - 2 * penWidth + 1, h - 2 * penWidth + 1,
-			   barBackground );
-	/*
-	 * Notice: The Xlib XDrawRectangle() function always fills one
-	 * pixel less than specified. Altough this is very likely just a
-	 * plain old bug, it is documented that way. Obviously, Qt just
-	 * maps the fillRect() call directly to XDrawRectangle() so they
-	 * inherited that bug (although the Qt doc stays silent about
-	 * it). So it is really necessary to compensate for that missing
-	 * pixel in each dimension.
-	 *
-	 * If you don't believe it, see for yourself.
-	 * Hint: Try the xmag program to zoom into the drawn pixels.
-	 **/
-
-	// Fill the desired percentage.
-
-	painter->fillRect( x + penWidth, y + penWidth,
-			   fillWidth+1, h - 2 * penWidth+1,
-			   fillColor );
-
-
-	// Draw 3D shadows.
-
-	pen.setColor( contrastingColor ( Qt::black,
-					 painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x, y, x+w, y );
-	painter->drawLine( x, y, x, y+h );
-
-	pen.setColor( contrastingColor( barBackground.dark(),
-					painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x+1, y+1, x+w-1, y+1 );
-	painter->drawLine( x+1, y+1, x+1, y+h-1 );
-
-	pen.setColor( contrastingColor( barBackground.light(),
-					painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x+1, y+h, x+w, y+h );
-	painter->drawLine( x+w, y, x+w, y+h );
-
-	pen.setColor( contrastingColor( Qt::white,
-					painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x+2, y+h-1, x+w-1, y+h-1 );
-	painter->drawLine( x+w-1, y+1, x+w-1, y+h-1 );
-    }
-}
-
-
-
-
-
-
-
 
 QString
 KDirStat::formatSizeLong( KFileSize size )
