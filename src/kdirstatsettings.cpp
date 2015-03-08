@@ -634,10 +634,12 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
 
     // The "Refresh policy" combo box
 
-    _refreshPolicy = new QComboBox( false, _fields );
+    _refreshPolicy = new QComboBox(_fields);
+    _refreshPolicy->setEditable(false);
     grid->addWidget( _refreshPolicy, row, 1 );
 
-    label = new QLabel( _refreshPolicy, i18n( "Refresh &Policy:" ), _fields );
+    label = new QLabel(i18n( "Refresh &Policy:" ), _fields);
+    label->setBuddy(_refreshPolicy);
     grid->addWidget( label, row++, 0 );
 
 
@@ -677,8 +679,8 @@ KCleanupPropertiesPage::setFields( const KCleanup * cleanup )
     _worksForDir->setChecked		( cleanup->worksForDir()	);
     _worksForFile->setChecked		( cleanup->worksForFile()	);
     _worksForDotEntry->setChecked	( cleanup->worksForDotEntry()	);
-    _worksForProtocols->setCurrentItem	( cleanup->worksLocalOnly() ? 0 : 1 );
-    _refreshPolicy->setCurrentItem	( cleanup->refreshPolicy()	);
+    _worksForProtocols->setCurrentIndex	( cleanup->worksLocalOnly() ? 0 : 1 );
+    _refreshPolicy->setCurrentIndex	( cleanup->refreshPolicy()	);
 
     enableFields( cleanup->enabled() );
 }
@@ -694,9 +696,9 @@ KCleanupPropertiesPage::fields() const
     cleanup.setAskForConfirmation	( _askForConfirmation->isChecked() );
     cleanup.setWorksForDir		( _worksForDir->isChecked()	   );
     cleanup.setWorksForFile		( _worksForFile->isChecked()	   );
-    cleanup.setWorksLocalOnly		( _worksForProtocols->currentItem() == 0 ? true : false );
+    cleanup.setWorksLocalOnly		( _worksForProtocols->currentIndex() == 0 ? true : false );
     cleanup.setWorksForDotEntry		( _worksForDotEntry->isChecked()   );
-    cleanup.setRefreshPolicy		( (KCleanup::RefreshPolicy) _refreshPolicy->currentItem() );
+    cleanup.setRefreshPolicy		( (KCleanup::RefreshPolicy) _refreshPolicy->currentIndex() );
 
     return cleanup;
 }
@@ -714,9 +716,9 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 {
     // Create layout and widgets.
 
-    QVBoxLayout * layout	= new QVBoxLayout( this, 5,			// border
-						   dialog->spacingHint() );	// spacing
-
+    QVBoxLayout * layout = new QVBoxLayout(this);
+    layout->setMargin(5);
+    layout->setSpacing(dialog->spacingHint());
     Q3VGroupBox * gbox		= new Q3VGroupBox( i18n( "Directory Reading" ), this );
     layout->addWidget( gbox );
 
@@ -1036,10 +1038,11 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     // Misc
 
     QWidget * gridBox	= new QWidget( vbox );
-    QGridLayout * grid	= new QGridLayout( gridBox, 2, 3, dialog->spacingHint() ); // rows, cols, spacing
-    grid->setColStretch( 0, 0 ); // (col, stretch) don't stretch this column
-    grid->setColStretch( 1, 0 ); // don't stretch
-    grid->setColStretch( 2, 1 ); // stretch this as you like
+    QGridLayout * grid = new QGridLayout(gridBox);
+    grid->setSpacing(dialog->spacingHint());
+    grid->setColumnStretch( 0, 0 ); // (col, stretch) don't stretch this column
+    grid->setColumnStretch( 1, 0 ); // don't stretch
+    grid->setColumnStretch( 2, 1 ); // stretch this as you like
 
     label		= new QLabel( i18n( "Highlight R&ectangle: " ), gridBox );
     _highlightColor	= new KColorButton( gridBox );
@@ -1050,7 +1053,10 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 
 
     label		= new QLabel( i18n( "Minim&um Treemap Tile Size: " ), gridBox );
-    _minTileSize	= new QSpinBox( 0, 30, 1, gridBox ); // min, max, step, parent
+    _minTileSize = new QSpinBox(gridBox);
+    _minTileSize->setMinimum(0);
+    _minTileSize->setMaximum(30);
+    _minTileSize->setSingleStep(1);
     label->setBuddy( _minTileSize );
 
     grid->addWidget( label,		1, 0 );
@@ -1192,10 +1198,10 @@ void
 addHStretch( QWidget * parent )
 {
     QWidget * stretch = new QWidget( parent );
-    stretch->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,	// hor
-					 QSizePolicy::Minimum,		// vert
-					 1,				// hstretch
-					 0 ) );				// vstretch
+    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    sp.setHorizontalStretch(1);
+    sp.setVerticalStretch(0);
+    stretch->setSizePolicy(sp);
 }
 
 
@@ -1203,11 +1209,10 @@ void
 addVStretch( QWidget * parent )
 {
     QWidget * stretch = new QWidget( parent );
-    stretch->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,		// hor
-					 QSizePolicy::Expanding,	// vert
-					 0,				// hstretch
-					 1 ) );				// vstretch
+    QSizePolicy sp(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    sp.setHorizontalStretch(0);
+    sp.setVerticalStretch(1);
+    stretch->setSizePolicy(sp);
 }
-
 
 // EOF
