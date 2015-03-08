@@ -185,22 +185,19 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 {
     // Outer layout box
 
-    QHBoxLayout * outerBox = new QHBoxLayout( this,
-					      0,	// border
-					      dialog->spacingHint() );
-
-
+    QHBoxLayout * outerBox = new QHBoxLayout(this);
+    outerBox->setMargin(0);
+    outerBox->setSpacing(dialog->spacingHint());
     // Inner layout box with a column of color buttons
 
-    QGridLayout *grid = new QGridLayout( _maxButtons,		// rows
-					 _maxButtons + 1,	// cols
-					 dialog->spacingHint() );
+    QGridLayout *grid = new QGridLayout();
+    grid->setMargin(dialog->spacingHint());
     outerBox->addLayout( grid, 1 );
-    grid->setColStretch( 0, 0 );	// label column - dont' stretch
+    grid->setColumnStretch( 0, 0 );	// label column - dont' stretch
 
     for ( int i=1; i < _maxButtons; i++ )
     {
-	grid->setColStretch( i, 1 );	// all other columns stretch as you like
+	grid->setColumnStretch( i, 1 );	// all other columns stretch as you like
     }
 
     for ( int i=0; i < _maxButtons; i++ )
@@ -213,19 +210,19 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 
 	_colorButton[i] = new KColorButton( this );
 	_colorButton[i]->setMinimumSize( QSize( 80, 10 ) );
-	grid->addMultiCellWidget( _colorButton [i], i, i, i+1, _maxButtons );
+	grid->addWidget(_colorButton[i], i, i+1, 1, _maxButtons - i);
 	grid->setRowStretch( i, 1 );
     }
 
 
     // Vertical slider
 
-    _slider = new QSlider( 1,			// minValue
-			   _maxButtons,		// maxValue
-			   1,			// pageStep
-			   1,			// value
-                           Qt::Vertical,
-			   this );
+    _slider = new QSlider(Qt::Vertical, this);
+    _slider->setMinimum(1);
+    _slider->setMaximum(_maxButtons);
+    _slider->setPageStep(1);
+    _slider->setValue(1);
+
     outerBox->addWidget( _slider, 0 );
     outerBox->activate();
 
@@ -303,9 +300,9 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
 
     // Create layout and widgets.
 
-    QHBoxLayout * layout = new QHBoxLayout( this,
-					    0,				// border
-					    dialog->spacingHint() );	// spacing
+    QHBoxLayout * layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(dialog->spacingHint());
     _listBox	= new KCleanupListBox( this );
     _props	= new KCleanupPropertiesPage( this, mainWin );
 
@@ -538,8 +535,9 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
    : QWidget( parent )
    , _mainWin( mainWin )
 {
-    QVBoxLayout *outerBox = new QVBoxLayout( this, 0, 0 );	// border, spacing
-
+    QVBoxLayout *outerBox = new QVBoxLayout(this);
+    outerBox->setMargin(0);
+    outerBox->setSpacing(0);
     // The topmost check box: "Enabled".
 
     _enabled = new QCheckBox( i18n( "&Enabled" ), this );
@@ -563,15 +561,14 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // Grid layout for the edit fields, their labels, some
     // explanatory text and the "recurse?" check box.
 
-    QGridLayout *grid = new QGridLayout( 7,	// rows
-					 2,	// cols
-					 4 );	// spacing
+    QGridLayout *grid = new QGridLayout();
+    grid->setSpacing(4);
     fieldsBox->addLayout( grid, 0 );
     fieldsBox->addStretch();
     fieldsBox->addSpacing( 5 );
 
-    grid->setColStretch( 0, 0 ); // column for field labels - dont' stretch
-    grid->setColStretch( 1, 1 ); // column for edit fields - stretch as you like
+    grid->setColumnStretch( 0, 0 ); // column for field labels - dont' stretch
+    grid->setColumnStretch( 1, 1 ); // column for edit fields - stretch as you like
 
 
     // Edit fields for cleanup action title and command line.
@@ -579,8 +576,14 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     QLabel *label;
     _title	= new QLineEdit( _fields );					grid->addWidget( _title,   0, 1 );
     _command	= new QLineEdit( _fields );					grid->addWidget( _command, 1, 1 );
-    label	= new QLabel( _title,	i18n( "&Title:"		), _fields );	grid->addWidget( label,	   0, 0 );
-    label	= new QLabel( _command, i18n( "&Command Line:"	), _fields );	grid->addWidget( label,	   1, 0 );
+
+    label = new QLabel(i18n("&Title:"), _fields);
+    label->setBuddy(_title);
+    grid->addWidget(label, 0, 0);
+
+    label = new QLabel(i18n("&Command Line:"), _fields);
+    label->setBuddy(_command);
+    grid->addWidget(label, 1, 0);
 
     label = new QLabel( i18n( "%p Full Path" ), _fields );
     grid->addWidget( label, 2, 1 );
@@ -623,16 +626,14 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     _worksForProtocols = new QComboBox( false, worksFor );
     worksForBox->addWidget( _worksForProtocols, 1 );
 
-    _worksForProtocols->insertItem( i18n( "On Local Machine Only ('file:/' Protocol)" ) );
-    _worksForProtocols->insertItem( i18n( "Network Transparent (ftp, smb, tar, ...)" ) );
+    _worksForProtocols->insertItem(0, i18n("On Local Machine Only ('file:/' Protocol)"));
+    _worksForProtocols->insertItem(1, i18n("Network Transparent (ftp, smb, tar, ...)"));
 
 
     // Grid layout for combo boxes at the bottom
 
-    grid = new QGridLayout( 1,		// rows
-			    2,		// cols
-			    4 );	// spacing
-
+    grid = new QGridLayout();
+    grid->setSpacing(4);
     fieldsBox->addLayout( grid, 0 );
     fieldsBox->addSpacing( 5 );
     fieldsBox->addStretch();
@@ -655,11 +656,10 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // than mere numeric IDs. One of these days I'm going to rewrite this
     // thing!
 
-    _refreshPolicy->insertItem( i18n( "No Refresh"			) );
-    _refreshPolicy->insertItem( i18n( "Refresh This Entry"		) );
-    _refreshPolicy->insertItem( i18n( "Refresh This Entry's Parent"	) );
-    _refreshPolicy->insertItem( i18n( "Assume Entry Has Been Deleted"	) );
-
+    _refreshPolicy->insertItem(0, i18n("No Refresh"));
+    _refreshPolicy->insertItem(1, i18n("Refresh This Entry"));
+    _refreshPolicy->insertItem(2, i18n("Refresh This Entry's Parent"));
+    _refreshPolicy->insertItem(3, i18n("Assume Entry Has Been Deleted"));
 
     outerBox->activate();
     setMinimumSize( sizeHint() );
