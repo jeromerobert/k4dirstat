@@ -13,24 +13,16 @@
 #   include <config.h>
 #endif
 
-#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qslider.h>
-#include <q3vbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
 #include <qspinbox.h>
-#include <q3listview.h>
 #include <qinputdialog.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
 #include <qmessagebox.h>
-#include <Q3VGroupBox>
-#include <Q3HGroupBox>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
