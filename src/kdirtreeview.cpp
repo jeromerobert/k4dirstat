@@ -19,6 +19,8 @@
 #include <qtimer.h>
 #include <qcolor.h>
 #include <QHeaderView>
+#include <QStyledItemDelegate>
+#include <QStyleFactory>
 #include <qmenu.h>
 
 #include <kapplication.h>
@@ -43,6 +45,33 @@
 
 using namespace KDirStat;
 
+class KDirItemDelegate: public QStyledItemDelegate {
+public:
+    KDirItemDelegate(KDirTreeView * view): view(view) {
+        QStyle * s = QApplication::style();
+        if(s->objectName() == "gtk+")
+            style = QStyleFactory::create("Cleanlooks");
+        else
+            style = s;
+    }
+
+    virtual void paint ( QPainter * painter,
+                         const QStyleOptionViewItem & option,
+                         const QModelIndex & index ) const {
+        KDirTreeViewItem * item = static_cast<KDirTreeViewItem*>(index.internalPointer());
+        QStyleOptionProgressBar o;
+        o.rect = option.rect;
+        o.minimum = 0;
+        o.maximum = 100;
+        o.progress = item->percent();
+        o.palette.setColor(QPalette::Highlight, view->fillColor(item->orig()->treeLevel()));
+        o.palette.setColor(QPalette::Base, view->palette().base().color());
+        style->drawControl(QStyle::CE_ProgressBar, &o, painter);
+    }
+private:
+    QStyle * style;
+    KDirTreeView * view;
+};
 
 KDirTreeView::KDirTreeView( QWidget * parent )
     : KDirTreeViewParentClass( parent )
@@ -89,8 +118,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _readJobsCol = _percentBarCol;
 #endif
     sortByColumn(_totalSizeCol);
-
-
+    setItemDelegateForColumn(_percentBarCol, new KDirItemDelegate(this));
 #define loadIcon(ICON)	KIconLoader::global()->loadIcon( (ICON), KIconLoader::Small )
 
     _openDirIcon	= loadIcon( "folder-open" 	);

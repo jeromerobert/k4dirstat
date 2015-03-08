@@ -690,6 +690,7 @@ namespace KDirStat
 	 **/
 	QString asciiDump();
 
+	float percent() const { return _percent; }
 
     protected:
 
