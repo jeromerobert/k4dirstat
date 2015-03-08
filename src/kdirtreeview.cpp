@@ -145,13 +145,13 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( KGlobalSettings::self(),	SIGNAL( kdisplayPaletteChanged()	),
 	     this,	SLOT  ( paletteChanged()		) );
 
-    connect( this,	SIGNAL( selectionChanged	( Q3ListViewItem * ) ),
-	     this,	SLOT  ( selectItem		( Q3ListViewItem * ) ) );
+    connect( this,	SIGNAL(itemSelectionChanged()),
+		 this,	SLOT(updateSelection()));
 
     connect( this,	SIGNAL( rightButtonPressed	( Q3ListViewItem *, const QPoint &, int ) ),
 	     this,	SLOT  ( popupContextMenu	( Q3ListViewItem *, const QPoint &, int ) ) );
 
-    connect( header(),	SIGNAL( sizeChange   ( int, int, int ) ),
+    connect( header(),	SIGNAL( sectionResized   ( int, int, int ) ),
 	     this,	SLOT  ( columnResized( int, int, int ) ) );
 
    _contextInfo	  = new QMenu();
@@ -607,6 +607,10 @@ KDirTreeView::openCount()
     return count;
 }
 
+void KDirTreeView::updateSelection() {
+    QList<QTreeWidgetItem*> l = selectedItems();
+    selectItem(l.empty() ? NULL : l.at(0));
+}
 
 void
 KDirTreeView::selectItem( QTreeWidgetItem *listViewItem )

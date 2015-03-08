@@ -391,15 +391,6 @@ namespace KDirStat
 	 **/
 	void	sendProgressInfo( const QString & currentDir = "" );
 
-
-#if QT_VERSION < 300
-	/**
-	 * "moc" doesnt't seem to handle default arguments well, so this is an
-	 * overloaded slot that uses the internally stored current directory.
-	 **/
-	void	sendProgressInfo();
-#endif
-
         /**
 	 * Set up everything prior to reading: Cyclic update timer, display
 	 * busy state, default sorting, stopwatch.
@@ -446,6 +437,8 @@ namespace KDirStat
 	 **/
         void columnResized( int column, int oldSize, int newSize );
 
+
+    void updateSelection();
 
     signals:
 
