@@ -113,7 +113,7 @@ k4dirstat::k4dirstat()
     connect( _treeView, SIGNAL( progressInfo( const QString & ) ),
              this,      SLOT  ( statusMsg   ( const QString & ) ) );
 
-    connect( _treeView, SIGNAL( selectionChanged( KFileInfo * ) ),
+    connect( _treeView, SIGNAL( treeSelectionChanged( KFileInfo * ) ),
              this,      SLOT  ( selectionChanged( KFileInfo * ) ) );
 
     connect( _treeView, SIGNAL( contextMenu( KDirTreeViewItem *, const QPoint & ) ),
@@ -291,7 +291,7 @@ void k4dirstat::initCleanups()
     _cleanupCollection->addUserCleanups( USER_CLEANUPS );
     _cleanupCollection->slotReadConfig();
 
-    connect( _treeView,          SIGNAL( selectionChanged( KFileInfo * ) ),
+    connect( _treeView,          SIGNAL( treeSelectionChanged( KFileInfo * ) ),
              _cleanupCollection, SIGNAL( selectionChanged( KFileInfo * ) ) );
 
     connect( this,               SIGNAL( readConfig( void ) ),

@@ -468,13 +468,13 @@ namespace KDirStat
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KDirTreeViewItem *item );
+	void treeSelectionChanged( KDirTreeViewItem *item );
 
 	/**
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KFileInfo *item );
+	void treeSelectionChanged( KFileInfo *item );
 
 	/**
 	 * Emitted when a context menu for this item should be opened.

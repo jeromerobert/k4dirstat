@@ -297,7 +297,7 @@ KDirTreeView::createTree()
     connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
 	     this,  SLOT  ( finalizeLocal( KDirInfo * ) ) );
 
-    connect( this,  SIGNAL( selectionChanged( KFileInfo * ) ),
+    connect( this,  SIGNAL( treeSelectionChanged( KFileInfo * ) ),
 	     _tree, SLOT  ( selectItem      ( KFileInfo * ) ) );
 
     connect( _tree, SIGNAL( selectionChanged( KFileInfo * ) ),
@@ -629,8 +629,8 @@ KDirTreeView::selectItem( QTreeWidgetItem *listViewItem )
     }
 
 
-    emit selectionChanged( _selection );
-    emit selectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
+    emit treeSelectionChanged( _selection );
+    emit treeSelectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
 }
 
 
@@ -655,7 +655,7 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
 	    closeAllExcept( _selection );
 	    _selection->setOpen( false );
 	    scrollToItem( _selection );
-	    emit selectionChanged( _selection );
+	    emit treeSelectionChanged( _selection );
 	    setCurrentItem(_selection);
 	}
 	else
@@ -671,8 +671,8 @@ KDirTreeView::clearSelection()
     _selection = 0;
     QTreeWidget::clearSelection();
 
-    emit selectionChanged( (KDirTreeViewItem *) 0 );
-    emit selectionChanged( (KFileInfo *) 0 );
+    emit treeSelectionChanged( (KDirTreeViewItem *) 0 );
+    emit treeSelectionChanged( (KFileInfo *) 0 );
 }
 
 
