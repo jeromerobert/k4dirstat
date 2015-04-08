@@ -21,6 +21,7 @@
 #include <QHeaderView>
 #include <QStyledItemDelegate>
 #include <QStyleFactory>
+#include <QMouseEvent>
 #include <qmenu.h>
 
 #include <kapplication.h>
@@ -1050,6 +1051,19 @@ KDirTreeView::sendMailToOwner()
 
 KDirTreeViewItem *KDirTreeView::topLevelItem(int index) const {
     return dynamic_cast<KDirTreeViewItem *>(this->QTreeWidget::topLevelItem(index));
+}
+
+void KDirTreeView::mousePressEvent(QMouseEvent *event) {
+    if (style()->styleHint(QStyle::SH_Q3ListViewExpand_SelectMouseType, 0, this) == QEvent::MouseButtonPress) {
+        KDirTreeViewItem * item = static_cast<KDirTreeViewItem*>(itemAt(event->pos()));
+        if(item != NULL) {
+            if ( !item->isExpanded() && doLazyClone() )
+                item->deferredClone();
+            QTreeWidget::mousePressEvent(event);
+        }
+    }
+    else
+        QTreeWidget::mousePressEvent(event);
 }
 
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,

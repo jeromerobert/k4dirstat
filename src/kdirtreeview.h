@@ -242,6 +242,7 @@ namespace KDirStat
         void setColumnAlignment(QTreeWidgetItem & item);
         void triggerUpdate();
 
+        void mousePressEvent(QMouseEvent *event);
     public slots:
 
 	/**
