@@ -150,8 +150,8 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect( this,	SIGNAL(itemSelectionChanged()),
 		 this,	SLOT(updateSelection()));
 
-    connect( this,	SIGNAL( rightButtonPressed	( Q3ListViewItem *, const QPoint &, int ) ),
-	     this,	SLOT  ( popupContextMenu	( Q3ListViewItem *, const QPoint &, int ) ) );
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popupContextMenu(const QPoint &)));
 
     connect( header(),	SIGNAL( sectionResized   ( int, int, int ) ),
 	     this,	SLOT  ( columnResized( int, int, int ) ) );
@@ -805,15 +805,15 @@ KDirTreeView::paletteChanged()
 
 
 void
-KDirTreeView::popupContextMenu( QTreeWidgetItem *	listViewItem,
-				const QPoint &	pos,
-				int 		column )
+KDirTreeView::popupContextMenu(const QPoint & localPos)
 {
-    KDirTreeViewItem *item = (KDirTreeViewItem *) listViewItem;
+    KDirTreeViewItem *item = (KDirTreeViewItem *) itemAt(localPos);
 
     if ( ! item )
 	return;
 
+    int column = columnAt(localPos.x());
+    QPoint pos = viewport()->mapToGlobal(localPos);
     KFileInfo * orig = item->orig();
 
     if ( ! orig )

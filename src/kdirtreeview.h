@@ -415,9 +415,7 @@ namespace KDirStat
 	 * Pop up context menu (i.e. emit the contextMenu() signal) or open a
 	 * small info popup with exact information, depending on 'column'.
 	 **/
-	void 	popupContextMenu	( QTreeWidgetItem *	listViewItem,
-					  const QPoint &	pos,
-					  int 			column );
+	void 	popupContextMenu	(const QPoint &	pos);
 
 	/**
 	 * Pop up info window with exact byte size.
