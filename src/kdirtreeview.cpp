@@ -46,6 +46,7 @@
 
 using namespace KDirStat;
 
+/** @brief Rendering of the percentage bar */
 class KDirItemDelegate: public QStyledItemDelegate {
 public:
     KDirItemDelegate(KDirTreeView * view): view(view) {
@@ -1053,6 +1054,13 @@ KDirTreeViewItem *KDirTreeView::topLevelItem(int index) const {
     return dynamic_cast<KDirTreeViewItem *>(this->QTreeWidget::topLevelItem(index));
 }
 
+/**
+ * Overriden from QTreeView to call deferredClone before expanding.
+ * This is not possible using existing signals because they only allow
+ * to be notified after expanding. This would have been possible
+ * using canFetch/fetchMore from QAbstractItemModel but would have needed
+ * to rewrite a model from scratch.
+ */
 void KDirTreeView::mousePressEvent(QMouseEvent *event) {
     if (style()->styleHint(QStyle::SH_Q3ListViewExpand_SelectMouseType, 0, this) == QEvent::MouseButtonPress) {
         KDirTreeViewItem * item = static_cast<KDirTreeViewItem*>(itemAt(event->pos()));
