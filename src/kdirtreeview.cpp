@@ -153,9 +153,6 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popupContextMenu(const QPoint &)));
 
-    connect( header(),	SIGNAL( sectionResized   ( int, int, int ) ),
-	     this,	SLOT  ( columnResized( int, int, int ) ) );
-
    _contextInfo	  = new QMenu();
    infoAction = new QAction(_contextInfo);
    _contextInfo->addAction(infoAction);
@@ -998,17 +995,6 @@ void
 KDirTreeView::logActivity( int points )
 {
     emit userActivity( points );
-}
-
-
-void
-KDirTreeView::columnResized( int column, int oldSize, int newSize )
-{
-    NOT_USED( oldSize );
-    NOT_USED( newSize );
-
-    if ( column == _percentBarCol )
-	triggerUpdate();
 }
 
 void

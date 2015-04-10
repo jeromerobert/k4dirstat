@@ -429,14 +429,6 @@ namespace KDirStat
 	void 	popupContextInfo	( const QPoint &	pos,
 					  const QString & 	info );
 
-
-	/**
-	 * Notification that a column has just been resized, thus may need
-	 * repaining.
-	 **/
-        void columnResized( int column, int oldSize, int newSize );
-
-
     void updateSelection();
 
     signals:
