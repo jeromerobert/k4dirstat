@@ -12,6 +12,7 @@
   * Check alignment of percent column during reading and after
   * Add margin to columns
   * Show the number of reads
+  * Refresh the icon when expanding
 
 - Reintroduce Pacman animation
 
