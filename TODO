@@ -11,7 +11,7 @@
 
   * Check alignment of percent column during reading and after
   * Add margin to columns
-  * Refresh tree view during disk read
+  * Show the number of reads
 
 - Reintroduce Pacman animation
 

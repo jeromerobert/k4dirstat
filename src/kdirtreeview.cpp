@@ -325,6 +325,7 @@ KDirTreeView::prepareReading()
 
 	connect( _updateTimer, SIGNAL( timeout() ),
 		 this,   	SLOT  ( sendProgressInfo() ) );
+	_updateTimer->start();
     }
 
 
