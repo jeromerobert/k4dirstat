@@ -51,7 +51,8 @@ class KDirItemDelegate: public QStyledItemDelegate {
 public:
     KDirItemDelegate(KDirTreeView * view): view(view) {
         QStyle * s = QApplication::style();
-        if(s->objectName() == "gtk+")
+        QString sn = s->objectName();
+        if(sn == "gtk+" || sn == "windows")
             style = QStyleFactory::create("Cleanlooks");
         else
             style = s;
