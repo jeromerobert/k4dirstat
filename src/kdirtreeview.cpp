@@ -50,12 +50,9 @@ using namespace KDirStat;
 class KDirItemDelegate: public QStyledItemDelegate {
 public:
     KDirItemDelegate(KDirTreeView * view): view(view) {
-        QStyle * s = QApplication::style();
-        QString sn = s->objectName();
-        if(sn == "gtk+" || sn == "windows")
-            style = QStyleFactory::create("Cleanlooks");
-        else
-            style = s;
+        // always use the Plastique style because it has the best
+        // progress bar precision
+        style = QStyleFactory::create("Plastique");
     }
 
     virtual void paint ( QPainter * painter,
