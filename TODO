@@ -10,7 +10,7 @@
 - Migrate to Qt4 MVC classes, removing all use of Q3Support
 
   * Check alignment of percent column during reading and after
-  * Fix columns width
+  * Add margin to columns
   * Refresh tree view during disk read
 
 - Reintroduce Pacman animation

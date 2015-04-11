@@ -431,6 +431,8 @@ namespace KDirStat
 
     void updateSelection();
 
+    void resizeIndexToContents(const QModelIndex & index);
+
     signals:
 
 	/**

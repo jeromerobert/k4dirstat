@@ -153,7 +153,10 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popupContextMenu(const QPoint &)));
 
-   _contextInfo	  = new QMenu();
+    connect(this, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeIndexToContents(const QModelIndex &)));
+    connect(this, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeIndexToContents(const QModelIndex &)));
+
+    _contextInfo	  = new QMenu();
    infoAction = new QAction(_contextInfo);
    _contextInfo->addAction(infoAction);
    createTree();
@@ -488,6 +491,9 @@ KDirTreeView::updateSummary()
 {
     for(int i = 0; i < topLevelItemCount(); i++)
         topLevelItem(i)->updateSummary();
+    for(int column = 0; column < this->model()->columnCount(); column++) {
+        resizeColumnToContents(column);
+    }
 }
 
 
@@ -1058,6 +1064,10 @@ void KDirTreeView::mousePressEvent(QMouseEvent *event) {
     }
     else
         QTreeWidget::mousePressEvent(event);
+}
+
+void KDirTreeView::resizeIndexToContents(const QModelIndex & index) {
+	resizeColumnToContents(index.column());
 }
 
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
