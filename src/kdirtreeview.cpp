@@ -59,6 +59,15 @@ public:
                          const QStyleOptionViewItem & option,
                          const QModelIndex & index ) const {
         KDirTreeViewItem * item = static_cast<KDirTreeViewItem*>(index.internalPointer());
+        if(view->readJobsCol() == view->percentBarCol())
+        {
+            QString t = item->text(view->readJobsCol());
+            if(!t.isEmpty())
+            {
+                QApplication::style()->drawItemText(painter, option.rect, Qt::AlignRight, view->palette(), true, t);
+                return;
+            }
+        }
         QStyleOptionProgressBar o;
         o.rect = option.rect;
         o.minimum = 0;
