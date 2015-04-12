@@ -35,7 +35,7 @@
 #include "ktreemapview.h"
 #include "kdirstatsettings.h"
 #include "kexcluderules.h"
-
+#include <QGroupBox>
 
 using namespace KDirStat;
 
@@ -600,7 +600,7 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
 
     // The "Works for..." check boxes, grouped together in a button group.
 
-    Q3ButtonGroup *worksFor = new Q3ButtonGroup( i18n( "Works for..." ), _fields );
+    QGroupBox *worksFor = new QGroupBox( i18n( "Works for..." ), _fields );
     QVBoxLayout *worksForBox = new QVBoxLayout( worksFor, 15, 2 );
     fieldsBox->addWidget( worksFor, 0 );
     fieldsBox->addSpacing( 5 );
@@ -719,34 +719,29 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(5);
     layout->setSpacing(dialog->spacingHint());
-    Q3VGroupBox * gbox		= new Q3VGroupBox( i18n( "Directory Reading" ), this );
+    QGroupBox * gbox		= new QGroupBox( i18n( "Directory Reading" ), this );
     layout->addWidget( gbox );
+    QVBoxLayout * gboxLayout = new QVBoxLayout(gbox);
+    gbox->setLayout(gboxLayout);
 
-
-
-    _crossFileSystems		= new QCheckBox( i18n( "Cross &File System Boundaries" ), gbox );
-    _enableLocalDirReader	= new QCheckBox( i18n( "Use Optimized &Local Directory Read Methods" ), gbox );
+    _crossFileSystems		= new QCheckBox( i18n( "Cross &File System Boundaries" ));
+    _enableLocalDirReader	= new QCheckBox( i18n( "Use Optimized &Local Directory Read Methods" ));
+    gboxLayout->addWidget(_crossFileSystems);
+    gboxLayout->addWidget(_enableLocalDirReader);
 
     connect( _enableLocalDirReader,	SIGNAL( stateChanged( int ) ),
 	     this,			SLOT  ( checkEnabledState() ) );
 
     layout->addSpacing( 10 );
-
-    gbox			= new Q3VGroupBox( i18n( "Animation" ), this );
-    //PacMan is broken and useless so we hide the associated widgets
-    gbox->setVisible(false);
-    layout->addWidget( gbox );
-
-    _enableToolBarAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Tool &Bar" ), gbox );
-    _enableTreeViewAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Directory &Tree" ), gbox );
-    layout->addSpacing( 10 );
     
-    Q3VGroupBox * excludeBox	= new Q3VGroupBox( i18n( "&Exclude Rules" ), this );
+    QGroupBox * excludeBox	= new QGroupBox( i18n( "&Exclude Rules" ), this );
     layout->addWidget( excludeBox );
-    
-    _excludeRulesListView	= new Q3ListView( excludeBox );
+    QVBoxLayout * excludeBoxLayout = new QVBoxLayout(excludeBox);
+    excludeBox->setLayout(excludeBoxLayout);
+    _excludeRulesListView	= new Q3ListView();
     _excludeRulesListView->addColumn( i18n( "Exclude Rule (Regular Expression)" ), 300 );
     _excludeRuleContextMenu	= 0;
+    excludeBoxLayout->addWidget(_excludeRulesListView);
 
     QGroupBox * buttonBox	= new Q3HGroupBox( excludeBox );
     _addExcludeRuleButton	= new QPushButton( i18n( "&Add"    ), buttonBox );
