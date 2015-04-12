@@ -166,6 +166,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 
     connect(this, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeIndexToContents(const QModelIndex &)));
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(itemExpandedSlot(QTreeWidgetItem*)));
+    connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem*)), this, SLOT(itemExpandedSlot(QTreeWidgetItem*)));
     connect(this, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeIndexToContents(const QModelIndex &)));
 
     _contextInfo	  = new QMenu();
@@ -1087,8 +1088,11 @@ void KDirTreeView::resizeIndexToContents(const QModelIndex & index) {
 
 void KDirTreeView::itemExpandedSlot(QTreeWidgetItem * item) {
     KDirTreeViewItem * kItem = dynamic_cast<KDirTreeViewItem*>(item);
-    if (kItem && kItem->isExpanded()) {
-	kItem->updateSummary();
+    if(kItem) {
+        if (kItem->isExpanded())
+            kItem->updateSummary();
+        else
+            kItem->setIcon();
     }
 }
 

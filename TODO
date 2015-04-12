@@ -7,13 +7,6 @@
 
 - Fix cleanup actions so they actually work
 
-- Migrate to Qt4 MVC classes, removing all use of Q3Support
-
-  * Add margin to columns
-  * Fix icon on collapse
-
-- Reintroduce Pacman animation
-
 			    TODO list for KDirStat
 			   ========================
 							Updated: 2005-12-27

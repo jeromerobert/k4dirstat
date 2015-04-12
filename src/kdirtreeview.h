@@ -680,13 +680,13 @@ namespace KDirStat
 
 	float percent() const { return _percent; }
 
-    protected:
-
 	/**
 	 * Set the appropriate icon depending on this item's type and open /
 	 * closed state.
 	 **/
 	void	setIcon();
+
+    protected:
 
 	/**
 	 * Remove dot entry if it doesn't have any children.
