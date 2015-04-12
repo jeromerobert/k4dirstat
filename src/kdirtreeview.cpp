@@ -68,7 +68,7 @@ public:
                 return;
             }
         }
-        if(item->orig()->treeLevel() > 0) {
+        else if(item->orig()->treeLevel() > 0) {
             QStyleOptionProgressBar o;
             o.rect = option.rect;
             o.minimum = 0;
@@ -128,7 +128,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 #if ! SEPARATE_READ_JOBS_COL
     _readJobsCol = _percentBarCol;
 #endif
-    sortByColumn(_totalSizeCol);
+    sortByColumn(_totalSizeCol, Qt::AscendingOrder);
     setItemDelegateForColumn(_percentBarCol, new KDirItemDelegate(this));
 #define loadIcon(ICON)	KIconLoader::global()->loadIcon( (ICON), KIconLoader::Small )
 
@@ -501,11 +501,14 @@ KDirTreeView::deleteChild( KFileInfo *child )
 void
 KDirTreeView::updateSummary()
 {
+    bool se = isSortingEnabled();
+    setSortingEnabled(false);
     for(int i = 0; i < topLevelItemCount(); i++)
         topLevelItem(i)->updateSummary();
     for(int column = 0; column < this->model()->columnCount(); column++) {
         resizeColumnToContents(column);
     }
+    setSortingEnabled(se);
 }
 
 
@@ -1345,8 +1348,12 @@ KDirTreeViewItem::updateSummary()
 
 
     // Update all children
+    // copy children because sorting may change the loop order
+    QVector<KDirTreeViewItem*> tmp(childCount());
     for(int i = 0; i < childCount(); i++)
-        child(i)->updateSummary();
+        tmp[i] = child(i);
+    for(int i = 0; i < tmp.size(); i++)
+        tmp[i]->updateSummary();
 }
 
 
