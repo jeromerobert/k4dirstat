@@ -10,7 +10,7 @@
 - Migrate to Qt4 MVC classes, removing all use of Q3Support
 
   * Add margin to columns
-  * Refresh the icon when expanding
+  * Fix percentage update on some lines at the end of reading
 
 - Reintroduce Pacman animation
 

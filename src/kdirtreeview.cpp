@@ -163,6 +163,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popupContextMenu(const QPoint &)));
 
     connect(this, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeIndexToContents(const QModelIndex &)));
+    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(itemExpandedSlot(QTreeWidgetItem*)));
     connect(this, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeIndexToContents(const QModelIndex &)));
 
     _contextInfo	  = new QMenu();
@@ -179,7 +180,6 @@ void KDirTreeView::setColumnAlignment(QTreeWidgetItem & item) {
     item.setTextAlignment(_totalFilesCol,	Qt::AlignRight);
     item.setTextAlignment(_totalSubDirsCol,	Qt::AlignRight);
     item.setTextAlignment(_readJobsCol,	Qt::AlignRight);
-    item.setTextAlignment(_percentBarCol, Qt::AlignLeft );
 }
 
 KDirTreeView::~KDirTreeView()
@@ -1080,6 +1080,13 @@ void KDirTreeView::resizeIndexToContents(const QModelIndex & index) {
 	resizeColumnToContents(index.column());
 }
 
+void KDirTreeView::itemExpandedSlot(QTreeWidgetItem * item) {
+    KDirTreeViewItem * kItem = dynamic_cast<KDirTreeViewItem*>(item);
+    if (kItem && kItem->isExpanded()) {
+	kItem->updateSummary();
+    }
+}
+
 KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 				    KFileInfo *		orig )
     : QTreeWidgetItem( view )
@@ -1519,26 +1526,12 @@ KDirTreeViewItem::findDotEntry() const
 void
 KDirTreeViewItem::setOpen( bool open )
 {
-    if ( open && _view->doLazyClone() )
-    {
-	// kdDebug() << "Opening " << this << endl;
-	deferredClone();
-    }
-
     if ( isExpanded() != open )
     {
 	openNotify( open );
     }
 
     setExpanded( open );
-    setIcon();
-
-    if ( open )
-	updateSummary();
-
-    // kdDebug() << _openCount << " open in " << this << endl;
-
-    // _view->logActivity( 1 );
 }
 
 

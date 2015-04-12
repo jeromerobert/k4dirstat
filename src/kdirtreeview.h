@@ -433,6 +433,8 @@ namespace KDirStat
 
     void resizeIndexToContents(const QModelIndex & index);
 
+    void itemExpandedSlot(QTreeWidgetItem*);
+
     signals:
 
 	/**
