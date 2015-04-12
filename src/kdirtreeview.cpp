@@ -145,6 +145,8 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     _readyIcon		= QPixmap();
 
 #undef loadIcon
+    setSortingEnabled(true);
+    setUniformRowHeights(true);
 
     setDefaultFillColors();
     readConfig();
@@ -1621,11 +1623,13 @@ bool KDirTreeViewItem::operator<(const QTreeWidgetItem &otherListViewItem) const
     const KDirTreeViewItem * other = dynamic_cast<const KDirTreeViewItem *> (&otherListViewItem);
     if(other)
     {
-        int r = compare(other, column);
-        if(r >= -1)
-            return r;
+        if(_view->nameCol() == column)
+            return this->orig()->name() < other->orig()->name();
+        else
+            return compare(other, column) == -1;
     }
-    return QTreeWidgetItem::operator<(otherListViewItem);
+    else
+        return QTreeWidgetItem::operator<(otherListViewItem);
 }
 
 /**
