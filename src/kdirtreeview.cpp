@@ -68,14 +68,16 @@ public:
                 return;
             }
         }
-        QStyleOptionProgressBar o;
-        o.rect = option.rect;
-        o.minimum = 0;
-        o.maximum = 100;
-        o.progress = item->percent();
-        o.palette.setColor(QPalette::Highlight, view->fillColor(item->orig()->treeLevel()));
-        o.palette.setColor(QPalette::Base, view->palette().base().color());
-        style->drawControl(QStyle::CE_ProgressBar, &o, painter);
+        if(item->orig()->treeLevel() > 0) {
+            QStyleOptionProgressBar o;
+            o.rect = option.rect;
+            o.minimum = 0;
+            o.maximum = 100;
+            o.progress = item->percent();
+            o.palette.setColor(QPalette::Highlight, view->fillColor(item->orig()->treeLevel() - 1));
+            o.palette.setColor(QPalette::Base, view->palette().base().color());
+            style->drawControl(QStyle::CE_ProgressBar, &o, painter);
+        }
     }
 private:
     QStyle * style;

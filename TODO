@@ -11,6 +11,7 @@
 
   * Add margin to columns
   * Fix percentage update on some lines at the end of reading
+  * Fix icon on collapse
 
 - Reintroduce Pacman animation
 
