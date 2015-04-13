@@ -934,62 +934,52 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     // kdDebug() << k_funcinfo << endl;
 
     QVBoxLayout * layout = new QVBoxLayout( this, 0, 0 ); // parent, border, spacing
-
-    Q3VBox * vbox	= new Q3VBox( this );
-    vbox->setSpacing( dialog->spacingHint() );
-    layout->addWidget( vbox );
-
-    _squarify		= new QCheckBox( i18n( "S&quarify Treemap"	), vbox );
-    _doCushionShading	= new QCheckBox( i18n( "Use C&ushion Shading"	), vbox );
-
+    _squarify = new QCheckBox(i18n("S&quarify Treemap"));
+    _doCushionShading = new QCheckBox(i18n("Use C&ushion Shading"));
+    layout->addWidget(_squarify);
+    layout->addWidget(_doCushionShading);
 
     // Cushion parameters
 
-    Q3VGroupBox * gbox	= new Q3VGroupBox( i18n( "Cushion Parameters" ), vbox );
+    QGroupBox * gbox	= new QGroupBox( i18n( "Cushion Parameters" ), this );
     _cushionParams	= gbox;
-    gbox->addSpace( 7 );
-    gbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-
     QLabel * label	= new QLabel( i18n( "Ambient &Light" ), gbox );
-    Q3HBox * hbox	= new Q3HBox( gbox );
     _ambientLight	= new QSlider ( MinAmbientLight, MaxAmbientLight, 10,	// min, max, pageStep
-                                        DefaultAmbientLight, Qt::Horizontal, hbox );
+                                        DefaultAmbientLight, Qt::Horizontal, gbox );
     _ambientLightSB	= new QSpinBox( MinAmbientLight, MaxAmbientLight, 1,	// min, max, step
-					hbox );
-    _ambientLightSB->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+                    gbox );
     label->setBuddy( _ambientLightSB );
 
-    gbox->addSpace( 7 );
-    label		= new QLabel( i18n( "&Height Scale" ), gbox );
-    hbox		= new Q3HBox( gbox );
+    QGridLayout * cushionLayout = new QGridLayout();
+    cushionLayout->addWidget(label, 0, 0, 1, 1);
+    cushionLayout->addWidget(_ambientLight, 0, 1, 1, 2);
+    cushionLayout->addWidget(_ambientLightSB, 0, 3, 1, 1);
+
+    label = new QLabel( i18n( "&Height Scale" ), gbox );
     _heightScalePercent = new QSlider( MinHeightScalePercent, MaxHeightScalePercent, 10,   // min, max, pageStep
-                                       DefaultHeightScalePercent, Qt::Horizontal, hbox );
+                                       DefaultHeightScalePercent, Qt::Horizontal, gbox );
     _heightScalePercentSB = new QSpinBox( MinHeightScalePercent, MaxHeightScalePercent, 1, // min, max, step
-					  hbox );
-    _heightScalePercentSB->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+                      gbox );
     label->setBuddy( _heightScalePercentSB );
 
-    gbox->addSpace( 10 );
+    cushionLayout->addWidget(label, 1, 0, 1, 1);
+    cushionLayout->addWidget(_heightScalePercent, 1, 1, 1, 2);
+    cushionLayout->addWidget(_heightScalePercentSB, 1, 3, 1, 1);
+
     _ensureContrast	= new QCheckBox( i18n( "Draw Lines if Lo&w Contrast"	), gbox );
-
-
-    hbox		= new Q3HBox( gbox );
-    _forceCushionGrid	= new QCheckBox( i18n( "Always Draw &Grid"		), hbox );
-    addHStretch( hbox );
-
-    _cushionGridColorL	= new QLabel( "	   " + i18n( "Gr&id Color: " ), hbox );
-    _cushionGridColor	= new KColorButton( hbox );
+    cushionLayout->addWidget(_ensureContrast, 3, 0, 1, 2);
+    _forceCushionGrid	= new QCheckBox( i18n( "Always Draw &Grid"		), gbox );
+    cushionLayout->addWidget(_forceCushionGrid, 4, 0, 1, 2);
+    _cushionGridColorL	= new QLabel(i18n( "Gr&id Color: " ), gbox );
+    _cushionGridColor	= new KColorButton( gbox );
     _cushionGridColorL->setBuddy( _cushionGridColor );
-    _cushionGridColorL->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-
-    // addVStretch( vbox );
-
+    cushionLayout->addWidget(_cushionGridColorL, 4, 2, 1, 1, Qt::AlignRight);
+    cushionLayout->addWidget(_cushionGridColor, 4, 3, 1, 1);
 
     // Plain treemaps parameters
 
-    _plainTileParams	= new Q3HGroupBox( i18n( "Colors for Plain Treemaps" ), vbox );
+    _plainTileParams	= new QGroupBox( i18n( "Colors for Plain Treemaps" ), this );
 
-    _plainTileParams->addSpace( 7 );
     label		= new QLabel( i18n( "&Files: " ), _plainTileParams );
     _fileFillColor	= new KColorButton( _plainTileParams );
     label->setBuddy( _fileFillColor );
@@ -1008,7 +998,7 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 
     // Misc
 
-    QWidget * gridBox	= new QWidget( vbox );
+    QWidget * gridBox	= new QWidget( this );
     QGridLayout * grid = new QGridLayout(gridBox);
     grid->setSpacing(dialog->spacingHint());
     grid->setColumnStretch( 0, 0 ); // (col, stretch) don't stretch this column
@@ -1033,7 +1023,7 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     grid->addWidget( label,		1, 0 );
     grid->addWidget( _minTileSize,	1, 1 );
 
-    _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), vbox );
+    _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), this );
 
 
 
