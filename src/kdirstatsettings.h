@@ -17,30 +17,21 @@
 #   include <config.h>
 #endif
 
-#include <q3listbox.h>
 #include <kpagedialog.h>
 #include "kcleanup.h"
 #include "kcleanupcollection.h"
 #include "k4dirstat.h"
-
+#include <QListWidget>
 
 class QCheckBox;
 class QComboBox;
-class Q3HGroupBox;
 class QLabel;
 class QLineEdit;
 class QRadioButton;
 class QSlider;
 class QSpinBox;
-class Q3VGroupBox;
-class QWidget;
-class QListView;
-class Q3PopupMenu;
-class Q3ListViewItem;
-class Q3ListView;
-
 class KColorButton;
-
+class QGroupBox;
 
 #define KDirStatSettingsMaxColorButton	12
 
@@ -405,7 +396,7 @@ namespace KDirStat
      *
      * @short cleanup list box
      **/
-    class KCleanupListBox: public Q3ListBox
+    class KCleanupListBox: public QListWidget
     {
 	Q_OBJECT
 
@@ -419,14 +410,7 @@ namespace KDirStat
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KCleanupListBox() {};
-
-	/**
-	 * Reimplemented so we can make sure all items are visible at all times
-	 * without scrolling. In fact, we never want to see a scroll bar with
-	 * this kind of list box.
-	 **/
-	virtual QSize sizeHint() const;
+	virtual ~KCleanupListBox() {}
 
 	/**
 	 * Insert an entry for a cleanup action into the list box. Uses the
@@ -459,7 +443,7 @@ namespace KDirStat
 	/**
 	 * Select an item.
 	 **/
-        void selectCleanup( Q3ListBoxItem * item );
+	void selectCleanup( QListWidgetItem * item );
 
 
     protected:
@@ -473,7 +457,7 @@ namespace KDirStat
     /**
      * List box item for a KCleanupListBox.
      **/
-    class KCleanupListBoxItem: public Q3ListBoxText
+    class KCleanupListBoxItem: public QListWidgetItem
     {
     public:
 
@@ -636,7 +620,7 @@ namespace KDirStat
 	/**
 	 * Show a context menu for the currently selected exclude rule.
 	 **/
-        void showExcludeRuleContextMenu( Q3ListViewItem *, const QPoint &, int );
+	void showExcludeRuleContextMenu( QListWidgetItem *, const QPoint &, int );
 
     protected:
 
@@ -651,11 +635,11 @@ namespace KDirStat
 	QCheckBox *	_enableToolBarAnimation;
 	QCheckBox *	_enableTreeViewAnimation;
 
-        Q3ListView *	_excludeRulesListView;
+	QListWidget *	_excludeRulesListView;
 	QPushButton * 	_addExcludeRuleButton;
 	QPushButton *	_editExcludeRuleButton;
 	QPushButton *	_deleteExcludeRuleButton;
-        Q3PopupMenu *	_excludeRuleContextMenu;
+	QMenu *	_excludeRuleContextMenu;
 
     }; // class KGeneralSettingsPage
 
@@ -737,7 +721,7 @@ namespace KDirStat
 	
 	QCheckBox *		_squarify;
 	QCheckBox *		_doCushionShading;
-        Q3VGroupBox *		_cushionParams;
+	QGroupBox *		_cushionParams;
 	QSlider *		    _ambientLight;
 	QSpinBox *		    _ambientLightSB;
 	QSlider *		    _heightScalePercent;
@@ -746,7 +730,7 @@ namespace KDirStat
 	QCheckBox *		    _forceCushionGrid;
 	KColorButton *		    _cushionGridColor;
 	QLabel *		    _cushionGridColorL;
-        Q3HGroupBox *		_plainTileParams;
+	QGroupBox *		_plainTileParams;
 	KColorButton *		    _fileFillColor;
 	KColorButton *		    _dirFillColor;
 	KColorButton *		    _outlineColor;

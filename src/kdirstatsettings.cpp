@@ -36,6 +36,7 @@
 #include "kdirstatsettings.h"
 #include "kexcluderules.h"
 #include <QGroupBox>
+#include <QMenu>
 
 using namespace KDirStat;
 
@@ -376,7 +377,7 @@ KCleanupPage::setup()
     // (Re-) Initialize list box.
 
     // _listBox->resize( _listBox->sizeHint() );
-    _listBox->setSelected( 0, true );
+    _listBox->setCurrentItem(NULL);
 }
 
 
@@ -431,7 +432,7 @@ KCleanupPage::storeProps( KCleanup * cleanup )
 
 
 KCleanupListBox::KCleanupListBox( QWidget *parent )
-   : Q3ListBox( parent )
+   : QListWidget( parent )
 {
     _selection = 0;
 
@@ -439,29 +440,6 @@ KCleanupListBox::KCleanupListBox( QWidget *parent )
              SIGNAL( selectionChanged( Q3ListBoxItem *) ),
              SLOT  ( selectCleanup   ( Q3ListBoxItem *) ) );
 }
-
-
-QSize
-KCleanupListBox::sizeHint() const
-{
-    // FIXME: Is this still needed with Qt 2.x?
-
-    if ( count() < 1 )
-    {
-	// As long as the list is empty, sizeHint() would default to
-	// (0,0) which is ALWAYS just a pain in the ass. We'd rather
-	// have an absolutely random value than this.
-	return QSize( 100, 100 );
-    }
-    else
-    {
-	// Calculate the list contents and take 3D frames (2*2 pixels)
-	// into account.
-	return QSize ( maxItemWidth() + 5,
-		       count() * itemHeight( 0 ) + 4 );
-    }
-}
-
 
 void
 KCleanupListBox::insert( KCleanup * cleanup )
@@ -475,7 +453,7 @@ KCleanupListBox::insert( KCleanup * cleanup )
 
 
 void
-KCleanupListBox::selectCleanup( Q3ListBoxItem * listBoxItem )
+KCleanupListBox::selectCleanup( QListWidgetItem * listBoxItem )
 {
     KCleanupListBoxItem * item = (KCleanupListBoxItem *) listBoxItem;
 
@@ -487,14 +465,10 @@ KCleanupListBox::selectCleanup( Q3ListBoxItem * listBoxItem )
 void
 KCleanupListBox::updateTitle( KCleanup * cleanup )
 {
-    KCleanupListBoxItem * item = (KCleanupListBoxItem *) firstItem();
-
-    while ( item )
-    {
-	if ( ! cleanup || item->cleanup() == cleanup )
-	    item->updateTitle();
-
-	item = (KCleanupListBoxItem *) item->next();
+    for(int i = 0; i < count(); i ++) {
+        KCleanupListBoxItem * item = static_cast<KCleanupListBoxItem *>(this->item(i));
+        if ( ! cleanup || item->cleanup() == cleanup )
+            item->updateTitle();
     }
 }
 
@@ -504,7 +478,7 @@ KCleanupListBox::updateTitle( KCleanup * cleanup )
 
 KCleanupListBoxItem::KCleanupListBoxItem( KCleanupListBox *	listBox,
 					  KCleanup *		cleanup )
-    : Q3ListBoxText( listBox )
+	: QListWidgetItem( listBox )
     , _cleanup( cleanup )
 {
     Q_CHECK_PTR( cleanup );
@@ -738,15 +712,18 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     layout->addWidget( excludeBox );
     QVBoxLayout * excludeBoxLayout = new QVBoxLayout(excludeBox);
     excludeBox->setLayout(excludeBoxLayout);
-    _excludeRulesListView	= new Q3ListView();
-    _excludeRulesListView->addColumn( i18n( "Exclude Rule (Regular Expression)" ), 300 );
+    _excludeRulesListView	= new QListWidget();
     _excludeRuleContextMenu	= 0;
     excludeBoxLayout->addWidget(_excludeRulesListView);
 
-    QGroupBox * buttonBox	= new Q3HGroupBox( excludeBox );
-    _addExcludeRuleButton	= new QPushButton( i18n( "&Add"    ), buttonBox );
-    _editExcludeRuleButton	= new QPushButton( i18n( "&Edit"   ), buttonBox );
-    _deleteExcludeRuleButton	= new QPushButton( i18n( "&Delete" ), buttonBox );
+    QGroupBox * buttonBox	= new QGroupBox( excludeBox );
+    QHBoxLayout * buttonBoxLayout = new QHBoxLayout(buttonBox);
+    _addExcludeRuleButton = new QPushButton(i18n("&Add"));
+    _editExcludeRuleButton = new QPushButton(i18n("&Edit"));
+    _deleteExcludeRuleButton = new QPushButton(i18n("&Delete"));
+    buttonBoxLayout->addWidget(_addExcludeRuleButton);
+    buttonBoxLayout->addWidget(_editExcludeRuleButton);
+    buttonBoxLayout->addWidget(_deleteExcludeRuleButton);
     
     connect( _excludeRulesListView,	SIGNAL( rightButtonClicked        ( Q3ListViewItem *, const QPoint &, int ) ),
              this,			SLOT  ( showExcludeRuleContextMenu( Q3ListViewItem *, const QPoint &, int ) ) );
@@ -773,11 +750,11 @@ KGeneralSettingsPage::~KGeneralSettingsPage()
 
 
 void
-KGeneralSettingsPage::showExcludeRuleContextMenu( Q3ListViewItem *, const QPoint &pos, int )
+KGeneralSettingsPage::showExcludeRuleContextMenu( QListWidgetItem *, const QPoint &pos, int )
 {
     if ( ! _excludeRuleContextMenu )
     {
-        _excludeRuleContextMenu = new Q3PopupMenu( 0 );
+        _excludeRuleContextMenu = new QMenu();
 	_excludeRuleContextMenu->insertItem( i18n( "&Edit"   ), this, SLOT( editExcludeRule  () ) );
 	_excludeRuleContextMenu->insertItem( i18n( "&Delete" ), this, SLOT( deleteExcludeRule() ) );
     }
@@ -811,15 +788,13 @@ KGeneralSettingsPage::apply()
     
     QStringList excludeRulesStringList;
     KExcludeRules::excludeRules()->clear();
-    Q3ListViewItem * item = _excludeRulesListView->firstChild();
-    
-    while ( item )
-    {
-	QString ruleText = item->text(0);
-	excludeRulesStringList.append( ruleText );
-	// kdDebug() << "Adding exclude rule " << ruleText << endl;
-	KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
-	item = item->nextSibling();
+
+    for(int i = 0; i < _excludeRulesListView->count(); i++) {
+        QListWidgetItem * item = _excludeRulesListView->item(i);
+        QString ruleText = item->text();
+        excludeRulesStringList.append( ruleText );
+        // kdDebug() << "Adding exclude rule " << ruleText << endl;
+        KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
     }
 
     config.writeEntry( "ExcludeRules", excludeRulesStringList );
@@ -858,7 +833,8 @@ KGeneralSettingsPage::setup()
     while ( excludeRule )
     {
 	// _excludeRulesListView->insertItem();
-        new Q3ListViewItem( _excludeRulesListView, excludeRule->regexp().pattern() );
+		QListWidgetItem * n = new QListWidgetItem(_excludeRulesListView);
+		n->setText(excludeRule->regexp().pattern());
 	excludeRule = KExcludeRules::excludeRules()->next();
     }
     
@@ -871,7 +847,7 @@ KGeneralSettingsPage::checkEnabledState()
 {
     _crossFileSystems->setEnabled( _enableLocalDirReader->isChecked() );
 
-    int excludeRulesCount = _excludeRulesListView->childCount();
+    int excludeRulesCount = _excludeRulesListView->count();
     
     _editExcludeRuleButton->setEnabled  ( excludeRulesCount > 0 );
     _deleteExcludeRuleButton->setEnabled( excludeRulesCount > 0 );
@@ -890,8 +866,9 @@ KGeneralSettingsPage::addExcludeRule()
 					  this );
     if ( ok && ! text.isEmpty() )
     {
-        _excludeRulesListView->insertItem( new Q3ListViewItem ( _excludeRulesListView, text ) );
-	
+        QListWidgetItem * l = new QListWidgetItem(_excludeRulesListView);
+        l->setText(text);
+        _excludeRulesListView->addItem(l);
     }
     
     checkEnabledState();
@@ -901,7 +878,7 @@ KGeneralSettingsPage::addExcludeRule()
 void
 KGeneralSettingsPage::editExcludeRule()
 {
-    Q3ListViewItem * item = _excludeRulesListView->currentItem();
+    QListWidgetItem * item = _excludeRulesListView->currentItem();
 
     if ( item )
     {
@@ -909,15 +886,15 @@ KGeneralSettingsPage::editExcludeRule()
 	QString text = QInputDialog::getText( i18n( "Edit exclude rule" ),
 					      i18n( "Exclude rule (regular expression):" ),
 					      QLineEdit::Normal,
-					      item->text(0),
+						  item->text(),
 					      &ok,
 					      this );
 	if ( ok )
 	{
 	    if ( text.isEmpty() )
-		_excludeRulesListView->removeItem( item );
+		_excludeRulesListView->takeItem(_excludeRulesListView->currentRow());
 	    else
-		item->setText( 0, text );
+			item->setText(text);
 	}
     }
     
@@ -925,21 +902,20 @@ KGeneralSettingsPage::editExcludeRule()
 }
 
 
-void
-KGeneralSettingsPage::deleteExcludeRule()
+void KGeneralSettingsPage::deleteExcludeRule()
 {
-    Q3ListViewItem * item = _excludeRulesListView->currentItem();
+    QListWidgetItem * item = _excludeRulesListView->currentItem();
 
     if ( item )
     {
-	QString excludeRule  = item->text(0);
-	int result = KMessageBox::questionYesNo( this,
-						 i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
-						 i18n( "Delete?" ) ); // Window title
-	if ( result == KMessageBox::Yes )
-	{
-	    _excludeRulesListView->removeItem( item );
-	}
+        QString excludeRule = item->text();
+        int result = KMessageBox::questionYesNo( this,
+            i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
+            i18n( "Delete?" ) ); // Window title
+        if ( result == KMessageBox::Yes )
+        {
+            _excludeRulesListView->takeItem(_excludeRulesListView->currentRow());
+        }
     }
 
     checkEnabledState();
