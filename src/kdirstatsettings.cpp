@@ -575,7 +575,7 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // The "Works for..." check boxes, grouped together in a button group.
 
     QGroupBox *worksFor = new QGroupBox( i18n( "Works for..." ), _fields );
-    QVBoxLayout *worksForBox = new QVBoxLayout( worksFor, 15, 2 );
+    QVBoxLayout *worksForBox = new QVBoxLayout(worksFor);
     fieldsBox->addWidget( worksFor, 0 );
     fieldsBox->addSpacing( 5 );
     fieldsBox->addStretch();
@@ -589,7 +589,8 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     worksForBox->addWidget( _worksForDotEntry	, 1 );
 
     worksForBox->addSpacing( 5 );
-    _worksForProtocols = new QComboBox( false, worksFor );
+    _worksForProtocols = new QComboBox(worksFor);
+    _worksForProtocols->setEditable(false);
     worksForBox->addWidget( _worksForProtocols, 1 );
 
     _worksForProtocols->insertItem(0, i18n("On Local Machine Only ('file:/' Protocol)"));
@@ -858,12 +859,11 @@ void
 KGeneralSettingsPage::addExcludeRule()
 {
     bool ok;
-    QString text = QInputDialog::getText( i18n( "New exclude rule" ),
+    QString text = QInputDialog::getText(this, i18n( "New exclude rule" ),
 					  i18n( "Regular expression for new exclude rule:" ),
 					  QLineEdit::Normal,
 					  QString::null,
-					  &ok,
-					  this );
+					  &ok);
     if ( ok && ! text.isEmpty() )
     {
         QListWidgetItem * l = new QListWidgetItem(_excludeRulesListView);
@@ -883,12 +883,11 @@ KGeneralSettingsPage::editExcludeRule()
     if ( item )
     {
 	bool ok;
-	QString text = QInputDialog::getText( i18n( "Edit exclude rule" ),
+	QString text = QInputDialog::getText(this, i18n( "Edit exclude rule" ),
 					      i18n( "Exclude rule (regular expression):" ),
 					      QLineEdit::Normal,
 						  item->text(),
-					      &ok,
-					      this );
+						  &ok);
 	if ( ok )
 	{
 	    if ( text.isEmpty() )
@@ -933,7 +932,7 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 {
     // kdDebug() << k_funcinfo << endl;
 
-    QVBoxLayout * layout = new QVBoxLayout( this, 0, 0 ); // parent, border, spacing
+    QVBoxLayout * layout = new QVBoxLayout(this); // parent, border, spacing
     _squarify = new QCheckBox(i18n("S&quarify Treemap"));
     _doCushionShading = new QCheckBox(i18n("Use C&ushion Shading"));
     layout->addWidget(_squarify);
@@ -944,10 +943,14 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     QGroupBox * gbox	= new QGroupBox( i18n( "Cushion Parameters" ), this );
     _cushionParams	= gbox;
     QLabel * label	= new QLabel( i18n( "Ambient &Light" ), gbox );
-    _ambientLight	= new QSlider ( MinAmbientLight, MaxAmbientLight, 10,	// min, max, pageStep
-                                        DefaultAmbientLight, Qt::Horizontal, gbox );
-    _ambientLightSB	= new QSpinBox( MinAmbientLight, MaxAmbientLight, 1,	// min, max, step
-                    gbox );
+    _ambientLight	= new QSlider (Qt::Horizontal, gbox );
+    _ambientLight->setMinimum(MinAmbientLight);
+    _ambientLight->setMaximum(MaxAmbientLight);
+    _ambientLight->setPageStep(10);
+    _ambientLight->setValue(DefaultAmbientLight);
+    _ambientLightSB	= new QSpinBox(gbox);
+    _ambientLightSB->setMinimum(MinAmbientLight);
+    _ambientLightSB->setMaximum(MaxAmbientLight);
     label->setBuddy( _ambientLightSB );
 
     QGridLayout * cushionLayout = new QGridLayout();
@@ -956,10 +959,14 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     cushionLayout->addWidget(_ambientLightSB, 0, 3, 1, 1);
 
     label = new QLabel( i18n( "&Height Scale" ), gbox );
-    _heightScalePercent = new QSlider( MinHeightScalePercent, MaxHeightScalePercent, 10,   // min, max, pageStep
-                                       DefaultHeightScalePercent, Qt::Horizontal, gbox );
-    _heightScalePercentSB = new QSpinBox( MinHeightScalePercent, MaxHeightScalePercent, 1, // min, max, step
-                      gbox );
+    _heightScalePercent = new QSlider(Qt::Horizontal, gbox);
+    _heightScalePercent->setMinimum(MinHeightScalePercent);
+    _heightScalePercent->setMaximum(MaxHeightScalePercent);
+    _heightScalePercent->setPageStep(10);
+    _heightScalePercent->setValue(DefaultHeightScalePercent);
+    _heightScalePercentSB = new QSpinBox(gbox);
+    _heightScalePercentSB->setMinimum(MinHeightScalePercent);
+    _heightScalePercentSB->setMaximum(MaxHeightScalePercent);
     label->setBuddy( _heightScalePercentSB );
 
     cushionLayout->addWidget(label, 1, 0, 1, 1);
