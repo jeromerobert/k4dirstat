@@ -16,8 +16,6 @@ set(k4dirstat_SRCS
    kdirinfo.cpp
    kdirtreecache.cpp
    kdirtreeiterators.cpp
-   kpacman.cpp
-   #kpacman_dummy.cpp
    kdirstatsettings.cpp
  )
 

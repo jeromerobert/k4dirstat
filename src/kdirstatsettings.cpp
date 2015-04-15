@@ -786,7 +786,6 @@ KGeneralSettingsPage::apply()
     config.writeEntry( "ToolbarPacMan",	_enableToolBarAnimation->isChecked()	);
     config.writeEntry( "DirTreePacMan",	_enableTreeViewAnimation->isChecked()	);
 
-    _mainWin->initPacMan( _enableToolBarAnimation->isChecked() );
     _treeView->enablePacManAnimation( _enableTreeViewAnimation->isChecked() );
 
     config = KGlobal::config()->group( "Exclude" );

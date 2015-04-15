@@ -751,7 +751,6 @@ namespace KDirStat
 	KDirTreeView *		_view;
 	KDirTreeViewItem *	_parent;
 	KFileInfo *		_orig;
-	KPacManAnimation *	_pacMan;
 	float			_percent;
 	int			_openCount;
 

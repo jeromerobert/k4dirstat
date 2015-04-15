@@ -39,7 +39,6 @@
 #include "kdirtreeview.h"
 #include "kdirreadjob.h"
 #include "kdirtreeiterators.h"
-#include "kpacman.h"
 
 #define SEPARATE_READ_JOBS_COL	0
 #define VERBOSE_PROGRESS_INFO	0
@@ -1123,7 +1122,6 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     _parent	= parent;
     _orig	= orig;
     _percent	= 0.0;
-    _pacMan	= 0;
     _openCount	= 0;
 
     // _view->incDebugCount(1);
@@ -1233,9 +1231,6 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 
 KDirTreeViewItem::~KDirTreeViewItem()
 {
-    if ( _pacMan )
-	delete _pacMan;
-
     if ( this == _view->selection() )
 	_view->clearSelection();
 }

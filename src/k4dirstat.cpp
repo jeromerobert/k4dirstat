@@ -46,7 +46,6 @@
 #include <Qt/qsplitter.h>
 
 #include "kdirtree.h"
-#include "kpacman.h"
 #include "ktreemapview.h"
 #include "ktreemaptile.h"
 #include "kcleanupcollection.h"
@@ -309,43 +308,6 @@ void k4dirstat::revertCleanupsToDefaults()
     *_cleanupCollection = defaultCollection;
 }
 
-
-void k4dirstat::initPacMan( bool enablePacMan )
-{
-    if ( enablePacMan )
-    {
-        if ( ! _pacMan )
-        {
-            _pacMan = new KPacMan( toolBar(), 16, false, "kde toolbar widget" );
-            _pacMan->setInterval( PACMAN_INTERVAL );	// millisec
-            //int id = ID_PACMAN;
-            //toolBar()->insertWidget( id, PACMAN_WIDTH, _pacMan );
-            //toolBar()->  setItemAutoSized( id, false );
-
-            _pacManDelimiter = new QWidget( toolBar() );
-            //toolBar()->insertWidget( ++id, 1, _pacManDelimiter );
-
-            connect( _treeView, SIGNAL( startingReading() ), _pacMan, SLOT( start() ) );
-            connect( _treeView, SIGNAL( finished()        ), _pacMan, SLOT( stop () ) );
-            connect( _treeView, SIGNAL( aborted()         ), _pacMan, SLOT( stop () ) );
-        }
-    }
-    else
-    {
-        if ( _pacMan )
-        {
-            delete _pacMan;
-            _pacMan = 0;
-        }
-
-        if ( _pacManDelimiter )
-        {
-            delete _pacManDelimiter;
-            _pacManDelimiter = 0;
-        }
-    }
-}
-
 void k4dirstat::initStatusBar()
 {
     statusBar()->insertItem( i18n( "Ready." ), ID_STATUS_MSG );
@@ -391,7 +353,6 @@ void k4dirstat::readMainWinConfig()
         resize( size );
 
     config = KGlobal::config()->group("Animation");
-    initPacMan( false );
     _treeView->enablePacManAnimation( config.readEntry( "DirTreePacMan", false ) );
 
     config = KGlobal::config()->group("Exclude");

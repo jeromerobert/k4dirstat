@@ -230,11 +230,6 @@ public slots:
     KCleanupCollection * cleanupCollection() { return _cleanupCollection; }
 
     /**
-     * Initialize @ref KPacMan animation in the tool bar.
-     **/
-    void initPacMan( bool enablePacMan = true );
-
-    /**
      * Returns true if the pacman animation in the tool bar is enabled, false
      * otherwise.
      **/
