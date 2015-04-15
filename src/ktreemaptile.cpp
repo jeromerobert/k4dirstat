@@ -36,9 +36,9 @@ using std::min;
 KTreemapTile::KTreemapTile( KTreemapView *	parentView,
 			    KTreemapTile *	parentTile,
 			    KFileInfo *		orig,
-			    const QRect &	rect,
+			    const QRectF &	rect,
 			    KOrientation	orientation )
-    : Q3CanvasRectangle( rect, parentView->canvas() )
+    : QGraphicsRectItem(rect)
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )
@@ -58,7 +58,7 @@ KTreemapTile::KTreemapTile( KTreemapView *		parentView,
 			    const QRect &		rect,
 			    const KCushionSurface &	cushionSurface,
 			    KOrientation		orientation )
-    : Q3CanvasRectangle( rect, parentView->canvas() )
+    : QGraphicsRectItem( rect, parentTile)
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )
@@ -87,7 +87,7 @@ KTreemapTile::init()
     // Note that this must happen before any children are created.
     // I found that out the hard way. ;-)
 
-    setZ( _parentTile ? ( _parentTile->z() + 1.0 ) : 0.0 );
+    setZValue(_parentTile ? ( _parentTile->zValue() + 1.0 ) : 0.0 );
 
     setBrush( QColor( 0x60, 0x60, 0x60 ) );
     setPen( Qt::NoPen );
@@ -100,7 +100,7 @@ KTreemapTile::init()
 
 
 void
-KTreemapTile::createChildren( const QRect &	rect,
+KTreemapTile::createChildren( const QRectF &	rect,
 			      KOrientation	orientation )
 {
     if ( _orig->totalSize() == 0 )	// Prevent division by zero
@@ -114,7 +114,7 @@ KTreemapTile::createChildren( const QRect &	rect,
 
 
 void
-KTreemapTile::createChildrenSimple( const QRect &	rect,
+KTreemapTile::createChildrenSimple( const QRectF &	rect,
 				    KOrientation	orientation )
 {
 
@@ -170,7 +170,7 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 
 
 void
-KTreemapTile::createSquarifiedChildren( const QRect & rect )
+KTreemapTile::createSquarifiedChildren( const QRectF & rect )
 {
     if ( _orig->totalSize() == 0 )
     {
@@ -190,7 +190,7 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
 #endif
 
     KFileInfoSortedBySizeIterator it( _orig, minSize, KDotEntryAsSubDir );
-    QRect childrenRect = rect;
+    QRectF childrenRect = rect;
 
     while ( *it )
     {
@@ -201,7 +201,7 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
 
 
 KFileInfoList
-KTreemapTile::squarify( const QRect & 			rect,
+KTreemapTile::squarify( const QRectF & rect,
 			double				scale,
 			KFileInfoSortedBySizeIterator & it   )
 {
@@ -266,8 +266,8 @@ KTreemapTile::squarify( const QRect & 			rect,
 
 
 
-QRect
-KTreemapTile::layoutRow( const QRect &		rect,
+QRectF
+KTreemapTile::layoutRow( const QRectF & rect,
 			 double			scale,
 			 KFileInfoList & 	row )
 {
@@ -354,11 +354,9 @@ KTreemapTile::layoutRow( const QRect &		rect,
 
 
 void
-KTreemapTile::drawShape( QPainter & painter )
+KTreemapTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    // kdDebug() << "drawShape() " << _orig << endl;
-
-    QSize size = rect().size();
+    QSizeF size = rect().size();
 
     if ( size.height() < 1 || size.width() < 1 )
 	return;
@@ -367,47 +365,47 @@ KTreemapTile::drawShape( QPainter & painter )
     {
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-	    Q3CanvasRectangle::drawShape( painter );
+	    QGraphicsRectItem::paint(painter, option, widget);
 	}
 	else
 	{
 	    if ( _cushion.isNull() )
 		_cushion = renderCushion();
 
-	    QRect rect = Q3CanvasRectangle::rect();
+	    QRectF rect = QGraphicsRectItem::rect();
 
 	    if ( ! _cushion.isNull() )
-		painter.drawPixmap( rect, _cushion );
+		painter->drawPixmap( rect, _cushion,  _cushion.rect());
 
 	    if ( _parentView->forceCushionGrid() )
 	    {
 		// Draw a clearly visible boundary
 
-		painter.setPen( QPen( _parentView->cushionGridColor(), 1 ) );
+		painter->setPen( QPen( _parentView->cushionGridColor(), 1 ) );
 
 		if ( rect.x() > 0 )
-		    painter.drawLine( rect.topLeft(), rect.bottomLeft() + QPoint( 0, 1 ) );
+		    painter->drawLine( rect.topLeft(), rect.bottomLeft() + QPoint( 0, 1 ) );
 
 		if ( rect.y() > 0 )
-		    painter.drawLine( rect.topLeft(), rect.topRight() + QPoint( 1, 0 ) );
+		    painter->drawLine( rect.topLeft(), rect.topRight() + QPoint( 1, 0 ) );
 	    }
 	}
     }
     else	// No cushion shading, use plain tiles
     {
-	painter.setPen( QPen( _parentView->outlineColor(), 1 ) );
+       painter->setPen( QPen( _parentView->outlineColor(), 1 ) );
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
-	    painter.setBrush( _parentView->dirFillColor() );
+	    painter->setBrush( _parentView->dirFillColor() );
 	else
 	{
-	    painter.setBrush( _parentView->tileColor( _orig ) );
+	    painter->setBrush( _parentView->tileColor( _orig ) );
 #if 0
-	    painter.setBrush( _parentView->fileFillColor() );
+	    painter->setBrush( _parentView->fileFillColor() );
 #endif
 	}
 
-	Q3CanvasRectangle::drawShape( painter );
+       QGraphicsRectItem::paint(painter, option, widget);
     }
 }
 
@@ -415,7 +413,7 @@ KTreemapTile::drawShape( QPainter & painter )
 QPixmap
 KTreemapTile::renderCushion()
 {
-    QRect rect = Q3CanvasRectangle::rect();
+    QRectF rect = QGraphicsRectItem::rect();
 
     if ( rect.width() < 1 || rect.height() < 1 )
 	return QPixmap();
@@ -571,7 +569,7 @@ KCushionSurface::KCushionSurface()
 
 
 void
-KCushionSurface::addRidge( KOrientation dim, double height, const QRect & rect )
+KCushionSurface::addRidge( KOrientation dim, double height, const QRectF & rect )
 {
     _height = height;
 

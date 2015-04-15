@@ -34,7 +34,7 @@ using namespace KDirStat;
 
 
 KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & initialSize )
-    : Q3CanvasView( parent )
+    : QGraphicsView( parent )
     , _tree( tree )
     , _rootTile( 0 )
     , _selectedTile( 0 )
@@ -53,8 +53,8 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
 
     if ( _autoResize )
     {
-	setHScrollBarMode( AlwaysOff );
-	setVScrollBarMode( AlwaysOff );
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 
     if ( initialSize.isValid() )
@@ -94,27 +94,14 @@ KTreemapView::~KTreemapView()
 void
 KTreemapView::clear()
 {
-    if ( canvas() )
-	deleteAllItems( canvas() );
+    foreach(QGraphicsItem * i, items()) {
+        scene()->removeItem(i);
+    }
 
     _selectedTile	= 0;
     _selectionRect	= 0;
     _rootTile		= 0;
 }
-
-
-void
-KTreemapView::deleteAllItems( Q3Canvas * canvas )
-{
-    if ( ! canvas )
-	return;
-
-    Q3CanvasItemList all = canvas->allItems();
-
-    for ( Q3CanvasItemList::Iterator it = all.begin(); it != all.end(); ++it )
-	delete *it;
-}
-
 
 void
 KTreemapView::readConfig()
@@ -139,13 +126,13 @@ KTreemapView::readConfig()
 
     if ( _autoResize )
     {
-	setHScrollBarMode( AlwaysOff );
-	setVScrollBarMode( AlwaysOff );
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
     else
     {
-	setHScrollBarMode( Q3ScrollView::Auto );
-	setVScrollBarMode( Q3ScrollView::Auto );
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
 }
 
@@ -161,14 +148,10 @@ KTreemapTile *
 KTreemapView::tileAt( QPoint pos )
 {
     KTreemapTile * tile = 0;
-
-    Q3CanvasItemList coll = canvas()->collisions( pos );
-    Q3CanvasItemList::Iterator it = coll.begin();
-
-    while ( it != coll.end() && tile == 0 )
-    {
-	tile = dynamic_cast<KTreemapTile *> (*it);
-	++it;
+    foreach(QGraphicsItem * it, items(pos)) {
+        tile = dynamic_cast<KTreemapTile *> (it);
+        if(tile)
+            break;
     }
 
     return tile;
@@ -394,21 +377,20 @@ KTreemapView::rebuildTreemap()
     if ( ! root )
 	root = _rootTile ? _rootTile->orig() : _tree->root();
 
-    rebuildTreemap( root, canvas()->size() );
+    rebuildTreemap(root, scene()->sceneRect());
     _savedRootUrl = "";
 }
 
 
 void
-KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
-			      const QSize &	newSz )
+KTreemapView::rebuildTreemap(KFileInfo * newRoot, const QRectF & newSz)
 {
     // kdDebug() << k_funcinfo << endl;
 
-    QSize newSize = newSz;
+    QRectF newSize = newSz;
 
     if ( newSz.isEmpty() )
-	newSize = visibleSize();
+       newSize = this->sceneRect();
 
 
     // Delete all old stuff.
@@ -416,14 +398,14 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
 
     // Re-create a new canvas
 
-    if ( ! canvas() )
+    if ( ! scene() )
     {
-	Q3Canvas * canv = new Q3Canvas( this );
+       QGraphicsScene * canv = new QGraphicsScene(this);
 	Q_CHECK_PTR( canv );
-	setCanvas( canv );
+	setScene(canv);
     }
 
-    canvas()->resize( newSize.width(), newSize.height() );
+    scene()->setSceneRect(newSize);
 
     if ( newSize.width() >= UpdateMinSize && newSize.height() >= UpdateMinSize )
     {
@@ -439,7 +421,7 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
 	    _rootTile = new KTreemapTile( this,		// parentView
 					  0,		// parentTile
 					  newRoot,	// orig
-					  QRect( QPoint( 0, 0), newSize ),
+					  newSize,
 					  KTreemapAuto );
 	}
 
@@ -499,7 +481,7 @@ KTreemapView::deleteNotify( KFileInfo * )
 void
 KTreemapView::resizeEvent( QResizeEvent * event )
 {
-    Q3CanvasView::resizeEvent( event );
+    QGraphicsView::resizeEvent( event );
 
     if ( _autoResize )
     {
@@ -543,13 +525,11 @@ KTreemapView::selectTile( KTreemapTile * tile )
     if ( _selectedTile )
     {
 	if ( ! _selectionRect )
-	    _selectionRect = new KTreemapSelectionRect( canvas(), _highlightColor );
+	    _selectionRect = new KTreemapSelectionRect(_highlightColor );
     }
 
     if ( _selectionRect )
 	_selectionRect->highlight( _selectedTile );
-
-    canvas()->update();
 
     if ( oldSelection != _selectedTile )
     {
@@ -572,41 +552,14 @@ KTreemapView::findTile( KFileInfo * node )
     if ( ! node )
 	return 0;
 
-    Q3CanvasItemList itemList = canvas()->allItems();
-    Q3CanvasItemList::Iterator it = itemList.begin();
-
-    while ( it != itemList.end() )
-    {
-	KTreemapTile * tile = dynamic_cast<KTreemapTile *> (*it);
-
-	if ( tile && tile->orig() == node )
-	    return tile;
-
-	++it;
+    foreach(QGraphicsItem * i, scene()->items()) {
+        KTreemapTile * tile = dynamic_cast<KTreemapTile *>(i);
+        if ( tile && tile->orig() == node )
+            return tile;
     }
 
     return 0;
 }
-
-
-QSize
-KTreemapView::visibleSize()
-{
-    ScrollBarMode oldHMode = hScrollBarMode();
-    ScrollBarMode oldVMode = vScrollBarMode();
-
-    setHScrollBarMode( AlwaysOff );
-    setVScrollBarMode( AlwaysOff );
-
-    QSize size = QSize( Q3CanvasView::visibleWidth(),
-			Q3CanvasView::visibleHeight() );
-
-    setHScrollBarMode( oldHMode );
-    setVScrollBarMode( oldVMode );
-
-    return size;
-}
-
 
 QColor
 KTreemapView::tileColor( KFileInfo * file )
@@ -737,11 +690,10 @@ KTreemapView::tileColor( KFileInfo * file )
 
 
 
-KTreemapSelectionRect::KTreemapSelectionRect( Q3Canvas * canvas, const QColor & color )
-    : Q3CanvasRectangle( canvas )
+KTreemapSelectionRect::KTreemapSelectionRect(const QColor & color)
 {
     setPen( QPen( color, 2 ) );
-    setZ( 1e10 );		// Higher than everything else
+    setZValue(1e10);		// Higher than everything else
 }
 
 
@@ -751,10 +703,7 @@ KTreemapSelectionRect::highlight( KTreemapTile * tile )
 {
     if ( tile )
     {
-	QRect tileRect = tile->rect();
-
-	move( tileRect.x(), tileRect.y() );
-	setSize( tileRect.width(), tileRect.height() );
+        setRect(tile->rect());
 
 	if ( ! isVisible() )
 	    show();

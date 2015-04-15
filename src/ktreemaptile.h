@@ -17,8 +17,7 @@
 #   include <config.h>
 #endif
 
-#include <q3canvas.h>
-#include <qrect.h>
+#include <QGraphicsRectItem>
 #include "kdirtreeiterators.h"
 
 
@@ -65,7 +64,7 @@ namespace KDirStat
 	 * If you don't want to get all that involved: The coefficients are
 	 * changed in some way.
 	 **/
-	void addRidge( KOrientation dim, double height, const QRect & rect );
+	void addRidge( KOrientation dim, double height, const QRectF & rect );
 
 	/**
 	 * Set the cushion's height.
@@ -131,7 +130,7 @@ namespace KDirStat
      *
      * @short Basic building block of a treemap
      **/
-    class KTreemapTile:	public Q3CanvasRectangle
+    class KTreemapTile:	public QGraphicsRectItem
     {
     public:
 
@@ -145,7 +144,7 @@ namespace KDirStat
 	KTreemapTile( KTreemapView *		parentView,
 		      KTreemapTile *		parentTile,
 		      KFileInfo *		orig,
-		      const QRect &		rect,
+			  const QRectF &		rect,
 		      KOrientation		orientation = KTreemapAuto );
 
     protected:
@@ -195,7 +194,7 @@ namespace KDirStat
 	/**
 	 * Create children (sub-tiles) of this tile.
 	 **/
-	void createChildren	( const QRect &	rect,
+	void createChildren	( const QRectF &	rect,
 				  KOrientation	orientation );
 
 	/**
@@ -205,7 +204,7 @@ namespace KDirStat
 	 * of the specified rectangle. This algorithm is very fast, but often
 	 * results in very thin, elongated tiles.
 	 **/
-	void createChildrenSimple( const QRect &	rect,
+	void createChildrenSimple( const QRectF &	rect,
 				   KOrientation		orientation );
 
 	/**
@@ -234,7 +233,7 @@ namespace KDirStat
 	 * and, most important, don't need to be sorted by size (which has a
 	 * cost of O(n*ln(n)) in the best case, so reducing n helps a lot).
 	 **/
-	void createSquarifiedChildren( const QRect & rect );
+	void createSquarifiedChildren( const QRectF & rect );
 
 	/**
 	 * Squarify as many children as possible: Try to squeeze members
@@ -245,7 +244,7 @@ namespace KDirStat
 	 *
 	 * 'scale' is the scaling factor between file sizes and pixels.
 	 **/
-	KFileInfoList squarify( const QRect & 			rect,
+	KFileInfoList squarify( const QRectF & 			rect,
 				double				scale,
 				KFileInfoSortedBySizeIterator & it   );
 
@@ -253,7 +252,7 @@ namespace KDirStat
 	 * Lay out all members of 'row' within 'rect' along its longer side.
 	 * Returns the new rectangle with the layouted area subtracted.
 	 **/
-	QRect layoutRow( const QRect &		rect,
+	QRectF layoutRow( const QRectF &		rect,
 			 double			scale,
 			 KFileInfoList & 	row );
 
@@ -262,7 +261,7 @@ namespace KDirStat
 	 *
 	 * Reimplemented from QCanvasRectangle.
 	 **/
-	virtual void drawShape( QPainter & painter );
+	virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
