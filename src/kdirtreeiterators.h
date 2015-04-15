@@ -18,8 +18,6 @@
 #endif
 
 #include "kdirtree.h"
-#include <q3ptrlist.h>
-
 
 namespace KDirStat
 {
