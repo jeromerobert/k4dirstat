@@ -726,9 +726,10 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     buttonBoxLayout->addWidget(_editExcludeRuleButton);
     buttonBoxLayout->addWidget(_deleteExcludeRuleButton);
     
-    connect( _excludeRulesListView,	SIGNAL( rightButtonClicked        ( Q3ListViewItem *, const QPoint &, int ) ),
-             this,			SLOT  ( showExcludeRuleContextMenu( Q3ListViewItem *, const QPoint &, int ) ) );
-    
+    _excludeRulesListView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(_excludeRulesListView, SIGNAL(customContextMenuRequested(const QPoint&)),
+        this, SLOT(showExcludeRuleContextMenu(const QPoint&)));
+
     connect( _addExcludeRuleButton,	SIGNAL( clicked()        ),
 	     this,			SLOT  ( addExcludeRule() ) );
     
@@ -751,13 +752,17 @@ KGeneralSettingsPage::~KGeneralSettingsPage()
 
 
 void
-KGeneralSettingsPage::showExcludeRuleContextMenu( QListWidgetItem *, const QPoint &pos, int )
+KGeneralSettingsPage::showExcludeRuleContextMenu(const QPoint &pos)
 {
     if ( ! _excludeRuleContextMenu )
     {
         _excludeRuleContextMenu = new QMenu();
-	_excludeRuleContextMenu->insertItem( i18n( "&Edit"   ), this, SLOT( editExcludeRule  () ) );
-	_excludeRuleContextMenu->insertItem( i18n( "&Delete" ), this, SLOT( deleteExcludeRule() ) );
+        QAction * editAction = new QAction(i18n("&Edit"), _excludeRuleContextMenu);
+        connect(editAction, SIGNAL(triggered()), this, SLOT(editExcludeRule()));
+        _excludeRuleContextMenu->addAction(editAction);
+        QAction * deleteAction = new QAction(i18n("&Delete"), _excludeRuleContextMenu);
+        connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteExcludeRule()));
+        _excludeRuleContextMenu->addAction(deleteAction);
     }
 
     if ( _excludeRuleContextMenu && _excludeRulesListView->currentItem() )

@@ -620,7 +620,7 @@ namespace KDirStat
 	/**
 	 * Show a context menu for the currently selected exclude rule.
 	 **/
-	void showExcludeRuleContextMenu( QListWidgetItem *, const QPoint &, int );
+	void showExcludeRuleContextMenu(const QPoint &);
 
     protected:
 
