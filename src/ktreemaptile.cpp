@@ -305,11 +305,10 @@ KTreemapTile::layoutRow( const QRectF & rect,
 
     int offset = 0;
     int remaining = primary;
-    KFileInfoListIterator it( row );
 
-    while ( *it )
+    foreach(KFileInfo * it, row)
     {
-	int childSize = (int) ( (*it)->totalSize() / (double) sum * primary + 0.5 );
+	int childSize = (int) ( it->totalSize() / (double) sum * primary + 0.5 );
 
 	if ( childSize > remaining )	// Prevent overflow because of accumulated rounding errors
 	    childSize = remaining;
@@ -325,7 +324,7 @@ KTreemapTile::layoutRow( const QRectF & rect,
 	    else
 		childRect = QRect( rect.x(), rect.y() + offset, secondary, childSize );
 
-	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
+	    KTreemapTile * tile = new KTreemapTile( _parentView, this, it, childRect, rowCushionSurface );
 	    Q_CHECK_PTR( tile );
 
 	    tile->cushionSurface().addRidge( dir,

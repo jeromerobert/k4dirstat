@@ -208,7 +208,7 @@ KFileInfoSortedIterator::delayedInit()
 	makeChildrenList();
     }
 
-    _current = _childrenList->first();
+    _current = 0;
     _initComplete = true;
 }
 
@@ -261,14 +261,7 @@ void KFileInfoSortedIterator::makeDefaultOrderChildrenList()
 
 
 	// Now append all of this dot entry children list to the children list
-
-	child = dotEntryChildrenList.first();
-
-	while ( child )
-	{
-	    _childrenList->append( child );
-	    child = dotEntryChildrenList.next();
-	}
+	_childrenList->append(dotEntryChildrenList);
     }
 }
 
@@ -294,7 +287,7 @@ KFileInfoSortedIterator::current()
     if ( ! _initComplete )
 	delayedInit();
 
-    return _current;
+    return _childrenList->at(_current);
 }
 
 
@@ -302,8 +295,7 @@ void KFileInfoSortedIterator::next()
 {
     if ( ! _initComplete )
 	delayedInit();
-
-    _current = _childrenList->next();
+    _current++;
 }
 
 
@@ -313,7 +305,7 @@ KFileInfoSortedIterator::finished()
     if ( ! _initComplete )
 	delayedInit();
 
-    return _current == 0;
+    return _current >= _childrenList->size();
 }
 
 
@@ -353,7 +345,7 @@ KFileInfoSortedBySizeIterator::makeChildrenList()
 
 
 KFileInfoList::KFileInfoList( KFileInfoSortOrder sortOrder, bool ascending )
-    : Q3PtrList<KFileInfo>()
+    : QList<KFileInfo*>()
 {
     _sortOrder	= sortOrder;
     _ascending	= ascending;
@@ -371,52 +363,55 @@ KFileSize
 KFileInfoList::sumTotalSizes()
 {
     KFileSize sum = 0;
-    KFileInfoListIterator it( *this );
-    
-    while ( *it )
-    {
-	sum += (*it)->totalSize();
-	++it;
-    }
+    foreach(KFileInfo * it, *this)
+	sum += it->totalSize();
 
     return sum;
 }
 
+class KFileInfoComparator {
+public:
+    KFileInfoComparator(KFileInfoSortOrder sortOrder, bool ascending):
+    _sortOrder(sortOrder), _ascending(ascending) {}
 
-
-int
-KFileInfoList::compareItems( Q3PtrCollection::Item it1, Q3PtrCollection::Item it2 )
-{
-    if ( it1 == it2 )
-	return 0;
-
-    KFileInfo *file1 = (KFileInfo *) it1;
-    KFileInfo *file2 = (KFileInfo *) it2;
-
-    int result = 0;
-
-    switch ( _sortOrder )
+    bool operator()(const KFileInfo *file1, const KFileInfo * file2) const
     {
-	case KUnsorted:
-	    return 1;
+        if ( file1 == file2 )
+            return false;
 
-	case KSortByName:
-	    result = QString::compare( file1->name(), file2->name() );
-	    break;
+        int result = 0;
+        KFileInfo * mf1 = const_cast<KFileInfo*>(file1);
+        KFileInfo * mf2 = const_cast<KFileInfo*>(file2);
+        switch ( _sortOrder )
+        {
+        case KSortByName:
+            result = QString::compare( file1->name(), file2->name() );
+            break;
 
-	case KSortByTotalSize:
-	    result = compare<KFileSize>( file1->totalSize(), file2->totalSize() );
-	    break;
+        case KSortByTotalSize:
+            result = compare<KFileSize>(mf1->totalSize(), mf2->totalSize() );
+            break;
 
-	case KSortByLatestMtime:
-	    result = compare<time_t>( file1->latestMtime(), file2->latestMtime() );
-	    break;
+        case KSortByLatestMtime:
+            result = compare<time_t>(mf1->latestMtime(), mf2->latestMtime() );
+            break;
+        default:
+            Q_ASSERT(false);
+        }
+
+        return _ascending ? result : -result;
     }
 
-    return _ascending ? result : -result;
+private:
+    KFileInfoSortOrder _sortOrder;
+    bool _ascending;
+};
+
+void KFileInfoList::sort() {
+    if(_sortOrder != KUnsorted) {
+        KFileInfoComparator c(_sortOrder, _ascending);
+        qSort(begin(), end(), c);
+    }
 }
-
-
-
 
 // EOF
