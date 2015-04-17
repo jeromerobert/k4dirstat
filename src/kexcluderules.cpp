@@ -45,18 +45,10 @@ KExcludeRule::match( const QString & text )
 }
 
 
-
-KExcludeRules::KExcludeRules()
-{
-    // Make the rules list automatically delete
-    _rules.setAutoDelete( true );
-}
-
-
 KExcludeRules::~KExcludeRules()
 {
-    // Do not try to delete the rules here: The rules list will automatically
-    // do that since it has autoDelete enabled.
+    foreach(KExcludeRule * rule, _rules)
+        delete rule;
 }
 
 
@@ -86,9 +78,7 @@ KExcludeRules::match( const QString & text )
     if ( text.isEmpty() )
 	return false;
 
-    KExcludeRule * rule = _rules.first();
-
-    while ( rule )
+    foreach(KExcludeRule * rule, _rules)
     {
 	if ( rule->match( text ) )
 	{
@@ -101,8 +91,6 @@ KExcludeRules::match( const QString & text )
 #endif
 	    return true;
 	}
-
-	rule = _rules.next();
     }
 
     return false;
@@ -115,14 +103,9 @@ KExcludeRules::matchingRule( const QString & text )
     if ( text.isEmpty() )
 	return NULL;
 
-    KExcludeRule * rule = _rules.first();
-
-    while ( rule )
-    {
+    foreach(KExcludeRule * rule, _rules) {
 	if ( rule->match( text ) )
 	    return rule;
-
-	rule = _rules.next();
     }
 
     return 0;

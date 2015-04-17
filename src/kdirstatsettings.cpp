@@ -833,14 +833,10 @@ KGeneralSettingsPage::setup()
     _enableTreeViewAnimation->setChecked( _treeView->doPacManAnimation() );
 
     _excludeRulesListView->clear();
-    KExcludeRule * excludeRule = KExcludeRules::excludeRules()->first();
 
-    while ( excludeRule )
-    {
-	// _excludeRulesListView->insertItem();
-		QListWidgetItem * n = new QListWidgetItem(_excludeRulesListView);
-		n->setText(excludeRule->regexp().pattern());
-	excludeRule = KExcludeRules::excludeRules()->next();
+    foreach(KExcludeRule * excludeRule, KExcludeRules::excludeRules()->rules()) {
+        QListWidgetItem * n = new QListWidgetItem(_excludeRulesListView);
+        n->setText(excludeRule->regexp().pattern());
     }
     
     checkEnabledState();
