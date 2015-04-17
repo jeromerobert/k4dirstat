@@ -781,13 +781,6 @@ KGeneralSettingsPage::apply()
     config.writeEntry( "CrossFileSystems",	_crossFileSystems->isChecked()		);
     config.writeEntry( "EnableLocalDirReader", _enableLocalDirReader->isChecked()	);
 
-    config = KGlobal::config()->group( "Animation" );
-    //config.setGroup( "Animation" );
-    config.writeEntry( "ToolbarPacMan",	_enableToolBarAnimation->isChecked()	);
-    config.writeEntry( "DirTreePacMan",	_enableTreeViewAnimation->isChecked()	);
-
-    _treeView->enablePacManAnimation( _enableTreeViewAnimation->isChecked() );
-
     config = KGlobal::config()->group( "Exclude" );
     //config.setGroup( "Exclude" );
     
@@ -811,10 +804,6 @@ KGeneralSettingsPage::revertToDefaults()
 {
     _crossFileSystems->setChecked( false );
     _enableLocalDirReader->setChecked( true );
-
-    _enableToolBarAnimation->setChecked( false );
-    _enableTreeViewAnimation->setChecked( false );
-    
     _excludeRulesListView->clear();
     _editExcludeRuleButton->setEnabled( false );
     _deleteExcludeRuleButton->setEnabled( false );
@@ -828,10 +817,6 @@ KGeneralSettingsPage::setup()
 
     _crossFileSystems->setChecked	( config.readEntry( "CrossFileSystems"	, false) );
     _enableLocalDirReader->setChecked	( config.readEntry( "EnableLocalDirReader" , true ) );
-
-    _enableToolBarAnimation->setChecked ( _mainWin->pacManEnabled() );
-    _enableTreeViewAnimation->setChecked( _treeView->doPacManAnimation() );
-
     _excludeRulesListView->clear();
 
     foreach(KExcludeRule * excludeRule, KExcludeRules::excludeRules()->rules()) {

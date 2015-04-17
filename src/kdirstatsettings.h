@@ -632,9 +632,6 @@ namespace KDirStat
 	QCheckBox *	_crossFileSystems;
 	QCheckBox *	_enableLocalDirReader;
 
-	QCheckBox *	_enableToolBarAnimation;
-	QCheckBox *	_enableTreeViewAnimation;
-
 	QListWidget *	_excludeRulesListView;
 	QPushButton * 	_addExcludeRuleButton;
 	QPushButton *	_editExcludeRuleButton;
