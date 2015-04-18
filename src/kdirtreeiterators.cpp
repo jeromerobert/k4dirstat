@@ -286,8 +286,10 @@ KFileInfoSortedIterator::current()
 {
     if ( ! _initComplete )
 	delayedInit();
-
-    return _childrenList->at(_current);
+    if(_current < _childrenList->size())
+        return _childrenList->at(_current);
+    else
+        return NULL;
 }
 
 
@@ -399,7 +401,7 @@ public:
             Q_ASSERT(false);
         }
 
-        return _ascending ? result : -result;
+        return _ascending ? result < 0 : result > 0;
     }
 
 private:

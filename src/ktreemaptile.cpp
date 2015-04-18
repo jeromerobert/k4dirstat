@@ -38,7 +38,7 @@ KTreemapTile::KTreemapTile( KTreemapView *	parentView,
 			    KFileInfo *		orig,
 			    const QRectF &	rect,
 			    KOrientation	orientation )
-    : QGraphicsRectItem(rect)
+    : QGraphicsRectItem(rect, parentTile)
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )

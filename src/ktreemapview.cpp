@@ -389,8 +389,10 @@ KTreemapView::rebuildTreemap(KFileInfo * newRoot, const QRectF & newSz)
 
     QRectF newSize = newSz;
 
-    if ( newSz.isEmpty() )
-       newSize = this->sceneRect();
+    if ( newSz.isEmpty() ) {
+       QRect viewportRect(0, 0, this->width(), this->height());
+       newSize = mapToScene(viewportRect).boundingRect();
+    }
 
 
     // Delete all old stuff.
@@ -423,6 +425,7 @@ KTreemapView::rebuildTreemap(KFileInfo * newRoot, const QRectF & newSz)
 					  newRoot,	// orig
 					  newSize,
 					  KTreemapAuto );
+	    scene()->addItem(_rootTile);
 	}
 
 
