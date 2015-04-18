@@ -709,16 +709,16 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 
     layout->addSpacing( 10 );
     
-    QGroupBox * excludeBox	= new QGroupBox( i18n( "&Exclude Rules" ), this );
+    QGroupBox * excludeBox	= new QGroupBox( i18n( "&Exclude Rules" ));
     layout->addWidget( excludeBox );
-    QVBoxLayout * excludeBoxLayout = new QVBoxLayout(excludeBox);
+    QVBoxLayout * excludeBoxLayout = new QVBoxLayout();
     excludeBox->setLayout(excludeBoxLayout);
     _excludeRulesListView	= new QListWidget();
     _excludeRuleContextMenu	= 0;
     excludeBoxLayout->addWidget(_excludeRulesListView);
 
-    QGroupBox * buttonBox	= new QGroupBox( excludeBox );
-    QHBoxLayout * buttonBoxLayout = new QHBoxLayout(buttonBox);
+    QHBoxLayout * buttonBoxLayout = new QHBoxLayout();
+    excludeBoxLayout->addLayout(buttonBoxLayout);
     _addExcludeRuleButton = new QPushButton(i18n("&Add"));
     _editExcludeRuleButton = new QPushButton(i18n("&Edit"));
     _deleteExcludeRuleButton = new QPushButton(i18n("&Delete"));
@@ -752,7 +752,7 @@ KGeneralSettingsPage::~KGeneralSettingsPage()
 
 
 void
-KGeneralSettingsPage::showExcludeRuleContextMenu(const QPoint &pos)
+KGeneralSettingsPage::showExcludeRuleContextMenu(const QPoint & localPos)
 {
     if ( ! _excludeRuleContextMenu )
     {
@@ -767,6 +767,7 @@ KGeneralSettingsPage::showExcludeRuleContextMenu(const QPoint &pos)
 
     if ( _excludeRuleContextMenu && _excludeRulesListView->currentItem() )
     {
+        QPoint pos = _excludeRulesListView->viewport()->mapToGlobal(localPos);
 	_excludeRuleContextMenu->move( pos.x(), pos.y() );
 	_excludeRuleContextMenu->show();
     }
