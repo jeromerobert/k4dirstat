@@ -320,7 +320,7 @@ namespace KDirStat
 	/**
 	 * Catch mouse click - emits a selectionChanged() signal.
 	 **/
-	virtual void contentsMousePressEvent( QMouseEvent * event );
+	virtual void mousePressEvent( QMouseEvent * event );
 
 	/**
 	 * Catch mouse double click:

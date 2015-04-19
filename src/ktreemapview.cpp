@@ -159,7 +159,7 @@ KTreemapView::tileAt( QPoint pos )
 
 
 void
-KTreemapView::contentsMousePressEvent( QMouseEvent * event )
+KTreemapView::mousePressEvent( QMouseEvent * event )
 {
     // kdDebug() << k_funcinfo << endl;
 
@@ -527,8 +527,10 @@ KTreemapView::selectTile( KTreemapTile * tile )
 
     if ( _selectedTile )
     {
-	if ( ! _selectionRect )
+	if ( ! _selectionRect ) {
 	    _selectionRect = new KTreemapSelectionRect(_highlightColor );
+	    scene()->addItem(_selectionRect);
+	}
     }
 
     if ( _selectionRect )
