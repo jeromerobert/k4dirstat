@@ -437,8 +437,8 @@ KCleanupListBox::KCleanupListBox( QWidget *parent )
     _selection = 0;
 
     connect( this,
-             SIGNAL( selectionChanged( Q3ListBoxItem *) ),
-             SLOT  ( selectCleanup   ( Q3ListBoxItem *) ) );
+             SIGNAL( currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+             SLOT  ( selectCleanup   ( QListWidgetItem *) ) );
 }
 
 void
@@ -739,7 +739,7 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     connect( _deleteExcludeRuleButton,	SIGNAL( clicked()           ),
 	     this,			SLOT  ( deleteExcludeRule() ) );
 
-    connect( _excludeRulesListView,	SIGNAL( doubleClicked( Q3ListViewItem *, const QPoint &, int ) ),
+    connect( _excludeRulesListView,	SIGNAL( itemDoubleClicked( QListWidgetItem *) ),
 	     this, 			SLOT  ( editExcludeRule() ) );
 }
 
