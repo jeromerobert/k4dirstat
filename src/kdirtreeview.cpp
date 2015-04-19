@@ -74,7 +74,8 @@ public:
             o.maximum = 100;
             o.progress = item->percent();
             o.palette.setColor(QPalette::Highlight, view->fillColor(item->orig()->treeLevel() - 1));
-            o.palette.setColor(QPalette::Base, view->palette().base().color());
+            if(!item->isSelected())
+                o.palette.setColor(QPalette::Base, view->palette().base().color());
             style->drawControl(QStyle::CE_ProgressBar, &o, painter);
         }
     }
