@@ -17,8 +17,6 @@
 #   include <config.h>
 #endif
 
-#include <q3ptrlist.h>
-
 #include "kcleanup.h"
 
 // Forward declarations

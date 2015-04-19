@@ -16,8 +16,6 @@ set(k4dirstat_SRCS
    kdirinfo.cpp
    kdirtreecache.cpp
    kdirtreeiterators.cpp
-   kpacman.cpp
-   #kpacman_dummy.cpp
    kdirstatsettings.cpp
  )
 
@@ -27,12 +25,8 @@ kde4_add_kcfg_files(k4dirstat_SRCS settings.kcfgc )
 
 kde4_add_executable(k4dirstat ${k4dirstat_SRCS})
 
-set_source_files_properties(kdirstatsettings.cpp kdirtreeview.cpp k4dirstat_automoc.cpp PROPERTIES COMPILE_DEFINITIONS QT3_SUPPORT)
-
 target_link_libraries(k4dirstat ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
     ${QT_QTGUI_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
-    ${KDE4_KDE3SUPPORT_LIBRARY}
     ${LIBKONQ_LIBRARY}
     ${ZLIB_LIBRARIES})
 

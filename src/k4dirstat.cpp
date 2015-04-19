@@ -46,7 +46,6 @@
 #include <Qt/qsplitter.h>
 
 #include "kdirtree.h"
-#include "kpacman.h"
 #include "ktreemapview.h"
 #include "ktreemaptile.h"
 #include "kcleanupcollection.h"
@@ -113,7 +112,7 @@ k4dirstat::k4dirstat()
     connect( _treeView, SIGNAL( progressInfo( const QString & ) ),
              this,      SLOT  ( statusMsg   ( const QString & ) ) );
 
-    connect( _treeView, SIGNAL( selectionChanged( KFileInfo * ) ),
+    connect( _treeView, SIGNAL( treeSelectionChanged( KFileInfo * ) ),
              this,      SLOT  ( selectionChanged( KFileInfo * ) ) );
 
     connect( _treeView, SIGNAL( contextMenu( KDirTreeViewItem *, const QPoint & ) ),
@@ -291,7 +290,7 @@ void k4dirstat::initCleanups()
     _cleanupCollection->addUserCleanups( USER_CLEANUPS );
     _cleanupCollection->slotReadConfig();
 
-    connect( _treeView,          SIGNAL( selectionChanged( KFileInfo * ) ),
+    connect( _treeView,          SIGNAL( treeSelectionChanged( KFileInfo * ) ),
              _cleanupCollection, SIGNAL( selectionChanged( KFileInfo * ) ) );
 
     connect( this,               SIGNAL( readConfig( void ) ),
@@ -307,43 +306,6 @@ void k4dirstat::revertCleanupsToDefaults()
     defaultCollection.addStdCleanups();
     defaultCollection.addUserCleanups( USER_CLEANUPS );
     *_cleanupCollection = defaultCollection;
-}
-
-
-void k4dirstat::initPacMan( bool enablePacMan )
-{
-    if ( enablePacMan )
-    {
-        if ( ! _pacMan )
-        {
-            _pacMan = new KPacMan( toolBar(), 16, false, "kde toolbar widget" );
-            _pacMan->setInterval( PACMAN_INTERVAL );	// millisec
-            //int id = ID_PACMAN;
-            //toolBar()->insertWidget( id, PACMAN_WIDTH, _pacMan );
-            //toolBar()->  setItemAutoSized( id, false );
-
-            _pacManDelimiter = new QWidget( toolBar() );
-            //toolBar()->insertWidget( ++id, 1, _pacManDelimiter );
-
-            connect( _treeView, SIGNAL( startingReading() ), _pacMan, SLOT( start() ) );
-            connect( _treeView, SIGNAL( finished()        ), _pacMan, SLOT( stop () ) );
-            connect( _treeView, SIGNAL( aborted()         ), _pacMan, SLOT( stop () ) );
-        }
-    }
-    else
-    {
-        if ( _pacMan )
-        {
-            delete _pacMan;
-            _pacMan = 0;
-        }
-
-        if ( _pacManDelimiter )
-        {
-            delete _pacManDelimiter;
-            _pacManDelimiter = 0;
-        }
-    }
 }
 
 void k4dirstat::initStatusBar()
@@ -391,7 +353,6 @@ void k4dirstat::readMainWinConfig()
         resize( size );
 
     config = KGlobal::config()->group("Animation");
-    initPacMan( false );
     _treeView->enablePacManAnimation( config.readEntry( "DirTreePacMan", false ) );
 
     config = KGlobal::config()->group("Exclude");

@@ -17,7 +17,8 @@
 #   include <config.h>
 #endif
 
-#include <q3canvas.h>
+#include <QGraphicsView>
+#include <QGraphicsRectItem>
 #include <kconfiggroup.h>
 
 
@@ -44,7 +45,7 @@ namespace KDirStat
     class KDirTree;
     class KFileInfo;
 
-    class KTreemapView:	public Q3CanvasView
+    class KTreemapView:	public QGraphicsView
     {
 	Q_OBJECT
 
@@ -158,13 +159,6 @@ namespace KDirStat
 	void clear();
 
 	/**
-	 * Delete all items of a QCanvas.
-	 *
-	 * Strangely enough, QCanvas itself does not provide such a function.
-	 **/
-	static void deleteAllItems( Q3Canvas * canvas );
-
-	/**
 	 * Notification that a dir tree node has been deleted.
 	 **/
 	void deleteNotify( KFileInfo * node );
@@ -181,34 +175,7 @@ namespace KDirStat
 	 * size. If 'newSize' is (0, 0), visibleSize() is used.
 	 **/
 	void rebuildTreemap( KFileInfo * 	newRoot,
-			     const QSize &	newSize = QSize() );
-
-	/**
-	 * Returns the visible size of the viewport presuming no scrollbars are
-	 * needed - which makes a lot more sense than fiddling with scrollbars
-	 * since treemaps can be scaled to make scrollbars unnecessary.
-	 **/
-	QSize visibleSize();
-
-	/**
-	 * Returns the visible width of the viewport presuming no scrollbars
-	 * are needed.
-	 *
-	 * This uses visibleSize() which is a somewhat expensive operation, so
-	 * if you need both visibleWidth() and visibleHeight(), better call
-	 * visibleSize() once and access its width() and height() methods.
-	 **/
-	int visibleWidth() { return visibleSize().width(); }
-
-	/**
-	 * Returns the visible height of the viewport presuming no scrollbars
-	 * are needed.
-	 *
-	 * This uses visibleSize() which is a somewhat expensive operation, so
-	 * if you need both visibleWidth() and visibleHeight(), better call
-	 * visibleSize() once and access its width() and height() methods.
-	 **/
-	int visibleHeight() { return visibleSize().height(); }
+				 const QRectF &	newSize = QRectF() );
 
 	/**
 	 * Returns true if it is possible to zoom in with the currently
@@ -353,7 +320,7 @@ namespace KDirStat
 	/**
 	 * Catch mouse click - emits a selectionChanged() signal.
 	 **/
-	virtual void contentsMousePressEvent( QMouseEvent * event );
+	virtual void mousePressEvent( QMouseEvent * event );
 
 	/**
 	 * Catch mouse double click:
@@ -421,14 +388,14 @@ namespace KDirStat
      * on top (i.e., great z-height) of everything else. The rectangle is
      * transparent, so the treemap tile contents remain visible.
      **/
-    class KTreemapSelectionRect: public Q3CanvasRectangle
+    class KTreemapSelectionRect: public QGraphicsRectItem
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	KTreemapSelectionRect( Q3Canvas * canvas, const QColor & color );
+	KTreemapSelectionRect(const QColor & color );
 
 	/**
 	 * Highlight the specified treemap tile: Resize this selection

@@ -18,7 +18,7 @@
 #include <qregexp.h>
 
 #include <kapplication.h>
-#include <k3process.h>
+#include <KProcess>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -336,7 +336,7 @@ void
 KCleanup::runCommand ( const KFileInfo *	item,
 		       const QString &		command ) const
 {
-    K3Process	proc;
+    KProcess	proc;
     KDirSaver	dir( itemDir( item ) );
     QString	cmd( expandVariables( item, command ));
 
@@ -363,7 +363,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 	    // finish, so we are starting the command as a pure
 	    // background process.
 
-	    proc.start( K3Process::DontCare );
+	    proc.start();
 	    break;
 
 
@@ -376,7 +376,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 	    // process in blocking mode.
 
 	    QApplication::setOverrideCursor( Qt::WaitCursor );
-	    proc.start( K3Process::Block );
+	    proc.execute();
 	    QApplication::restoreOverrideCursor();
 	    break;
     }

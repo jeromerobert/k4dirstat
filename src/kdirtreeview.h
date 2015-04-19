@@ -18,10 +18,8 @@
 #endif
 
 #include <qdatetime.h>
-#include <q3listview.h>
+#include <QTreeWidget>
 #include <qpixmap.h>
-#include <KDE/K3ListView>
-#include <q3painter.h>
 #include "kdirtree.h"
 
 #define DEBUG_COUNTERS		10
@@ -48,13 +46,13 @@ namespace KDirStat
 #if USE_KLISTVIEW
 #   define KDirTreeViewParentClass		KListView
 #else
-#   define KDirTreeViewParentClass		Q3ListView
+#   define KDirTreeViewParentClass		QTreeWidget
 #endif
 
     class KDirTreeViewItem;
 
 
-    class KDirTreeView:	public Q3ListView
+    class KDirTreeView:	public QTreeWidget
     // Using
     //		class KDirTreeView: public KDirTreeViewParentClass
     // or some other 'ifdef' ... construct seems to confuse "moc".
@@ -83,13 +81,7 @@ namespace KDirStat
 					bool		lazy	= true,
 					bool		doClone	= true );
 
-	/**
-	 * Get the first child of this view or 0 if there is none.
-	 * Use the child's next() method to get the next child.
-	 * Reimplemented from @ref QListView.
-	 **/
-	KDirTreeViewItem *	firstChild() const
-	    { return (KDirTreeViewItem *) KDirTreeViewParentClass::firstChild(); }
+	KDirTreeViewItem *topLevelItem(int index) const;
 
 	/**
 	 * Return the currently selected item or 0, if none is selected.
@@ -201,13 +193,6 @@ namespace KDirStat
 	void ensureContrast();
 
 	/**
-	 * Set the sort column.
-	 *
-	 * Reimplemented from QListView so we can keep track of the sort column.
-	 **/
-	virtual void setSorting( int column, bool increasing = TRUE );
-
-	/**
 	 * Returns the internal @ref KDirTree this view works on.
 	 * Handle with caution: This might be short-lived information.
 	 * The view might choose to create a new tree shortly after returning
@@ -227,7 +212,6 @@ namespace KDirStat
 	int	totalSubDirsCol()	const	{ return _totalSubDirsCol;	}
 	int	latestMtimeCol()	const	{ return _latestMtimeCol;	}
 	int	readJobsCol()		const	{ return _readJobsCol;		}
-	int	sortCol()		const   { return _sortCol;		}
 
 	QPixmap	openDirIcon()		const	{ return _openDirIcon;		}
 	QPixmap	closedDirIcon()		const	{ return _closedDirIcon;	}
@@ -255,7 +239,10 @@ namespace KDirStat
 	 **/
 	void	incDebugCount( int i );
 
+        void setColumnAlignment(QTreeWidgetItem & item);
+        void triggerUpdate();
 
+        void mousePressEvent(QMouseEvent *event);
     public slots:
 
 	/**
@@ -286,13 +273,13 @@ namespace KDirStat
         /**
 	 * Select a (QListViewItem) item. Triggers selectionChanged() signals.
 	 **/
-        void selectItem( Q3ListViewItem *item );
+        void selectItem( QTreeWidgetItem *item );
 
         /**
 	 * Select an item. Triggers selectionChanged() signals.
 	 * Overloaded for convenience.
 	 **/
-        void selectItem( KDirTreeViewItem *item ) { selectItem( (Q3ListViewItem *) item ); }
+        void selectItem( KDirTreeViewItem *item ) { selectItem( (QTreeWidgetItem *) item ); }
 
 	/**
 	 * Select a KDirTree item. Used for connecting the @ref
@@ -405,15 +392,6 @@ namespace KDirStat
 	 **/
 	void	sendProgressInfo( const QString & currentDir = "" );
 
-
-#if QT_VERSION < 300
-	/**
-	 * "moc" doesnt't seem to handle default arguments well, so this is an
-	 * overloaded slot that uses the internally stored current directory.
-	 **/
-	void	sendProgressInfo();
-#endif
-
         /**
 	 * Set up everything prior to reading: Cyclic update timer, display
 	 * busy state, default sorting, stopwatch.
@@ -437,9 +415,7 @@ namespace KDirStat
 	 * Pop up context menu (i.e. emit the contextMenu() signal) or open a
 	 * small info popup with exact information, depending on 'column'.
 	 **/
-	void 	popupContextMenu	( Q3ListViewItem *	listViewItem,
-					  const QPoint &	pos,
-					  int 			column );
+	void 	popupContextMenu	(const QPoint &	pos);
 
 	/**
 	 * Pop up info window with exact byte size.
@@ -453,13 +429,11 @@ namespace KDirStat
 	void 	popupContextInfo	( const QPoint &	pos,
 					  const QString & 	info );
 
+    void updateSelection();
 
-	/**
-	 * Notification that a column has just been resized, thus may need
-	 * repaining.
-	 **/
-        void columnResized( int column, int oldSize, int newSize );
+    void resizeIndexToContents(const QModelIndex & index);
 
+    void itemExpandedSlot(QTreeWidgetItem*);
 
     signals:
 
@@ -489,13 +463,13 @@ namespace KDirStat
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KDirTreeViewItem *item );
+	void treeSelectionChanged( KDirTreeViewItem *item );
 
 	/**
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KFileInfo *item );
+	void treeSelectionChanged( KFileInfo *item );
 
 	/**
 	 * Emitted when a context menu for this item should be opened.
@@ -518,7 +492,6 @@ namespace KDirStat
 	 * KActivityTracker.
 	 **/
 	void userActivity( int points );
-
 
     protected:
 
@@ -563,7 +536,6 @@ namespace KDirStat
 	int	_totalSubDirsCol;
 	int	_latestMtimeCol;
 	int	_readJobsCol;
-	int	_sortCol;
 
 	int 	_debugCount[ DEBUG_COUNTERS ];
 	QString	_debugFunc [ DEBUG_COUNTERS ];
@@ -589,7 +561,7 @@ namespace KDirStat
 
 
 
-    class KDirTreeViewItem: public Q3ListViewItem
+    class KDirTreeViewItem: public QTreeWidgetItem
     {
     public:
 	/**
@@ -660,40 +632,14 @@ namespace KDirStat
 	 * Returns the corresponding original item of the "real" (vs. view)
 	 * tree where all the important information resides.
 	 **/
-	KFileInfo *		orig()		{ return _orig;	}
+	KFileInfo *		orig()	const { return _orig;	}
 
-	/**
-	 * Returns the first child of this item or 0 if there is none.
-	 * Use the child's next() method to get the next child.
-	 * Reimplemented from @ref QListViewItem.
-	 **/
-	KDirTreeViewItem * 	firstChild() const
-	    { return (KDirTreeViewItem *) Q3ListViewItem::firstChild(); }
+	/** Specialization of QTreeWidgetItem::child */
+	inline KDirTreeViewItem *child(int index) const {
+	    return static_cast<KDirTreeViewItem *>(this->QTreeWidgetItem::child(index));
+	}
 
-	/**
-	 * Returns the next sibling of this item or 0 if there is none.
-	 * (Kind of) reimplemented from @ref QListViewItem.
-	 **/
-	KDirTreeViewItem * 	next() const
-	    { return (KDirTreeViewItem *) Q3ListViewItem::nextSibling(); }
-
-	/**
-	 * Comparison function used for sorting the list.
-	 *
-	 * Using this function is much more efficient than overwriting
-	 * QListViewItem::key() which operates on QStrings.
-	 *
-	 * Returns:
-	 * -1 if this <  other
-	 *  0 if this == other
-	 * +1 if this >  other
-	 *
-	 * Reimplemented from QListViewItem
-	 **/
-	virtual int compare( Q3ListViewItem *	other,
-			     int		col,
-			     bool		ascending ) const;
-
+	virtual bool operator<(const QTreeWidgetItem &other) const;
 	/**
 	 * Perform any necessary pending updates when a branch is opened.
 	 * Reimplemented from @ref QListViewItem.
@@ -732,14 +678,15 @@ namespace KDirStat
 	 **/
 	QString asciiDump();
 
-
-    protected:
+	float percent() const { return _percent; }
 
 	/**
 	 * Set the appropriate icon depending on this item's type and open /
 	 * closed state.
 	 **/
 	void	setIcon();
+
+    protected:
 
 	/**
 	 * Remove dot entry if it doesn't have any children.
@@ -759,31 +706,6 @@ namespace KDirStat
 	 **/
 	KDirTreeViewItem * findDotEntry() const;
 
-
-	/**
-	 * Paint method. Reimplemented from @ref QListViewItem so different
-	 * colors can be used - and of course for painting percentage bars.
-	 *
-	 * Reimplemented from @ref QListViewItem.
-	 **/
-	virtual void paintCell 	( QPainter *		painter,
-				  const QColorGroup &	colorGroup,
-				  int			column,
-				  int			width,
-				  int			alignment );
-
-	/**
-	 * Paint a percentage bar into a @ref QListViewItem cell.
-	 * 'width' is the width of the entire cell.
-	 * 'indent' is the number of pixels to indent the bar.
-	 **/
-	void paintPercentageBar	( float			percent,
-				  QPainter *		painter,
-				  int			indent,
-				  int			width,
-				  const QColor &	fillColor,
-				  const QColor &	barBackground	);
-
 	/**
 	 * Generic comparison function.
 	 **/
@@ -796,6 +718,20 @@ namespace KDirStat
 	}
 
     private:
+	/**
+	 * Comparison function used for sorting the list.
+	 *
+	 * Using this function is much more efficient than overwriting
+	 * QListViewItem::key() which operates on QStrings.
+	 *
+	 * Returns:
+	 * -1 if this <  other
+	 *  0 if this == other
+	 * +1 if this >  other
+	 *
+	 **/
+	 int compare( const KDirTreeViewItem *	other,
+				 int		col) const;
 
 	/**
 	 * Initializations common to all constructors.
@@ -804,6 +740,10 @@ namespace KDirStat
 			  KDirTreeViewItem *	parent,
 			  KFileInfo *		orig );
 
+    int height() {
+        return _view->visualItemRect (this).height();
+    }
+
     protected:
 
 	// Data members
@@ -811,7 +751,6 @@ namespace KDirStat
 	KDirTreeView *		_view;
 	KDirTreeViewItem *	_parent;
 	KFileInfo *		_orig;
-	KPacManAnimation *	_pacMan;
 	float			_percent;
 	int			_openCount;
 

@@ -19,8 +19,6 @@
 
 #include <qstring.h>
 #include <qregexp.h>
-#include <q3ptrlist.h>
-
 
 namespace KDirStat
 {
@@ -104,7 +102,7 @@ namespace KDirStat
 	 * Most applications will want to use excludeRules() instead to create
 	 * and use a singleton object of this class.
 	 **/
-	KExcludeRules();
+	KExcludeRules(){}
 
 	/**
 	 * Destructor.
@@ -141,31 +139,16 @@ namespace KDirStat
 	const KExcludeRule * matchingRule( const QString & text );
 
 	/**
-	 * Returns the first exclude rule of this rule set
-	 * or 0 if there is none.
-	 **/
-	KExcludeRule * first() { return _rules.first(); }
-	
-	/**
-	 * Returns the next exclude rule (after first() or next() )
-	 * of this rule set or 0 if there is no more.
-	 **/
-	KExcludeRule * next() { return _rules.next(); }
-	
-	/**
-	 * Returns the current exclude rule of this rule set
-	 * or 0 if there is none.
-	 **/
-	KExcludeRule * current() { return _rules.current(); }
-
-	/**
 	 * Clear (delete) all exclude rules.
 	 **/
 	void clear() { _rules.clear(); }
 
+        const QList<KExcludeRule*> & rules() const {
+            return _rules;
+        }
     private:
 
-	Q3PtrList<KExcludeRule>    _rules;
+	QList<KExcludeRule*>    _rules;
     };
 
 }	// namespace KDirStat

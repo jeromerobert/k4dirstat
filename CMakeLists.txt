@@ -25,8 +25,6 @@ function(git_version output_variable default_version strip_string)
     add_definitions(-D${output_variable}=${${output_variable}})
 endfunction()
 
-SET(QT_USE_QT3SUPPORT true)
-
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 find_package(LibKonq REQUIRED)
@@ -36,10 +34,6 @@ include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${QT_GUI_INCLUDES})
 
 ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
-
-if(QT_USE_QT3SUPPORT)
-  include_directories(${QT_QT3SUPPORT_INCLUDES})
-endif()
 
 git_version(K4DIRSTAT_VERSION 2.7.8 k4dirstat-)
 add_subdirectory( doc )

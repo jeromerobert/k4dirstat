@@ -18,8 +18,6 @@
 #endif
 
 #include "kdirtree.h"
-#include <q3ptrlist.h>
-
 
 namespace KDirStat
 {
@@ -179,11 +177,11 @@ namespace KDirStat
 
 	KFileInfo *	_parent;
 	KDotEntryPolicy	_policy;
-	KFileInfo *	_current;
 	bool		_directChildrenProcessed;
 	bool		_dotEntryProcessed;
 	bool		_dotEntryChildrenProcessed;
-
+    private:
+        KFileInfo *	_current;
     };	// class KFileInfoIterator
 
 
@@ -268,6 +266,7 @@ namespace KDirStat
 	// Data members
 
 	KFileInfoList *		_childrenList;
+	int			_current;
 	KFileInfoSortOrder	_sortOrder;
 	bool			_ascending;
 	bool			_initComplete;
@@ -326,7 +325,7 @@ namespace KDirStat
     /**
      * Internal helper class for sorting iterators.
      **/
-    class KFileInfoList: public Q3PtrList<KFileInfo>
+    class KFileInfoList: public QList<KFileInfo*>
     {
     public:
 
@@ -346,21 +345,11 @@ namespace KDirStat
 	 **/
 	KFileSize sumTotalSizes();
 
-	
+    	void sort();
     protected:
-	/**
-	 * Comparison function. This is why this class is needed at all.
-	 **/
-	virtual int compareItems( Q3PtrCollection::Item it1, Q3PtrCollection::Item it2 );
-
 	KFileInfoSortOrder 	_sortOrder;
 	bool			_ascending;
     };
-
-
-    typedef Q3PtrListIterator<KFileInfo> KFileInfoListIterator;
-
-
 
     //----------------------------------------------------------------------
     //			       Static Functions

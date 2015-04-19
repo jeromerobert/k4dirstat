@@ -13,24 +13,16 @@
 #   include <config.h>
 #endif
 
-#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qslider.h>
-#include <q3vbox.h>
-#include <q3hgroupbox.h>
-#include <q3vgroupbox.h>
 #include <qspinbox.h>
-#include <q3listview.h>
 #include <qinputdialog.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
 #include <qmessagebox.h>
-#include <Q3VGroupBox>
-#include <Q3HGroupBox>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
@@ -43,7 +35,8 @@
 #include "ktreemapview.h"
 #include "kdirstatsettings.h"
 #include "kexcluderules.h"
-
+#include <QGroupBox>
+#include <QMenu>
 
 using namespace KDirStat;
 
@@ -185,22 +178,19 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 {
     // Outer layout box
 
-    QHBoxLayout * outerBox = new QHBoxLayout( this,
-					      0,	// border
-					      dialog->spacingHint() );
-
-
+    QHBoxLayout * outerBox = new QHBoxLayout(this);
+    outerBox->setMargin(0);
+    outerBox->setSpacing(dialog->spacingHint());
     // Inner layout box with a column of color buttons
 
-    QGridLayout *grid = new QGridLayout( _maxButtons,		// rows
-					 _maxButtons + 1,	// cols
-					 dialog->spacingHint() );
+    QGridLayout *grid = new QGridLayout();
+    grid->setMargin(dialog->spacingHint());
     outerBox->addLayout( grid, 1 );
-    grid->setColStretch( 0, 0 );	// label column - dont' stretch
+    grid->setColumnStretch( 0, 0 );	// label column - dont' stretch
 
     for ( int i=1; i < _maxButtons; i++ )
     {
-	grid->setColStretch( i, 1 );	// all other columns stretch as you like
+	grid->setColumnStretch( i, 1 );	// all other columns stretch as you like
     }
 
     for ( int i=0; i < _maxButtons; i++ )
@@ -213,19 +203,19 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 
 	_colorButton[i] = new KColorButton( this );
 	_colorButton[i]->setMinimumSize( QSize( 80, 10 ) );
-	grid->addMultiCellWidget( _colorButton [i], i, i, i+1, _maxButtons );
+	grid->addWidget(_colorButton[i], i, i+1, 1, _maxButtons - i);
 	grid->setRowStretch( i, 1 );
     }
 
 
     // Vertical slider
 
-    _slider = new QSlider( 1,			// minValue
-			   _maxButtons,		// maxValue
-			   1,			// pageStep
-			   1,			// value
-                           Qt::Vertical,
-			   this );
+    _slider = new QSlider(Qt::Vertical, this);
+    _slider->setMinimum(1);
+    _slider->setMaximum(_maxButtons);
+    _slider->setPageStep(1);
+    _slider->setValue(1);
+
     outerBox->addWidget( _slider, 0 );
     outerBox->activate();
 
@@ -303,9 +293,9 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
 
     // Create layout and widgets.
 
-    QHBoxLayout * layout = new QHBoxLayout( this,
-					    0,				// border
-					    dialog->spacingHint() );	// spacing
+    QHBoxLayout * layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(dialog->spacingHint());
     _listBox	= new KCleanupListBox( this );
     _props	= new KCleanupPropertiesPage( this, mainWin );
 
@@ -387,7 +377,7 @@ KCleanupPage::setup()
     // (Re-) Initialize list box.
 
     // _listBox->resize( _listBox->sizeHint() );
-    _listBox->setSelected( 0, true );
+    _listBox->setCurrentItem(NULL);
 }
 
 
@@ -442,37 +432,14 @@ KCleanupPage::storeProps( KCleanup * cleanup )
 
 
 KCleanupListBox::KCleanupListBox( QWidget *parent )
-   : Q3ListBox( parent )
+   : QListWidget( parent )
 {
     _selection = 0;
 
     connect( this,
-             SIGNAL( selectionChanged( Q3ListBoxItem *) ),
-             SLOT  ( selectCleanup   ( Q3ListBoxItem *) ) );
+             SIGNAL( currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+             SLOT  ( selectCleanup   ( QListWidgetItem *) ) );
 }
-
-
-QSize
-KCleanupListBox::sizeHint() const
-{
-    // FIXME: Is this still needed with Qt 2.x?
-
-    if ( count() < 1 )
-    {
-	// As long as the list is empty, sizeHint() would default to
-	// (0,0) which is ALWAYS just a pain in the ass. We'd rather
-	// have an absolutely random value than this.
-	return QSize( 100, 100 );
-    }
-    else
-    {
-	// Calculate the list contents and take 3D frames (2*2 pixels)
-	// into account.
-	return QSize ( maxItemWidth() + 5,
-		       count() * itemHeight( 0 ) + 4 );
-    }
-}
-
 
 void
 KCleanupListBox::insert( KCleanup * cleanup )
@@ -486,7 +453,7 @@ KCleanupListBox::insert( KCleanup * cleanup )
 
 
 void
-KCleanupListBox::selectCleanup( Q3ListBoxItem * listBoxItem )
+KCleanupListBox::selectCleanup( QListWidgetItem * listBoxItem )
 {
     KCleanupListBoxItem * item = (KCleanupListBoxItem *) listBoxItem;
 
@@ -498,14 +465,10 @@ KCleanupListBox::selectCleanup( Q3ListBoxItem * listBoxItem )
 void
 KCleanupListBox::updateTitle( KCleanup * cleanup )
 {
-    KCleanupListBoxItem * item = (KCleanupListBoxItem *) firstItem();
-
-    while ( item )
-    {
-	if ( ! cleanup || item->cleanup() == cleanup )
-	    item->updateTitle();
-
-	item = (KCleanupListBoxItem *) item->next();
+    for(int i = 0; i < count(); i ++) {
+        KCleanupListBoxItem * item = static_cast<KCleanupListBoxItem *>(this->item(i));
+        if ( ! cleanup || item->cleanup() == cleanup )
+            item->updateTitle();
     }
 }
 
@@ -515,7 +478,7 @@ KCleanupListBox::updateTitle( KCleanup * cleanup )
 
 KCleanupListBoxItem::KCleanupListBoxItem( KCleanupListBox *	listBox,
 					  KCleanup *		cleanup )
-    : Q3ListBoxText( listBox )
+	: QListWidgetItem( listBox )
     , _cleanup( cleanup )
 {
     Q_CHECK_PTR( cleanup );
@@ -538,8 +501,9 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
    : QWidget( parent )
    , _mainWin( mainWin )
 {
-    QVBoxLayout *outerBox = new QVBoxLayout( this, 0, 0 );	// border, spacing
-
+    QVBoxLayout *outerBox = new QVBoxLayout(this);
+    outerBox->setMargin(0);
+    outerBox->setSpacing(0);
     // The topmost check box: "Enabled".
 
     _enabled = new QCheckBox( i18n( "&Enabled" ), this );
@@ -563,15 +527,14 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // Grid layout for the edit fields, their labels, some
     // explanatory text and the "recurse?" check box.
 
-    QGridLayout *grid = new QGridLayout( 7,	// rows
-					 2,	// cols
-					 4 );	// spacing
+    QGridLayout *grid = new QGridLayout();
+    grid->setSpacing(4);
     fieldsBox->addLayout( grid, 0 );
     fieldsBox->addStretch();
     fieldsBox->addSpacing( 5 );
 
-    grid->setColStretch( 0, 0 ); // column for field labels - dont' stretch
-    grid->setColStretch( 1, 1 ); // column for edit fields - stretch as you like
+    grid->setColumnStretch( 0, 0 ); // column for field labels - dont' stretch
+    grid->setColumnStretch( 1, 1 ); // column for edit fields - stretch as you like
 
 
     // Edit fields for cleanup action title and command line.
@@ -579,8 +542,14 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     QLabel *label;
     _title	= new QLineEdit( _fields );					grid->addWidget( _title,   0, 1 );
     _command	= new QLineEdit( _fields );					grid->addWidget( _command, 1, 1 );
-    label	= new QLabel( _title,	i18n( "&Title:"		), _fields );	grid->addWidget( label,	   0, 0 );
-    label	= new QLabel( _command, i18n( "&Command Line:"	), _fields );	grid->addWidget( label,	   1, 0 );
+
+    label = new QLabel(i18n("&Title:"), _fields);
+    label->setBuddy(_title);
+    grid->addWidget(label, 0, 0);
+
+    label = new QLabel(i18n("&Command Line:"), _fields);
+    label->setBuddy(_command);
+    grid->addWidget(label, 1, 0);
 
     label = new QLabel( i18n( "%p Full Path" ), _fields );
     grid->addWidget( label, 2, 1 );
@@ -605,8 +574,8 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
 
     // The "Works for..." check boxes, grouped together in a button group.
 
-    Q3ButtonGroup *worksFor = new Q3ButtonGroup( i18n( "Works for..." ), _fields );
-    QVBoxLayout *worksForBox = new QVBoxLayout( worksFor, 15, 2 );
+    QGroupBox *worksFor = new QGroupBox( i18n( "Works for..." ), _fields );
+    QVBoxLayout *worksForBox = new QVBoxLayout(worksFor);
     fieldsBox->addWidget( worksFor, 0 );
     fieldsBox->addSpacing( 5 );
     fieldsBox->addStretch();
@@ -620,19 +589,18 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     worksForBox->addWidget( _worksForDotEntry	, 1 );
 
     worksForBox->addSpacing( 5 );
-    _worksForProtocols = new QComboBox( false, worksFor );
+    _worksForProtocols = new QComboBox(worksFor);
+    _worksForProtocols->setEditable(false);
     worksForBox->addWidget( _worksForProtocols, 1 );
 
-    _worksForProtocols->insertItem( i18n( "On Local Machine Only ('file:/' Protocol)" ) );
-    _worksForProtocols->insertItem( i18n( "Network Transparent (ftp, smb, tar, ...)" ) );
+    _worksForProtocols->insertItem(0, i18n("On Local Machine Only ('file:/' Protocol)"));
+    _worksForProtocols->insertItem(1, i18n("Network Transparent (ftp, smb, tar, ...)"));
 
 
     // Grid layout for combo boxes at the bottom
 
-    grid = new QGridLayout( 1,		// rows
-			    2,		// cols
-			    4 );	// spacing
-
+    grid = new QGridLayout();
+    grid->setSpacing(4);
     fieldsBox->addLayout( grid, 0 );
     fieldsBox->addSpacing( 5 );
     fieldsBox->addStretch();
@@ -641,10 +609,12 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
 
     // The "Refresh policy" combo box
 
-    _refreshPolicy = new QComboBox( false, _fields );
+    _refreshPolicy = new QComboBox(_fields);
+    _refreshPolicy->setEditable(false);
     grid->addWidget( _refreshPolicy, row, 1 );
 
-    label = new QLabel( _refreshPolicy, i18n( "Refresh &Policy:" ), _fields );
+    label = new QLabel(i18n( "Refresh &Policy:" ), _fields);
+    label->setBuddy(_refreshPolicy);
     grid->addWidget( label, row++, 0 );
 
 
@@ -655,11 +625,10 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
     // than mere numeric IDs. One of these days I'm going to rewrite this
     // thing!
 
-    _refreshPolicy->insertItem( i18n( "No Refresh"			) );
-    _refreshPolicy->insertItem( i18n( "Refresh This Entry"		) );
-    _refreshPolicy->insertItem( i18n( "Refresh This Entry's Parent"	) );
-    _refreshPolicy->insertItem( i18n( "Assume Entry Has Been Deleted"	) );
-
+    _refreshPolicy->insertItem(0, i18n("No Refresh"));
+    _refreshPolicy->insertItem(1, i18n("Refresh This Entry"));
+    _refreshPolicy->insertItem(2, i18n("Refresh This Entry's Parent"));
+    _refreshPolicy->insertItem(3, i18n("Assume Entry Has Been Deleted"));
 
     outerBox->activate();
     setMinimumSize( sizeHint() );
@@ -685,8 +654,8 @@ KCleanupPropertiesPage::setFields( const KCleanup * cleanup )
     _worksForDir->setChecked		( cleanup->worksForDir()	);
     _worksForFile->setChecked		( cleanup->worksForFile()	);
     _worksForDotEntry->setChecked	( cleanup->worksForDotEntry()	);
-    _worksForProtocols->setCurrentItem	( cleanup->worksLocalOnly() ? 0 : 1 );
-    _refreshPolicy->setCurrentItem	( cleanup->refreshPolicy()	);
+    _worksForProtocols->setCurrentIndex	( cleanup->worksLocalOnly() ? 0 : 1 );
+    _refreshPolicy->setCurrentIndex	( cleanup->refreshPolicy()	);
 
     enableFields( cleanup->enabled() );
 }
@@ -702,9 +671,9 @@ KCleanupPropertiesPage::fields() const
     cleanup.setAskForConfirmation	( _askForConfirmation->isChecked() );
     cleanup.setWorksForDir		( _worksForDir->isChecked()	   );
     cleanup.setWorksForFile		( _worksForFile->isChecked()	   );
-    cleanup.setWorksLocalOnly		( _worksForProtocols->currentItem() == 0 ? true : false );
+    cleanup.setWorksLocalOnly		( _worksForProtocols->currentIndex() == 0 ? true : false );
     cleanup.setWorksForDotEntry		( _worksForDotEntry->isChecked()   );
-    cleanup.setRefreshPolicy		( (KCleanup::RefreshPolicy) _refreshPolicy->currentItem() );
+    cleanup.setRefreshPolicy		( (KCleanup::RefreshPolicy) _refreshPolicy->currentIndex() );
 
     return cleanup;
 }
@@ -722,46 +691,45 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 {
     // Create layout and widgets.
 
-    QVBoxLayout * layout	= new QVBoxLayout( this, 5,			// border
-						   dialog->spacingHint() );	// spacing
-
-    Q3VGroupBox * gbox		= new Q3VGroupBox( i18n( "Directory Reading" ), this );
+    QVBoxLayout * layout = new QVBoxLayout(this);
+    layout->setMargin(5);
+    layout->setSpacing(dialog->spacingHint());
+    QGroupBox * gbox		= new QGroupBox( i18n( "Directory Reading" ), this );
     layout->addWidget( gbox );
+    QVBoxLayout * gboxLayout = new QVBoxLayout(gbox);
+    gbox->setLayout(gboxLayout);
 
-
-
-    _crossFileSystems		= new QCheckBox( i18n( "Cross &File System Boundaries" ), gbox );
-    _enableLocalDirReader	= new QCheckBox( i18n( "Use Optimized &Local Directory Read Methods" ), gbox );
+    _crossFileSystems		= new QCheckBox( i18n( "Cross &File System Boundaries" ));
+    _enableLocalDirReader	= new QCheckBox( i18n( "Use Optimized &Local Directory Read Methods" ));
+    gboxLayout->addWidget(_crossFileSystems);
+    gboxLayout->addWidget(_enableLocalDirReader);
 
     connect( _enableLocalDirReader,	SIGNAL( stateChanged( int ) ),
 	     this,			SLOT  ( checkEnabledState() ) );
 
     layout->addSpacing( 10 );
-
-    gbox			= new Q3VGroupBox( i18n( "Animation" ), this );
-    //PacMan is broken and useless so we hide the associated widgets
-    gbox->setVisible(false);
-    layout->addWidget( gbox );
-
-    _enableToolBarAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Tool &Bar" ), gbox );
-    _enableTreeViewAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Directory &Tree" ), gbox );
-    layout->addSpacing( 10 );
     
-    Q3VGroupBox * excludeBox	= new Q3VGroupBox( i18n( "&Exclude Rules" ), this );
+    QGroupBox * excludeBox	= new QGroupBox( i18n( "&Exclude Rules" ));
     layout->addWidget( excludeBox );
-    
-    _excludeRulesListView	= new Q3ListView( excludeBox );
-    _excludeRulesListView->addColumn( i18n( "Exclude Rule (Regular Expression)" ), 300 );
+    QVBoxLayout * excludeBoxLayout = new QVBoxLayout();
+    excludeBox->setLayout(excludeBoxLayout);
+    _excludeRulesListView	= new QListWidget();
     _excludeRuleContextMenu	= 0;
+    excludeBoxLayout->addWidget(_excludeRulesListView);
 
-    QGroupBox * buttonBox	= new Q3HGroupBox( excludeBox );
-    _addExcludeRuleButton	= new QPushButton( i18n( "&Add"    ), buttonBox );
-    _editExcludeRuleButton	= new QPushButton( i18n( "&Edit"   ), buttonBox );
-    _deleteExcludeRuleButton	= new QPushButton( i18n( "&Delete" ), buttonBox );
+    QHBoxLayout * buttonBoxLayout = new QHBoxLayout();
+    excludeBoxLayout->addLayout(buttonBoxLayout);
+    _addExcludeRuleButton = new QPushButton(i18n("&Add"));
+    _editExcludeRuleButton = new QPushButton(i18n("&Edit"));
+    _deleteExcludeRuleButton = new QPushButton(i18n("&Delete"));
+    buttonBoxLayout->addWidget(_addExcludeRuleButton);
+    buttonBoxLayout->addWidget(_editExcludeRuleButton);
+    buttonBoxLayout->addWidget(_deleteExcludeRuleButton);
     
-    connect( _excludeRulesListView,	SIGNAL( rightButtonClicked        ( Q3ListViewItem *, const QPoint &, int ) ),
-             this,			SLOT  ( showExcludeRuleContextMenu( Q3ListViewItem *, const QPoint &, int ) ) );
-    
+    _excludeRulesListView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(_excludeRulesListView, SIGNAL(customContextMenuRequested(const QPoint&)),
+        this, SLOT(showExcludeRuleContextMenu(const QPoint&)));
+
     connect( _addExcludeRuleButton,	SIGNAL( clicked()        ),
 	     this,			SLOT  ( addExcludeRule() ) );
     
@@ -771,7 +739,7 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
     connect( _deleteExcludeRuleButton,	SIGNAL( clicked()           ),
 	     this,			SLOT  ( deleteExcludeRule() ) );
 
-    connect( _excludeRulesListView,	SIGNAL( doubleClicked( Q3ListViewItem *, const QPoint &, int ) ),
+    connect( _excludeRulesListView,	SIGNAL( itemDoubleClicked( QListWidgetItem *) ),
 	     this, 			SLOT  ( editExcludeRule() ) );
 }
 
@@ -784,17 +752,22 @@ KGeneralSettingsPage::~KGeneralSettingsPage()
 
 
 void
-KGeneralSettingsPage::showExcludeRuleContextMenu( Q3ListViewItem *, const QPoint &pos, int )
+KGeneralSettingsPage::showExcludeRuleContextMenu(const QPoint & localPos)
 {
     if ( ! _excludeRuleContextMenu )
     {
-        _excludeRuleContextMenu = new Q3PopupMenu( 0 );
-	_excludeRuleContextMenu->insertItem( i18n( "&Edit"   ), this, SLOT( editExcludeRule  () ) );
-	_excludeRuleContextMenu->insertItem( i18n( "&Delete" ), this, SLOT( deleteExcludeRule() ) );
+        _excludeRuleContextMenu = new QMenu();
+        QAction * editAction = new QAction(i18n("&Edit"), _excludeRuleContextMenu);
+        connect(editAction, SIGNAL(triggered()), this, SLOT(editExcludeRule()));
+        _excludeRuleContextMenu->addAction(editAction);
+        QAction * deleteAction = new QAction(i18n("&Delete"), _excludeRuleContextMenu);
+        connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteExcludeRule()));
+        _excludeRuleContextMenu->addAction(deleteAction);
     }
 
     if ( _excludeRuleContextMenu && _excludeRulesListView->currentItem() )
     {
+        QPoint pos = _excludeRulesListView->viewport()->mapToGlobal(localPos);
 	_excludeRuleContextMenu->move( pos.x(), pos.y() );
 	_excludeRuleContextMenu->show();
     }
@@ -809,28 +782,18 @@ KGeneralSettingsPage::apply()
     config.writeEntry( "CrossFileSystems",	_crossFileSystems->isChecked()		);
     config.writeEntry( "EnableLocalDirReader", _enableLocalDirReader->isChecked()	);
 
-    config = KGlobal::config()->group( "Animation" );
-    //config.setGroup( "Animation" );
-    config.writeEntry( "ToolbarPacMan",	_enableToolBarAnimation->isChecked()	);
-    config.writeEntry( "DirTreePacMan",	_enableTreeViewAnimation->isChecked()	);
-
-    _mainWin->initPacMan( _enableToolBarAnimation->isChecked() );
-    _treeView->enablePacManAnimation( _enableTreeViewAnimation->isChecked() );
-
     config = KGlobal::config()->group( "Exclude" );
     //config.setGroup( "Exclude" );
     
     QStringList excludeRulesStringList;
     KExcludeRules::excludeRules()->clear();
-    Q3ListViewItem * item = _excludeRulesListView->firstChild();
-    
-    while ( item )
-    {
-	QString ruleText = item->text(0);
-	excludeRulesStringList.append( ruleText );
-	// kdDebug() << "Adding exclude rule " << ruleText << endl;
-	KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
-	item = item->nextSibling();
+
+    for(int i = 0; i < _excludeRulesListView->count(); i++) {
+        QListWidgetItem * item = _excludeRulesListView->item(i);
+        QString ruleText = item->text();
+        excludeRulesStringList.append( ruleText );
+        // kdDebug() << "Adding exclude rule " << ruleText << endl;
+        KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
     }
 
     config.writeEntry( "ExcludeRules", excludeRulesStringList );
@@ -842,10 +805,6 @@ KGeneralSettingsPage::revertToDefaults()
 {
     _crossFileSystems->setChecked( false );
     _enableLocalDirReader->setChecked( true );
-
-    _enableToolBarAnimation->setChecked( false );
-    _enableTreeViewAnimation->setChecked( false );
-    
     _excludeRulesListView->clear();
     _editExcludeRuleButton->setEnabled( false );
     _deleteExcludeRuleButton->setEnabled( false );
@@ -859,18 +818,11 @@ KGeneralSettingsPage::setup()
 
     _crossFileSystems->setChecked	( config.readEntry( "CrossFileSystems"	, false) );
     _enableLocalDirReader->setChecked	( config.readEntry( "EnableLocalDirReader" , true ) );
-
-    _enableToolBarAnimation->setChecked ( _mainWin->pacManEnabled() );
-    _enableTreeViewAnimation->setChecked( _treeView->doPacManAnimation() );
-
     _excludeRulesListView->clear();
-    KExcludeRule * excludeRule = KExcludeRules::excludeRules()->first();
 
-    while ( excludeRule )
-    {
-	// _excludeRulesListView->insertItem();
-        new Q3ListViewItem( _excludeRulesListView, excludeRule->regexp().pattern() );
-	excludeRule = KExcludeRules::excludeRules()->next();
+    foreach(KExcludeRule * excludeRule, KExcludeRules::excludeRules()->rules()) {
+        QListWidgetItem * n = new QListWidgetItem(_excludeRulesListView);
+        n->setText(excludeRule->regexp().pattern());
     }
     
     checkEnabledState();
@@ -882,7 +834,7 @@ KGeneralSettingsPage::checkEnabledState()
 {
     _crossFileSystems->setEnabled( _enableLocalDirReader->isChecked() );
 
-    int excludeRulesCount = _excludeRulesListView->childCount();
+    int excludeRulesCount = _excludeRulesListView->count();
     
     _editExcludeRuleButton->setEnabled  ( excludeRulesCount > 0 );
     _deleteExcludeRuleButton->setEnabled( excludeRulesCount > 0 );
@@ -893,16 +845,16 @@ void
 KGeneralSettingsPage::addExcludeRule()
 {
     bool ok;
-    QString text = QInputDialog::getText( i18n( "New exclude rule" ),
+    QString text = QInputDialog::getText(this, i18n( "New exclude rule" ),
 					  i18n( "Regular expression for new exclude rule:" ),
 					  QLineEdit::Normal,
 					  QString::null,
-					  &ok,
-					  this );
+					  &ok);
     if ( ok && ! text.isEmpty() )
     {
-        _excludeRulesListView->insertItem( new Q3ListViewItem ( _excludeRulesListView, text ) );
-	
+        QListWidgetItem * l = new QListWidgetItem(_excludeRulesListView);
+        l->setText(text);
+        _excludeRulesListView->addItem(l);
     }
     
     checkEnabledState();
@@ -912,23 +864,22 @@ KGeneralSettingsPage::addExcludeRule()
 void
 KGeneralSettingsPage::editExcludeRule()
 {
-    Q3ListViewItem * item = _excludeRulesListView->currentItem();
+    QListWidgetItem * item = _excludeRulesListView->currentItem();
 
     if ( item )
     {
 	bool ok;
-	QString text = QInputDialog::getText( i18n( "Edit exclude rule" ),
+	QString text = QInputDialog::getText(this, i18n( "Edit exclude rule" ),
 					      i18n( "Exclude rule (regular expression):" ),
 					      QLineEdit::Normal,
-					      item->text(0),
-					      &ok,
-					      this );
+						  item->text(),
+						  &ok);
 	if ( ok )
 	{
 	    if ( text.isEmpty() )
-		_excludeRulesListView->removeItem( item );
+		_excludeRulesListView->takeItem(_excludeRulesListView->currentRow());
 	    else
-		item->setText( 0, text );
+			item->setText(text);
 	}
     }
     
@@ -936,21 +887,20 @@ KGeneralSettingsPage::editExcludeRule()
 }
 
 
-void
-KGeneralSettingsPage::deleteExcludeRule()
+void KGeneralSettingsPage::deleteExcludeRule()
 {
-    Q3ListViewItem * item = _excludeRulesListView->currentItem();
+    QListWidgetItem * item = _excludeRulesListView->currentItem();
 
     if ( item )
     {
-	QString excludeRule  = item->text(0);
-	int result = KMessageBox::questionYesNo( this,
-						 i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
-						 i18n( "Delete?" ) ); // Window title
-	if ( result == KMessageBox::Yes )
-	{
-	    _excludeRulesListView->removeItem( item );
-	}
+        QString excludeRule = item->text();
+        int result = KMessageBox::questionYesNo( this,
+            i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
+            i18n( "Delete?" ) ); // Window title
+        if ( result == KMessageBox::Yes )
+        {
+            _excludeRulesListView->takeItem(_excludeRulesListView->currentRow());
+        }
     }
 
     checkEnabledState();
@@ -968,86 +918,100 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 {
     // kdDebug() << k_funcinfo << endl;
 
-    QVBoxLayout * layout = new QVBoxLayout( this, 0, 0 ); // parent, border, spacing
-
-    Q3VBox * vbox	= new Q3VBox( this );
-    vbox->setSpacing( dialog->spacingHint() );
-    layout->addWidget( vbox );
-
-    _squarify		= new QCheckBox( i18n( "S&quarify Treemap"	), vbox );
-    _doCushionShading	= new QCheckBox( i18n( "Use C&ushion Shading"	), vbox );
-
+    QVBoxLayout * layout = new QVBoxLayout(this); // parent
+    setLayout(layout);
+    _squarify = new QCheckBox(i18n("S&quarify Treemap"), this);
+    _doCushionShading = new QCheckBox(i18n("Use C&ushion Shading"), this);
+    layout->addWidget(_squarify);
+    layout->addWidget(_doCushionShading);
 
     // Cushion parameters
 
-    Q3VGroupBox * gbox	= new Q3VGroupBox( i18n( "Cushion Parameters" ), vbox );
+    QGroupBox * gbox	= new QGroupBox( i18n( "Cushion Parameters" ), this );
+    layout->addWidget(gbox);
     _cushionParams	= gbox;
-    gbox->addSpace( 7 );
-    gbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-
-    QLabel * label	= new QLabel( i18n( "Ambient &Light" ), gbox );
-    Q3HBox * hbox	= new Q3HBox( gbox );
-    _ambientLight	= new QSlider ( MinAmbientLight, MaxAmbientLight, 10,	// min, max, pageStep
-                                        DefaultAmbientLight, Qt::Horizontal, hbox );
-    _ambientLightSB	= new QSpinBox( MinAmbientLight, MaxAmbientLight, 1,	// min, max, step
-					hbox );
-    _ambientLightSB->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    QLabel * label	= new QLabel( i18n( "Ambient &Light" ));
+    _ambientLight	= new QSlider (Qt::Horizontal);
+    _ambientLight->setMinimum(MinAmbientLight);
+    _ambientLight->setMaximum(MaxAmbientLight);
+    _ambientLight->setPageStep(10);
+    _ambientLight->setValue(DefaultAmbientLight);
+    _ambientLightSB	= new QSpinBox();
+    _ambientLightSB->setMinimum(MinAmbientLight);
+    _ambientLightSB->setMaximum(MaxAmbientLight);
     label->setBuddy( _ambientLightSB );
 
-    gbox->addSpace( 7 );
-    label		= new QLabel( i18n( "&Height Scale" ), gbox );
-    hbox		= new Q3HBox( gbox );
-    _heightScalePercent = new QSlider( MinHeightScalePercent, MaxHeightScalePercent, 10,   // min, max, pageStep
-                                       DefaultHeightScalePercent, Qt::Horizontal, hbox );
-    _heightScalePercentSB = new QSpinBox( MinHeightScalePercent, MaxHeightScalePercent, 1, // min, max, step
-					  hbox );
-    _heightScalePercentSB->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
+    QGridLayout * cushionLayout = new QGridLayout();
+    gbox->setLayout(cushionLayout);
+    cushionLayout->setColumnStretch(1, 1);
+    cushionLayout->addWidget(label, 0, 0, 1, 1);
+    cushionLayout->addWidget(_ambientLight, 0, 1, 1, 2);
+    cushionLayout->addWidget(_ambientLightSB, 0, 3, 1, 1);
+
+    label = new QLabel( i18n( "&Height Scale" ));
+    _heightScalePercent = new QSlider(Qt::Horizontal);
+    _heightScalePercent->setMinimum(MinHeightScalePercent);
+    _heightScalePercent->setMaximum(MaxHeightScalePercent);
+    _heightScalePercent->setPageStep(10);
+    _heightScalePercent->setValue(DefaultHeightScalePercent);
+    _heightScalePercent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    _heightScalePercentSB = new QSpinBox();
+    _heightScalePercentSB->setMinimum(MinHeightScalePercent);
+    _heightScalePercentSB->setMaximum(MaxHeightScalePercent);
     label->setBuddy( _heightScalePercentSB );
 
-    gbox->addSpace( 10 );
-    _ensureContrast	= new QCheckBox( i18n( "Draw Lines if Lo&w Contrast"	), gbox );
+    cushionLayout->addWidget(label, 1, 0, 1, 1);
+    cushionLayout->addWidget(_heightScalePercent, 1, 1, 1, 2);
+    cushionLayout->addWidget(_heightScalePercentSB, 1, 3, 1, 1);
 
+    _ensureContrast	= new QCheckBox( i18n( "Draw Lines if Lo&w Contrast"));
 
-    hbox		= new Q3HBox( gbox );
-    _forceCushionGrid	= new QCheckBox( i18n( "Always Draw &Grid"		), hbox );
-    addHStretch( hbox );
-
-    _cushionGridColorL	= new QLabel( "	   " + i18n( "Gr&id Color: " ), hbox );
-    _cushionGridColor	= new KColorButton( hbox );
+    _forceCushionGrid	= new QCheckBox( i18n( "Always Draw &Grid"));
+    _cushionGridColorL	= new QLabel(i18n( "Gr&id Color: "));
+    _cushionGridColor	= new KColorButton();
     _cushionGridColorL->setBuddy( _cushionGridColor );
-    _cushionGridColorL->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-
-    // addVStretch( vbox );
-
+    cushionLayout->addWidget(_forceCushionGrid, 4, 0, 1, 2);
+    cushionLayout->addWidget(_ensureContrast, 3, 0, 1, 2);
+    cushionLayout->addWidget(_cushionGridColorL, 4, 2, 1, 1, Qt::AlignRight);
+    cushionLayout->addWidget(_cushionGridColor, 4, 3, 1, 1);
 
     // Plain treemaps parameters
 
-    _plainTileParams	= new Q3HGroupBox( i18n( "Colors for Plain Treemaps" ), vbox );
-
-    _plainTileParams->addSpace( 7 );
-    label		= new QLabel( i18n( "&Files: " ), _plainTileParams );
-    _fileFillColor	= new KColorButton( _plainTileParams );
+    _plainTileParams	= new QGroupBox( i18n( "Colors for Plain Treemaps" ), this );
+    layout->addWidget(_plainTileParams);
+    QHBoxLayout * plainTileLayout = new QHBoxLayout();
+    _plainTileParams->setLayout(plainTileLayout);
+    label = new QLabel(i18n("&Files: "));
+    plainTileLayout->addWidget(label);
+    _fileFillColor = new KColorButton();
+    plainTileLayout->addWidget(_fileFillColor);
     label->setBuddy( _fileFillColor );
     label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
-    label		= new QLabel( "	   " + i18n( "&Directories: " ), _plainTileParams );
-    _dirFillColor	= new KColorButton( _plainTileParams );
+    label = new QLabel( "	   " + i18n( "&Directories: " ));
+    _dirFillColor = new KColorButton();
     label->setBuddy( _dirFillColor );
     label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    plainTileLayout->addWidget(label);
+    plainTileLayout->addWidget(_dirFillColor);
 
-    label		= new QLabel( i18n( "Gr&id: " ), _plainTileParams );
-    _outlineColor	= new KColorButton( _plainTileParams );
+    label		= new QLabel( i18n( "Gr&id: " ));
+    _outlineColor	= new KColorButton();
     label->setBuddy( _outlineColor );
     label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    plainTileLayout->addWidget(label);
+    plainTileLayout->addWidget(_outlineColor);
 
 
     // Misc
 
-    QWidget * gridBox	= new QWidget( vbox );
-    QGridLayout * grid	= new QGridLayout( gridBox, 2, 3, dialog->spacingHint() ); // rows, cols, spacing
-    grid->setColStretch( 0, 0 ); // (col, stretch) don't stretch this column
-    grid->setColStretch( 1, 0 ); // don't stretch
-    grid->setColStretch( 2, 1 ); // stretch this as you like
+    QWidget * gridBox	= new QWidget( this );
+    layout->addWidget(gridBox);
+    QGridLayout * grid = new QGridLayout(gridBox);
+    grid->setSpacing(dialog->spacingHint());
+    grid->setColumnStretch( 0, 0 ); // (col, stretch) don't stretch this column
+    grid->setColumnStretch( 1, 0 ); // don't stretch
+    grid->setColumnStretch( 2, 1 ); // stretch this as you like
 
     label		= new QLabel( i18n( "Highlight R&ectangle: " ), gridBox );
     _highlightColor	= new KColorButton( gridBox );
@@ -1058,14 +1022,17 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 
 
     label		= new QLabel( i18n( "Minim&um Treemap Tile Size: " ), gridBox );
-    _minTileSize	= new QSpinBox( 0, 30, 1, gridBox ); // min, max, step, parent
+    _minTileSize = new QSpinBox(gridBox);
+    _minTileSize->setMinimum(0);
+    _minTileSize->setMaximum(30);
+    _minTileSize->setSingleStep(1);
     label->setBuddy( _minTileSize );
 
     grid->addWidget( label,		1, 0 );
     grid->addWidget( _minTileSize,	1, 1 );
 
-    _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), vbox );
-
+    _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), this );
+    layout->addWidget(_autoResize);
 
 
     // Connections
@@ -1200,10 +1167,10 @@ void
 addHStretch( QWidget * parent )
 {
     QWidget * stretch = new QWidget( parent );
-    stretch->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,	// hor
-					 QSizePolicy::Minimum,		// vert
-					 1,				// hstretch
-					 0 ) );				// vstretch
+    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    sp.setHorizontalStretch(1);
+    sp.setVerticalStretch(0);
+    stretch->setSizePolicy(sp);
 }
 
 
@@ -1211,11 +1178,10 @@ void
 addVStretch( QWidget * parent )
 {
     QWidget * stretch = new QWidget( parent );
-    stretch->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,		// hor
-					 QSizePolicy::Expanding,	// vert
-					 0,				// hstretch
-					 1 ) );				// vstretch
+    QSizePolicy sp(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    sp.setHorizontalStretch(0);
+    sp.setVerticalStretch(1);
+    stretch->setSizePolicy(sp);
 }
-
 
 // EOF
