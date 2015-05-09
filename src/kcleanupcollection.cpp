@@ -229,10 +229,10 @@ KCleanupCollection::addUserCleanups( int number )
 
 	if ( _nextUserCleanupNo <= 9 )
 	    // Provide a keyboard shortcut for cleanup #0..#9
-	    title=i18n( "User Defined Cleanup #&%1" ).arg(_nextUserCleanupNo);
+	    title=i18n( "User Defined Cleanup #&%1", _nextUserCleanupNo);
 	else
 	    // No keyboard shortcuts for cleanups #10.. - they would be duplicates
-	    title=i18n( "User Defined Cleanup #%1" ).arg(_nextUserCleanupNo);
+	    title=i18n( "User Defined Cleanup #%1", _nextUserCleanupNo);
 
 	_nextUserCleanupNo++;
 	

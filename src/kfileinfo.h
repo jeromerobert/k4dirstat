@@ -21,6 +21,7 @@
 #include <limits.h>
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <KUrl>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )

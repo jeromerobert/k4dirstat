@@ -305,27 +305,27 @@ protected:
     KFeedbackDialog *		_feedbackDialog;
     KActivityTracker *		_activityTracker;
 
-    KAction * 			_fileAskOpenDir;
-    KAction * 			_fileAskOpenUrl;
+    QAction * 			_fileAskOpenDir;
+    QAction * 			_fileAskOpenUrl;
     KRecentFilesAction *	_fileOpenRecent;
-    KAction * 			_fileCloseDir;
-    KAction * 			_fileRefreshAll;
-    KAction *			_fileRefreshSelected;
-    KAction *			_fileReadExcludedDir;
-    KAction *			_fileContinueReadingAtMountPoint;
-    KAction *			_fileStopReading;
-    KAction *			_fileAskWriteCache;
-    KAction *			_fileAskReadCache;
-    KAction * 			_fileQuit;
-    KAction * 			_editCopy;
-    KAction * 			_cleanupOpenWith;
-    KAction *	 		_treemapZoomIn;
-    KAction *			_treemapZoomOut;
-    KAction *			_treemapSelectParent;
-    KAction * 			_treemapRebuild;
+    QAction * 			_fileCloseDir;
+    QAction * 			_fileRefreshAll;
+    QAction *			_fileRefreshSelected;
+    QAction *			_fileReadExcludedDir;
+    QAction *			_fileContinueReadingAtMountPoint;
+    QAction *			_fileStopReading;
+    QAction *			_fileAskWriteCache;
+    QAction *			_fileAskReadCache;
+    QAction * 			_fileQuit;
+    QAction * 			_editCopy;
+    QAction * 			_cleanupOpenWith;
+    QAction *	 		_treemapZoomIn;
+    QAction *			_treemapZoomOut;
+    QAction *			_treemapSelectParent;
+    QAction * 			_treemapRebuild;
 
-    KAction *			_reportMailToOwner;
-    KAction *			_helpSendFeedbackMail;
+    QAction *			_reportMailToOwner;
+    QAction *			_helpSendFeedbackMail;
     KToggleAction * 		_showTreemapView;
 
     KCleanupCollection *	_cleanupCollection;

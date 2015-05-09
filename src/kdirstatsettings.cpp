@@ -37,6 +37,8 @@
 #include "kexcluderules.h"
 #include <QGroupBox>
 #include <QMenu>
+#include <KDialog>
+#include <KGlobal>
 
 using namespace KDirStat;
 
@@ -66,7 +68,7 @@ KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
 
     setFaceType(Tabbed);
     setModal(false);
-    setCaption(i18n( "Settings"));
+    setWindowTitle(i18n( "Settings"));
     setButtons(KDialog::Ok | KDialog::Apply |
                KDialog::Default | KDialog::Cancel | KDialog::Help);
 
@@ -180,11 +182,9 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 
     QHBoxLayout * outerBox = new QHBoxLayout(this);
     outerBox->setMargin(0);
-    outerBox->setSpacing(dialog->spacingHint());
     // Inner layout box with a column of color buttons
 
     QGridLayout *grid = new QGridLayout();
-    grid->setMargin(dialog->spacingHint());
     outerBox->addLayout( grid, 1 );
     grid->setColumnStretch( 0, 0 );	// label column - dont' stretch
 
@@ -197,7 +197,7 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
     {
 	QString labelText;
 
-	labelText=i18n( "Tree Level %1" ).arg(i+1);
+	labelText=i18n( "Tree Level %1", i+1);
 	_colorLabel[i] = new QLabel( labelText, this );
 	grid->addWidget( _colorLabel [i], i, 0 );
 
@@ -295,7 +295,6 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
 
     QHBoxLayout * layout = new QHBoxLayout(this);
     layout->setMargin(0);
-    layout->setSpacing(dialog->spacingHint());
     _listBox	= new KCleanupListBox( this );
     _props	= new KCleanupPropertiesPage( this, mainWin );
 
@@ -694,7 +693,6 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(5);
-    layout->setSpacing(dialog->spacingHint());
     QGroupBox * gbox		= new QGroupBox( i18n( "Directory Reading" ), this );
     layout->addWidget( gbox );
     QVBoxLayout * gboxLayout = new QVBoxLayout(gbox);
@@ -1009,7 +1007,6 @@ KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
     QWidget * gridBox	= new QWidget( this );
     layout->addWidget(gridBox);
     QGridLayout * grid = new QGridLayout(gridBox);
-    grid->setSpacing(dialog->spacingHint());
     grid->setColumnStretch( 0, 0 ); // (col, stretch) don't stretch this column
     grid->setColumnStretch( 1, 0 ); // don't stretch
     grid->setColumnStretch( 2, 1 ); // stretch this as you like

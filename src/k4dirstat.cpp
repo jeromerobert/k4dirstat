@@ -16,10 +16,6 @@
 
 #include <QtGui/QDropEvent>
 #include <QtGui/QPainter>
-#include <QtGui/QPrinter>\
-
-
-
 
 #include <kconfigdialog.h>
 #include <kstatusbar.h>
@@ -41,9 +37,12 @@
 #include <ktoolbar.h>
 #include <kxmlguifactory.h>
 
-#include <Qt/qclipboard.h>
-#include <Qt/qmenu.h>
-#include <Qt/qsplitter.h>
+#include <QClipboard>
+#include <QSplitter>
+#include <QMenu>
+#include <KUrl>
+#include <KIcon>
+#include <KGlobal>
 
 #include "kdirtree.h"
 #include "ktreemapview.h"
@@ -241,11 +240,11 @@ void k4dirstat::setupActions()
     connect(_showTreemapView,SIGNAL(triggered()),this, SLOT(toggleTreemapView()));
     _showTreemapView->setShortcut(Qt::Key_F9);
 
-    KAction *newAct = actionCollection()->addAction("treemap_help", this, SLOT(treemapHelp()));
+    QAction *newAct = actionCollection()->addAction("treemap_help", this, SLOT(treemapHelp()));
     newAct->setText(i18n( "Help about Treemaps" ));
     newAct->setIcon(KIcon("help-contents"));
 
-    KAction * pref  = KStandardAction::preferences( this, SLOT( preferences()	), actionCollection() );
+    QAction * pref  = KStandardAction::preferences( this, SLOT( preferences()	), actionCollection() );
 
     _reportMailToOwner = actionCollection()->addAction("report_mail_to_owner", _treeView, SLOT(sendMailToOwner()));
     _reportMailToOwner->setText(i18n("Send &Mail to Owner"));
@@ -310,7 +309,7 @@ void k4dirstat::revertCleanupsToDefaults()
 
 void k4dirstat::initStatusBar()
 {
-    statusBar()->insertItem( i18n( "Ready." ), ID_STATUS_MSG );
+    statusBar()->showMessage(i18n( "Ready." ));
 }
 
 void k4dirstat::openURL( const KUrl& url )
@@ -678,7 +677,7 @@ void k4dirstat::statusMsg( const QString &text )
     // Change status message permanently
 
     statusBar()->clearMessage();
-    statusBar()->changeItem( text, ID_STATUS_MSG );
+    statusBar()->showMessage(text);
 }
 
 void k4dirstat::contextMenu( KDirTreeViewItem * item, const QPoint &pos )

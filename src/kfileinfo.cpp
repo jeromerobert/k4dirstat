@@ -147,7 +147,7 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 	_isSparseFile = false;
     }
 
-    _mtime	 = fileItem->time( KIO::UDSEntry::UDS_MODIFICATION_TIME );
+    _mtime	 = fileItem->time(KFileItem::ModificationTime).toTime_t();
 }
 
 

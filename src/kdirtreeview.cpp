@@ -516,8 +516,7 @@ KDirTreeView::updateSummary()
 void
 KDirTreeView::slotFinished()
 {
-    emit progressInfo( i18n( "Finished. Elapsed time: %1" )
-		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
+    emit progressInfo( i18n( "Finished. Elapsed time: %1", formatTime( _stopWatch.elapsed(), true )));
 
     if ( _updateTimer )
     {
@@ -558,8 +557,7 @@ KDirTreeView::slotFinished()
 void
 KDirTreeView::slotAborted()
 {
-    emit progressInfo( i18n( "Aborted. Elapsed time: %1" )
-		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
+    emit progressInfo( i18n( "Aborted. Elapsed time: %1", formatTime( _stopWatch.elapsed(), true ) ));
 
     if ( _updateTimer )
     {
@@ -594,12 +592,11 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
     _currentDir = newCurrentDir;
 
 #if VERBOSE_PROGRESS_INFO
-    emit progressInfo( i18n( "Elapsed time: %1   reading directory %2" )
-		       .arg( formatTime( _stopWatch.elapsed() ) )
-		       .arg( _currentDir ) );
+    emit progressInfo( i18n( "Elapsed time: %1   reading directory %2",
+               formatTime( _stopWatch.elapsed() ),
+               _currentDir ) );
 #else
-    emit progressInfo( i18n( "Elapsed time: %1" )
-		       .arg( formatTime( _stopWatch.elapsed() ) ) );
+    emit progressInfo( i18n( "Elapsed time: %1", formatTime( _stopWatch.elapsed() ) ));
 #endif
 }
 
@@ -1045,8 +1042,8 @@ KDirTreeView::sendMailToOwner()
     KUrl mail;
     mail.setProtocol( "mailto" );
     mail.setPath( owner );
-    mail.setQuery( "?subject="	+ KUrl::encode_string( subject ) +
-		   "&body="	+ KUrl::encode_string( body ) );
+    mail.setQuery( "?subject="	+ QUrl::toPercentEncoding( subject ) +
+		   "&body="	+ QUrl::toPercentEncoding( body ) );
 
     // TODO: Check for maximum command line length.
     //
@@ -1310,7 +1307,7 @@ KDirTreeViewItem::updateSummary()
 
 	    if ( jobs > 0 )
 	    {
-		text = i18n( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
+		text = i18n( "[%1 Read Jobs]", formatCount( _orig->pendingReadJobs(), true ) );
 	    }
 
 	    setText( _view->readJobsCol(), text );

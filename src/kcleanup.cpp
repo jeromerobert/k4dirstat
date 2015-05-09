@@ -27,6 +27,7 @@
 
 #include "kcleanup.h"
 #include "kdirsaver.h"
+#include <KGlobal>
 
 #define VERBOSE_RUN_COMMAND	1
 #define SIMULATE_COMMAND	0

@@ -18,6 +18,7 @@
 #include <kdebug.h>
 #include "kcleanup.h"
 #include "kstdcleanup.h"
+#include <KIcon>
 
 using namespace KDirStat;
 

@@ -365,8 +365,8 @@ KCacheReader::addItem()
 	    raw_name = raw_path;
     }
 
-    QString path = KUrl::decode_string( QString::fromLatin1( raw_path ) );
-    QString name = KUrl::decode_string( QString::fromLatin1( raw_name ) );
+    QString path = QUrl::toPercentEncoding( QString::fromLatin1( raw_path ) );
+    QString name = QUrl::toPercentEncoding( QString::fromLatin1( raw_name ) );
 
     if ( _lastExcludedDir )
     {
