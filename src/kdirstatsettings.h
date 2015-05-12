@@ -42,6 +42,7 @@ namespace KDirStat
     class KCleanupPropertiesPage;
     class KDirTreeView;
     class KTreemapView;
+    class KSettingsPage;
 
 
     /**
@@ -104,6 +105,10 @@ namespace KDirStat
 	 **/
         virtual void slotHelp();
 
+        //These slots just delegate to KSettingsPages
+        virtual void apply();
+        virtual void revertToDefaults();
+        virtual void setup();
 
     signals:
 
@@ -121,6 +126,7 @@ namespace KDirStat
         KPageWidgetItem *	_treeColorsPageIndex;
         KPageWidgetItem *	_treemapPageIndex;
         KPageWidgetItem *	_generalSettingsPageIndex;
+        QList<KSettingsPage *>    _pages;
 
     }; // class KSettingsDialog
 
@@ -139,23 +145,12 @@ namespace KDirStat
 	Q_OBJECT
 
     public:
-
-	/**
-	 * Constructor.
-	 *
-	 * Sets up standard connections to the methods defined in this class,
-	 * e.g., apply(), setup(), revertToDefaults().
-	 **/
-	KSettingsPage( KSettingsDialog *	dialog,
-		       QWidget *		parent );
+        KSettingsPage(QWidget* parent): QWidget( parent ){}
 
 	/**
 	 * Destructor.
 	 **/
 	virtual ~KSettingsPage();
-
-
-    public slots:
 
 	/**
 	 * Apply the changes.
@@ -177,9 +172,6 @@ namespace KDirStat
 	 * Derived classes need to reimplement this method.
 	 **/
 	virtual void setup() = 0;
-
-
-    public:
 
 	/**
 	 * Returns the page index of this page.
@@ -219,8 +211,7 @@ namespace KDirStat
 	/**
 	 * Constructor
 	 **/
-	KTreeColorsPage( KSettingsDialog *	dialog,
-			 QWidget *		parent,
+	KTreeColorsPage( QWidget *		parent,
                          k4dirstat *		mainWin );
 
 	/**
@@ -297,8 +288,7 @@ namespace KDirStat
 	/**
 	 * Constructor
 	 **/
-	KCleanupPage( KSettingsDialog *	dialog,
-		      QWidget *		parent,
+	KCleanupPage( QWidget *		parent,
                       k4dirstat *	mainWin );
 
 	/**
@@ -560,8 +550,7 @@ namespace KDirStat
 	/**
 	 * Constructor
 	 **/
-	KGeneralSettingsPage( KSettingsDialog *	dialog,
-			      QWidget *		parent,
+	KGeneralSettingsPage( QWidget *		parent,
                               k4dirstat *	mainWin );
 
 	/**
@@ -654,8 +643,7 @@ namespace KDirStat
 	/**
 	 * Constructor
 	 **/
-	KTreemapPage( KSettingsDialog *	dialog,
-		      QWidget *		parent,
+	KTreemapPage( QWidget *		parent,
                       k4dirstat *	mainWin );
 
 	/**

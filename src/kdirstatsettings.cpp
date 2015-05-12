@@ -77,23 +77,40 @@ KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
 
     item = addPage(page, i18n( "&Actions" ) );
     _cleanupsPageIndex = item;
-    new KCleanupPage( this, page, _mainWin );
+    _pages.append(new KCleanupPage(page, _mainWin ));
 
     page = new KVBox();
     _treeColorsPageIndex = addPage(page, i18n( "&Tree Colors" ));
-    new KTreeColorsPage( this, page, _mainWin );
+    _pages.append(new KTreeColorsPage(page, _mainWin ));
 
     page = new KVBox();
     _treemapPageIndex = addPage(page, i18n( "Tree&map" ) );
-    new KTreemapPage( this, page, _mainWin );
+    _pages.append(new KTreemapPage(page, _mainWin ));
 
     page = new KVBox();
     _generalSettingsPageIndex = addPage(page, i18n( "&General" ) );
-    new KGeneralSettingsPage( this, page, _mainWin );
+    _pages.append(new KGeneralSettingsPage(page, _mainWin ));
 
-    // resize( sizeHint() );
+    connect(this, SIGNAL(aboutToShow()), this, SLOT(setup()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(apply()));
+    connect(this, SIGNAL(applyClicked()), this, SLOT(apply()));
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(revertToDefaults()));
 }
 
+void KSettingsDialog::apply() {
+    foreach(KSettingsPage * p, _pages)
+        p->apply();
+}
+
+void KSettingsDialog::revertToDefaults() {
+    foreach(KSettingsPage * p, _pages)
+        p->revertToDefaults();
+}
+
+void KSettingsDialog::setup() {
+    foreach(KSettingsPage * p, _pages)
+        p->setup();
+}
 
 KSettingsDialog::~KSettingsDialog()
 {
@@ -119,8 +136,8 @@ KSettingsDialog::slotDefault()
                                              KGuiItem(i18n( "&Really Revert to Defaults" ))	// continueButton
 					     ) == KMessageBox::Continue )
     {
-	emit defaultClicked();
-	emit applyClicked();
+        revertToDefaults();
+        apply();
     }
 }
 
@@ -142,25 +159,6 @@ KSettingsDialog::slotHelp()
 
 /*--------------------------------------------------------------------------*/
 
-
-KSettingsPage::KSettingsPage( KSettingsDialog * dialog,
-			      QWidget *		parent )
-    : QWidget( parent )
-{
-    connect( dialog,	SIGNAL( aboutToShow	( void ) ),
-	     this,	SLOT  ( setup		( void ) ) );
-
-    connect( dialog,	SIGNAL( okClicked	( void ) ),
-	     this,	SLOT  ( apply		( void ) ) );
-
-    connect( dialog,	SIGNAL( applyClicked	( void ) ),
-	     this,	SLOT  ( apply		( void ) ) );
-
-    connect( dialog,	SIGNAL( defaultClicked	( void ) ),
-	     this,	SLOT  ( revertToDefaults( void ) ) );
-}
-
-
 KSettingsPage::~KSettingsPage()
 {
     // NOP
@@ -170,10 +168,9 @@ KSettingsPage::~KSettingsPage()
 /*--------------------------------------------------------------------------*/
 
 
-KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
-				  QWidget *		parent,
+KTreeColorsPage::KTreeColorsPage( QWidget *		parent,
                                   k4dirstat *		mainWin )
-    : KSettingsPage( dialog, parent )
+    : KSettingsPage(parent)
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
     , _maxButtons( KDirStatSettingsMaxColorButton )
@@ -280,10 +277,9 @@ KTreeColorsPage::enableColors( int maxColors )
 
 
 
-KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
-			    QWidget *		parent,
+KCleanupPage::KCleanupPage( QWidget *		parent,
                             k4dirstat *	mainWin )
-    : KSettingsPage( dialog, parent )
+    : KSettingsPage(parent )
     , _mainWin( mainWin )
     , _currentCleanup( 0 )
 {
@@ -682,10 +678,9 @@ KCleanupPropertiesPage::fields() const
 /*--------------------------------------------------------------------------*/
 
 
-KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
-					    QWidget *		parent,
+KGeneralSettingsPage::KGeneralSettingsPage( QWidget *		parent,
                                             k4dirstat *	mainWin )
-    : KSettingsPage( dialog, parent )
+    : KSettingsPage(parent)
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
 {
@@ -909,10 +904,8 @@ void KGeneralSettingsPage::deleteExcludeRule()
 /*--------------------------------------------------------------------------*/
 
 
-KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
-					    QWidget *		parent,
-                                            k4dirstat *	mainWin )
-    : KSettingsPage( dialog, parent )
+KTreemapPage::KTreemapPage(QWidget * parent, k4dirstat * mainWin)
+    : KSettingsPage(parent)
     , _mainWin( mainWin )
 {
     // kdDebug() << k_funcinfo << endl;
