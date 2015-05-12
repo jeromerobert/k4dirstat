@@ -111,7 +111,7 @@ public slots:
     /**
      * Open a directory tree from the "recent" menu.
      **/
-    void fileOpenRecent( const KUrl& url );
+    void fileOpenRecent( const QUrl& url );
 
     /**
      * asks for saving if the file is modified, then closes the current file

@@ -39,6 +39,7 @@
 #include <QMenu>
 #include <KDialog>
 #include <KGlobal>
+#include <KHelpClient>
 
 using namespace KDirStat;
 
@@ -69,8 +70,9 @@ KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
     setFaceType(Tabbed);
     setModal(false);
     setWindowTitle(i18n( "Settings"));
-    setButtons(KDialog::Ok | KDialog::Apply |
-               KDialog::Default | KDialog::Cancel | KDialog::Help);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply |
+                       QDialogButtonBox::RestoreDefaults |
+                       QDialogButtonBox::Cancel | QDialogButtonBox::Help);
 
     KVBox * page = new KVBox();
     KPageWidgetItem *item;
@@ -92,9 +94,10 @@ KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
     _pages.append(new KGeneralSettingsPage(page, _mainWin ));
 
     connect(this, SIGNAL(aboutToShow()), this, SLOT(setup()));
-    connect(this, SIGNAL(okClicked()), this, SLOT(apply()));
-    connect(this, SIGNAL(applyClicked()), this, SLOT(apply()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(revertToDefaults()));
+    connect(button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(apply()));
+    connect(button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
+    connect(button(QDialogButtonBox::RestoreDefaults),
+            SIGNAL(clicked()), this, SLOT(revertToDefaults()));
 }
 
 void KSettingsDialog::apply() {
@@ -153,7 +156,7 @@ KSettingsDialog::slotHelp()
     else if ( currentPage() == _generalSettingsPageIndex)	helpTopic = "general_settings";
 
     // kdDebug() << "Help topic: " << helpTopic << endl;
-    KToolInvocation::invokeHelp( helpTopic );
+    KHelpClient::invokeHelp(helpTopic);
 }
 
 

@@ -14,11 +14,14 @@
 #endif
 
 #include <klocale.h>
-#include <konq_operations.h>
 #include <kdebug.h>
 #include "kcleanup.h"
 #include "kstdcleanup.h"
 #include <KIcon>
+#include <KIO/JobUiDelegate>
+#include <KIO/FileUndoManager>
+#include <KIO/CopyJob>
+#include <KJobWidgets>
 
 using namespace KDirStat;
 
@@ -163,6 +166,16 @@ TrashBinCleanup::TrashBinCleanup(KActionCollection *parent):
 {
 }
 
+static void konqOperationsDel(QWidget * m_mainWindow, KUrl::List & urls) {
+    KIO::JobUiDelegate uiDelegate;
+    uiDelegate.setWindow(m_mainWindow);
+    if (uiDelegate.askDeleteConfirmation(urls, KIO::JobUiDelegate::Trash, KIO::JobUiDelegate::DefaultConfirmation)) {
+        KIO::Job* job = KIO::trash(urls);
+        KIO::FileUndoManager::self()->recordJob( KIO::FileUndoManager::Trash, urls, KUrl("trash:/"), job );
+        KJobWidgets::setWindow(job, m_mainWindow);
+        job->ui()->setAutoErrorHandlingEnabled(true); // or connect to the result signal
+    }
+}
 
 void
 TrashBinCleanup::execute( KFileInfo* item ){
@@ -174,8 +187,7 @@ TrashBinCleanup::execute( KFileInfo* item ){
 	urls.append(url);
 	KActionCollection *collection = static_cast<KActionCollection*>(parent());
 	kdDebug() << collection->associatedWidgets().length() << endl;
-	KonqOperations::del( collection->associatedWidgets()[0],KonqOperations::TRASH,
-			    urls);
+	konqOperationsDel(collection->associatedWidgets()[0], urls);
 	item->tree()->deleteSubtree( _selection );
     }
 

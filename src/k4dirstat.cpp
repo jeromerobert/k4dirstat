@@ -43,6 +43,7 @@
 #include <KUrl>
 #include <KIcon>
 #include <KGlobal>
+#include <KHelpClient>
 
 #include "kdirtree.h"
 #include "ktreemapview.h"
@@ -178,7 +179,7 @@ void k4dirstat::setupActions()
     _fileAskOpenUrl->setIcon(KIcon("konqueror"));
 
 
-    _fileOpenRecent	= KStandardAction::openRecent	( this, SLOT( fileOpenRecent( const KUrl& ) ),	actionCollection() );
+    _fileOpenRecent	= KStandardAction::openRecent	( this, SLOT( fileOpenRecent( const QUrl& ) ),	actionCollection() );
     _fileCloseDir	= KStandardAction::close		( this, SLOT( fileCloseDir() ), 		actionCollection() );
 
     _fileRefreshAll = actionCollection()->addAction("file_refresh_all", this, SLOT(refreshAll()));
@@ -408,7 +409,7 @@ void k4dirstat::fileAskOpenUrl()
 {
     statusMsg( i18n( "Opening URL..." ) );
 
-    KUrl url = KUrlRequesterDialog::getUrl( QString::null,	// startDir
+    QUrl url = KUrlRequesterDialog::getUrl( QUrl(),	// startDir
                                          this, i18n( "Open URL..." ) );
 
     if( ! url.isEmpty() )
@@ -417,7 +418,7 @@ void k4dirstat::fileAskOpenUrl()
     statusMsg( i18n( "Ready." ) );
 }
 
-void k4dirstat::fileOpenRecent( const KUrl& url )
+void k4dirstat::fileOpenRecent( const QUrl& url )
 {
     statusMsg( i18n( "Opening directory..." ) );
 
@@ -639,8 +640,7 @@ void k4dirstat::treemapRebuild()
 
 void k4dirstat::treemapHelp()
 {
-    //kapp->invokeHelp( "treemap_intro" );
-    KToolInvocation::invokeHelp( "treemap_intro" );
+    KHelpClient::invokeHelp("treemap_intro");
 }
 
 

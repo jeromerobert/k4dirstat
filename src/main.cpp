@@ -14,7 +14,7 @@
 
 #include "k4dirstat.h"
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <KDE/KLocale>
 #include <KDE/KUrl>
@@ -31,8 +31,8 @@ static const char version[] = EXPAND(K4DIRSTAT_VERSION);
 
 int main(int argc, char **argv)
 {
-    KAboutData about("k4dirstat", 0, ki18n("k4dirstat"), version, ki18n(description),
-		     KAboutData::License_GPL,
+    K4AboutData about("k4dirstat", 0, ki18n("k4dirstat"), version, ki18n(description),
+		     K4AboutData::License_GPL,
 		     ki18n("(c) 1999-2008 Stefan Hundhammer, (c) 2010 Joshua Hodosh"),
 		     KLocalizedString(), "https://bitbucket.org/jeromerobert/k4dirstat",
 		     "https://bitbucket.org/jeromerobert/k4dirstat/issues");

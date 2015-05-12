@@ -49,9 +49,9 @@ using namespace KDirStat;
 class KDirItemDelegate: public QStyledItemDelegate {
 public:
     KDirItemDelegate(KDirTreeView * view): view(view) {
-        // always use the Plastique style because it has the best
+        // always use the Fusion style because it has the best
         // progress bar precision
-        style = QStyleFactory::create("Plastique");
+        style = QStyleFactory::create("Fusion");
     }
 
     virtual void paint ( QPainter * painter,
@@ -1067,7 +1067,7 @@ KDirTreeViewItem *KDirTreeView::topLevelItem(int index) const {
  * to rewrite a model from scratch.
  */
 void KDirTreeView::mousePressEvent(QMouseEvent *event) {
-    if (style()->styleHint(QStyle::SH_Q3ListViewExpand_SelectMouseType, 0, this) == QEvent::MouseButtonPress) {
+    if (style()->styleHint(QStyle::SH_ListViewExpand_SelectMouseType, 0, this) == QEvent::MouseButtonPress) {
         KDirTreeViewItem * item = static_cast<KDirTreeViewItem*>(itemAt(event->pos()));
         if(item != NULL) {
             if ( !item->isExpanded() && doLazyClone() )
