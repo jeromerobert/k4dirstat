@@ -44,7 +44,12 @@ find_package(KF5 REQUIRED COMPONENTS CoreAddons GuiAddons I18n DocTools KDELibs4
 find_package(ZLIB)
 
 ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
-add_definitions("-DKDELIBS4SUPPORT_DEPRECATED=__attribute__ (())")
+
+option(ENABLE_KDELIBS4SUPPORT_WARNING "Show kdelibs4support warning")
+if(NOT ENABLE_KDELIBS4SUPPORT_WARNING)
+  add_definitions("-DKDELIBS4SUPPORT_DEPRECATED=__attribute__ (())")
+endif()
+
 REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
 
 git_version(K4DIRSTAT_VERSION 2.7.8 k4dirstat-)
