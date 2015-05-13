@@ -22,6 +22,7 @@
 #include <QStyledItemDelegate>
 #include <QStyleFactory>
 #include <QMouseEvent>
+#include <QDesktopServices>
 #include <qmenu.h>
 
 #include <kapplication.h>
@@ -1051,7 +1052,7 @@ KDirTreeView::sendMailToOwner()
     // stuff into 'config.h' or some other include file without hardcoding
     // anything - this is too system dependent.
 
-    KToolInvocation::invokeMailer(mail);
+    QDesktopServices::openUrl(mail);
     logActivity( 10 );
 }
 
