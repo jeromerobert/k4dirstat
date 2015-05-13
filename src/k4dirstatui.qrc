@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/kxmlgui5/k4dirstat">
+    <file>k4dirstatui.rc</file>
+</qresource>
+</RCC>

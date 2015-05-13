@@ -1,5 +1,7 @@
+qt5_add_resources(UI_RCC k4dirstatui.qrc)
 set(k4dirstat_SRCS
    k4dirstat.cpp
+   ${UI_RCC}
    main.cpp
    #k4dirstatview.cpp
    ktreemapview.cpp
@@ -35,4 +37,3 @@ install(TARGETS k4dirstat ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES k4dirstat.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES k4dirstat.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
-install( FILES k4dirstatui.rc  DESTINATION  ${DATA_INSTALL_DIR}/k4dirstat )
