@@ -26,8 +26,8 @@ KCleanup *
 KStdCleanup::openInKonqueror( KActionCollection *parent )
 {
     KCleanup *cleanup = new KCleanup( "cleanup_open_in_konqueror",
-				      "kfmclient openURL %p",
-				      i18n( "Open in &Konqueror" ),
+                                      "xdg-open %p",
+                                      i18n( "Open a file &browser" ),
 				      parent );
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
