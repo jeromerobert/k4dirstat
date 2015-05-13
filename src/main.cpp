@@ -13,9 +13,9 @@
 
 
 #include "k4dirstat.h"
-#include <kapplication.h>
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
+#include <QApplication>
+#include <KAboutData>
+#include <QCommandLineParser>
 #include <KDE/KLocale>
 #include <KDE/KUrl>
 
@@ -31,44 +31,41 @@ static const char version[] = EXPAND(K4DIRSTAT_VERSION);
 
 int main(int argc, char **argv)
 {
-    K4AboutData about("k4dirstat", 0, ki18n("k4dirstat"), version, ki18n(description),
-		     K4AboutData::License_GPL,
-		     ki18n("(c) 1999-2008 Stefan Hundhammer, (c) 2010 Joshua Hodosh"),
-		     KLocalizedString(), "https://bitbucket.org/jeromerobert/k4dirstat",
-		     "https://bitbucket.org/jeromerobert/k4dirstat/issues");
+    KAboutData about("k4dirstat", i18n("k4dirstat"), version, i18n(description),
+                     KAboutLicense::GPL,
+                     "\u00A9 2015 J\u00E9r\u00F4me Robert, \u00A9 2010 Joshua Hodosh, \u00A9 1999-2008 Stefan Hundhammer",
+                     "", "https://bitbucket.org/jeromerobert/k4dirstat",
+                     "https://bitbucket.org/jeromerobert/k4dirstat/issues");
 
-    about.addAuthor( ki18n("Jerome Robert"),
-		      ki18n("Current maintainer." ), 0,
+    about.addAuthor("J\u00E9r\u00F4me Robert", i18n("KF5 Port, current maintainer." ), "",
 		      "https://bitbucket.org/jeromerobert/k4dirstat" );
-    about.addAuthor( ki18n("Stefan Hundhammer"),
-		      ki18n("Original kdirstat author." ), "kdirstat@gmx.de",
+    about.addAuthor("Stefan Hundhammer",
+                      i18n("Original kdirstat author." ), "kdirstat@gmx.de",
 		      "http://kdirstat.sourceforge.net/" );
-    about.addAuthor( ki18n("Joshua Hodosh"), ki18n("Ported to KDE4"),
+    about.addAuthor("Joshua Hodosh", i18n("Port to KDE4"),
                      "kdirstat@grumpypenguin.org" );
 
-    about.addCredit( ki18n("SequoiaView Team"),
-		      ki18n( "for showing just how useful treemaps really can be." ),
+    about.addCredit( i18n("SequoiaView Team"),
+                      i18n( "for showing just how useful treemaps really can be." ),
 		      0,	// e-mail
 		      "http://www.win.tue.nl/sequoiaview" );
 
-    about.addCredit( ki18n("Jarke J. van Wijk, Huub van de Wetering, Mark Bruls"),
-		      ki18n( "for their papers about treemaps." ),
+    about.addCredit( i18n("Jarke J. van Wijk, Huub van de Wetering, Mark Bruls"),
+                      i18n( "for their papers about treemaps." ),
 		      "vanwijk@win.tue.nl",
 		      "http://www.win.tue.nl/~vanwijk/" );
 
-    about.addCredit( ki18n("Ben Shneiderman"),
-		      ki18n( "for his ingenious idea of treemaps -\n"
+    about.addCredit( i18n("Ben Shneiderman"),
+                      i18n( "for his ingenious idea of treemaps -\n"
 				 "a truly intuitive way of visualizing tree contents." ),
 		      "",	// E-Mail
 		      "http://www.cs.umd.edu/hcil/treemaps/" );
-
-    KCmdLineArgs::init(argc, argv, &about);
-
-    KCmdLineOptions options;
-    options.add("+[Dir/URL]", ki18n( "Directory or URL to open" ));
-    KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app;
-
+    KAboutData::setApplicationData(about);
+    QApplication app(argc, argv);
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addPositionalArgument("+[Dir/URL]", "Directory or URL to open");
+    parser.process(app);
     k4dirstat *kdirstat = new k4dirstat;
 
     // see if we are starting with session management
@@ -80,20 +77,16 @@ int main(int argc, char **argv)
     {
         kdirstat->show();
         // no session.. just start up normally
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();      
-        if (args->count() == 0)
+        QStringList args = parser.positionalArguments();
+        if (args.isEmpty())
         {
             kdirstat->fileAskOpenDir();
         }
         else
         {       
             // Process command line arguments as URLs or paths to scan
-
-            KUrl url = args->url( 0 );
-            // kdDebug() << "Opening " << url.url() << endl;
-            kdirstat->openURL( url );
+            kdirstat->openURL(args[0]);
         }
-        args->clear();
     }
 
     return app.exec();
