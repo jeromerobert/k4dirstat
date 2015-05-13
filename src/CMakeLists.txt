@@ -19,11 +19,9 @@ set(k4dirstat_SRCS
    kdirstatsettings.cpp
  )
 
-#kde4_add_ui_files(k4dirstat_SRCS k4dirstatview_base.ui prefs_base.ui)
+kconfig_add_kcfg_files(k4dirstat_SRCS settings.kcfgc )
 
-kde4_add_kcfg_files(k4dirstat_SRCS settings.kcfgc )
-
-kde4_add_executable(k4dirstat ${k4dirstat_SRCS})
+add_executable(k4dirstat ${k4dirstat_SRCS})
 
 target_link_libraries(k4dirstat ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
     ${QT_QTGUI_LIBS}

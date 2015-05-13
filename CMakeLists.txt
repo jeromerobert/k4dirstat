@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.0)
+cmake_minimum_required(VERSION 2.8.12)
 project(k4dirstat)
 
 function(git_version output_variable default_version strip_string)
@@ -25,14 +25,20 @@ function(git_version output_variable default_version strip_string)
     add_definitions(-D${output_variable}=${${output_variable}})
 endfunction()
 
-find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
-find_package(LibKonq REQUIRED)
+find_package(ECM REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(FeatureSummary)
+
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(KF5 REQUIRED COMPONENTS CoreAddons GuiAddons I18n DocTools KDELibs4Support XmlGui KIO JobWidgets)
 find_package(ZLIB)
 
-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${QT_GUI_INCLUDES})
-
 ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
+add_definitions("-DKDELIBS4SUPPORT_DEPRECATED=__attribute__ (())")
 REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
 
 git_version(K4DIRSTAT_VERSION 2.7.8 k4dirstat-)
