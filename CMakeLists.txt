@@ -25,6 +25,12 @@ function(git_version output_variable default_version strip_string)
     add_definitions(-D${output_variable}=${${output_variable}})
 endfunction()
 
+include(CheckCCompilerFlag)
+check_c_compiler_flag(-Wl,--as-needed has_as_needed)
+if (has_as_needed)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
+endif()
+
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
