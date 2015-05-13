@@ -403,8 +403,7 @@ KTreemapTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option,
 	    painter->setBrush( _parentView->fileFillColor() );
 #endif
 	}
-
-       QGraphicsRectItem::paint(painter, option, widget);
+	painter->drawRect(rect());
     }
 }
 
