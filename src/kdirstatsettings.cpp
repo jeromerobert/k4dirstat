@@ -377,7 +377,7 @@ KCleanupPage::setup()
     // (Re-) Initialize list box.
 
     // _listBox->resize( _listBox->sizeHint() );
-    _listBox->setCurrentItem(NULL);
+    _listBox->setCurrentRow(0);
 }
 
 
@@ -456,9 +456,10 @@ void
 KCleanupListBox::selectCleanup( QListWidgetItem * listBoxItem )
 {
     KCleanupListBoxItem * item = (KCleanupListBoxItem *) listBoxItem;
-
-    _selection = item->cleanup();
-    emit selectCleanup( _selection );
+    if(item) {
+        _selection = item->cleanup();
+        emit selectCleanup( _selection );
+    }
 }
 
 
