@@ -18,7 +18,7 @@
 #include <qregexp.h>
 
 #include <kapplication.h>
-#include <KProcess>
+#include <QProcess>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -336,24 +336,11 @@ void
 KCleanup::runCommand ( const KFileInfo *	item,
 		       const QString &		command ) const
 {
-    KProcess	proc;
-    KDirSaver	dir( itemDir( item ) );
-    QString	cmd( expandVariables( item, command ));
-
-#if VERBOSE_RUN_COMMAND
-    printf( "\ncd " );
-    fflush( stdout );
-    system( "pwd" );
-    QTextCodec * codec = QTextCodec::codecForLocale();
-    printf( "%s\n", (const char *) codec->fromUnicode( cmd ) );
-    fflush( stdout );
-#endif
+    QProcess *	proc = new QProcess();
+    QStringList args;
+    args << "-c" << expandVariables( item, command );
 
 #if ! SIMULATE_COMMAND
-    proc << "sh";
-    proc << "-c";
-    proc << cmd;
-
     switch ( _refreshPolicy )
     {
 	case noRefresh:
@@ -363,7 +350,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 	    // finish, so we are starting the command as a pure
 	    // background process.
 
-	    proc.start();
+	    proc->start("sh", args);
 	    break;
 
 
@@ -376,7 +363,8 @@ KCleanup::runCommand ( const KFileInfo *	item,
 	    // process in blocking mode.
 
 	    QApplication::setOverrideCursor( Qt::WaitCursor );
-	    proc.execute();
+	    proc->start("sh", args);
+	    proc->waitForFinished();
 	    QApplication::restoreOverrideCursor();
 	    break;
     }
