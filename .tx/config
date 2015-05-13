@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[k4dirstat.k4dirstat]
+file_filter = po/<lang>.po
+source_file = po/k4dirstat.pot
+source_lang = en
+type = PO
