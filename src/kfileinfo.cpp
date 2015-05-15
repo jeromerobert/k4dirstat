@@ -21,7 +21,8 @@
 
 #include "kfileinfo.h"
 #include "kdirinfo.h"
-#include "kdirsaver.h"
+#include <QFileInfo>
+#include <QDir>
 
 // Some file systems (NTFS seems to be among them) may handle block fragments well.
 // Don't report files as "sparse" files if the block size is only a few bytes
@@ -389,38 +390,7 @@ KFileInfo::locate( QString url, bool findDotEntries )
 KUrl
 KDirStat::fixedUrl( const QString & dirtyUrl )
 {
-    KUrl url = dirtyUrl;
-
-    if ( ! url.isValid() )		// Maybe it's just a path spec?
-    {
-	url = KUrl();			// Start over with an empty, but valid URL
-	url.setPath( dirtyUrl );	// and use just the path part.
-    }
-    else
-    {
-	url.cleanPath();	// Resolve relative paths, get rid of multiple slashes.
-    }
-
-
-    // Strip off the rightmost slash - some kioslaves (e.g. 'tar') can't handle that.
-
-    QString path = url.path();
-
-    if ( path.length() > 1 && path.right(1) == "/" )
-    {
-	path = path.left( path.length()-1 );
-	url.setPath( path );
-    }
-
-    if ( url.isLocalFile() )
-    {
-	// Make a relative path an absolute path
-
-	KDirSaver dir( url.path() );
-	url.setPath( dir.currentDirPath() );
-    }
-
-    return url;
+    return QUrl::fromUserInput(dirtyUrl, QDir::currentPath(), QUrl::AssumeLocalFile);
 }
 
 

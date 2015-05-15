@@ -11,7 +11,6 @@ set(k4dirstat_SRCS
    ktreemaptile.cpp
    kstdcleanup.cpp
    kcleanup.cpp
-   kdirsaver.cpp
    kdirtree.cpp
    kexcluderules.cpp
    kdirreadjob.cpp

@@ -26,7 +26,6 @@
 #include <kconfiggroup.h>
 
 #include "kcleanup.h"
-#include "kdirsaver.h"
 #include <KGlobal>
 
 #define VERBOSE_RUN_COMMAND	1
