@@ -94,10 +94,8 @@ KTreemapView::~KTreemapView()
 void
 KTreemapView::clear()
 {
-    foreach(QGraphicsItem * i, items()) {
-        scene()->removeItem(i);
-    }
-
+    if(scene())
+        scene()->clear();
     _selectedTile	= 0;
     _selectionRect	= 0;
     _rootTile		= 0;
