@@ -18,6 +18,7 @@
 #include <QCommandLineParser>
 #include <KDE/KLocale>
 #include <KDE/KUrl>
+#include <QDir>
 
 static const char description[] =
     I18N_NOOP("k4dirstat - Directory statistics.\n"
@@ -90,7 +91,8 @@ int main(int argc, char **argv)
         else
         {       
             // Process command line arguments as URLs or paths to scan
-            kdirstat->openURL(args[0]);
+            QUrl u = QUrl::fromUserInput(args[0], QDir::currentPath(), QUrl::AssumeLocalFile);
+            kdirstat->openURL(u);
         }
     }
 
