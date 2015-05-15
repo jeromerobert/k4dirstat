@@ -57,3 +57,5 @@ add_subdirectory( doc )
 add_subdirectory( src )
 add_subdirectory( icons )
 add_subdirectory( po )
+
+install(FILES k4dirstat.1 DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")

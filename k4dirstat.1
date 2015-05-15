@@ -1,0 +1,59 @@
+.TH "K4DIRSTAT" "1" "May 2015" "" ""
+.
+.SH "NAME"
+\fBk4dirstat\fR \- Graphical directory statistics
+.
+.SH "SYNOPSIS"
+\fBk4dirstat\fR [\fIOPTIONS\fR\.\.\.] [\fIpath or url\fR]
+.
+.SH "DESCRIPTION"
+Shows where all your disk space has gone and helps you clean it up\. The size of files and directory is shown using treemapping\.
+.
+.TP
+\fIpath or url\fR
+Directory or URL to open
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-v\fR, \fB\-version\fR
+Output version information and exit\.
+.
+.SS "Qt options"
+.
+.TP
+\fB\-platform\fR \fIplatformName[:options]\fR
+specifies the Qt Platform Abstraction (QPA) plugin\. Overridden by the \fBQT_QPA_PLATFORM\fR environment variable\.
+.
+.TP
+\fB\-platformpluginpath\fR \fIpath\fR
+specifies the path to platform plugins\. Overridden by the \fBQT_QPA_PLATFORM_PLUGIN_PATH\fR environment variable\.
+.
+.TP
+\fB\-platformtheme\fR \fIplatformTheme\fR
+specifies the platform theme\. Overridden by the \fBQT_QPA_PLATFORMTHEME\fR environment variable\.
+.
+.TP
+\fB\-plugin\fR \fIplugin\fR
+specifies additional plugins to load\. The argument may appear multiple times\. Overridden by the \fBQT_QPA_GENERIC_PLUGINS\fR environment variable\.
+.
+.TP
+\fB\-qwindowgeometry\fR \fIgeometry\fR
+specifies window geometry for the main window using the X11\-syntax\. For example: \fB\-qwindowgeometry 100x100+50+50\fR\.
+.
+.TP
+\fB\-qwindowicon\fR
+sets the default window icon\.
+.
+.TP
+\fB\-qwindowtitle\fR
+sets the title of the first window\.
+.
+.TP
+\fB\-display\fR \fIhostname\fR
+screen_number, switches displays on X11\. Overrides the \fBDISPLAY\fR environment variable\.
+.
+.TP
+\fB\-geometry\fR
+geometry, same as \fB\-qwindowgeometry\fR\.
+
