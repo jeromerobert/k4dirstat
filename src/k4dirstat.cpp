@@ -675,8 +675,6 @@ void k4dirstat::preferences()
 void k4dirstat::statusMsg( const QString &text )
 {
     // Change status message permanently
-
-    statusBar()->clearMessage();
     statusBar()->showMessage(text);
 }
 
