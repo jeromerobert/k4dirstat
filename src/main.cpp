@@ -62,8 +62,13 @@ int main(int argc, char **argv)
 		      "http://www.cs.umd.edu/hcil/treemaps/" );
     KAboutData::setApplicationData(about);
     QApplication app(argc, argv);
+    app.setApplicationName("k4dirstat");
+    app.setApplicationVersion(version);
+    app.setApplicationDisplayName(i18n("k4dirstat"));
+    app.setWindowIcon(QIcon::fromTheme("k4dirstat"));
     QCommandLineParser parser;
     parser.addHelpOption();
+    parser.addVersionOption();
     parser.addPositionalArgument("+[Dir/URL]", "Directory or URL to open");
     parser.process(app);
     k4dirstat *kdirstat = new k4dirstat;
