@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=K4DirStat
-Exec=k4dirstat %i -caption "%c"
+Exec=k4dirstat %i -qwindowtitle "%c" "%u"
 Icon=k4dirstat
 Type=Application
 X-DocPath=k4dirstat/index.html
