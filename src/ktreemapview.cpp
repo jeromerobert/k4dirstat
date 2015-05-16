@@ -29,10 +29,6 @@
 
 using namespace KDirStat;
 
-#define UpdateMinSize	20
-
-
-
 KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & initialSize )
     : QGraphicsView( parent )
     , _tree( tree )
@@ -71,7 +67,7 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
 	    rebuildTreemap( tree->root() );
 	}
     }
-
+    _refreshTimer.setSingleShot(true);
     connect( this,	SIGNAL( selectionChanged( KFileInfo * ) ),
 	     tree,	SLOT  ( selectItem	( KFileInfo * ) ) );
 
@@ -82,7 +78,8 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
 	     this,	SLOT  ( deleteNotify	( KFileInfo * ) ) );
 
     connect( tree,	SIGNAL( childDeleted()	 ),
-	     this,	SLOT  ( rebuildTreemap() ) );
+            &_refreshTimer, SLOT(start()));
+    connect(&_refreshTimer, SIGNAL(timeout()), this, SLOT(rebuildTreemap()));
 }
 
 
@@ -375,68 +372,33 @@ KTreemapView::rebuildTreemap()
     if ( ! root )
 	root = _rootTile ? _rootTile->orig() : _tree->root();
 
-    rebuildTreemap(root, scene()->sceneRect());
+    rebuildTreemap(root);
     _savedRootUrl = "";
 }
 
-
 void
-KTreemapView::rebuildTreemap(KFileInfo * newRoot, const QRectF & newSz)
+KTreemapView::rebuildTreemap(KFileInfo * newRoot)
 {
-    // kdDebug() << k_funcinfo << endl;
-
-    QRectF newSize = newSz;
-
-    if ( newSz.isEmpty() ) {
-       QRect viewportRect(0, 0, this->width(), this->height());
-       newSize = mapToScene(viewportRect).boundingRect();
-    }
-
-
-    // Delete all old stuff.
+    QRect viewportRect(0, 0, this->width(), this->height());
+    QRectF newSize = mapToScene(viewportRect).boundingRect();
     clear();
-
-    // Re-create a new canvas
-
-    if ( ! scene() )
+    if ( newRoot )
     {
-       QGraphicsScene * canv = new QGraphicsScene(this);
-	Q_CHECK_PTR( canv );
-	setScene(canv);
+        QGraphicsScene * canv = new QGraphicsScene(this);
+        canv->setSceneRect(newSize);
+        _rootTile = new KTreemapTile( this,		// parentView
+                                      0,		// parentTile
+                                      newRoot,	// orig
+                                      newSize,
+                                      KTreemapAuto );
+        canv->addItem(_rootTile);
+        setScene(canv);
     }
 
-    scene()->setSceneRect(newSize);
+    // Synchronize selection with the tree
 
-    if ( newSize.width() >= UpdateMinSize && newSize.height() >= UpdateMinSize )
-    {
-	// The treemap contents is displayed if larger than a certain minimum
-	// visible size. This is an easy way for the user to avoid
-	// time-consuming delays when deleting a lot of files: Simply make the
-	// treemap (sub-) window very small.
-
-	// Fill the new canvas
-
-	if ( newRoot )
-	{
-	    _rootTile = new KTreemapTile( this,		// parentView
-					  0,		// parentTile
-					  newRoot,	// orig
-					  newSize,
-					  KTreemapAuto );
-	    scene()->addItem(_rootTile);
-	}
-
-
-	// Synchronize selection with the tree
-
-	if ( _tree->selection() )
-	    selectTile( _tree->selection() );
-    }
-    else
-    {
-	// kdDebug() << "Too small - suppressing treemap contents" << endl;
-    }
-
+    if(_tree->selection())
+        selectTile(_tree->selection());
     emit treemapChanged();
 }
 
@@ -483,32 +445,7 @@ void
 KTreemapView::resizeEvent( QResizeEvent * event )
 {
     QGraphicsView::resizeEvent( event );
-
-    if ( _autoResize )
-    {
-	bool tooSmall =
-	    event->size().width()  < UpdateMinSize ||
-	    event->size().height() < UpdateMinSize;
-
-	if ( tooSmall && _rootTile )
-	{
-	    // kdDebug() << "Suppressing treemap contents" << endl;
-	    rebuildTreemap( _rootTile->orig() );
-	}
-	else if ( ! tooSmall && ! _rootTile )
-	{
-	    if ( _tree->root() )
-	    {
-		// kdDebug() << "Redisplaying suppressed treemap contents" << endl;
-		rebuildTreemap( _tree->root() );
-	    }
-	}
-	else if ( _rootTile )
-	{
-	    // kdDebug() << "Auto-resizing treemap" << endl;
-	    rebuildTreemap( _rootTile->orig() );
-	}
-    }
+    _refreshTimer.start();
 }
 
 

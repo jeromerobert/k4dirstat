@@ -171,13 +171,6 @@ namespace KDirStat
     public:
 
 	/**
-	 * Rebuild the treemap with 'newRoot' as the new root and the specified
-	 * size. If 'newSize' is (0, 0), visibleSize() is used.
-	 **/
-	void rebuildTreemap( KFileInfo * 	newRoot,
-				 const QRectF &	newSize = QRectF() );
-
-	/**
 	 * Returns true if it is possible to zoom in with the currently
 	 * selected tile, false if not.
 	 **/
@@ -314,8 +307,12 @@ namespace KDirStat
 	 **/
 	void userActivity( int points );
 
-
     protected:
+        /**
+         * Rebuild the treemap with 'newRoot' as the new root and the specified
+         * size. If 'newSize' is (0, 0), visibleSize() is used.
+         **/
+        void rebuildTreemap(KFileInfo * newRoot);
 
 	/**
 	 * Catch mouse click - emits a selectionChanged() signal.
@@ -374,7 +371,7 @@ namespace KDirStat
 	double			_lightZ;
 
 	double 			_heightScaleFactor;
-
+	QTimer 			_refreshTimer;
     }; // class KTreemapView
 
 
