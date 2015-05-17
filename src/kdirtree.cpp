@@ -100,16 +100,16 @@ KDirTree::clear( bool sendSignals )
 void
 KDirTree::startReading( const KUrl & url )
 {
-    // kdDebug() << k_funcinfo << " " << url.url() << endl;
+    // qDebug() << k_funcinfo << " " << url.url() << endl;
 
 #if 0
-    kdDebug() << "url: "		<< url.url()		<< endl;
-    kdDebug() << "path: "		<< url.path()		<< endl;
-    kdDebug() << "filename: "		<< url.filename() 	<< endl;
-    kdDebug() << "protocol: "		<< url.protocol() 	<< endl;
-    kdDebug() << "isValid: "		<< url.isValid() 	<< endl;
-    kdDebug() << "isMalformed: "	<< url.isMalformed() 	<< endl;
-    kdDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
+    qDebug() << "url: "		<< url.url()		<< endl;
+    qDebug() << "path: "		<< url.path()		<< endl;
+    qDebug() << "filename: "		<< url.filename() 	<< endl;
+    qDebug() << "protocol: "		<< url.protocol() 	<< endl;
+    qDebug() << "isValid: "		<< url.isValid() 	<< endl;
+    qDebug() << "isMalformed: "	<< url.isMalformed() 	<< endl;
+    qDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
 #endif
 
     _isBusy = true;
@@ -121,13 +121,13 @@ KDirTree::startReading( const KUrl & url )
 
     if ( _isFileProtocol && _enableLocalDirReader )
     {
-	// kdDebug() << "Using local directory reader for " << url.url() << endl;
+	// qDebug() << "Using local directory reader for " << url.url() << endl;
 	_readMethod	= KDirReadLocal;
 	_root		= KLocalDirReadJob::stat( url, this );
     }
     else
     {
-	// kdDebug() << "Using KIO methods for " << url.url() << endl;
+	// qDebug() << "Using KIO methods for " << url.url() << endl;
 	KUrl cleanUrl( url );
 	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
 	_readMethod	= KDirReadKIO;
@@ -155,7 +155,7 @@ KDirTree::startReading( const KUrl & url )
     }
     else	// stat() failed
     {
-	// kdWarning() << "stat(" << url.url() << ") failed" << endl;
+	// qWarning() << "stat(" << url.url() << ") failed" << endl;
 	_isBusy = false;
 	emit finished();
 	emit finalizeLocal( 0 );
@@ -196,7 +196,7 @@ KDirTree::refresh( KFileInfo *subtree )
 
 	emit deletingChild( subtree );
 
-	// kdDebug() << "Deleting subtree " << subtree << endl;
+	// qDebug() << "Deleting subtree " << subtree << endl;
 
 	/**
 	 * This may sound stupid, but the parent must be told to unlink its
@@ -219,7 +219,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	subtree = ( _readMethod == KDirReadLocal ) ?
 	    KLocalDirReadJob::stat( url, this, parent ) : KioDirReadJob::stat( url, this, parent );
 
-	// kdDebug() << "New subtree: " << subtree << endl;
+	// qDebug() << "New subtree: " << subtree << endl;
 
 	if ( subtree )
 	{
@@ -306,7 +306,7 @@ KDirTree::childDeletedNotify()
 void
 KDirTree::deleteSubtree( KFileInfo *subtree )
 {
-    // kdDebug() << "Deleting subtree " << subtree << endl;
+    // qDebug() << "Deleting subtree " << subtree << endl;
     KDirInfo *parent = subtree->parent();
 
     if ( parent )
@@ -331,7 +331,7 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
 	    {
 		if ( parent->parent()->isFinished() )
 		{
-		    // kdDebug() << "Removing empty dot entry " << parent << endl;
+		    // qDebug() << "Removing empty dot entry " << parent << endl;
 
 		    deletingChildNotify( parent );
 		    parent->parent()->setDotEntry( 0 );
@@ -341,7 +341,7 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
 	    }
 	    else	// no parent - this should never happen (?)
 	    {
-		kdError() << "Internal error: Killing dot entry without parent " << parent << endl;
+		qCritical() << "Internal error: Killing dot entry without parent " << parent << endl;
 
 		// Better leave that dot entry alone - we shouldn't have come
 		// here in the first place. Who knows what will happen if this
@@ -415,9 +415,9 @@ KDirTree::selectItem( KFileInfo *newSelection )
 
 #if 0
     if ( newSelection )
-	kdDebug() << k_funcinfo << " selecting " << newSelection << endl;
+	qDebug() << k_funcinfo << " selecting " << newSelection << endl;
     else
-	kdDebug() << k_funcinfo << " selecting nothing" << endl;
+	qDebug() << k_funcinfo << " selecting nothing" << endl;
 #endif
 
     _selection = newSelection;

@@ -86,7 +86,7 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 
 	if ( _isSparseFile )
 	{
-	    kdDebug() << "Found sparse file: " << this
+	    qDebug() << "Found sparse file: " << this
 		      << "    Byte size: " << formatSize( byteSize() )
 		      << "  Allocated: " << formatSize( allocatedSize() )
 		      << " (" << (int) _blocks << " blocks)"
@@ -96,7 +96,7 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 #if 0
 	if ( isFile() && _links > 1 )
 	{
-	    kdDebug() << _links << " hard links: " << this << endl;
+	    qDebug() << _links << " hard links: " << this << endl;
 	}
 #endif
     }
@@ -185,7 +185,7 @@ KFileInfo::KFileInfo( KDirTree * 	tree,
 	_blocks		= blocks;
     }
 
-    // kdDebug() << "Created KFileInfo " << this << endl;
+    // qDebug() << "Created KFileInfo " << this << endl;
 }
 
 
@@ -260,7 +260,7 @@ KFileInfo::urlPart( int targetLevel ) const
 
     if ( level < targetLevel )
     {
-	kdError() << k_funcinfo << "URL level " << targetLevel
+	qCritical() << k_funcinfo << "URL level " << targetLevel
 		  << " requested, this is level " << level << endl;
 	return "";
     }

@@ -84,7 +84,7 @@ KDirReadJob::finished()
     if ( _queue )
 	_queue->jobFinishedNotify( this );
     else
-	kdError() << "No job queue for " << _dir << endl;
+	qCritical() << "No job queue for " << _dir << endl;
 }
 
 
@@ -163,7 +163,7 @@ KLocalDirReadJob::startReading()
 			    }
 			    else	// The subdirectory we just found is a mount point.
 			    {
-				// kdDebug() << "Found mount point " << subDir << endl;
+				// qDebug() << "Found mount point " << subDir << endl;
 				subDir->setMountPoint();
 
 				if ( _tree->crossFileSystems() )
@@ -194,7 +194,7 @@ KLocalDirReadJob::startReading()
 
 			    if ( firstDirInCache == dirName )	// Does this cache file match this directory?
 			    {
-				kdDebug() << "Using cache file " << fullName << " for " << dirName << endl;
+				qDebug() << "Using cache file " << fullName << " for " << dirName << endl;
 
 				cacheReadJob->reader()->rewind();	// Read offset was moved by firstDir()
 				_tree->addJob( cacheReadJob );	// Job queue will assume ownership of cacheReadJob
@@ -215,7 +215,7 @@ KLocalDirReadJob::startReading()
 			    }
 			    else
 			    {
-				kdDebug() << "NOT using cache file " << fullName
+				qDebug() << "NOT using cache file " << fullName
 					  << " with dir " << firstDirInCache
 					  << " for " << dirName
 					  << endl;
@@ -233,7 +233,7 @@ KLocalDirReadJob::startReading()
 		}
 		else			// lstat() error
 		{
-		    kdWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
+		    qWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
 
 		    /*
 		     * Not much we can do when lstat() didn't work; let's at
@@ -248,7 +248,7 @@ KLocalDirReadJob::startReading()
 	}
 
 	closedir( _diskDir );
-	// kdDebug() << "Finished reading " << _dir << endl;
+	// qDebug() << "Finished reading " << _dir << endl;
 	_dir->setReadState( KDirFinished );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
@@ -258,7 +258,7 @@ KLocalDirReadJob::startReading()
 	_dir->setReadState( KDirError );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
-	// kdWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
+	// qWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
     }
 
@@ -324,7 +324,7 @@ KioDirReadJob::startReading()
 
     if ( ! url.isValid() )
     {
-	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
+	qWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
 
     _job = KIO::listDir( url );
@@ -349,7 +349,7 @@ KioDirReadJob::entries ( KIO::Job *			job,
 
     if ( ! url.isValid() )
     {
-	kdWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
+	qWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
     }
 
     KIO::UDSEntryList::ConstIterator it = entryList.begin();
@@ -364,7 +364,7 @@ KioDirReadJob::entries ( KIO::Job *			job,
 	if ( entry.name() != "." &&
 	     entry.name() != ".."  )
 	{
-	    // kdDebug() << "Found " << entry.url().url() << endl;
+	    // qDebug() << "Found " << entry.url().url() << endl;
 
 	    if ( entry.isDir()    &&	// Directory child
 		 ! entry.isLink()   )	// and not a symlink?
@@ -522,13 +522,13 @@ KCacheReadJob::read()
         return;
     }
 
-    // kdDebug() << "Reading 1000 cache lines" << endl;
+    // qDebug() << "Reading 1000 cache lines" << endl;
     _reader->read( 1000 );
     _tree->sendProgressInfo( "" );
 
     if ( _reader->eof() || ! _reader->ok() )
     {
-	// kdDebug() << "Cache reading finished - ok: " << _reader->ok() << endl;
+	// qDebug() << "Cache reading finished - ok: " << _reader->ok() << endl;
 	finished();
     }
 }
@@ -562,7 +562,7 @@ KDirReadJobQueue::enqueue( KDirReadJob * job )
 
 	if ( ! _timer.isActive() )
 	{
-	    // kdDebug() << "First job queued" << endl;
+	    // qDebug() << "First job queued" << endl;
 	    emit startingReading();
 	    _timer.start( 0 );
 	}
@@ -656,7 +656,7 @@ KDirReadJobQueue::jobFinishedNotify( KDirReadJob *job )
     if ( _queue.isEmpty() )	// No new job available - we're done.
     {
 	_timer.stop();
-	// kdDebug() << "No more jobs - finishing" << endl;
+	// qDebug() << "No more jobs - finishing" << endl;
 	emit finished();
     }
 }

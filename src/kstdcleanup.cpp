@@ -182,11 +182,11 @@ TrashBinCleanup::execute( KFileInfo* item ){
     if (worksFor( item )){
 	KUrl url;
 	url.setPath(item->url());
-	kdDebug() << "trashing url  " <<_selection->url() << endl;
+	qDebug() << "trashing url  " <<_selection->url() << endl;
 	KUrl::List urls;
 	urls.append(url);
 	KActionCollection *collection = static_cast<KActionCollection*>(parent());
-	kdDebug() << collection->associatedWidgets().length() << endl;
+	qDebug() << collection->associatedWidgets().length() << endl;
 	konqOperationsDel(collection->associatedWidgets()[0], urls);
 	item->tree()->deleteSubtree( _selection );
     }

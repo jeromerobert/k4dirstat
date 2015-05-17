@@ -84,7 +84,7 @@ KExcludeRules::match( const QString & text )
 	{
 #if VERBOSE_EXCLUDE_MATCHES
 	    
-	    kdDebug() << text << " matches exclude rule "
+	    qDebug() << text << " matches exclude rule "
 		      << rule->regexp().pattern()
 		      << endl;
 

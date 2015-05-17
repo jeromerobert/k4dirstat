@@ -35,7 +35,7 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
     , _selectedTile( 0 )
     , _selectionRect( 0 )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // qDebug() << k_funcinfo << endl;
 
     readConfig();
 
@@ -155,7 +155,7 @@ KTreemapView::tileAt( QPoint pos )
 void
 KTreemapView::mousePressEvent( QMouseEvent * event )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // qDebug() << k_funcinfo << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
 
@@ -224,7 +224,7 @@ KTreemapView::mousePressEvent( QMouseEvent * event )
 void
 KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // qDebug() << k_funcinfo << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
 
@@ -363,7 +363,7 @@ KTreemapView::rebuildTreemap()
 
     if ( ! _savedRootUrl.isEmpty() )
     {
-	// kdDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
+	// qDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
 
 	root = _tree->locate( _savedRootUrl, true );	// node, findDotEntries
     }
@@ -451,7 +451,7 @@ KTreemapView::resizeEvent( QResizeEvent * event )
 void
 KTreemapView::selectTile( KTreemapTile * tile )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // qDebug() << k_funcinfo << endl;
 
     KTreemapTile * oldSelection = _selectedTile;
     _selectedTile = tile;

@@ -135,7 +135,7 @@ KDirInfo::~KDirInfo()
 void
 KDirInfo::recalc()
 {
-    // kdDebug() << k_funcinfo << this << endl;
+    // qDebug() << k_funcinfo << this << endl;
 
     _totalSize		= _size;
     _totalBlocks	= _blocks;
@@ -386,14 +386,14 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
 {
     if ( deletedChild->parent() != this )
     {
-	kdError() << deletedChild << " is not a child of " << this
+	qCritical() << deletedChild << " is not a child of " << this
 		  << " - cannot unlink from children list!" << endl;
 	return;
     }
 
     if ( deletedChild == _firstChild )
     {
-	// kdDebug() << "Unlinking first child " << deletedChild << endl;
+	// qDebug() << "Unlinking first child " << deletedChild << endl;
 	_firstChild = deletedChild->next();
 	return;
     }
@@ -404,7 +404,7 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
     {
 	if ( child->next() == deletedChild )
 	{
-	    // kdDebug() << "Unlinking " << deletedChild << endl;
+	    // qDebug() << "Unlinking " << deletedChild << endl;
 	    child->setNext( deletedChild->next() );
 
 	    return;
@@ -413,7 +413,7 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
 	child = child->next();
     }
 
-    kdError() << "Couldn't unlink " << deletedChild << " from "
+    qCritical() << "Couldn't unlink " << deletedChild << " from "
 	      << this << " children list" << endl;
 }
 
@@ -507,7 +507,7 @@ KDirInfo::cleanupDotEntries()
 
     if ( ! _firstChild )
     {
-	// kdDebug() << "Reparenting children of solo dot entry " << this << endl;
+	// qDebug() << "Reparenting children of solo dot entry " << this << endl;
 
 	KFileInfo *child = _dotEntry->firstChild();
 	_firstChild = child;		// Move the entire children chain here.
@@ -525,7 +525,7 @@ KDirInfo::cleanupDotEntries()
 
     if ( ! _dotEntry->firstChild() )
     {
-	// kdDebug() << "Removing empty dot entry " << this << endl;
+	// qDebug() << "Removing empty dot entry " << this << endl;
 
 	delete _dotEntry;
 	_dotEntry = 0;

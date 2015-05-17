@@ -170,7 +170,7 @@ KPacManAnimation::animate( QPainter *	painter,
 
 #if 0
     QPoint offset = painter->worldMatrix().map( _pacManRect.topLeft() );
-    // kdDebug() << "bitBlt() to " << offset.x() << ", " << offset.y() << endl;
+    // qDebug() << "bitBlt() to " << offset.x() << ", " << offset.y() << endl;
     bitBlt( _widget, offset, &pixmap );
 #endif
 
