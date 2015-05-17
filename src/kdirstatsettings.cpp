@@ -240,7 +240,7 @@ KTreeColorsPage::apply()
 	_treeView->setFillColor( i, _colorButton [i]->color() );
     }
 
-    _treeView->triggerUpdate();
+    _treeView->viewport()->repaint();
 }
 
 

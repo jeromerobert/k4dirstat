@@ -989,11 +989,7 @@ KDirTreeView::readConfig()
     }
 
     if ( isVisible() )
-	triggerUpdate();
-}
-
-void KDirTreeView::triggerUpdate() {
-    qCritical() << "KDirTreeView::triggerUpdate not yet implemented";
+        viewport()->repaint();
 }
 
 void
