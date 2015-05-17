@@ -16,7 +16,6 @@
 #include <math.h>
 #include <algorithm>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <qimage.h>

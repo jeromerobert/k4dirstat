@@ -13,7 +13,6 @@
 #   include <config.h>
 #endif
 
-#include <kapplication.h>
 #include <klocale.h>
 #include "kdirinfo.h"
 #include "kdirtreeiterators.h"

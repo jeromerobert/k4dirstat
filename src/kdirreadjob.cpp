@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <sys/errno.h>
 #include <klocale.h>
-#include <kapplication.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 

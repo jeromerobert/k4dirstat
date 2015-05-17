@@ -17,7 +17,6 @@
 #include <qapplication.h>
 #include <qregexp.h>
 
-#include <kapplication.h>
 #include <QProcess>
 #include <kdebug.h>
 #include <kmessagebox.h>

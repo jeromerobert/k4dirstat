@@ -25,7 +25,7 @@
 #include <QDesktopServices>
 #include <qmenu.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -797,7 +797,8 @@ KDirTreeView::setTreeBackground( const QColor &color )
     _treeBackground = color;
     _percentageBarBackground = _treeBackground.dark( 115 );
 
-    QPalette pal = kapp->palette();
+    QGuiApplication * app = dynamic_cast<QGuiApplication*>(QCoreApplication::instance());
+    QPalette pal = app->palette();
     pal.setBrush(QPalette::Base, _treeBackground );
     setPalette( pal );
 }

@@ -16,7 +16,6 @@
 #include <qevent.h>
 #include <qregexp.h>
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
