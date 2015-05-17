@@ -1417,6 +1417,7 @@ KDirTreeViewItem::deferredClone()
 	return;
     }
 
+    takeChildren();
 
     // Clone all normal children
 
