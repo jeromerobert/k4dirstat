@@ -174,11 +174,11 @@ KCleanup::confirmation( KFileInfo * item )
 
     if ( item->isDir() || item->isDotEntry() )
     {
-	msg = i18n( "%1\nin directory %2" ).arg( cleanTitle() ).arg( item->url() );
+        msg = i18n( "%1\nin directory %2", cleanTitle(), item->url() );
     }
     else
     {
-	msg = i18n( "%1\nfor file %2" ).arg( cleanTitle() ).arg( item->url() );
+        msg = i18n( "%1\nfor file %2", cleanTitle(), item->url() );
     }
 
     if ( KMessageBox::warningContinueCancel( 0,				// parentWidget
