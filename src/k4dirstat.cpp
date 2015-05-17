@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 #include <krun.h>
 #include <KDE/KLocale>
-#include <kapplication.h>
+#include <QGuiApplication>
 #include <ktoolinvocation.h>
 #include <ktoggleaction.h>
 #include <kconfigdialog.h>
@@ -211,7 +211,7 @@ void k4dirstat::setupActions()
     _fileAskReadCache->setText(i18n( "&Read Cache File..." ));
     _fileAskReadCache->setIcon(KIcon("document-import"));
 
-    _fileQuit		= KStandardAction::quit		( kapp, SLOT( quit()  		), actionCollection() );
+    _fileQuit = KStandardAction::quit(QCoreApplication::instance(), SLOT(quit()), actionCollection());
     _editCopy		= KStandardAction::copy		( this, SLOT( editCopy() 	), actionCollection() );
 
     _cleanupOpenWith = actionCollection()->addAction( "cleanup_open_with", this, SLOT(cleanupOpenWith()));
@@ -526,9 +526,11 @@ void k4dirstat::askReadCache()
 
 void k4dirstat::editCopy()
 {
-    if ( _treeView->selection() )
-        //kapp->clipboard()->setText( QString::fromLocal8Bit(_treeView->selection()->orig()->url()) );
-        kapp->clipboard()->setText( _treeView->selection()->orig()->url() );
+    if(_treeView->selection()) {
+        QGuiApplication * app = dynamic_cast<QGuiApplication*>(QCoreApplication::instance());
+        if(app)
+            app->clipboard()->setText(_treeView->selection()->orig()->url());
+    }
 
 #if 0
 #warning debug
