@@ -213,7 +213,7 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * stat( const KUrl &	url,
+	static KFileInfo * stat( const QUrl &	url,
 				 KDirTree  *	tree,
 				 KDirInfo *	parent = 0 );
 
@@ -267,7 +267,7 @@ namespace KDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo *	stat( const KUrl &	url,
+	static KFileInfo *	stat( const QUrl &	url,
 				      KDirTree	*	tree,
 				      KDirInfo *	parent = 0 );
 
@@ -277,7 +277,7 @@ namespace KDirStat
 	 * This is a moderately expensive operation since it involves a network
 	 * transparent stat() call.
 	 **/
-	static QString		owner( KUrl url );
+	static QString		owner( QUrl url );
 
 
     protected slots:

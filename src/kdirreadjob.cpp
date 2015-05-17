@@ -124,7 +124,6 @@ KLocalDirReadJob::startReading()
     struct dirent *	entry;
     struct stat		statInfo;
     QString		dirName		 = _dir->url();
-    QString		defaultCacheName = DEFAULT_CACHE_NAME.url();
 
     if ( ( _diskDir = opendir( dirName.toAscii() ) ) )
     {
@@ -181,7 +180,7 @@ KLocalDirReadJob::startReading()
 		    }
 		    else		// non-directory child
 		    {
-			if ( entryName == defaultCacheName )	// .kdirstat.cache.gz found?
+			if ( entryName == DEFAULT_CACHE_NAME )	// .kdirstat.cache.gz found?
 			{
 			    //
 			    // Read content of this subdirectory from cache file
@@ -269,7 +268,7 @@ KLocalDirReadJob::startReading()
 
 
 KFileInfo *
-KLocalDirReadJob::stat( const KUrl & 	url,
+KLocalDirReadJob::stat( const QUrl & 	url,
 			KDirTree  *	tree,
 			KDirInfo * 	parent )
 {
@@ -345,7 +344,7 @@ KioDirReadJob::entries ( KIO::Job *			job,
 			 const KIO::UDSEntryList &	entryList )
 {
     NOT_USED( job );
-    KUrl url( _dir->url() );	// Cache this - it's expensive!
+    QUrl url( _dir->url() );	// Cache this - it's expensive!
 
     if ( ! url.isValid() )
     {
@@ -417,7 +416,7 @@ KioDirReadJob::finished( KIO::Job * job )
 
 
 KFileInfo *
-KioDirReadJob::stat( const KUrl & 	url,
+KioDirReadJob::stat( const QUrl & 	url,
 		      KDirTree  * 	tree,
 		      KDirInfo  * 	parent )
 {
@@ -437,7 +436,7 @@ KioDirReadJob::stat( const KUrl & 	url,
 
 
 QString
-KioDirReadJob::owner( KUrl url )
+KioDirReadJob::owner( QUrl url )
 {
     KIO::UDSEntry uds_entry;
 

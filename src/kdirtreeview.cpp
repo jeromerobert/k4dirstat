@@ -260,7 +260,7 @@ KDirTreeView::idleDisplay()
 
 
 void
-KDirTreeView::openURL( KUrl url )
+KDirTreeView::openURL( QUrl url )
 {
     clear();
     _tree->clear();
@@ -1037,8 +1037,8 @@ KDirTreeView::sendMailToOwner()
     // qDebug() << "subject: " << subject << endl;
     // qDebug() << "body:\n"   << body    << endl;
 
-    KUrl mail;
-    mail.setProtocol( "mailto" );
+    QUrl mail;
+    mail.setScheme( "mailto" );
     mail.setPath( owner );
     mail.setQuery( "?subject="	+ QUrl::toPercentEncoding( subject ) +
 		   "&body="	+ QUrl::toPercentEncoding( body ) );

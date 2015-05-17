@@ -67,7 +67,7 @@ public:
     /**
      * Open an URL specified by command line argument.
      **/
-    void openURL( const KUrl & url );
+    void openURL( const QUrl & url );
 
     /**
      * Return the main window's @ref KDirTreeView.

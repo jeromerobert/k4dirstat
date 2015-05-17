@@ -26,7 +26,7 @@
 #include <krecentfilesaction.h>
 
 #include <kurlrequesterdialog.h>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <KDE/KLocale>
@@ -313,7 +313,7 @@ void k4dirstat::initStatusBar()
     statusBar()->showMessage(i18n( "Ready." ));
 }
 
-void k4dirstat::openURL( const KUrl& url )
+void k4dirstat::openURL( const QUrl& url )
 {
     statusMsg( i18n( "Opening directory..." ) );
 
@@ -396,8 +396,7 @@ void k4dirstat::saveMainWinConfig()
 void k4dirstat::fileAskOpenDir()
 {
     statusMsg( i18n( "Opening directory..." ) );
-
-    QString url = KFileDialog::getExistingDirectory( KUrl(), this, i18n( "Open Directory..." ) );
+    QString url = QFileDialog::getExistingDirectory(this, i18n( "Open Directory..." ));
 
     if( ! url.isEmpty() )
         openURL( fixedUrl( url ) );
@@ -471,10 +470,7 @@ void k4dirstat::askWriteCache()
     do
     {
         file_name =
-            KFileDialog::getSaveFileName( DEFAULT_CACHE_NAME, 			// startDir
-                                          QString::null,			// filter
-                                          this,					// parent
-                                          i18n( "Write to Cache File" ) );	// caption
+            QFileDialog::getSaveFileName(this, i18n("Write to Cache File"), DEFAULT_CACHE_NAME);
 
         if ( file_name.isEmpty() )		// user hit "cancel"
             return;
@@ -508,10 +504,7 @@ void k4dirstat::askWriteCache()
 void k4dirstat::askReadCache()
 {
     QString file_name =
-        KFileDialog::getOpenFileName( DEFAULT_CACHE_NAME,		// startDir
-                                      QString::null,			// filter
-                                      this,				// parent
-                                      i18n( "Read Cache File" ) );	// caption
+        QFileDialog::getOpenFileName(this, i18n("Read Cache File"), DEFAULT_CACHE_NAME);
 
     statusMsg( i18n( "Reading cache file..." ) );
 

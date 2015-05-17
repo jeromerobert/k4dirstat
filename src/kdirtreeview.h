@@ -246,7 +246,7 @@ namespace KDirStat
 	/**
 	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
 	 **/
-	void openURL( KUrl url );
+	void openURL( QUrl url );
 
 	/**
 	 * Refresh (i.e. re-read from disk) the entire tree.

@@ -387,7 +387,7 @@ KFileInfo::locate( QString url, bool findDotEntries )
 
 
 
-KUrl
+QUrl
 KDirStat::fixedUrl( const QString & dirtyUrl )
 {
     return QUrl::fromUserInput(dirtyUrl, QDir::currentPath(), QUrl::AssumeLocalFile);

@@ -19,7 +19,7 @@
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
 #include <KGlobal>
-
+#include <QDir>
 using namespace KDirStat;
 
 
@@ -98,7 +98,7 @@ KDirTree::clear( bool sendSignals )
 
 
 void
-KDirTree::startReading( const KUrl & url )
+KDirTree::startReading( const QUrl & url )
 {
     // qDebug() << k_funcinfo << " " << url.url() << endl;
 
@@ -128,10 +128,8 @@ KDirTree::startReading( const KUrl & url )
     else
     {
 	// qDebug() << "Using KIO methods for " << url.url() << endl;
-	KUrl cleanUrl( url );
-	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
 	_readMethod	= KDirReadKIO;
-	_root 		= KioDirReadJob::stat( cleanUrl, this );
+	_root 		= KioDirReadJob::stat( url, this );
     }
 
     if ( _root )
@@ -177,7 +175,7 @@ KDirTree::refresh( KFileInfo *subtree )
     {
 	// Save some values from the old subtree.
 
-	KUrl url		= subtree->url();
+	QUrl url = QUrl::fromUserInput(subtree->url(), QDir::currentPath(), QUrl::AssumeLocalFile);
 	KDirInfo * parent	= subtree->parent();
 
 

@@ -166,7 +166,7 @@ TrashBinCleanup::TrashBinCleanup(KActionCollection *parent):
 {
 }
 
-static void konqOperationsDel(QWidget * m_mainWindow, KUrl::List & urls) {
+static void konqOperationsDel(QWidget * m_mainWindow, const QList<QUrl> & urls) {
     KIO::JobUiDelegate uiDelegate;
     uiDelegate.setWindow(m_mainWindow);
     if (uiDelegate.askDeleteConfirmation(urls, KIO::JobUiDelegate::Trash, KIO::JobUiDelegate::DefaultConfirmation)) {
@@ -183,7 +183,7 @@ TrashBinCleanup::execute( KFileInfo* item ){
 	KUrl url;
 	url.setPath(item->url());
 	qDebug() << "trashing url  " <<_selection->url() << endl;
-	KUrl::List urls;
+	QList<QUrl> urls;
 	urls.append(url);
 	KActionCollection *collection = static_cast<KActionCollection*>(parent());
 	qDebug() << collection->associatedWidgets().length() << endl;

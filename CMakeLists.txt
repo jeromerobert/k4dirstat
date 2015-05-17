@@ -50,7 +50,7 @@ if(NOT ENABLE_KDELIBS4SUPPORT_WARNING)
   add_definitions("-DKDELIBS4SUPPORT_DEPRECATED=__attribute__ (())")
 endif()
 
-REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 git_version(K4DIRSTAT_VERSION 3.0 k4dirstat-)
 add_subdirectory( doc )
