@@ -52,7 +52,7 @@ endif()
 
 REMOVE_DEFINITIONS(-DQT_NO_DEBUG)
 
-git_version(K4DIRSTAT_VERSION 3.0~alpha k4dirstat-)
+git_version(K4DIRSTAT_VERSION 3.0 k4dirstat-)
 add_subdirectory( doc )
 add_subdirectory( src )
 add_subdirectory( icons )
