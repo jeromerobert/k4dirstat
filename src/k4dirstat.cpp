@@ -92,6 +92,7 @@ k4dirstat::k4dirstat()
     _pacManDelimiter	= 0;
     _treemapViewHeight	= 0;
 
+    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(triggerSaveConfig()));
 
     // Set up internal (mainWin -> mainWin) connections
 
@@ -739,6 +740,9 @@ void k4dirstat::deleteTreemapView()
     updateActions();
 }
 
+void k4dirstat::triggerSaveConfig() {
+    emit saveConfig();
+}
 
 /*void k4dirstat::fileNew()
 {

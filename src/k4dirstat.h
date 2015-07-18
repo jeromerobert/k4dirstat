@@ -263,6 +263,9 @@ public slots:
      **/
     void askReadCache();
 
+private slots:
+    void triggerSaveConfig();
+
 signals:
 
     /**
