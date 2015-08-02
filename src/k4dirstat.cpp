@@ -396,10 +396,10 @@ void k4dirstat::saveMainWinConfig()
 void k4dirstat::fileAskOpenDir()
 {
     statusMsg( i18n( "Opening directory..." ) );
-    QString url = QFileDialog::getExistingDirectory(this, i18n( "Open Directory..." ));
+    QUrl url = QFileDialog::getExistingDirectoryUrl(this, i18n( "Open Directory..." ));
 
     if( ! url.isEmpty() )
-        openURL( fixedUrl( url ) );
+        openURL(url);
 
     statusMsg( i18n( "Ready." ) );
 }

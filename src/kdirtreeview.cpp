@@ -1130,7 +1130,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     }
     else
     {
-	setText(view->nameCol(), QString::fromLocal8Bit(_orig->name().toAscii()));
+	setText(view->nameCol(), _orig->name());
 
 	if ( ! _orig->isDevice() )
 	{

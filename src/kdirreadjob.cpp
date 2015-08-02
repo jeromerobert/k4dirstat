@@ -28,6 +28,7 @@
 #include "kdirtreecache.h"
 #include "kexcluderules.h"
 #include "k4dirstat.h"
+#include <QDir>
 
 using namespace KDirStat;
 
@@ -125,7 +126,7 @@ KLocalDirReadJob::startReading()
     struct stat		statInfo;
     QString		dirName		 = _dir->url();
 
-    if ( ( _diskDir = opendir( dirName.toAscii() ) ) )
+    if ( ( _diskDir = opendir( dirName.toLocal8Bit() ) ) )
     {
 	_tree->sendProgressInfo( dirName );
 	_dir->setReadState( KDirReading );
@@ -138,8 +139,8 @@ KLocalDirReadJob::startReading()
 		 entryName != ".."   )
 	    {
 		QString fullName = dirName + "/" + entryName;
-
-		if ( lstat( fullName.toAscii(), &statInfo ) == 0 )	// lstat() OK
+		QByteArray rawFullName = dirName.toLocal8Bit() + QDir::separator().toAscii() + QByteArray(entry->d_name);
+		if ( lstat(rawFullName.data(), &statInfo ) == 0 )	// lstat() OK
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
