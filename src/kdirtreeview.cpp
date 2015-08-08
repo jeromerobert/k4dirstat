@@ -1670,7 +1670,7 @@ KDirTreeViewItem::compare( const KDirTreeViewItem *	other,
 QString
 KDirStat::formatSizeLong( KFileSize size )
 {
-    return KGlobal::locale()->formatLong(size);
+    return KLocale::global()->formatLong(size);
 }
 
 
@@ -1813,8 +1813,8 @@ KDirStat::localeTimeDate( time_t rawTime )
     QDateTime timeDate;
     timeDate.setTime_t( rawTime );
     QString timeDateString =
-	KGlobal::locale()->formatDate( timeDate.date(), KLocale::ShortDate) + "  " +	// short format
-	KGlobal::locale()->formatTime( timeDate.time(), true );		// include seconds
+	KLocale::global()->formatDate( timeDate.date(), KLocale::ShortDate) + "  " +	// short format
+	KLocale::global()->formatTime( timeDate.time(), true );		// include seconds
 
     return timeDateString;
 }
