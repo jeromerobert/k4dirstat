@@ -45,11 +45,6 @@ find_package(ZLIB)
 
 ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 
-option(ENABLE_KDELIBS4SUPPORT_WARNING "Show kdelibs4support warning")
-if(NOT ENABLE_KDELIBS4SUPPORT_WARNING)
-  add_definitions("-DKDELIBS4SUPPORT_DEPRECATED=__attribute__ (())")
-endif()
-
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 git_version(K4DIRSTAT_VERSION 3.0 k4dirstat-)
