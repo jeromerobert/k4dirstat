@@ -163,7 +163,7 @@ static void konqOperationsDel(QWidget * m_mainWindow, const QList<QUrl> & urls) 
     uiDelegate.setWindow(m_mainWindow);
     if (uiDelegate.askDeleteConfirmation(urls, KIO::JobUiDelegate::Trash, KIO::JobUiDelegate::DefaultConfirmation)) {
         KIO::Job* job = KIO::trash(urls);
-        KIO::FileUndoManager::self()->recordJob( KIO::FileUndoManager::Trash, urls, KUrl("trash:/"), job );
+        KIO::FileUndoManager::self()->recordJob( KIO::FileUndoManager::Trash, urls, QUrl("trash:/"), job );
         KJobWidgets::setWindow(job, m_mainWindow);
         job->ui()->setAutoErrorHandlingEnabled(true); // or connect to the result signal
     }
@@ -172,7 +172,7 @@ static void konqOperationsDel(QWidget * m_mainWindow, const QList<QUrl> & urls) 
 void
 TrashBinCleanup::execute( KFileInfo* item ){
     if (worksFor( item )){
-	KUrl url;
+	QUrl url;
 	url.setPath(item->url());
 	QList<QUrl> urls;
 	urls.append(url);

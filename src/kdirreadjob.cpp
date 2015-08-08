@@ -320,8 +320,7 @@ KioDirReadJob::~KioDirReadJob()
 void
 KioDirReadJob::startReading()
 {
-    KUrl url( _dir->url() );
-
+    QUrl url = QUrl::fromUserInput(_dir->url(), QDir::currentPath(), QUrl::AssumeLocalFile);
     if ( ! url.isValid() )
     {
 	qWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;

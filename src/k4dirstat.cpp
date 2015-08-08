@@ -40,7 +40,7 @@
 #include <QClipboard>
 #include <QSplitter>
 #include <QMenu>
-#include <KUrl>
+#include <QList>
 #include <QIcon>
 #include <KGlobal>
 #include <KHelpClient>
@@ -545,7 +545,9 @@ void k4dirstat::cleanupOpenWith()
     if ( sel->isDotEntry() )
         return;
 
-    KUrl::List urlList( KUrl( sel->url()  ) );
+    QList<QUrl> urlList;
+    urlList.append(QUrl::fromUserInput(sel->url(), QDir::currentPath(),
+        QUrl::AssumeLocalFile));
     KRun::displayOpenWithDialog( urlList, this, false );
 }
 
