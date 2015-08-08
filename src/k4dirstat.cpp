@@ -331,8 +331,7 @@ void k4dirstat::openURL( const QUrl& url )
 
 void k4dirstat::readMainWinConfig()
 {
-
-    KConfigGroup config = KGlobal::config()->group("General Options");
+    KConfigGroup config = KSharedConfig::openConfig()->group("General Options");
 
     // Status settings of the various bars and views
 
@@ -356,10 +355,10 @@ void k4dirstat::readMainWinConfig()
     if( ! size.isEmpty() )
         resize( size );
 
-    config = KGlobal::config()->group("Animation");
+    config = KSharedConfig::openConfig()->group("Animation");
     _treeView->enablePacManAnimation( config.readEntry( "DirTreePacMan", false ) );
 
-    config = KGlobal::config()->group("Exclude");
+    config = KSharedConfig::openConfig()->group("Exclude");
     QStringList excludeRules = config.readEntry ( "ExcludeRules", QStringList() );
     KExcludeRules::excludeRules()->clear();
 
@@ -377,7 +376,7 @@ void k4dirstat::readMainWinConfig()
 
 void k4dirstat::saveMainWinConfig()
 {
-    KConfigGroup config = KGlobal::config()->group("General Options");
+    KConfigGroup config = KSharedConfig::openConfig()->group("General Options");
 
 
     config.writeEntry( "Geometry", 		size() );

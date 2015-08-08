@@ -100,7 +100,7 @@ KTreemapView::clear()
 void
 KTreemapView::readConfig()
 {
-    KConfigGroup config = KGlobal::config()->group( "Treemaps" );
+    KConfigGroup config = KSharedConfig::openConfig()->group( "Treemaps" );
 
     _ambientLight	= config.readEntry( "AmbientLight"		,  DefaultAmbientLight );
 

@@ -52,7 +52,7 @@ KDirTree::~KDirTree()
 void
 KDirTree::readConfig()
 {
-    KConfigGroup config = KGlobal::config()->group("Directory Reading");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Directory Reading");
 
     _crossFileSystems		= config.readEntry( "CrossFileSystems",     false );
     _enableLocalDirReader	= config.readEntry( "EnableLocalDirReader", true  );

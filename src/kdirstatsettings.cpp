@@ -767,12 +767,12 @@ KGeneralSettingsPage::showExcludeRuleContextMenu(const QPoint & localPos)
 void
 KGeneralSettingsPage::apply()
 {
-    KConfigGroup config = KGlobal::config()->group( "Directory Reading" );
+    KConfigGroup config = KSharedConfig::openConfig()->group( "Directory Reading" );
 
     config.writeEntry( "CrossFileSystems",	_crossFileSystems->isChecked()		);
     config.writeEntry( "EnableLocalDirReader", _enableLocalDirReader->isChecked()	);
 
-    config = KGlobal::config()->group( "Exclude" );
+    config = KSharedConfig::openConfig()->group( "Exclude" );
     //config.setGroup( "Exclude" );
     
     QStringList excludeRulesStringList;
@@ -804,7 +804,7 @@ KGeneralSettingsPage::revertToDefaults()
 void
 KGeneralSettingsPage::setup()
 {
-    KConfigGroup config = KGlobal::config()->group("Directory Reading");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Directory Reading");
 
     _crossFileSystems->setChecked	( config.readEntry( "CrossFileSystems"	, false) );
     _enableLocalDirReader->setChecked	( config.readEntry( "EnableLocalDirReader" , true ) );
@@ -1054,7 +1054,7 @@ KTreemapPage::~KTreemapPage()
 void
 KTreemapPage::apply()
 {
-    KConfigGroup config = KGlobal::config()->group( "Treemaps" );
+    KConfigGroup config = KSharedConfig::openConfig()->group( "Treemaps" );
 
     config.writeEntry( "Squarify",		_squarify->isChecked()			);
     config.writeEntry( "CushionShading",	_doCushionShading->isChecked()		);
@@ -1102,7 +1102,7 @@ KTreemapPage::revertToDefaults()
 void
 KTreemapPage::setup()
 {
-    KConfigGroup config = KGlobal::config()->group("Treemaps");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Treemaps");
 
     _squarify->setChecked		( config.readEntry( "Squarify"		, true	) );
     _doCushionShading->setChecked	( config.readEntry( "CushionShading"	, true	) );

@@ -344,7 +344,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 void
 KCleanup::readConfig()
 {
-    KConfigGroup config = KGlobal::config()->group(_id);
+    KConfigGroup config = KSharedConfig::openConfig()->group(_id);
 
     bool valid = config.readEntry( "valid", false	);
 
@@ -374,7 +374,7 @@ KCleanup::readConfig()
 void
 KCleanup::saveConfig() const
 {
-    KConfigGroup config = KGlobal::config()->group(_id);
+    KConfigGroup config = KSharedConfig::openConfig()->group(_id);
 
     config.writeEntry( "valid",		true			);
     config.writeEntry( "command",		_command		);

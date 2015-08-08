@@ -963,7 +963,7 @@ KDirTreeView::popupContextInfo( const QPoint  &	pos,
 void
 KDirTreeView::readConfig()
 {
-    KConfigGroup config = KGlobal::config()->group( "Tree Colors" );
+    KConfigGroup config = KSharedConfig::openConfig()->group( "Tree Colors" );
     _usedFillColors = config.readEntry( "usedFillColors", -1 );
 
     if ( _usedFillColors < 0 )
@@ -996,7 +996,7 @@ KDirTreeView::readConfig()
 void
 KDirTreeView::saveConfig() const
 {
-    KConfigGroup config = KGlobal::config()->group( "Tree Colors" );
+    KConfigGroup config = KSharedConfig::openConfig()->group( "Tree Colors" );
 
     config.writeEntry( "usedFillColors", _usedFillColors );
 
