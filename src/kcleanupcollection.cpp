@@ -18,7 +18,9 @@
 #include "kcleanupcollection.h"
 #include <KActionCollection>
 #include "kcleanupcollection_p.h"
-#include <KIcon>
+#include <QIcon>
+#include <KIconEngine>
+#include <KIconLoader>
 
 using namespace KDirStat;
 
@@ -72,15 +74,15 @@ void KCleanupCollection::saveConfig() {
     }
 }
 
-void KCleanupCollection::add(KCleanup * (*factory)(QString & iconFile, QKeySequence & shortcut)) {
-    QString iconFile;
+void KCleanupCollection::add(KCleanup * (*factory)(QString & iconName, QKeySequence & shortcut)) {
+    QString iconName;
     QKeySequence shortcut;
     QAction * action;
-    action = add(factory(iconFile, shortcut));
+    action = add(factory(iconName, shortcut));
     if(!shortcut.isEmpty())
         _actionCollection.setDefaultShortcut(action, shortcut);
-    if(!iconFile.isEmpty())
-        action->setIcon(KIcon(iconFile));
+    if(!iconName.isEmpty())
+        action->setIcon(QIcon(new KIconEngine(iconName, KIconLoader::global())));
 }
 
 void

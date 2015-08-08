@@ -41,9 +41,11 @@
 #include <QSplitter>
 #include <QMenu>
 #include <KUrl>
-#include <KIcon>
+#include <QIcon>
 #include <KGlobal>
 #include <KHelpClient>
+#include <KIconEngine>
+#include <KIconLoader>
 
 #include "kdirtree.h"
 #include "ktreemapview.h"
@@ -65,6 +67,10 @@
 #define PACMAN_INTERVAL	75	// millisec
 
 using namespace KDirStat;
+
+static QIcon icon(const QString & iconName) {
+    return QIcon(new KIconEngine(iconName, KIconLoader::global()));
+}
 
 k4dirstat * k4dirstat::instance_ = NULL;
 
@@ -177,7 +183,7 @@ void k4dirstat::setupActions()
 
     _fileAskOpenUrl	= actionCollection()->addAction("file_open_url",this,SLOT(fileAskOpenUrl()));
     _fileAskOpenUrl->setText( i18n( "Open &URL..." ));
-    _fileAskOpenUrl->setIcon(KIcon("konqueror"));
+    _fileAskOpenUrl->setIcon(icon("konqueror"));
 
 
     _fileOpenRecent	= KStandardAction::openRecent	( this, SLOT( fileOpenRecent( const QUrl& ) ),	actionCollection() );
@@ -185,7 +191,7 @@ void k4dirstat::setupActions()
 
     _fileRefreshAll = actionCollection()->addAction("file_refresh_all", this, SLOT(refreshAll()));
     _fileRefreshAll->setText(i18n ("Refresh &All"));
-    _fileRefreshAll->setIcon(KIcon("document-revert"));
+    _fileRefreshAll->setIcon(icon("document-revert"));
 
 
     _fileRefreshSelected = actionCollection()->addAction("file_refresh_selected", this, SLOT(refreshSelected()));
@@ -197,20 +203,20 @@ void k4dirstat::setupActions()
     _fileContinueReadingAtMountPoint = actionCollection()->addAction( "file_continue_reading_at_mount_point" ,
                                                                       this, SLOT(refreshSelected()));
     _fileContinueReadingAtMountPoint->setText( i18n( "Continue Reading at &Mount Point" ));
-    _fileContinueReadingAtMountPoint->setIcon(KIcon("drive-harddisk"));
+    _fileContinueReadingAtMountPoint->setIcon(icon("drive-harddisk"));
 
     _fileStopReading = actionCollection()->addAction("file_stop_reading", this, SLOT(stopReading()));
     _fileStopReading->setText(i18n( "Stop Rea&ding" ));
-    _fileStopReading->setIcon(KIcon("process-stop"));
+    _fileStopReading->setIcon(icon("process-stop"));
 
     _fileAskWriteCache = actionCollection()->addAction("file_ask_write_cache",
                                                        this, SLOT(askWriteCache()));
     _fileAskWriteCache->setText(i18n( "&Write to Cache File..." ));
-    _fileAskWriteCache->setIcon(KIcon("document-export"));
+    _fileAskWriteCache->setIcon(icon("document-export"));
 
     _fileAskReadCache = actionCollection()->addAction("file_ask_read_cache", this, SLOT(askReadCache()));
     _fileAskReadCache->setText(i18n( "&Read Cache File..." ));
-    _fileAskReadCache->setIcon(KIcon("document-import"));
+    _fileAskReadCache->setIcon(icon("document-import"));
 
     _fileQuit = KStandardAction::quit(QCoreApplication::instance(), SLOT(quit()), actionCollection());
     _editCopy		= KStandardAction::copy		( this, SLOT( editCopy() 	), actionCollection() );
@@ -220,17 +226,17 @@ void k4dirstat::setupActions()
 
     _treemapZoomIn = actionCollection()->addAction("treemap_zoom_in", this, SLOT( treemapZoomIn()));
     _treemapZoomIn->setText( i18n( "Zoom in" ));
-    _treemapZoomIn->setIcon(KIcon("zoom-in"));
+    _treemapZoomIn->setIcon(icon("zoom-in"));
     actionCollection()->setDefaultShortcut(_treemapZoomIn, Qt::Key_Plus);
 
     _treemapZoomOut = actionCollection()->addAction("treemap_zoom_out", this, SLOT(treemapZoomOut()));
     _treemapZoomOut->setText(i18n( "Zoom out" ));
-    _treemapZoomOut->setIcon(KIcon("zoom-out"));
+    _treemapZoomOut->setIcon(icon("zoom-out"));
     actionCollection()->setDefaultShortcut(_treemapZoomOut, Qt::Key_Minus);
 
     _treemapSelectParent = actionCollection()->addAction("treemap_select_parent", this, SLOT(treemapSelectParent()));
     _treemapSelectParent->setText(i18n("Select Parent"));
-    _treemapSelectParent->setIcon(KIcon("go-up"));
+    _treemapSelectParent->setIcon(icon("go-up"));
     actionCollection()->setDefaultShortcut(_treemapSelectParent, Qt::Key_Asterisk);
 
     _treemapRebuild = actionCollection()->addAction("treemap_rebuild", this, SLOT(treemapRebuild()));
@@ -244,13 +250,13 @@ void k4dirstat::setupActions()
 
     QAction *newAct = actionCollection()->addAction("treemap_help", this, SLOT(treemapHelp()));
     newAct->setText(i18n( "Help about Treemaps" ));
-    newAct->setIcon(KIcon("help-contents"));
+    newAct->setIcon(icon("help-contents"));
 
     QAction * pref  = KStandardAction::preferences( this, SLOT( preferences()	), actionCollection() );
 
     _reportMailToOwner = actionCollection()->addAction("report_mail_to_owner", _treeView, SLOT(sendMailToOwner()));
     _reportMailToOwner->setText(i18n("Send &Mail to Owner"));
-    _reportMailToOwner->setIcon(KIcon("mail-message-new"));
+    _reportMailToOwner->setIcon(icon("mail-message-new"));
 
    // _helpSendFeedbackMail = actionCollection()->addAction("help_send_feedback_mail",this, SLOT(sendFeedbackMail()));
    // _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));

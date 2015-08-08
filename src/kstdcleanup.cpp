@@ -38,7 +38,7 @@ KStdCleanup::openInKonqueror(QString & icon, QKeySequence & shortcut)
     cleanup->setWorksForDotEntry( true );
     cleanup->setWorksLocalOnly	( false );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
-    icon = "konqueror.png";
+    icon = "konqueror";
     shortcut = Qt::CTRL + Qt::Key_K;
     return cleanup;
 }
