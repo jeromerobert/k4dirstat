@@ -366,7 +366,7 @@ namespace KDirStat
 	KCleanupPropertiesPage *	_props;
         k4dirstat *			_mainWin;
 
-	KCleanupCollection		_workCleanupCollection;
+	QList<KCleanup> _workCleanupCollection;
 	KCleanup *			_currentCleanup;
 
     }; // class KCleanupPage

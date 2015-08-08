@@ -12,16 +12,7 @@
 #ifndef KCleanup_h
 #define KCleanup_h
 
-
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kdebug.h>
 #include "kdirtree.h"
-
 
 namespace KDirStat
 {
@@ -31,10 +22,8 @@ namespace KDirStat
      * @short KDirStat cleanup action
      **/
 
-    class KCleanup: public KAction
+    class KCleanup
     {
-	Q_OBJECT
-
     public:
 
 	enum RefreshPolicy { noRefresh, refreshThis, refreshParent, assumeDeleted };
@@ -52,8 +41,7 @@ namespace KDirStat
 	 **/
 	KCleanup( QString		id,
 		  QString		command,
-		  QString		title,
-		  KActionCollection *	parent);
+		  QString		title);
 
 	/**
 	 * Copy Constructor.
@@ -68,6 +56,7 @@ namespace KDirStat
 	 **/
 	KCleanup( const KCleanup &src );
 
+	virtual ~KCleanup(){}
 	/**
 	 * Assignment operator.
 	 *
@@ -109,12 +98,6 @@ namespace KDirStat
 	 * Return whether or not this cleanup action is generally enabled.
 	 **/
 	bool enabled()			const { return _enabled; }
-
-	/**
-	 * Return this cleanup's internally stored @ref KDirTree
-	 * selection. Important only for copy constructor etc.
-	 **/
-	KFileInfo * selection()		const { return _selection; }
 
 	/**
 	 * Return whether or not this cleanup action works for this particular
@@ -210,9 +193,6 @@ namespace KDirStat
 	void setAskForConfirmation	( bool ask	)		{ _askForConfirmation	= ask;		}
 	void setRefreshPolicy		( enum RefreshPolicy refreshPolicy ) { _refreshPolicy = refreshPolicy; 	}
 
-
-    public slots:
-
 	/**
 	 * The heart of the matter: Perform the cleanup with the KFileInfo
 	 * specified.
@@ -220,17 +200,11 @@ namespace KDirStat
 	virtual void execute( KFileInfo *item );
 
 	/**
-	 * Perform the cleanup with the current KDirTree selection if there is
-	 * any.
-	 **/
-	void executeWithSelection();
-
-	/**
 	 * Set enabled/disabled status according to 'selection' and internally
 	 * store 'selection' - this will also be used upon calling
 	 * @ref executeWithSelection() . '0' means "nothing selected".
 	 **/
-	void selectionChanged( KFileInfo *selection );
+	bool isEnabledFromSelection( KFileInfo *selection );
 
         /**
 	 * Read configuration.
@@ -241,28 +215,6 @@ namespace KDirStat
 	 * Save configuration.
 	 **/
 	void saveConfig() const;
-
-
-    signals:
-
-	/**
-	 * Emitted after the action is executed.
-	 *
-	 * Please note that there intentionally is no reference as to which
-	 * object the action was executed upon since this object very likely
-	 * doesn't exist any more.
-	 **/
-	void executed();
-
-	
-    protected slots:
-
-        /**
-	 * Inherited from @ref KAction : Perform the action.
-	 * In this case, execute the cleanup with the current selection.
-	 **/
-        virtual void slotActivated() { executeWithSelection(); }
-
     
     protected:
 
@@ -324,8 +276,6 @@ namespace KDirStat
 	//
 	// Data members
 	//
-	
-	KFileInfo *		_selection;
 	QString			_id;
 	QString			_command;
 	QString			_title;
@@ -338,19 +288,7 @@ namespace KDirStat
 	bool			_askForConfirmation;
 	enum RefreshPolicy	_refreshPolicy;
     };
-
-
-    inline kdbgstream & operator<< ( kdbgstream & stream, const KCleanup * cleanup )
-    {
-	if ( cleanup )
-	    stream << cleanup->id();
-	else
-	    stream << "<NULL>";
-	
-	return stream;
-    }
 }	// namespace KDirStat
-
 
 #endif // ifndef KCleanup_h
 

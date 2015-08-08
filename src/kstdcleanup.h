@@ -42,13 +42,13 @@ namespace KDirStat
     class KStdCleanup
     {
     public:
-	static KCleanup *openInKonqueror	( KActionCollection *parent = 0 );
-	static KCleanup *openInTerminal		( KActionCollection *parent = 0 );
-	static KCleanup *compressSubtree	( KActionCollection *parent = 0 );
-	static KCleanup *makeClean		( KActionCollection *parent = 0 );
-	static KCleanup *deleteTrash		( KActionCollection *parent = 0 );
-	static KCleanup *moveToTrashBin		( KActionCollection *parent = 0 );
-	static KCleanup *hardDelete		( KActionCollection *parent = 0 );
+	static KCleanup *openInKonqueror	(QString & icon, QKeySequence & shortcut);
+	static KCleanup *openInTerminal		(QString & icon, QKeySequence & shortcut);
+	static KCleanup *compressSubtree	(QString & icon, QKeySequence & shortcut);
+	static KCleanup *makeClean		(QString & icon, QKeySequence & shortcut);
+	static KCleanup *deleteTrash		(QString & icon, QKeySequence & shortcut);
+	static KCleanup *moveToTrashBin		(QString & icon, QKeySequence & shortcut);
+	static KCleanup *hardDelete		(QString & icon, QKeySequence & shortcut);
 	
     private:
 	/**
@@ -60,10 +60,8 @@ namespace KDirStat
 
     class TrashBinCleanup: public KCleanup
     {
-	Q_OBJECT
-
     public:
-	TrashBinCleanup(KActionCollection *parent);
+	TrashBinCleanup();
     public slots:
 	virtual void execute( KFileInfo *item );
     };

@@ -287,7 +287,7 @@ KCleanupPage::KCleanupPage( QWidget *		parent,
 {
     // Copy the main window's cleanup collection.
 
-    _workCleanupCollection = *mainWin->cleanupCollection();
+    _workCleanupCollection = mainWin->cleanupCollection()->cleanupsCopy();
 
     // Create layout and widgets.
 
@@ -362,14 +362,8 @@ KCleanupPage::setup()
     // Fill the list box.
 
     _listBox->clear();
-    KCleanupList cleanupList = _workCleanupCollection.cleanupList();
-    KCleanupListIterator it( cleanupList );
-
-    while ( it.hasNext() )
-    {
-	_listBox->insert( it.next() );
-    }
-
+    for(int i = 0; i < _workCleanupCollection.count(); i++)
+        _listBox->insert(&_workCleanupCollection[i]);
 
     // (Re-) Initialize list box.
 
@@ -383,7 +377,7 @@ KCleanupPage::importCleanups()
 {
     // Copy the main window's cleanup collecton to _workCleanupCollection.
 
-    _workCleanupCollection = * _mainWin->cleanupCollection();
+    _workCleanupCollection = _mainWin->cleanupCollection()->cleanupsCopy();
 
 
     // Pointers to the old collection contents are now invalid!
@@ -404,7 +398,7 @@ KCleanupPage::exportCleanups()
     // Copy the _workCleanupCollection to the main window's cleanup
     // collection.
 
-    * _mainWin->cleanupCollection() = _workCleanupCollection;
+    _mainWin->cleanupCollection()->setCleanups(_workCleanupCollection);
 }
 
 
@@ -662,7 +656,7 @@ KCleanupPropertiesPage::setFields( const KCleanup * cleanup )
 KCleanup
 KCleanupPropertiesPage::fields() const
 {
-    KCleanup cleanup( _id , _command->text(), _title->text(), _mainWin->actionCollection());
+    KCleanup cleanup( _id , _command->text(), _title->text());
 
     cleanup.setEnabled			( _enabled->isChecked()		   );
     cleanup.setRecurse			( _recurse->isChecked()		   );

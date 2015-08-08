@@ -3,7 +3,6 @@ set(k4dirstat_SRCS
    k4dirstat.cpp
    ${UI_RCC}
    main.cpp
-   #k4dirstatview.cpp
    ktreemapview.cpp
    kcleanupcollection.cpp
    kfileinfo.cpp

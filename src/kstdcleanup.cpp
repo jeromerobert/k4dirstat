@@ -17,79 +17,74 @@
 #include <kdebug.h>
 #include "kcleanup.h"
 #include "kstdcleanup.h"
-#include <KIcon>
 #include <KIO/JobUiDelegate>
 #include <KIO/FileUndoManager>
 #include <KIO/CopyJob>
 #include <KJobWidgets>
+#include "k4dirstat.h"
 
 using namespace KDirStat;
 
 
 KCleanup *
-KStdCleanup::openInKonqueror( KActionCollection *parent )
+KStdCleanup::openInKonqueror(QString & icon, QKeySequence & shortcut)
 {
     KCleanup *cleanup = new KCleanup( "cleanup_open_in_konqueror",
                                       "xdg-open %p",
-                                      i18n( "Open a file &browser" ),
-				      parent );
+                                      i18n( "Open a file &browser" ));
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
     cleanup->setWorksForFile    ( true );
     cleanup->setWorksForDotEntry( true );
     cleanup->setWorksLocalOnly	( false );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
-    cleanup->setIcon(KIcon("konqueror.png" ));
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_K );
-    
+    icon = "konqueror.png";
+    shortcut = Qt::CTRL + Qt::Key_K;
     return cleanup;
 }
 
 
 KCleanup *
-KStdCleanup::openInTerminal( KActionCollection *parent )
+KStdCleanup::openInTerminal(QString & icon, QKeySequence & shortcut)
 {
     KCleanup *cleanup = new KCleanup( "cleanup_open_in_terminal",
 				      "konsole",
-				      i18n( "Open in &Terminal" ),
-				      parent );
+				      i18n( "Open in &Terminal" ));
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
     cleanup->setWorksForFile    ( true );
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( KCleanup::noRefresh );
-    cleanup->setIcon(KIcon("utilities-terminal" ));
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
+    icon = "utilities-terminal";
+    shortcut = Qt::CTRL + Qt::Key_T;
 
     return cleanup;
 }
 
 
 KCleanup *
-KStdCleanup::compressSubtree( KActionCollection *parent )
+KStdCleanup::compressSubtree(QString & iconFile, QKeySequence &)
 {
     KCleanup *cleanup = new KCleanup( "cleanup_compress_subtree",
 				      "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
-				      i18n( "&Compress" ),
-				      parent );
+				      i18n( "&Compress" ));
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( false );
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( KCleanup::refreshParent );
-    cleanup->setIcon(KIcon( "utilities-file-archiver" ));
+    iconFile = "utilities-file-archiver";
 
     return cleanup;
 }
 
 
 KCleanup *
-KStdCleanup::makeClean( KActionCollection *parent )
+KStdCleanup::makeClean(QString &, QKeySequence &)
 {
     KCleanup *cleanup = new KCleanup( "cleanup_make_clean",
 				      "make clean",
-				      i18n( "&make clean" ),
-				      parent );
+				      i18n( "&make clean" ));
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( false );
@@ -101,12 +96,11 @@ KStdCleanup::makeClean( KActionCollection *parent )
 
 
 KCleanup *
-KStdCleanup::deleteTrash( KActionCollection *parent )
+KStdCleanup::deleteTrash(QString &, QKeySequence &)
 {
     KCleanup *cleanup = new KCleanup( "cleanup_delete_trash",
 				      "rm -f *.o *~ *.bak *.auto core",
-				      i18n( "Delete T&rash Files" ),
-				      parent );
+				      i18n( "Delete T&rash Files" ));
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( false );
@@ -119,9 +113,9 @@ KStdCleanup::deleteTrash( KActionCollection *parent )
 
 
 KCleanup *
-KStdCleanup::moveToTrashBin( KActionCollection *parent )
+KStdCleanup::moveToTrashBin(QString & icon, QKeySequence & shortcut)
 {
-    KCleanup *cleanup = new TrashBinCleanup(parent);
+    KCleanup *cleanup = new TrashBinCleanup();
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( true  );
@@ -132,37 +126,35 @@ KStdCleanup::moveToTrashBin( KActionCollection *parent )
        "user-trash" which will probably be the same in most
        icon sets. */
     //cleanup->setIcon(KIcon( "edit-trash" ));
-    cleanup->setIcon(KIcon( "user-trash" ));
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_X );
+    icon = "user-trash";
+    shortcut = Qt::CTRL + Qt::Key_X;
 
     return cleanup;
 }
 	
 
 KCleanup *
-KStdCleanup::hardDelete( KActionCollection *parent )
+KStdCleanup::hardDelete(QString & icon, QKeySequence & shortcut)
 {
     KCleanup *cleanup = new KCleanup( "cleanup_hard_delete",
 				      "rm -rf %p",
-				      i18n( "&Delete (no way to undelete!)" ),
-				      parent );
+				      i18n( "&Delete (no way to undelete!)" ));
     Q_CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
     cleanup->setWorksForFile    ( true  );
     cleanup->setWorksForDotEntry( false );
     cleanup->setAskForConfirmation( true );
     cleanup->setRefreshPolicy( KCleanup::assumeDeleted );
-    cleanup->setIcon(KIcon( "edit-delete" ));
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_Delete );
+    icon = "edit-delete";
+    shortcut = Qt::CTRL + Qt::Key_Delete;
 
     return cleanup;
 }
 	
 
-TrashBinCleanup::TrashBinCleanup(KActionCollection *parent):
+TrashBinCleanup::TrashBinCleanup():
     KCleanup("cleanup_move_to_trash_bin","",
-	     i18n( "Delete (to Trash &Bin)"),
-	     parent)
+	     i18n( "Delete (to Trash &Bin)"))
 {
 }
 
@@ -182,16 +174,11 @@ TrashBinCleanup::execute( KFileInfo* item ){
     if (worksFor( item )){
 	KUrl url;
 	url.setPath(item->url());
-	qDebug() << "trashing url  " <<_selection->url() << endl;
 	QList<QUrl> urls;
 	urls.append(url);
-	KActionCollection *collection = static_cast<KActionCollection*>(parent());
-	qDebug() << collection->associatedWidgets().length() << endl;
-	konqOperationsDel(collection->associatedWidgets()[0], urls);
-	item->tree()->deleteSubtree( _selection );
+	konqOperationsDel(k4dirstat::instance(), urls);
+	item->tree()->deleteSubtree(item);
     }
-
-    emit executed();
 }
 
 

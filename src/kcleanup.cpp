@@ -35,17 +35,11 @@ using namespace KDirStat;
 
 KCleanup::KCleanup( QString		id,
 		    QString		command,
-		    QString		title,
-		    KActionCollection *	parent	)
-    
-    : KAction( title,
-	       parent)
-    
-    , _id	( id	  )
+		    QString		title)
+    : _id	( id	  )
     , _command	( command )
     , _title	( title	  )
 {
-    _selection		= 0;
     _enabled		= true;
     _worksForDir	= true;
     _worksForFile	= false;
@@ -54,17 +48,10 @@ KCleanup::KCleanup( QString		id,
     _recurse		= false;
     _askForConfirmation	= false;
     _refreshPolicy	= noRefresh;
-    
-    KAction::setEnabled( false );
-    parent->addAction(id,this);
-
-    connect(this, SIGNAL(triggered()),
-            this, SLOT(executeWithSelection()));
 }
 
 
 KCleanup::KCleanup( const KCleanup &src )
-    : KAction(src.title(), src.parent())
 {
     copy( src );
 }
@@ -83,7 +70,6 @@ void
 KCleanup::copy( const KCleanup &src )
 {
     setTitle( src.title() );
-    _selection		= src.selection();
     _id			= src.id();
     _command		= src.command();
     _enabled		= src.enabled();
@@ -101,7 +87,6 @@ void
 KCleanup::setTitle( const QString &title )
 {
     _title = title;
-    KAction::setText( _title );
 }
 
 
@@ -121,12 +106,9 @@ KCleanup::worksFor( KFileInfo *item ) const
 }
 
 
-void
-KCleanup::selectionChanged( KFileInfo *selection )
+bool KCleanup::isEnabledFromSelection( KFileInfo *selection )
 {
     bool enabled = false;
-    _selection = selection;
-
     if ( selection )
     {
 	enabled = worksFor( selection );
@@ -153,21 +135,10 @@ KCleanup::selectionChanged( KFileInfo *selection )
 	    
 	}
     }
-    
-    KAction::setEnabled( enabled );
+    return enabled;
 }
 
-
-void
-KCleanup::executeWithSelection()
-{
-    if ( _selection )
-	execute( _selection );
-}
-
-
-bool
-KCleanup::confirmation( KFileInfo * item )
+bool KCleanup::confirmation( KFileInfo * item )
 {
     QString msg;
 
@@ -237,8 +208,6 @@ KCleanup::execute( KFileInfo *item )
 		break;
 	}
     }
-
-    emit executed();
 }
 
 

@@ -284,28 +284,25 @@ void k4dirstat::setupActions()
 
 void k4dirstat::initCleanups()
 {
-    _cleanupCollection = new KCleanupCollection( actionCollection() );
+    _cleanupCollection = new KCleanupCollection( *actionCollection() );
     Q_CHECK_PTR( _cleanupCollection );
     _cleanupCollection->addStdCleanups();
     _cleanupCollection->addUserCleanups( USER_CLEANUPS );
-    _cleanupCollection->slotReadConfig();
+    _cleanupCollection->readConfig();
 
     connect( _treeView,          SIGNAL( treeSelectionChanged( KFileInfo * ) ),
              _cleanupCollection, SIGNAL( selectionChanged( KFileInfo * ) ) );
 
     connect( this,               SIGNAL( readConfig( void ) ),
-             _cleanupCollection, SIGNAL( readConfig( void ) ) );
+             _cleanupCollection, SLOT( readConfig( void ) ) );
 
     connect( this,               SIGNAL( saveConfig( void ) ),
-             _cleanupCollection, SIGNAL( saveConfig( void ) ) );
+             _cleanupCollection, SLOT( saveConfig( void ) ) );
 }
 
 void k4dirstat::revertCleanupsToDefaults()
 {
-    KCleanupCollection defaultCollection;
-    defaultCollection.addStdCleanups();
-    defaultCollection.addUserCleanups( USER_CLEANUPS );
-    *_cleanupCollection = defaultCollection;
+    _cleanupCollection->revertToDefault(USER_CLEANUPS);
 }
 
 void k4dirstat::initStatusBar()
@@ -655,14 +652,12 @@ void k4dirstat::toggleTreemapView()
 
 void k4dirstat::preferences()
 {
-    if ( ! _settingsDialog )
-    {
-        _settingsDialog = new KDirStat::KSettingsDialog( this );
-        Q_CHECK_PTR( _settingsDialog );
-    }
-
-    if ( ! _settingsDialog->isVisible() )
-        _settingsDialog->show();
+    if(_settingsDialog && _settingsDialog->isVisible())
+        return;
+    // TODO no longer store the instance as it's always recreated.
+    // need to detect closing
+    _settingsDialog = new KDirStat::KSettingsDialog( this );
+    _settingsDialog->show();
 }
 
 
