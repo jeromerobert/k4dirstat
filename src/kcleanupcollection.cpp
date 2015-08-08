@@ -139,8 +139,9 @@ KCleanupCollection::cleanupExecuted()
 
 void KCleanupCollection::revertToDefault(int nbUserCleanups) {
     _nextUserCleanupNo = 0;
+    for(int i = 0; i < cleanupActions.size(); i++)
+        _actionCollection.removeAction(cleanupActions[i]);
     cleanupActions.clear();
-    _actionCollection.clear();
     addStdCleanups();
     addUserCleanups(nbUserCleanups);
 }
