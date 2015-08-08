@@ -65,6 +65,7 @@ CleanupAction * KCleanupCollection::add( KCleanup *newCleanup )
 void KCleanupCollection::readConfig() {
     for(int i = 0; i < cleanupActions.count(); i++) {
         cleanupActions[i]->cleanup().readConfig();
+        cleanupActions[i]->refresh();
     }
 }
 
@@ -154,6 +155,8 @@ QList<KCleanup> KCleanupCollection::cleanupsCopy() {
 
 void KCleanupCollection::setCleanups(QList<KCleanup> & cleanups) {
     Q_ASSERT(cleanups.size() == cleanupActions.size());
-    for(int i = 0; i < cleanups.size(); i++)
+    for(int i = 0; i < cleanups.size(); i++) {
         cleanupActions[i]->cleanup() = cleanups[i];
+        cleanupActions[i]->refresh();
+    }
 }
