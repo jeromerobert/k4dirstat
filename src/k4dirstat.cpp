@@ -221,17 +221,17 @@ void k4dirstat::setupActions()
     _treemapZoomIn = actionCollection()->addAction("treemap_zoom_in", this, SLOT( treemapZoomIn()));
     _treemapZoomIn->setText( i18n( "Zoom in" ));
     _treemapZoomIn->setIcon(KIcon("zoom-in"));
-    _treemapZoomIn->setShortcut(Qt::Key_Plus);
+    actionCollection()->setDefaultShortcut(_treemapZoomIn, Qt::Key_Plus);
 
     _treemapZoomOut = actionCollection()->addAction("treemap_zoom_out", this, SLOT(treemapZoomOut()));
     _treemapZoomOut->setText(i18n( "Zoom out" ));
     _treemapZoomOut->setIcon(KIcon("zoom-out"));
-    _treemapZoomOut->setShortcut(Qt::Key_Minus);
+    actionCollection()->setDefaultShortcut(_treemapZoomOut, Qt::Key_Minus);
 
     _treemapSelectParent = actionCollection()->addAction("treemap_select_parent", this, SLOT(treemapSelectParent()));
     _treemapSelectParent->setText(i18n("Select Parent"));
     _treemapSelectParent->setIcon(KIcon("go-up"));
-    _treemapSelectParent->setShortcut(Qt::Key_Asterisk);
+    actionCollection()->setDefaultShortcut(_treemapSelectParent, Qt::Key_Asterisk);
 
     _treemapRebuild = actionCollection()->addAction("treemap_rebuild", this, SLOT(treemapRebuild()));
     _treemapRebuild->setText(i18n("Rebuild Treemap"));
@@ -240,7 +240,7 @@ void k4dirstat::setupActions()
     actionCollection()->addAction("options_show_treemap", _showTreemapView);
     //_showTreemapView->set
     connect(_showTreemapView,SIGNAL(triggered()),this, SLOT(toggleTreemapView()));
-    _showTreemapView->setShortcut(Qt::Key_F9);
+    actionCollection()->setDefaultShortcut(_showTreemapView, Qt::Key_F9);
 
     QAction *newAct = actionCollection()->addAction("treemap_help", this, SLOT(treemapHelp()));
     newAct->setText(i18n( "Help about Treemaps" ));
