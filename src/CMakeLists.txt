@@ -23,7 +23,9 @@ kconfig_add_kcfg_files(k4dirstat_SRCS settings.kcfgc )
 
 add_executable(k4dirstat ${k4dirstat_SRCS})
 
-target_link_libraries(k4dirstat ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
+target_link_libraries(k4dirstat KF5::XmlGui KF5::KIOCore
+    KF5::KIOWidgets KF5::I18n KF5::IconThemes
+    KF5::KDELibs4Support
     ${QT_QTGUI_LIBS}
     ${LIBKONQ_LIBRARY}
     ${ZLIB_LIBRARIES})
