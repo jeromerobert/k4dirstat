@@ -19,11 +19,11 @@
 
 #include <QProcess>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
+#include <KSharedConfig>
 #include <kconfiggroup.h>
 
 #include "kcleanup.h"
-#include <KGlobal>
+#include <KLocalizedString>
 
 #define VERBOSE_RUN_COMMAND	1
 #define SIMULATE_COMMAND	0
@@ -284,9 +284,9 @@ KCleanup::expandVariables( const KFileInfo *	item,
 			   const QString &	unexpanded ) const
 {
     QString expanded = unexpanded;
-    QString url = QString::fromLocal8Bit( item->url().toAscii() ).replace("'", "'\\''");
+    QString url = item->url().replace("'", "'\\''");
     expanded.replace( QRegExp( "%p" ), "'" + url + "'" );
-    QString name = QString::fromLocal8Bit( item->name().toAscii() ).replace("'", "'\\''");
+    QString name = item->name().replace("'", "'\\''");
     expanded.replace( QRegExp( "%n" ), "'" + name + "'" );
 
    // if ( KDE::versionMajor() >= 3 && KDE::versionMinor() >= 4 )

@@ -18,7 +18,7 @@
 #include "kdirtree.h"
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
-#include <KGlobal>
+#include <KSharedConfig>
 #include <QDir>
 using namespace KDirStat;
 

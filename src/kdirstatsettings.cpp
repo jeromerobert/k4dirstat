@@ -34,7 +34,8 @@
 #include "kexcluderules.h"
 #include <QGroupBox>
 #include <QMenu>
-#include <KGlobal>
+#include <KLocalizedString>
+#include <KSharedConfig>
 #include <KHelpClient>
 
 using namespace KDirStat;
