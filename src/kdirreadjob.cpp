@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <sys/errno.h>
 #include <kio/job.h>
-#include <kio/netaccess.h>
 
 #include "kdirtree.h"
 #include "kdirreadjob.h"
@@ -138,7 +137,7 @@ KLocalDirReadJob::startReading()
 		 entryName != ".."   )
 	    {
 		QString fullName = dirName + "/" + entryName;
-		QByteArray rawFullName = dirName.toLocal8Bit() + QDir::separator().toAscii() + QByteArray(entry->d_name);
+		QByteArray rawFullName = dirName.toLocal8Bit() + QDir::separator().toLatin1() + QByteArray(entry->d_name);
 		if ( lstat(rawFullName.data(), &statInfo ) == 0 )	// lstat() OK
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
@@ -274,7 +273,7 @@ KLocalDirReadJob::stat( const QUrl & 	url,
 {
     struct stat statInfo;
 
-    if ( lstat( url.path().toAscii(), &statInfo ) == 0 )		// lstat() OK
+    if ( lstat( url.path().toLocal8Bit(), &statInfo ) == 0 )		// lstat() OK
     {
 	QString name = parent ? url.fileName() : url.path();
 
@@ -419,11 +418,9 @@ KioDirReadJob::stat( const QUrl & 	url,
 		      KDirTree  * 	tree,
 		      KDirInfo  * 	parent )
 {
-    KIO::UDSEntry uds_entry;
-
-    if ( KIO::NetAccess::stat( url, uds_entry, k4dirstat::instance()) )	// remote stat() OK?
-    {
-	KFileItem entry( uds_entry, url,
+    KIO::StatJob * job = KIO::stat(url);
+    if(job->exec()) {
+	KFileItem entry( job->statResult(), url,
 			 true,		// determine MIME type on demand
 			 false );	// URL specifies parent directory
 
@@ -437,11 +434,9 @@ KioDirReadJob::stat( const QUrl & 	url,
 QString
 KioDirReadJob::owner( QUrl url )
 {
-    KIO::UDSEntry uds_entry;
-
-    if ( KIO::NetAccess::stat( url, uds_entry, k4dirstat::instance()) )	// remote stat() OK?
-    {
-	KFileItem entry( uds_entry, url,
+    KIO::StatJob * job = KIO::stat(url);
+    if(job->exec()) {
+	KFileItem entry( job->statResult(), url,
 			 true,		// determine MIME type on demand
 			 false );	// URL specifies parent directory
 

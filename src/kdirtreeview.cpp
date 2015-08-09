@@ -26,8 +26,6 @@
 #include <qmenu.h>
 
 #include <QApplication>
-#include <KLocale>
-#include <KGlobalSettings>
 #include <KLocalizedString>
 #include <kicontheme.h>
 #include <kiconloader.h>
@@ -155,9 +153,9 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     readConfig();
     ensureContrast();
 
-
-    connect( KGlobalSettings::self(),	SIGNAL( kdisplayPaletteChanged()	),
-	     this,	SLOT  ( paletteChanged()		) );
+    // Does not work for GTK style
+    QGuiApplication * app = dynamic_cast<QGuiApplication*>(QCoreApplication::instance());
+    connect(app, SIGNAL(paletteChanged(const QPalette & )), this, SLOT(paletteChanged()));
 
     connect( this,	SIGNAL(itemSelectionChanged()),
 		 this,	SLOT(updateSelection()));
@@ -1600,11 +1598,9 @@ KDirTreeViewItem::closeAllExceptThis()
 QString
 KDirTreeViewItem::asciiDump()
 {
-    QString dump;
-
-    dump.sprintf( "%10s  %s\n",
-		  formatSize( _orig->totalSize() ).toAscii().data(),
-		  _orig->debugUrl().toAscii().data() );
+    QString dump = QString("%1 %2")
+        .arg(formatSize( _orig->totalSize()))
+        .arg(_orig->debugUrl());
 
     if ( isExpanded() )
     {
@@ -1812,11 +1808,7 @@ KDirStat::localeTimeDate( time_t rawTime )
 {
     QDateTime timeDate;
     timeDate.setTime_t( rawTime );
-    QString timeDateString =
-	KLocale::global()->formatDate( timeDate.date(), KLocale::ShortDate) + "  " +	// short format
-	KLocale::global()->formatTime( timeDate.time(), true );		// include seconds
-
-    return timeDateString;
+    return timeDate.toString(Qt::DefaultLocaleShortDate);
 }
 
 
