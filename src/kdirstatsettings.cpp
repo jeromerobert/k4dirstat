@@ -42,6 +42,13 @@
 
 using namespace KDirStat;
 
+template<class T> void KSettingsDialog::addSettingsPage(KPageWidgetItem * & item, const char * name) {
+    KSettingsPage * settingsPage = new T(NULL, _mainWin);
+    _pages.append(settingsPage);
+    item = new KPageWidgetItem(settingsPage);
+    item->setName(i18n(name));
+    addPage(item);
+}
 
 KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
     : KPageDialog(mainWin)
@@ -72,25 +79,10 @@ KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply |
                        QDialogButtonBox::RestoreDefaults |
                        QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-
-    KVBox * page = new KVBox();
-    KPageWidgetItem *item;
-
-    item = addPage(page, i18n( "&Actions" ) );
-    _cleanupsPageIndex = item;
-    _pages.append(new KCleanupPage(page, _mainWin ));
-
-    page = new KVBox();
-    _treeColorsPageIndex = addPage(page, i18n( "&Tree Colors" ));
-    _pages.append(new KTreeColorsPage(page, _mainWin ));
-
-    page = new KVBox();
-    _treemapPageIndex = addPage(page, i18n( "Tree&map" ) );
-    _pages.append(new KTreemapPage(page, _mainWin ));
-
-    page = new KVBox();
-    _generalSettingsPageIndex = addPage(page, i18n( "&General" ) );
-    _pages.append(new KGeneralSettingsPage(page, _mainWin ));
+    addSettingsPage<KCleanupPage>(_cleanupsPageIndex, "&Actions");
+    addSettingsPage<KTreeColorsPage>(_treeColorsPageIndex, "&Tree Colors");
+    addSettingsPage<KTreemapPage>(_treemapPageIndex, "Tree&map");
+    addSettingsPage<KGeneralSettingsPage>(_generalSettingsPageIndex, "&General");
 
     connect(this, SIGNAL(aboutToShow()), this, SLOT(setup()));
     connect(button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(apply()));

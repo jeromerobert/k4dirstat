@@ -127,7 +127,7 @@ namespace KDirStat
         KPageWidgetItem *	_treemapPageIndex;
         KPageWidgetItem *	_generalSettingsPageIndex;
         QList<KSettingsPage *>    _pages;
-
+        template<class T> void addSettingsPage(KPageWidgetItem * & item, const char * name);
     }; // class KSettingsDialog
 
 
