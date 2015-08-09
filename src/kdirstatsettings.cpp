@@ -25,10 +25,8 @@
 #include <qmessagebox.h>
 
 #include <kcolorbutton.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
-#include <kvbox.h>
 
 #include "kdirtreeview.h"
 #include "ktreemapview.h"
@@ -36,7 +34,6 @@
 #include "kexcluderules.h"
 #include <QGroupBox>
 #include <QMenu>
-#include <KDialog>
 #include <KGlobal>
 #include <KHelpClient>
 

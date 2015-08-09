@@ -306,7 +306,7 @@ namespace KDirStat
 
 
 
-inline kdbgstream & operator<< ( kdbgstream & stream, const QRect & rect )
+inline QDebug & operator<< ( QDebug & stream, const QRect & rect )
 {
     stream << "("
 	   << rect.width() << "x" << rect.height()

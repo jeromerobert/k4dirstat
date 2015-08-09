@@ -21,7 +21,6 @@
 #include <limits.h>
 #endif
 
-#include <kdebug.h>
 #include <kfileitem.h>
 #include "kfileinfo.h"
 

@@ -16,8 +16,8 @@
 #include <QApplication>
 #include <KAboutData>
 #include <QCommandLineParser>
-#include <KDE/KLocale>
-#include <KDE/KUrl>
+#include <KLocalizedString>
+#include <QUrl>
 #include <QDir>
 
 static const char description[] =

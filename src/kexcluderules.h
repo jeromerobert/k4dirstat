@@ -19,6 +19,7 @@
 
 #include <qstring.h>
 #include <qregexp.h>
+#include <QList>
 
 namespace KDirStat
 {

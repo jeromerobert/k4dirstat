@@ -21,7 +21,6 @@
 #include <limits.h>
 #include <dirent.h>
 #include <stdlib.h>
-#include <kdebug.h>
 #include "kdirinfo.h"
 #include "kdirreadjob.h"
 

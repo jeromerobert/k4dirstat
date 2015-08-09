@@ -18,9 +18,8 @@
 #include <QtGui/QPainter>
 
 #include <kconfigdialog.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <krecentfilesaction.h>
@@ -29,11 +28,10 @@
 #include <QFileDialog>
 #include <kmessagebox.h>
 #include <krun.h>
-#include <KDE/KLocale>
+#include <KLocalizedString>
 #include <QGuiApplication>
 #include <ktoolinvocation.h>
 #include <ktoggleaction.h>
-#include <kconfigdialog.h>
 #include <ktoolbar.h>
 #include <kxmlguifactory.h>
 
@@ -42,11 +40,9 @@
 #include <QMenu>
 #include <QList>
 #include <QIcon>
-#include <KGlobal>
 #include <KHelpClient>
 #include <KIconEngine>
 #include <KIconLoader>
-
 #include "kdirtree.h"
 #include "ktreemapview.h"
 #include "ktreemaptile.h"

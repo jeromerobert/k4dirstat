@@ -15,9 +15,7 @@
 
 #include <math.h>
 #include <algorithm>
-
-#include <klocale.h>
-#include <kglobal.h>
+#include <QDebug>
 #include <qimage.h>
 #include <qpainter.h>
 
@@ -25,7 +23,6 @@
 #include "ktreemapview.h"
 #include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
-
 
 using namespace KDirStat;
 using std::max;

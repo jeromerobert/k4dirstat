@@ -16,9 +16,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#include <klocale.h>
-
+#include <KLocalizedString>
 #include "kfileinfo.h"
 #include "kdirinfo.h"
 #include <QFileInfo>

@@ -15,7 +15,7 @@
 
 #include <ctype.h>
 #include <errno.h>
-#include <kdebug.h>
+#include <QDebug>
 #include "kdirtreecache.h"
 #include "kdirtree.h"
 #include "kexcluderules.h"
@@ -213,7 +213,7 @@ KCacheReader::KCacheReader( const QString &	fileName,
 
     if ( _cache == 0 )
     {
-	qCritical() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
+	qCritical() << "Can't open " << fileName << ": " << strerror( errno );
 	_ok = false;
 	emit error();
 	return;

@@ -13,9 +13,9 @@
 #   include <config.h>
 #endif
 
-#include <klocale.h>
 #include "kdirinfo.h"
 #include "kdirtreeiterators.h"
+#include <QDebug>
 
 using namespace KDirStat;
 

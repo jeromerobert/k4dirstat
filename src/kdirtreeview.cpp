@@ -26,9 +26,9 @@
 #include <qmenu.h>
 
 #include <QApplication>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
+#include <KLocale>
+#include <KGlobalSettings>
+#include <KLocalizedString>
 #include <kicontheme.h>
 #include <kiconloader.h>
 #include <kexcluderules.h>
@@ -1670,7 +1670,7 @@ KDirTreeViewItem::compare( const KDirTreeViewItem *	other,
 QString
 KDirStat::formatSizeLong( KFileSize size )
 {
-    return KLocale::global()->formatLong(size);
+    return QLocale().toString(size);
 }
 
 

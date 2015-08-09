@@ -13,8 +13,7 @@
 #   include <config.h>
 #endif
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocalizedString>
 #include "kcleanup.h"
 #include "kstdcleanup.h"
 #include <KIO/JobUiDelegate>

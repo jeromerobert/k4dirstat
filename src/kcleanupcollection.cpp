@@ -13,7 +13,7 @@
 #   include <config.h>
 #endif
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include "kstdcleanup.h"
 #include "kcleanupcollection.h"
 #include <KActionCollection>

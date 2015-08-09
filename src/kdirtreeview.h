@@ -755,7 +755,7 @@ namespace KDirStat
     };
 
 
-    inline kdbgstream & operator<< ( kdbgstream & stream, KDirTreeViewItem * item )
+    inline QDebug & operator<< ( QDebug & stream, KDirTreeViewItem * item )
     {
 	if ( item )
 	{

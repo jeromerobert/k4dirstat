@@ -18,9 +18,7 @@
 #include <qregexp.h>
 
 #include <QProcess>
-#include <kdebug.h>
 #include <kmessagebox.h>
-#include <klocale.h>
 #include <kglobalsettings.h>
 #include <kconfiggroup.h>
 

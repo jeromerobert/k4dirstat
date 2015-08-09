@@ -20,7 +20,6 @@
 #include <dirent.h>
 #include <qlist.h>
 #include <qtimer.h>
-#include <kdebug.h>
 #include <kio/jobclasses.h>
 
 #ifndef NOT_USED

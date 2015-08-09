@@ -19,9 +19,8 @@
 
 #include <sys/types.h>
 #include <limits.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kfileitem.h>
-#include <KUrl>
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )
@@ -632,7 +631,7 @@ namespace KDirStat
     /**
      * Print the debugUrl() of a @ref KFileInfo in a debug stream.
      **/
-    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileInfo * info )
+    inline QDebug & operator<< ( QDebug & stream, const KFileInfo * info )
     {
 	if ( info )
 	    stream << info->debugUrl();
@@ -646,7 +645,7 @@ namespace KDirStat
     /**
      * Human-readable output of a file size in a debug stream.
      **/
-    inline kdbgstream & operator<< ( kdbgstream & stream, KFileSize lSize )
+    inline QDebug & operator<< ( QDebug & stream, KFileSize lSize )
     {
 	stream << formatSize( lSize );
 
