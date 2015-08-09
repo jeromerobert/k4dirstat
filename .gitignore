@@ -3,4 +3,4 @@
 Makefile
 CMakeCache.txt
 moc_*.cpp
-
+CMakeFiles
