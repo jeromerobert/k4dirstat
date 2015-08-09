@@ -135,7 +135,7 @@ KDirInfo::~KDirInfo()
 void
 KDirInfo::recalc()
 {
-    // qDebug() << k_funcinfo << this << endl;
+    // qDebug() << Q_FUNC_INFO << this << endl;
 
     _totalSize		= _size;
     _totalBlocks	= _blocks;

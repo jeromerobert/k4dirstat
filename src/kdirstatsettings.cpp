@@ -896,7 +896,7 @@ KTreemapPage::KTreemapPage(QWidget * parent, k4dirstat * mainWin)
     : KSettingsPage(parent)
     , _mainWin( mainWin )
 {
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
 
     QVBoxLayout * layout = new QVBoxLayout(this); // parent
     setLayout(layout);

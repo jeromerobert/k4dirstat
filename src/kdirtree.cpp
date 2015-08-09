@@ -100,7 +100,7 @@ KDirTree::clear( bool sendSignals )
 void
 KDirTree::startReading( const QUrl & url )
 {
-    // qDebug() << k_funcinfo << " " << url.url() << endl;
+    // qDebug() << Q_FUNC_INFO << " " << url.url() << endl;
 
 #if 0
     qDebug() << "url: "		<< url.url()		<< endl;
@@ -413,9 +413,9 @@ KDirTree::selectItem( KFileInfo *newSelection )
 
 #if 0
     if ( newSelection )
-	qDebug() << k_funcinfo << " selecting " << newSelection << endl;
+	qDebug() << Q_FUNC_INFO << " selecting " << newSelection << endl;
     else
-	qDebug() << k_funcinfo << " selecting nothing" << endl;
+	qDebug() << Q_FUNC_INFO << " selecting nothing" << endl;
 #endif
 
     _selection = newSelection;

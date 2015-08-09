@@ -260,7 +260,7 @@ KFileInfo::urlPart( int targetLevel ) const
 
     if ( level < targetLevel )
     {
-	qCritical() << k_funcinfo << "URL level " << targetLevel
+	qCritical() << Q_FUNC_INFO << "URL level " << targetLevel
 		  << " requested, this is level " << level << endl;
 	return "";
     }

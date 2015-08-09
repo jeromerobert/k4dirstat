@@ -35,7 +35,7 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
     , _selectedTile( 0 )
     , _selectionRect( 0 )
 {
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
 
     readConfig();
 
@@ -155,7 +155,7 @@ KTreemapView::tileAt( QPoint pos )
 void
 KTreemapView::mousePressEvent( QMouseEvent * event )
 {
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
 
@@ -224,7 +224,7 @@ KTreemapView::mousePressEvent( QMouseEvent * event )
 void
 KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 {
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
 
@@ -451,7 +451,7 @@ KTreemapView::resizeEvent( QResizeEvent * event )
 void
 KTreemapView::selectTile( KTreemapTile * tile )
 {
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
 
     KTreemapTile * oldSelection = _selectedTile;
     _selectedTile = tile;

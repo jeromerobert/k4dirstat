@@ -173,7 +173,7 @@ KTreemapTile::createSquarifiedChildren( const QRectF & rect )
 {
     if ( _orig->totalSize() == 0 )
     {
-	qCritical() << k_funcinfo << "Zero totalSize()" << endl;
+	qCritical() << Q_FUNC_INFO << "Zero totalSize()" << endl;
 	return;
     }
 
@@ -211,7 +211,7 @@ KTreemapTile::squarify( const QRectF & rect,
 
     if ( length == 0 )	// Sanity check
     {
-	qWarning() << k_funcinfo << "Zero length" << endl;
+	qWarning() << Q_FUNC_INFO << "Zero length";
 
 	if ( *it )	// Prevent endless loop in case of error:
 	    ++it;	// Advance iterator.
@@ -415,7 +415,7 @@ KTreemapTile::renderCushion()
     if ( rect.width() < 1 || rect.height() < 1 )
 	return QPixmap();
 
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
 
     double 	nx;
     double 	ny;

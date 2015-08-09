@@ -258,7 +258,7 @@ KLocalDirReadJob::startReading()
 	_dir->setReadState( KDirError );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
-	// qWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
+	// qWarning() << Q_FUNC_INFO << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
     }
 
@@ -323,7 +323,7 @@ KioDirReadJob::startReading()
     QUrl url = QUrl::fromUserInput(_dir->url(), QDir::currentPath(), QUrl::AssumeLocalFile);
     if ( ! url.isValid() )
     {
-	qWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
+	qWarning() << Q_FUNC_INFO << "URL malformed: " << _dir->url() << endl;
     }
 
     _job = KIO::listDir( url );
@@ -348,7 +348,7 @@ KioDirReadJob::entries ( KIO::Job *			job,
 
     if ( ! url.isValid() )
     {
-	qWarning() << k_funcinfo << "URL malformed: " << _dir->url() << endl;
+	qWarning() << Q_FUNC_INFO << "URL malformed: " << _dir->url() << endl;
     }
 
     KIO::UDSEntryList::ConstIterator it = entryList.begin();

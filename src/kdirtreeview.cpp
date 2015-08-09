@@ -436,7 +436,7 @@ KDirTreeView::slotAddChild( KFileInfo *newChild )
 	{
 	    if ( ! _doLazyClone )
 	    {
-		qCritical() << k_funcinfo << "Can't find parent view item for "
+		qCritical() << Q_FUNC_INFO << "Can't find parent view item for "
 			  << newChild << endl;
 	    }
 	}
@@ -638,12 +638,12 @@ KDirTreeView::selectItem( QTreeWidgetItem *listViewItem )
 
     if ( _selection )
     {
-	// qDebug() << k_funcinfo << " Selecting item " << _selection << endl;
+	// qDebug() << Q_FUNC_INFO << " Selecting item " << _selection << endl;
 	setCurrentItem(_selection);
     }
     else
     {
-	// qDebug() << k_funcinfo << " Clearing selection" << endl;
+	// qDebug() << Q_FUNC_INFO << " Clearing selection" << endl;
 	clearSelection();
     }
 
@@ -686,7 +686,7 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
 void
 KDirTreeView::clearSelection()
 {
-    // qDebug() << k_funcinfo << endl;
+    // qDebug() << Q_FUNC_INFO << endl;
     _selection = 0;
     QTreeWidget::clearSelection();
 
@@ -700,7 +700,7 @@ KDirTreeView::closeAllExcept( KDirTreeViewItem *except )
 {
     if ( ! except )
     {
-	qCritical() << k_funcinfo << ": NULL pointer passed" << endl;
+	qCritical() << Q_FUNC_INFO << ": NULL pointer passed" << endl;
 	return;
     }
 
@@ -713,7 +713,7 @@ KDirTreeView::fillColor( int level ) const
 {
     if ( level < 0 )
     {
-	qWarning() << k_funcinfo << "Invalid argument: " << level << endl;
+	qWarning() << Q_FUNC_INFO << "Invalid argument: " << level << endl;
 	level = 0;
     }
 
@@ -727,7 +727,7 @@ KDirTreeView::rawFillColor( int level ) const
     if ( level < 0 || level > KDirTreeViewMaxFillColor )
     {
 	level = 0;
-	qWarning() << k_funcinfo << "Invalid argument: " << level << endl;
+	qWarning() << Q_FUNC_INFO << "Invalid argument: " << level << endl;
     }
 
     return _fillColor [ level % KDirTreeViewMaxFillColor ];
@@ -749,12 +749,12 @@ KDirTreeView::setUsedFillColors( int usedFillColors )
 {
     if ( usedFillColors < 1 )
     {
-	qWarning() << k_funcinfo << "Invalid argument: "<< usedFillColors << endl;
+	qWarning() << Q_FUNC_INFO << "Invalid argument: "<< usedFillColors << endl;
 	usedFillColors = 1;
     }
     else if ( usedFillColors >= KDirTreeViewMaxFillColor )
     {
-	qWarning() << k_funcinfo << "Invalid argument: "<< usedFillColors
+	qWarning() << Q_FUNC_INFO << "Invalid argument: "<< usedFillColors
 		    << " (max: " << KDirTreeViewMaxFillColor-1 << ")" << endl;
 	usedFillColors = KDirTreeViewMaxFillColor-1;
     }
@@ -1019,7 +1019,7 @@ KDirTreeView::sendMailToOwner()
 {
     if ( ! _selection )
     {
-	qCritical() << k_funcinfo << "Nothing selected!" << endl;
+	qCritical() << Q_FUNC_INFO << "Nothing selected!" << endl;
 	return;
     }
 
@@ -1412,7 +1412,7 @@ KDirTreeViewItem::deferredClone()
 
     if ( ! _orig->hasChildren() )
     {
-	// qDebug() << k_funcinfo << "Oops, no children - sorry for bothering you!" << endl;
+	// qDebug() << Q_FUNC_INFO << "Oops, no children - sorry for bothering you!" << endl;
 	setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	return;
     }
@@ -1461,7 +1461,7 @@ KDirTreeViewItem::deferredClone()
 void
 KDirTreeViewItem::finalizeLocal()
 {
-    // qDebug() << k_funcinfo << _orig << endl;
+    // qDebug() << Q_FUNC_INFO << _orig << endl;
     cleanupDotEntries();
 
     if ( _orig->totalItems() == 0 )
