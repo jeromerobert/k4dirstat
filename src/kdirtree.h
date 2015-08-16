@@ -288,6 +288,7 @@ namespace KDirStat
 	 **/
 	void readCache( const QString & cacheFileName );
 
+        void parseLs(QTextStream & stream);
 
     signals:
 

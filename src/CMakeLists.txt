@@ -17,6 +17,7 @@ set(k4dirstat_SRCS
    kdirtreecache.cpp
    kdirtreeiterators.cpp
    kdirstatsettings.cpp
+   lsreadjob.cpp
  )
 
 kconfig_add_kcfg_files(k4dirstat_SRCS settings.kcfgc )

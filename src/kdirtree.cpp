@@ -18,6 +18,7 @@
 #include "kdirtree.h"
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
+#include "lsreadjob.h"
 #include <KSharedConfig>
 #include <QDir>
 using namespace KDirStat;
@@ -430,6 +431,11 @@ KDirTree::writeCache( const QString & cacheFileName )
     return writer.ok();
 }
 
+void KDirTree::parseLs(QTextStream & stream) {
+    _isBusy = true;
+    emit startingReading();
+    addJob(new LsReadJob(this, 0, stream));
+}
 
 void
 KDirTree::readCache( const QString & cacheFileName )

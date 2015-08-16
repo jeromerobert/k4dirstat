@@ -313,6 +313,11 @@ void k4dirstat::initStatusBar()
     statusBar()->showMessage(i18n( "Ready." ));
 }
 
+void k4dirstat::parseLs(QTextStream & stream) {
+    _treeView->tree()->parseLs(stream);
+    _fileRefreshAll->setEnabled( true );
+}
+
 void k4dirstat::openURL( const QUrl& url )
 {
     statusMsg( i18n( "Opening directory..." ) );

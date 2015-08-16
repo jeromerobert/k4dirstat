@@ -19,6 +19,7 @@
 #include <KLocalizedString>
 #include <QUrl>
 #include <QDir>
+#include <QTextStream>
 
 static const char description[] =
     I18N_NOOP("k4dirstat - Directory statistics.\n"
@@ -71,9 +72,10 @@ int main(int argc, char **argv)
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("+[Dir/URL]", "Directory or URL to open");
+    parser.addOption(QCommandLineOption("stdin", "Read the output of ls -l on stdin instead"));
     parser.process(app);
     k4dirstat *kdirstat = new k4dirstat;
-
+    QTextStream lsIn(stdin);
     // see if we are starting with session management
     if (app.isSessionRestored())
     {
@@ -84,8 +86,9 @@ int main(int argc, char **argv)
         kdirstat->show();
         // no session.. just start up normally
         QStringList args = parser.positionalArguments();
-        if (args.isEmpty())
-        {
+        if (parser.isSet("stdin")) {
+            kdirstat->parseLs(lsIn);
+        } else if (args.isEmpty()) {
             kdirstat->fileAskOpenDir();
         }
         else

@@ -20,6 +20,7 @@ class QPrinter;
 class KUrl;
 
 class QSplitter;
+class QTextStream;
 class KActivityTracker;
 class KFeedbackDialog;
 class KPacMan;
@@ -68,6 +69,8 @@ public:
      * Open an URL specified by command line argument.
      **/
     void openURL( const QUrl & url );
+
+    void parseLs(QTextStream & stream);
 
     /**
      * Return the main window's @ref KDirTreeView.
