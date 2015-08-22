@@ -420,6 +420,13 @@ KCleanupListBox::KCleanupListBox( QWidget *parent )
     connect( this,
              SIGNAL( currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
              SLOT  ( selectCleanup   ( QListWidgetItem *) ) );
+    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+}
+
+QSize KCleanupListBox::sizeHint() const {
+    QSize r = QListWidget::sizeHint();
+    r.setWidth(sizeHintForColumn(0));
+    return r;
 }
 
 void

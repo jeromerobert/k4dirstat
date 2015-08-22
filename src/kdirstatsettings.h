@@ -419,7 +419,7 @@ namespace KDirStat
 	 **/
 	void updateTitle( KCleanup * cleanup = 0 );
 
-
+        QSize sizeHint() const;
     signals:
 
 	/**
