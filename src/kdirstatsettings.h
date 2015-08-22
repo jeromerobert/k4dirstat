@@ -50,7 +50,7 @@ namespace KDirStat
      *
      * @short Settings dialog for KDirStat
      **/
-    class KSettingsDialog: public KPageDialog
+    class KSettingsDialog: public QDialog
     {
 	Q_OBJECT
 
@@ -122,12 +122,13 @@ namespace KDirStat
     protected:
 
         k4dirstat *             _mainWin;
-        KPageWidgetItem *	_cleanupsPageIndex;
-        KPageWidgetItem *	_treeColorsPageIndex;
-        KPageWidgetItem *	_treemapPageIndex;
-        KPageWidgetItem *	_generalSettingsPageIndex;
+        QTabWidget * tabWidget;
+        int _cleanupsPageIndex;
+        int _treeColorsPageIndex;
+        int _treemapPageIndex;
+        int _generalSettingsPageIndex;
         QList<KSettingsPage *>    _pages;
-        template<class T> void addSettingsPage(KPageWidgetItem * & item, const char * name);
+        template<class T> int addSettingsPage(const char * name);
     }; // class KSettingsDialog
 
 

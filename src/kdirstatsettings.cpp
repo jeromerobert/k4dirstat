@@ -40,53 +40,40 @@
 
 using namespace KDirStat;
 
-template<class T> void KSettingsDialog::addSettingsPage(KPageWidgetItem * & item, const char * name) {
+template<class T> int KSettingsDialog::addSettingsPage(const char * name) {
     KSettingsPage * settingsPage = new T(NULL, _mainWin);
     _pages.append(settingsPage);
-    item = new KPageWidgetItem(settingsPage);
-    item->setName(i18n(name));
-    addPage(item);
+    return tabWidget->addTab(settingsPage, i18n(name));
 }
 
 KSettingsDialog::KSettingsDialog( k4dirstat *mainWin )
-    : KPageDialog(mainWin)
+    : QDialog(mainWin)
     , _mainWin( mainWin )
 {
-    /**
-     * This may seem like overkill, but I didn't find any other way to get
-     * geometry management right with KDialogBase, yet maintain a modular and
-     * object-oriented design:
-     *
-     * Each individual settings page is added with 'addVBoxPage()' to get some
-     * initial geometry management. Only then can some generic widget be added
-     * into this - and I WANT my settings pages to be generic widgets. I want
-     * them to be self-sufficient - no monolithic mess of widget creation in my
-     * code, intermixed with all kinds of layout objects.
-     *
-     * The ordinary KDialogBase::addPage() just creates a QFrame which is too
-     * dumb for any kind of geometry management - it cannot even handle one
-     * single child right. So, let's have KDialogBase create something more
-     * intelligent: A QVBox (which is derived from QFrame anyway). This QVBox
-     * gets only one child - the KSettingsPage. This KSettingsPage handles its
-     * own layout.
-     **/
-
-    setFaceType(Tabbed);
     setModal(false);
     setWindowTitle(i18n( "Settings"));
-    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply |
+    QDialogButtonBox*  buttonBox = new QDialogButtonBox(
+                       QDialogButtonBox::Ok | QDialogButtonBox::Apply |
                        QDialogButtonBox::RestoreDefaults |
                        QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    addSettingsPage<KCleanupPage>(_cleanupsPageIndex, "&Actions");
-    addSettingsPage<KTreeColorsPage>(_treeColorsPageIndex, "&Tree Colors");
-    addSettingsPage<KTreemapPage>(_treemapPageIndex, "Tree&map");
-    addSettingsPage<KGeneralSettingsPage>(_generalSettingsPageIndex, "&General");
+    tabWidget = new QTabWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(tabWidget);
+    mainLayout->addWidget(buttonBox);
+    setLayout(mainLayout);
+    _cleanupsPageIndex = addSettingsPage<KCleanupPage>("&Actions");
+    _treeColorsPageIndex = addSettingsPage<KTreeColorsPage>("&Tree Colors");
+    _treemapPageIndex = addSettingsPage<KTreemapPage>("Tree&map");
+    _generalSettingsPageIndex = addSettingsPage<KGeneralSettingsPage>("&General");
 
     connect(this, SIGNAL(aboutToShow()), this, SLOT(setup()));
-    connect(button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(apply()));
-    connect(button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
-    connect(button(QDialogButtonBox::RestoreDefaults),
-            SIGNAL(clicked()), this, SLOT(revertToDefaults()));
+    connect(this, SIGNAL(accepted()), this, SLOT(apply()));
+    connect(buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
+    connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
+    connect(buttonBox->button(QDialogButtonBox::Help), SIGNAL(clicked()), this, SLOT(slotHelp()));
+    connect(buttonBox->button(QDialogButtonBox::RestoreDefaults),
+            SIGNAL(clicked()), this, SLOT(slotDefault()));
 }
 
 void KSettingsDialog::apply() {
@@ -114,7 +101,7 @@ void
 KSettingsDialog::show()
 {
     emit aboutToShow();
-    KPageDialog::show();
+    QDialog::show();
 }
 
 
@@ -138,11 +125,11 @@ void
 KSettingsDialog::slotHelp()
 {
     QString helpTopic = "";
-
-    if	    ( currentPage() == _cleanupsPageIndex	)	helpTopic = "configuring_cleanups";
-    else if ( currentPage() == _treeColorsPageIndex )	helpTopic = "tree_colors";
-    else if ( currentPage() == _treemapPageIndex	)	helpTopic = "treemap_settings";
-    else if ( currentPage() == _generalSettingsPageIndex)	helpTopic = "general_settings";
+    int i = tabWidget->currentIndex();
+    if	    ( i == _cleanupsPageIndex	)	helpTopic = "configuring_cleanups";
+    else if ( i == _treeColorsPageIndex )	helpTopic = "tree_colors";
+    else if ( i == _treemapPageIndex	)	helpTopic = "treemap_settings";
+    else if ( i == _generalSettingsPageIndex)	helpTopic = "general_settings";
 
     // qDebug() << "Help topic: " << helpTopic << endl;
     KHelpClient::invokeHelp(helpTopic);
@@ -170,7 +157,6 @@ KTreeColorsPage::KTreeColorsPage( QWidget *		parent,
     // Outer layout box
 
     QHBoxLayout * outerBox = new QHBoxLayout(this);
-    outerBox->setMargin(0);
     // Inner layout box with a column of color buttons
 
     QGridLayout *grid = new QGridLayout();
@@ -282,7 +268,6 @@ KCleanupPage::KCleanupPage( QWidget *		parent,
     // Create layout and widgets.
 
     QHBoxLayout * layout = new QHBoxLayout(this);
-    layout->setMargin(0);
     _listBox	= new KCleanupListBox( this );
     _props	= new KCleanupPropertiesPage( this, mainWin );
 
@@ -420,7 +405,6 @@ KCleanupListBox::KCleanupListBox( QWidget *parent )
     connect( this,
              SIGNAL( currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
              SLOT  ( selectCleanup   ( QListWidgetItem *) ) );
-    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
 }
 
 QSize KCleanupListBox::sizeHint() const {
@@ -680,7 +664,6 @@ KGeneralSettingsPage::KGeneralSettingsPage( QWidget *		parent,
     // Create layout and widgets.
 
     QVBoxLayout * layout = new QVBoxLayout(this);
-    layout->setMargin(5);
     QGroupBox * gbox		= new QGroupBox( i18n( "Directory Reading" ), this );
     layout->addWidget( gbox );
     QVBoxLayout * gboxLayout = new QVBoxLayout(gbox);
