@@ -40,7 +40,7 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
-find_package(KF5 REQUIRED COMPONENTS CoreAddons GuiAddons I18n DocTools XmlGui KIO JobWidgets IconThemes)
+find_package(KF5 REQUIRED COMPONENTS CoreAddons I18n DocTools XmlGui KIO JobWidgets IconThemes)
 find_package(ZLIB)
 
 ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
