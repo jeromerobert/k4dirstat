@@ -26,7 +26,6 @@ add_executable(k4dirstat ${k4dirstat_SRCS})
 target_link_libraries(k4dirstat KF5::XmlGui KF5::KIOCore
     KF5::KIOWidgets KF5::I18n KF5::IconThemes
     ${QT_QTGUI_LIBS}
-    ${LIBKONQ_LIBRARY}
     ${ZLIB_LIBRARIES})
 
 install(TARGETS k4dirstat ${INSTALL_TARGETS_DEFAULT_ARGS} )
