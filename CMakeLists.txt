@@ -47,6 +47,10 @@ ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
+# Hide warnings some warnings from KDE
+# TODO to be removed once fixed in KDE
+add_definitions("-DKCONFIGCORE_DEPRECATED= " "-DKXMLGUI_DEPRECATED= ")
+
 git_version(K4DIRSTAT_VERSION 3.1 k4dirstat-)
 add_subdirectory( doc )
 add_subdirectory( src )
