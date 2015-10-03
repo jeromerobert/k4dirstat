@@ -365,8 +365,8 @@ KCacheReader::addItem()
 	    raw_name = raw_path;
     }
 
-    QString path = QUrl::toPercentEncoding( QString::fromLatin1( raw_path ) );
-    QString name = QUrl::toPercentEncoding( QString::fromLatin1( raw_name ) );
+    QString path = QUrl::fromPercentEncoding(raw_path);
+    QString name = QUrl::fromPercentEncoding(raw_name);
 
     if ( _lastExcludedDir )
     {
