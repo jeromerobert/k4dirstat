@@ -505,10 +505,9 @@ void k4dirstat::askReadCache()
     QString file_name =
         QFileDialog::getOpenFileName(this, i18n("Read Cache File"), DEFAULT_CACHE_NAME);
 
-    statusMsg( i18n( "Reading cache file..." ) );
-
-    if ( _treeView )
+    if(!file_name.isNull() && _treeView)
     {
+        statusMsg( i18n( "Reading cache file..." ) );
         _fileRefreshAll->setEnabled( true );
         _treeView->readCache( file_name );
     }
