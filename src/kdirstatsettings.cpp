@@ -865,7 +865,7 @@ void KGeneralSettingsPage::deleteExcludeRule()
     {
         QString excludeRule = item->text();
         int result = KMessageBox::questionYesNo( this,
-            i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
+            i18n( "Really delete exclude rule \"%1\"?", excludeRule ),
             i18n( "Delete?" ) ); // Window title
         if ( result == KMessageBox::Yes )
         {

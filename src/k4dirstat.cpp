@@ -478,7 +478,7 @@ void k4dirstat::askWriteCache()
         {
             int button =
                 KMessageBox::questionYesNoCancel( this,
-                                                  i18n( "File %1 exists. Overwrite?" ).arg( file_name ),
+                                                  i18n( "File %1 exists. Overwrite?", file_name ),
                                                   i18n( "Overwrite?" ) );	// caption
 
             if ( button == KMessageBox::Cancel 	)	return;
@@ -490,13 +490,13 @@ void k4dirstat::askWriteCache()
 
     if ( ! _treeView || ! _treeView->writeCache( file_name ) )
     {
-        QString errMsg = i18n( "Error writing cache file %1" ).arg( file_name );
+        QString errMsg = i18n( "Error writing cache file %1", file_name );
         statusMsg( errMsg );
         KMessageBox::sorry( this, errMsg,
                             i18n( "Write Error" ) );			// caption
     }
 
-    statusMsg( i18n( "Wrote cache file %1" ).arg( file_name ) );
+    statusMsg( i18n( "Wrote cache file %1", file_name ) );
 }
 
 

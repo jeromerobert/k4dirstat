@@ -852,7 +852,7 @@ KDirTreeView::popupContextMenu(const QPoint & localPos)
 
 	    if ( rule )
 	    {
-		text = i18n( "Matching exclude rule:   %1" ).arg( rule->regexp().pattern() );
+		text = i18n( "Matching exclude rule:   %1", rule->regexp().pattern() );
 	    }
 	    else
 	    {
@@ -886,20 +886,20 @@ KDirTreeView::popupContextMenu(const QPoint & localPos)
 
 	    if ( orig->isSparseFile() )
 	    {
-		text = i18n( "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)" )
-		    .arg( formatSize( orig->byteSize() ) )
-		    .arg( formatSizeLong( orig->byteSize()  ) )
-		    .arg( formatSize( orig->allocatedSize() ) )
-		    .arg( formatSizeLong( orig->allocatedSize() ) );
+		text = i18n( "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)",
+		    formatSize(orig->byteSize()),
+		    formatSizeLong(orig->byteSize()),
+		    formatSize(orig->allocatedSize()),
+		    formatSizeLong(orig->allocatedSize()));
 	    }
 	    else
 	    {
-		text = i18n( "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)" )
-		    .arg( formatSize( orig->byteSize() ) )
-		    .arg( formatSizeLong( orig->byteSize() ) )
-		    .arg( orig->links() )
-		    .arg( formatSize( orig->size() ) )
-		    .arg( formatSizeLong( orig->size() ) );
+		text = i18n( "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)",
+		    formatSize( orig->byteSize() ),
+		    formatSizeLong( orig->byteSize() ),
+		    orig->links(),
+		    formatSize( orig->size() ),
+		    formatSizeLong( orig->size() ) );
 	    }
 
 	    popupContextInfo( pos, text );
@@ -940,9 +940,7 @@ KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
     }
     else
     {
-	info = i18n( "%1 (%2 Bytes)" )
-	    .arg( formatSize( size ) )
-	    .arg( formatSizeLong( size ) );
+        info = i18n("%1 (%2 Bytes)", formatSize(size), formatSizeLong(size));
     }
 
     popupContextInfo( pos, info );
@@ -1138,25 +1136,25 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 	    {
 		if ( _orig->isSparseFile() )
 		{
-		    text = i18n( "%1 / %2 Links (allocated: %3)" )
-			.arg( formatSize( _orig->byteSize() ) )
-			.arg( formatSize( _orig->links() ) )
-			.arg( formatSize( _orig->allocatedSize() ) );
+		    text = i18n( "%1 / %2 Links (allocated: %3)",
+			formatSize( _orig->byteSize() ),
+			formatSize( _orig->links() ),
+			formatSize( _orig->allocatedSize() ) );
 		}
 		else
 		{
-		    text = i18n( "%1 / %2 Links" )
-			.arg( formatSize( _orig->byteSize() ) )
-			.arg( _orig->links() );
+		    text = i18n( "%1 / %2 Links",
+			formatSize( _orig->byteSize() ),
+			_orig->links() );
 		}
 	    }
 	    else // No multiple links or no regular file
 	    {
 		if ( _orig->isSparseFile() )
 		{
-		    text = i18n( "%1 (allocated: %2)" )
-			.arg( formatSize( _orig->byteSize() ) )
-			.arg( formatSize( _orig->allocatedSize() ) );
+		    text = i18n( "%1 (allocated: %2)",
+			formatSize( _orig->byteSize() ),
+			formatSize( _orig->allocatedSize() ) );
 		}
 		else
 		{
