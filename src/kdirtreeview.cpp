@@ -670,8 +670,6 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
 	if ( _selection )
 	{
 	    closeAllExcept( _selection );
-	    _selection->setOpen( false );
-	    scrollToItem( _selection );
 	    emit treeSelectionChanged( _selection );
 	    setCurrentItem(_selection);
 	}
@@ -1577,19 +1575,15 @@ KDirTreeViewItem::closeSubtree()
 void
 KDirTreeViewItem::closeAllExceptThis()
 {
-    KDirTreeViewItem *sibling = _parent ?
-	_parent : _view->topLevelItem(0);
-
-    for(int i = 0; i < sibling->childCount(); i++)
-    {
-        if(sibling->child(i) != this)
-            sibling->child(i)->closeSubtree();
+    if(_parent) {
+        KDirTreeViewItem *sibling = _parent;
+        for(int i = 0; i < sibling->childCount(); i++) {
+            if(sibling->child(i) != this)
+                sibling->child(i)->closeSubtree();
+        }
+        setOpen(true);
+        _parent->closeAllExceptThis();	// Recurse up
     }
-
-    setOpen( true );
-
-    if ( _parent )
-	_parent->closeAllExceptThis();	// Recurse up
 }
 
 
