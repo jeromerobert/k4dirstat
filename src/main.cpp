@@ -32,6 +32,7 @@ static const char version[] = EXPAND(K4DIRSTAT_VERSION);
 
 int main(int argc, char **argv)
 {
+    QApplication app(argc, argv);
     KAboutData about("k4dirstat", i18n("k4dirstat"), version, i18n(description),
                      KAboutLicense::GPL,
                      "\u00A9 2015 J\u00E9r\u00F4me Robert, \u00A9 2010 Joshua Hodosh, \u00A9 1999-2008 Stefan Hundhammer",
@@ -62,7 +63,6 @@ int main(int argc, char **argv)
 		      "",	// E-Mail
 		      "http://www.cs.umd.edu/hcil/treemaps/" );
     KAboutData::setApplicationData(about);
-    QApplication app(argc, argv);
     app.setApplicationName("k4dirstat");
     app.setApplicationVersion(version);
     app.setApplicationDisplayName(i18n("k4dirstat"));
