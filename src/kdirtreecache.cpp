@@ -16,6 +16,8 @@
 #include <ctype.h>
 #include <errno.h>
 #include <QDebug>
+#include <QFileInfo>
+#include <QDir>
 #include "kdirtreecache.h"
 #include "kdirtree.h"
 #include "kexcluderules.h"
@@ -349,24 +351,15 @@ KCacheReader::addItem()
 
     //
     // Create a new item
-    //
-
-    char * raw_name = raw_path;
-
-    if ( *raw_path == '/' && _tree->root() )
-    {
-	// Split raw_path in path + name
-
-	raw_name = strrchr( raw_path, '/' );
-
-	if ( raw_name )
-	    *raw_name++ = 0;	// Overwrite the last '/' with 0 byte - split string there
-	else			// No '/' found
-	    raw_name = raw_path;
+    QFileInfo fileInfo(QUrl::fromPercentEncoding(raw_path));
+    QString path, name;
+    if(_tree->root()) {
+        path = fileInfo.dir().path();
+        name = fileInfo.baseName();
+    } else {
+        path = fileInfo.filePath();
+        name = path;
     }
-
-    QString path = QUrl::fromPercentEncoding(raw_path);
-    QString name = QUrl::fromPercentEncoding(raw_name);
 
     if ( _lastExcludedDir )
     {
