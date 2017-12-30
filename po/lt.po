@@ -2,44 +2,44 @@
 # This file is put in the public domain.
 # 
 # Translators:
-# Moo, 2014
+# Moo, 2014-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: k4dirstat\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-27 21:42+0200\n"
-"PO-Revision-Date: 2014-12-30 19:45+0000\n"
+"POT-Creation-Date: 2015-05-13 14:29+0200\n"
+"PO-Revision-Date: 2017-09-23 20:34+0000\n"
 "Last-Translator: Moo\n"
-"Language-Team: Lithuanian (http://www.transifex.com/projects/p/k4dirstat/language/lt/)\n"
+"Language-Team: Lithuanian (http://www.transifex.com/k4dirstat/k4dirstat/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/kdirstatsettings.cpp:76
+#: ../src/kdirstatsettings.cpp:72
 msgid "Settings"
 msgstr "Nustatymai"
 
 #. i18n: file: ../src/k4dirstatui.rc:35
 #. i18n: ectx: Menu (cleanup)
-#: ../src/kdirstatsettings.cpp:83 ui_rc.cpp:6 ui_rc.cpp:6
+#: ../src/kdirstatsettings.cpp:80 ui_rc.cpp:6 ui_rc.cpp:6
 msgid "&Actions"
 msgstr "&Veiksmai"
 
-#: ../src/kdirstatsettings.cpp:88
+#: ../src/kdirstatsettings.cpp:85
 msgid "&Tree Colors"
-msgstr "&Medžių Spalvos"
+msgstr "&Medžių spalvos"
 
-#: ../src/kdirstatsettings.cpp:92
+#: ../src/kdirstatsettings.cpp:89
 msgid "Tree&map"
 msgstr "Medžių že&mėlapis"
 
-#: ../src/kdirstatsettings.cpp:96
+#: ../src/kdirstatsettings.cpp:93
 msgid "&General"
 msgstr "&Bendra"
 
-#: ../src/kdirstatsettings.cpp:121
+#: ../src/kdirstatsettings.cpp:136
 msgid ""
 "Really revert all settings to their default values?\n"
 "You will lose all changes you ever made!"
@@ -47,244 +47,222 @@ msgstr "Ar tikrai atkurti visus nustatymus į jų numatytąsias reikšmes?\nJūs
 
 #. parentWidget
 #. message
-#: ../src/kdirstatsettings.cpp:123 ../src/kcleanup.cpp:186
+#: ../src/kdirstatsettings.cpp:138 ../src/kcleanup.cpp:187
 msgid "Please Confirm"
-msgstr "Prašome Patvirtinti"
+msgstr "Prašome patvirtinti"
 
 #. caption
-#: ../src/kdirstatsettings.cpp:124
+#: ../src/kdirstatsettings.cpp:139
 msgid "&Really Revert to Defaults"
-msgstr "&Tikrai Atkurti Numatytąsias Reikšmes"
+msgstr "&Tikrai atkurti numatytąsias reikšmes"
 
-#: ../src/kdirstatsettings.cpp:210
+#: ../src/kdirstatsettings.cpp:200
 msgid "Tree Level %1"
-msgstr "Medžio Lygis %1"
+msgstr "Medžio lygis %1"
 
-#. border, spacing
 #. The topmost check box: "Enabled".
-#: ../src/kdirstatsettings.cpp:546
+#: ../src/kdirstatsettings.cpp:507
 msgid "&Enabled"
 msgstr "Į&jungta"
 
-#: ../src/kdirstatsettings.cpp:583
+#: ../src/kdirstatsettings.cpp:544
 msgid "&Title:"
 msgstr "&Pavadinimas:"
 
-#: ../src/kdirstatsettings.cpp:584
+#: ../src/kdirstatsettings.cpp:548
 msgid "&Command Line:"
-msgstr "&Komandų Eilutė:"
+msgstr "&Komandų eilutė:"
 
-#: ../src/kdirstatsettings.cpp:586
+#: ../src/kdirstatsettings.cpp:552
 #, c-format
 msgid "%p Full Path"
-msgstr "%p Pilnas Kelias"
+msgstr "%p Pilnas kelias"
 
-#: ../src/kdirstatsettings.cpp:589
+#: ../src/kdirstatsettings.cpp:555
 #, c-format
 msgid "%n File / Directory Name Without Path"
-msgstr "%n Failas / Katalogo Pavadinimas Be Kelio"
+msgstr "%n failas / Katalogo pavadinimas be kelio"
 
-#: ../src/kdirstatsettings.cpp:592
+#: ../src/kdirstatsettings.cpp:558
 msgid "%t KDE Trash Directory"
-msgstr "%t KDE Šiukšlinės Katalogas"
+msgstr "%t KDE šiukšlinės katalogas"
 
 #. "Recurse into subdirs" check box
-#: ../src/kdirstatsettings.cpp:598
+#: ../src/kdirstatsettings.cpp:564
 msgid "&Recurse into Subdirectories"
-msgstr "&Apdoroti su Pakatalogiais"
+msgstr "&Apdoroti su pakatalogiais"
 
 #. "Ask for confirmation" check box
-#: ../src/kdirstatsettings.cpp:603
+#: ../src/kdirstatsettings.cpp:569
 msgid "&Ask for Confirmation"
-msgstr "K&lausti Patvirtinimo"
+msgstr "K&lausti patvirtinimo"
 
 #. The "Works for..." check boxes, grouped together in a button group.
-#: ../src/kdirstatsettings.cpp:609
+#: ../src/kdirstatsettings.cpp:575
 msgid "Works for..."
 msgstr "Taikoma..."
 
-#: ../src/kdirstatsettings.cpp:615
+#: ../src/kdirstatsettings.cpp:581
 msgid "&Directories"
 msgstr "Ka&talogams"
 
-#: ../src/kdirstatsettings.cpp:616
+#: ../src/kdirstatsettings.cpp:582
 msgid "&Files"
 msgstr "&Failams"
 
-#: ../src/kdirstatsettings.cpp:617
+#: ../src/kdirstatsettings.cpp:583
 msgid "<Files> P&seudo Entries"
 msgstr "<Failai> P&seudoįrašams"
 
-#: ../src/kdirstatsettings.cpp:627
+#: ../src/kdirstatsettings.cpp:594
 msgid "On Local Machine Only ('file:/' Protocol)"
-msgstr "Tik Vietiniame Kompiuteryje ('file:/' Protokolas)"
+msgstr "Tik vietiniame kompiuteryje ('file:/' Protokolas)"
 
-#: ../src/kdirstatsettings.cpp:628
+#: ../src/kdirstatsettings.cpp:595
 msgid "Network Transparent (ftp, smb, tar, ...)"
-msgstr "Permatomame Tinkle (ftp, smb, tar, ...)"
+msgstr "Permatomame tinkle (ftp, smb, tar, ...)"
 
-#: ../src/kdirstatsettings.cpp:648
+#: ../src/kdirstatsettings.cpp:614
 msgid "Refresh &Policy:"
-msgstr "Naujinimo &Politika:"
+msgstr "Naujinimo &politika:"
 
 #. Caution: The order of those entries must match the order of
 #. 'enum RefreshPolicy' in 'kcleanup.h'!
 #. I don't like this one bit. The ComboBox should provide something better
 #. than mere numeric IDs. One of these days I'm going to rewrite this
 #. thing!
-#: ../src/kdirstatsettings.cpp:659
+#: ../src/kdirstatsettings.cpp:626
 msgid "No Refresh"
 msgstr "Nenaujinti"
 
-#: ../src/kdirstatsettings.cpp:660
+#: ../src/kdirstatsettings.cpp:627
 msgid "Refresh This Entry"
 msgstr "Įkelti iš naujo šį įrašą"
 
-#: ../src/kdirstatsettings.cpp:661
+#: ../src/kdirstatsettings.cpp:628
 msgid "Refresh This Entry's Parent"
-msgstr "Naujinti Šio Įrašo Pirminį"
+msgstr "Naujinti šio įrašo pirminį"
 
-#: ../src/kdirstatsettings.cpp:662
+#: ../src/kdirstatsettings.cpp:629
 msgid "Assume Entry Has Been Deleted"
-msgstr "Numanyti, kad Įrašas Buvo Ištrintas"
+msgstr "Numanyti, kad įrašas buvo ištrintas"
 
-#. Create layout and widgets.
-#. border
-#. spacing
-#: ../src/kdirstatsettings.cpp:729
+#: ../src/kdirstatsettings.cpp:693
 msgid "Directory Reading"
-msgstr "Katalogo Skaitymas"
+msgstr "Katalogo skaitymas"
 
-#: ../src/kdirstatsettings.cpp:734
+#: ../src/kdirstatsettings.cpp:698
 msgid "Cross &File System Boundaries"
-msgstr "Peržengti &Failų Sistemos Ribas"
+msgstr "Peržengti &failų sistemos ribas"
 
-#: ../src/kdirstatsettings.cpp:735
+#: ../src/kdirstatsettings.cpp:699
 msgid "Use Optimized &Local Directory Read Methods"
-msgstr "Naudoti Optimizuotus Vietinio Katalogo Skaitymo Metodus"
+msgstr "Naudoti optimizuotus vietinio katalogo skaitymo metodus"
 
-#: ../src/kdirstatsettings.cpp:742
-msgid "Animation"
-msgstr "Animacija"
-
-#: ../src/kdirstatsettings.cpp:747
-msgid "P@cM@n Animation in Tool &Bar"
-msgstr "P@cM@n Animacija Įrankių &Juostoje"
-
-#: ../src/kdirstatsettings.cpp:748
-msgid "P@cM@n Animation in Directory &Tree"
-msgstr "P@cM@n Animacija Katalogo &Medyje"
-
-#: ../src/kdirstatsettings.cpp:751
+#: ../src/kdirstatsettings.cpp:708
 msgid "&Exclude Rules"
-msgstr "&Išskyrimo Taisyklės"
+msgstr "&Išskyrimo taisyklės"
 
-#: ../src/kdirstatsettings.cpp:755
-msgid "Exclude Rule (Regular Expression)"
-msgstr "Išskyrimo Taisyklė (Reguliari Išraiška)"
-
-#: ../src/kdirstatsettings.cpp:759
+#: ../src/kdirstatsettings.cpp:718
 msgid "&Add"
 msgstr "&Pridėti"
 
-#: ../src/kdirstatsettings.cpp:760 ../src/kdirstatsettings.cpp:793
+#: ../src/kdirstatsettings.cpp:719 ../src/kdirstatsettings.cpp:756
 msgid "&Edit"
 msgstr "&Keisti"
 
-#: ../src/kdirstatsettings.cpp:761 ../src/kdirstatsettings.cpp:794
+#: ../src/kdirstatsettings.cpp:720 ../src/kdirstatsettings.cpp:759
 msgid "&Delete"
 msgstr "&Ištrinti"
 
-#: ../src/kdirstatsettings.cpp:897
+#: ../src/kdirstatsettings.cpp:844
 msgid "New exclude rule"
 msgstr "Nauja išskyrimo taisyklė"
 
-#: ../src/kdirstatsettings.cpp:898
+#: ../src/kdirstatsettings.cpp:845
 msgid "Regular expression for new exclude rule:"
 msgstr "Reguliari išraiška naujai išskyrimo taisyklei:"
 
-#: ../src/kdirstatsettings.cpp:921
+#: ../src/kdirstatsettings.cpp:868
 msgid "Edit exclude rule"
 msgstr "Keisti išskyrimo taisyklę"
 
-#: ../src/kdirstatsettings.cpp:922
+#: ../src/kdirstatsettings.cpp:869
 msgid "Exclude rule (regular expression):"
 msgstr "Išskirti taisyklę (reguliari išraiška):"
 
-#: ../src/kdirstatsettings.cpp:949
+#: ../src/kdirstatsettings.cpp:894
 msgid "Really delete exclude rule \"%1\"?"
 msgstr "Tikrai ištrinti išskyrimo taisyklę \"%1\"?"
 
-#: ../src/kdirstatsettings.cpp:950
+#: ../src/kdirstatsettings.cpp:895
 msgid "Delete?"
 msgstr "Ištrinti?"
 
-#: ../src/kdirstatsettings.cpp:978
+#: ../src/kdirstatsettings.cpp:917
 msgid "S&quarify Treemap"
-msgstr "&Stačiakampis Medžių žemėlapis"
+msgstr "&Stačiakampis medžių žemėlapis"
 
-#: ../src/kdirstatsettings.cpp:979
+#: ../src/kdirstatsettings.cpp:918
 msgid "Use C&ushion Shading"
-msgstr "Naudoti Pagalvėlių &Užtemdymą"
+msgstr "Naudoti pagalvėlių &užtemdymą"
 
 #. Cushion parameters
-#: ../src/kdirstatsettings.cpp:984
+#: ../src/kdirstatsettings.cpp:924
 msgid "Cushion Parameters"
-msgstr "Pagalvėlių Parametrai"
+msgstr "Pagalvėlių parametrai"
 
-#: ../src/kdirstatsettings.cpp:989
+#: ../src/kdirstatsettings.cpp:927
 msgid "Ambient &Light"
-msgstr "Apjuosianti &Šviesa"
+msgstr "Apjuosianti &šviesa"
 
-#: ../src/kdirstatsettings.cpp:999
+#: ../src/kdirstatsettings.cpp:945
 msgid "&Height Scale"
-msgstr "&Aukščio Skalė"
+msgstr "&Aukščio skalė"
 
-#: ../src/kdirstatsettings.cpp:1009
+#: ../src/kdirstatsettings.cpp:961
 msgid "Draw Lines if Lo&w Contrast"
-msgstr "Braižyti Eilutes, jei Žemas &Kontrastas"
+msgstr "Braižyti eilutes, jei žemas &kontrastas"
 
-#: ../src/kdirstatsettings.cpp:1013
+#: ../src/kdirstatsettings.cpp:963
 msgid "Always Draw &Grid"
-msgstr "Visuomet Braižyti &Tinklelį"
+msgstr "Visuomet braižyti &tinklelį"
 
-#: ../src/kdirstatsettings.cpp:1016
+#: ../src/kdirstatsettings.cpp:964
 msgid "Gr&id Color: "
-msgstr "T&inklelio Spalva:"
+msgstr "T&inklelio spalva:"
 
-#. addVStretch( vbox );
 #. Plain treemaps parameters
-#: ../src/kdirstatsettings.cpp:1026
+#: ../src/kdirstatsettings.cpp:974
 msgid "Colors for Plain Treemaps"
-msgstr "Paprastų Medžių Žemėlapių Spalvos"
+msgstr "Paprastų medžių žemėlapių spalvos"
 
-#: ../src/kdirstatsettings.cpp:1029
+#: ../src/kdirstatsettings.cpp:978
 msgid "&Files: "
 msgstr "&Failai:"
 
-#: ../src/kdirstatsettings.cpp:1034
+#: ../src/kdirstatsettings.cpp:985
 msgid "&Directories: "
 msgstr "Kata&logai:"
 
-#: ../src/kdirstatsettings.cpp:1039
+#: ../src/kdirstatsettings.cpp:992
 msgid "Gr&id: "
 msgstr "Ti&nklelis:"
 
-#. rows, cols, spacing
 #. (col, stretch) don't stretch this column
 #. don't stretch
 #. stretch this as you like
-#: ../src/kdirstatsettings.cpp:1053
+#: ../src/kdirstatsettings.cpp:1009
 msgid "Highlight R&ectangle: "
-msgstr "&Paryškinimo Stačiakampis:"
+msgstr "&Paryškinimo stačiakampis:"
 
-#: ../src/kdirstatsettings.cpp:1061
+#: ../src/kdirstatsettings.cpp:1017
 msgid "Minim&um Treemap Tile Size: "
-msgstr "Minimal&us Medžių Žemėlapio Išklotinės Dydis:"
+msgstr "Minimal&us medžių žemėlapio išklotinės dydis:"
 
-#: ../src/kdirstatsettings.cpp:1068
+#: ../src/kdirstatsettings.cpp:1027
 msgid "Auto-&Resize Treemap"
-msgstr "Automatiškai Keisti Medžių Žemėlapio &Dydį"
+msgstr "Automatiškai keisti medžių žemėlapio &dydį"
 
 #: ../src/main.cpp:23
 msgid ""
@@ -294,121 +272,121 @@ msgid ""
 "and helps you clean it up."
 msgstr "k4dirstat - Katalogų statistika.\n\nRodo kur dingo visa jūsų vieta\nir padeda ją išvalyti."
 
-#: ../src/kdirtreeview.cpp:74
+#: ../src/kdirtreeview.cpp:114
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ../src/kdirtreeview.cpp:76
+#: ../src/kdirtreeview.cpp:116
 msgid "Subtree Percentage"
-msgstr "Pomedžio Procentinė Dalis"
+msgstr "Pomedžio procentinė dalis"
 
-#: ../src/kdirtreeview.cpp:77
+#: ../src/kdirtreeview.cpp:117
 msgid "Percentage"
-msgstr "Procentinė Dalis"
+msgstr "Procentinė dalis"
 
-#: ../src/kdirtreeview.cpp:78
+#: ../src/kdirtreeview.cpp:118
 msgid "Subtree Total"
-msgstr "Pomedžio Suma"
+msgstr "Pomedžio suma"
 
-#: ../src/kdirtreeview.cpp:80
+#: ../src/kdirtreeview.cpp:120
 msgid "Own Size"
-msgstr "Nuosavybės Dydis"
+msgstr "Nuosavybės dydis"
 
-#: ../src/kdirtreeview.cpp:81
+#: ../src/kdirtreeview.cpp:121
 msgid "Items"
 msgstr "Elementų"
 
-#: ../src/kdirtreeview.cpp:82
+#: ../src/kdirtreeview.cpp:122
 msgid "Files"
 msgstr "Failų"
 
-#: ../src/kdirtreeview.cpp:83
+#: ../src/kdirtreeview.cpp:123
 msgid "Subdirs"
 msgstr "Pakatalogių"
 
-#: ../src/kdirtreeview.cpp:84
+#: ../src/kdirtreeview.cpp:124
 msgid "Last Change"
-msgstr "Paskutinis Pakeitimas"
+msgstr "Paskutinis pakeitimas"
 
-#: ../src/kdirtreeview.cpp:179
+#: ../src/kdirtreeview.cpp:223
 msgid "Read Jobs"
-msgstr "Skaitymo Užduotys"
+msgstr "Skaitymo užduotys"
 
-#: ../src/kdirtreeview.cpp:472
+#: ../src/kdirtreeview.cpp:519
 msgid "Finished. Elapsed time: %1"
 msgstr "Užbaigta. Praėjęs laikas: %1"
 
-#: ../src/kdirtreeview.cpp:514
+#: ../src/kdirtreeview.cpp:560
 msgid "Aborted. Elapsed time: %1"
 msgstr "Nutraukta. Praėjęs laikas: %1"
 
-#: ../src/kdirtreeview.cpp:550
+#: ../src/kdirtreeview.cpp:595
 msgid "Elapsed time: %1   reading directory %2"
 msgstr "Praėjęs laikas: %1 skaitomas katalogas %2"
 
-#: ../src/kdirtreeview.cpp:554
+#: ../src/kdirtreeview.cpp:599
 msgid "Elapsed time: %1"
 msgstr "Praėjęs laikas: %1"
 
-#: ../src/kdirtreeview.cpp:823
+#: ../src/kdirtreeview.cpp:855
 msgid "Matching exclude rule:   %1"
 msgstr "Atitinka išskyrimo taisyklę: %1"
 
-#: ../src/kdirtreeview.cpp:827
+#: ../src/kdirtreeview.cpp:859
 msgid "<Unknown exclude rule>"
 msgstr "<Nežinoma išskyrimo taisyklė>"
 
-#: ../src/kdirtreeview.cpp:857
+#: ../src/kdirtreeview.cpp:889
 msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
-msgstr "Retas failas: %1 (%2 Baitai) -- išdėstyta: %3 (%4 Baitai)"
+msgstr "Retas failas: %1 (%2 baitai) -- išdėstyta: %3 (%4 baitai)"
 
-#: ../src/kdirtreeview.cpp:865
+#: ../src/kdirtreeview.cpp:897
 msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
-msgstr "%1 (%2 Baitai) su %3 patvariaisiais saitais => efektyvus dydis: %4 (%5 Baitai)"
+msgstr "%1 (%2 baitai) su %3 patvariaisiais saitais => efektyvus dydis: %4 (%5 baitai)"
 
-#: ../src/kdirtreeview.cpp:907 ../src/kfileinfo.cpp:442
+#: ../src/kdirtreeview.cpp:939 ../src/kfileinfo.cpp:442
 msgid "Bytes"
 msgstr "Baitai"
 
-#: ../src/kdirtreeview.cpp:911
+#: ../src/kdirtreeview.cpp:943
 msgid "%1 (%2 Bytes)"
-msgstr "%1 (%2 Baitai)"
+msgstr "%1 (%2 baitai)"
 
-#: ../src/kdirtreeview.cpp:1014
+#: ../src/kdirtreeview.cpp:1029
 msgid "Disk Usage"
-msgstr "Disko Naudojimas"
+msgstr "Disko naudojimas"
 
-#: ../src/kdirtreeview.cpp:1016
+#: ../src/kdirtreeview.cpp:1031
 msgid "Please check your disk usage and clean up if you can. Thank you."
 msgstr "Prašome patikrinkite savo disko naudojimą ir, jei galite, išvalykite. Ačiū."
 
-#: ../src/kdirtreeview.cpp:1020
+#: ../src/kdirtreeview.cpp:1035
 msgid "Disk usage report generated by k4dirstat"
 msgstr "Disko naudojimo ataskaita sukurta programos k4dirstat"
 
-#: ../src/kdirtreeview.cpp:1083
+#: ../src/kdirtreeview.cpp:1130
 msgid "<Files>"
 msgstr "<Failai>"
 
-#: ../src/kdirtreeview.cpp:1098
+#: ../src/kdirtreeview.cpp:1145
 msgid "%1 / %2 Links (allocated: %3)"
-msgstr "%1 / %2 Nuorodos (išdėstyta: %3)"
+msgstr "%1 / %2 nuorodos (išdėstyta: %3)"
 
-#: ../src/kdirtreeview.cpp:1105
+#: ../src/kdirtreeview.cpp:1152
 msgid "%1 / %2 Links"
-msgstr "%1 / %2 Nuorodos"
+msgstr "%1 / %2 nuorodos"
 
-#: ../src/kdirtreeview.cpp:1114
+#: ../src/kdirtreeview.cpp:1161
 msgid "%1 (allocated: %2)"
 msgstr "%1 (išdėstyta: %2)"
 
-#: ../src/kdirtreeview.cpp:1133 ../src/kdirtreeview.cpp:1277
+#: ../src/kdirtreeview.cpp:1180 ../src/kdirtreeview.cpp:1323
 msgid "[excluded]"
 msgstr "[išskirta]"
 
-#: ../src/kdirtreeview.cpp:1264
+#: ../src/kdirtreeview.cpp:1310
 msgid "[%1 Read Jobs]"
-msgstr "[%1 Skaitymo Užduotys]"
+msgstr "[%1 skaitymo užduotys]"
 
 #: ../src/kfileinfo.cpp:451
 msgid "kB"
@@ -423,289 +401,289 @@ msgid "GB"
 msgstr "GB"
 
 #. Provide a keyboard shortcut for cleanup #0..#9
-#: ../src/kcleanupcollection.cpp:236
+#: ../src/kcleanupcollection.cpp:232
 msgid "User Defined Cleanup #&%1"
-msgstr "Vartotojo Apibrėžtas Išvalymas #&%1"
+msgstr "Vartotojo apibrėžtas išvalymas #&%1"
 
 #. No keyboard shortcuts for cleanups #10.. - they would be duplicates
-#: ../src/kcleanupcollection.cpp:239
+#: ../src/kcleanupcollection.cpp:235
 msgid "User Defined Cleanup #%1"
-msgstr "Vartotojo Apibrėžtas Išvalymas #%1"
+msgstr "Vartotojo apibrėžtas išvalymas #%1"
 
-#: ../src/kstdcleanup.cpp:30
-msgid "Open in &Konqueror"
-msgstr "Atidaryti programoje &Konqueror"
+#: ../src/kstdcleanup.cpp:34
+msgid "Open a file &browser"
+msgstr "Atidaryti failų &tvarkytuvę"
 
-#: ../src/kstdcleanup.cpp:50
+#: ../src/kstdcleanup.cpp:54
 msgid "Open in &Terminal"
-msgstr "Atidaryti &Terminale"
+msgstr "Atidaryti &terminale"
 
-#: ../src/kstdcleanup.cpp:69
+#: ../src/kstdcleanup.cpp:73
 msgid "&Compress"
 msgstr "&Suglaudinti"
 
-#: ../src/kstdcleanup.cpp:87
+#: ../src/kstdcleanup.cpp:91
 msgid "&make clean"
 msgstr "&padaryti valymą"
 
-#: ../src/kstdcleanup.cpp:104
+#: ../src/kstdcleanup.cpp:108
 msgid "Delete T&rash Files"
-msgstr "Ištrinti Šiukšlinės &Failus"
+msgstr "Ištrinti šiukšlinės &failus"
 
-#: ../src/kstdcleanup.cpp:143
+#: ../src/kstdcleanup.cpp:147
 msgid "&Delete (no way to undelete!)"
 msgstr "&Ištrinti (atkūrimas neįmanomas!)"
 
-#: ../src/kstdcleanup.cpp:160
+#: ../src/kstdcleanup.cpp:164
 msgid "Delete (to Trash &Bin)"
-msgstr "Ištrinti (į Ši&ukšlinę)"
+msgstr "Ištrinti (į ši&ukšlinę)"
 
-#: ../src/kcleanup.cpp:177
+#: ../src/kcleanup.cpp:178
 msgid ""
 "%1\n"
 "in directory %2"
 msgstr "%1\nkataloge %2"
 
-#: ../src/kcleanup.cpp:181
+#: ../src/kcleanup.cpp:182
 msgid ""
 "%1\n"
 "for file %2"
 msgstr "%1\nfailui %2"
 
 #. caption
-#: ../src/kcleanup.cpp:187
+#: ../src/kcleanup.cpp:188
 msgid "Confirm"
 msgstr "Patvirtinti"
 
-#: ../src/k4dirstat.cpp:175
+#: ../src/k4dirstat.cpp:178
 msgid "Open &URL..."
 msgstr "Atidaryti &URL..."
 
-#: ../src/k4dirstat.cpp:183
+#: ../src/k4dirstat.cpp:186
 msgid "Refresh &All"
-msgstr "Naujinti &Viską"
-
-#: ../src/k4dirstat.cpp:188
-msgid "Refresh &Selected"
-msgstr "Naujinti &Pasirinktą"
+msgstr "Naujinti &viską"
 
 #: ../src/k4dirstat.cpp:191
+msgid "Refresh &Selected"
+msgstr "Naujinti &pasirinktą"
+
+#: ../src/k4dirstat.cpp:194
 msgid "Read &Excluded Directory"
-msgstr "Skaityti Išski&rtą Katalogą"
+msgstr "Skaityti išski&rtą katalogą"
 
-#: ../src/k4dirstat.cpp:195
+#: ../src/k4dirstat.cpp:198
 msgid "Continue Reading at &Mount Point"
-msgstr "Tęsti Skaitymą Pri&jungimo Vietoje"
+msgstr "Tęsti skaitymą pri&jungimo vietoje"
 
-#: ../src/k4dirstat.cpp:199
+#: ../src/k4dirstat.cpp:202
 msgid "Stop Rea&ding"
-msgstr "Stabdyti S&kaitymą"
+msgstr "Stabdyti s&kaitymą"
 
-#: ../src/k4dirstat.cpp:204
+#: ../src/k4dirstat.cpp:207
 msgid "&Write to Cache File..."
-msgstr "Į&rašyti į Talpyklos Failą..."
+msgstr "Į&rašyti į talpyklos failą..."
 
-#: ../src/k4dirstat.cpp:208
+#: ../src/k4dirstat.cpp:211
 msgid "&Read Cache File..."
-msgstr "&Skaityti Talpyklos Failą..."
-
-#: ../src/k4dirstat.cpp:215
-msgid "Open With"
-msgstr "Atidaryti Su"
+msgstr "&Skaityti talpyklos failą..."
 
 #: ../src/k4dirstat.cpp:218
+msgid "Open With"
+msgstr "Atidaryti su"
+
+#: ../src/k4dirstat.cpp:221
 msgid "Zoom in"
 msgstr "Didinti"
 
-#: ../src/k4dirstat.cpp:223
+#: ../src/k4dirstat.cpp:226
 msgid "Zoom out"
 msgstr "Mažinti"
 
-#: ../src/k4dirstat.cpp:228
+#: ../src/k4dirstat.cpp:231
 msgid "Select Parent"
-msgstr "Pasirinkti Pirminį"
+msgstr "Pasirinkti pirminį"
 
-#: ../src/k4dirstat.cpp:233
+#: ../src/k4dirstat.cpp:236
 msgid "Rebuild Treemap"
-msgstr "Perdaryti Medžių Žemėlapį"
+msgstr "Perdaryti medžių žemėlapį"
 
-#: ../src/k4dirstat.cpp:235
+#: ../src/k4dirstat.cpp:238
 msgid "Show Treemap"
-msgstr "Rodyti Medžių Žemėlapį"
+msgstr "Rodyti medžių žemėlapį"
 
-#: ../src/k4dirstat.cpp:242
+#: ../src/k4dirstat.cpp:245
 msgid "Help about Treemaps"
-msgstr "Pagalba su Medžių Žemėlapiais"
+msgstr "Pagalba su medžių žemėlapiais"
 
-#: ../src/k4dirstat.cpp:248
+#: ../src/k4dirstat.cpp:251
 msgid "Send &Mail to Owner"
-msgstr "Siųsti &Laišką Savininkui"
+msgstr "Siųsti &laišką savininkui"
 
 #. _helpSendFeedbackMail =
 #. actionCollection()->addAction("help_send_feedback_mail",this,
 #. SLOT(sendFeedbackMail()));
 #. _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));
-#: ../src/k4dirstat.cpp:254
+#: ../src/k4dirstat.cpp:257
 msgid "Opens a directory"
 msgstr "Atidaro katalogą"
 
-#: ../src/k4dirstat.cpp:255
+#: ../src/k4dirstat.cpp:258
 msgid "Opens a (possibly remote) directory"
 msgstr "Atidaro (galimai nuotolinį) katalogą"
 
-#: ../src/k4dirstat.cpp:256
+#: ../src/k4dirstat.cpp:259
 msgid "Opens a recently used directory"
 msgstr "Atidaro paskiausiai naudotą katalogą"
 
-#: ../src/k4dirstat.cpp:257
+#: ../src/k4dirstat.cpp:260
 msgid "Closes the current directory"
 msgstr "Uždaro dabartinį katalogą"
 
-#: ../src/k4dirstat.cpp:258
+#: ../src/k4dirstat.cpp:261
 msgid "Re-reads the entire directory tree"
 msgstr "Iš naujo skaito visą katalogo medį"
 
-#: ../src/k4dirstat.cpp:259
+#: ../src/k4dirstat.cpp:262
 msgid "Re-reads the selected subtree"
 msgstr "Iš naujo skaito pasirinktą pomedį"
 
-#: ../src/k4dirstat.cpp:260
+#: ../src/k4dirstat.cpp:263
 msgid "Scan directory tree that was previously excluded"
 msgstr "Skaityti, prieš tai išskirtą, katalogo medį"
 
-#: ../src/k4dirstat.cpp:261
+#: ../src/k4dirstat.cpp:264
 msgid "Scan mounted file systems"
 msgstr "Skenuoti prijungtas failų sistemas"
 
-#: ../src/k4dirstat.cpp:262
+#: ../src/k4dirstat.cpp:265
 msgid "Stops directory reading"
 msgstr "Sustabdo katalogo skaitymą"
 
-#: ../src/k4dirstat.cpp:263
+#: ../src/k4dirstat.cpp:266
 msgid ""
 "Writes the current directory tree to a cache file that can be loaded much "
 "faster"
 msgstr "Įrašo dabartinį katalogo medį į talpyklos failą, kuris gali būti įkeltas žymiai greičiau"
 
-#: ../src/k4dirstat.cpp:264
+#: ../src/k4dirstat.cpp:267
 msgid "Reads a directory tree from a cache file"
 msgstr "Skaito katalogo medį iš talpyklos failo"
 
-#: ../src/k4dirstat.cpp:265
+#: ../src/k4dirstat.cpp:268
 msgid "Quits the application"
 msgstr "Baigia programą"
 
-#: ../src/k4dirstat.cpp:266
+#: ../src/k4dirstat.cpp:269
 msgid "Copies the URL of the selected item to the clipboard"
 msgstr "Kopijuoja pasirinkto elemento URL į iškarpinę"
 
-#: ../src/k4dirstat.cpp:267
+#: ../src/k4dirstat.cpp:270
 msgid "Open file or directory with arbitrary application"
 msgstr "Atidaryti failą ar katalogą per sutartinę programą"
 
-#: ../src/k4dirstat.cpp:268
+#: ../src/k4dirstat.cpp:271
 msgid "Enables/disables the treemap view"
 msgstr "Įjungia/išjungia medžių žemėlapio rodinį"
 
-#: ../src/k4dirstat.cpp:269
+#: ../src/k4dirstat.cpp:272
 msgid "Zoom treemap in"
 msgstr "Didinti medžių zemėlapį"
 
-#: ../src/k4dirstat.cpp:270
+#: ../src/k4dirstat.cpp:273
 msgid "Zoom treemap out"
 msgstr "Mažinti medžių žemėlapį"
 
-#: ../src/k4dirstat.cpp:271
+#: ../src/k4dirstat.cpp:274
 msgid "Select parent"
 msgstr "Pasirinkti pirminį"
 
-#: ../src/k4dirstat.cpp:272
+#: ../src/k4dirstat.cpp:275
 msgid "Rebuild treemap to fit into available space"
 msgstr "Perdaryti medžių žemėlapį taip, kad tilptų į prieinamą vietą"
 
-#: ../src/k4dirstat.cpp:273
+#: ../src/k4dirstat.cpp:276
 msgid "Opens the preferences dialog"
 msgstr "Atidaro nuostatų langą"
 
-#: ../src/k4dirstat.cpp:274
+#: ../src/k4dirstat.cpp:277
 msgid "Sends a mail to the owner of the selected subtree"
 msgstr "Siunčia laišką pasirinkto pomedžio savininkui"
 
-#: ../src/k4dirstat.cpp:347 ../src/k4dirstat.cpp:359 ../src/k4dirstat.cpp:440
-#: ../src/k4dirstat.cpp:453 ../src/k4dirstat.cpp:463 ../src/k4dirstat.cpp:474
-#: ../src/k4dirstat.cpp:482 ../src/k4dirstat.cpp:493
+#: ../src/k4dirstat.cpp:313 ../src/k4dirstat.cpp:325 ../src/k4dirstat.cpp:405
+#: ../src/k4dirstat.cpp:418 ../src/k4dirstat.cpp:428 ../src/k4dirstat.cpp:439
+#: ../src/k4dirstat.cpp:447 ../src/k4dirstat.cpp:458
 msgid "Ready."
 msgstr "Parengtas."
 
-#: ../src/k4dirstat.cpp:352 ../src/k4dirstat.cpp:433 ../src/k4dirstat.cpp:458
+#: ../src/k4dirstat.cpp:318 ../src/k4dirstat.cpp:398 ../src/k4dirstat.cpp:423
 msgid "Opening directory..."
 msgstr "Atidaromas katalogas..."
 
-#: ../src/k4dirstat.cpp:435
+#: ../src/k4dirstat.cpp:400
 msgid "Open Directory..."
-msgstr "Atidaryti Katalogą..."
+msgstr "Atidaryti katalogą..."
 
-#: ../src/k4dirstat.cpp:445
+#: ../src/k4dirstat.cpp:410
 msgid "Opening URL..."
 msgstr "Atidaromas URL..."
 
 #. startDir
-#: ../src/k4dirstat.cpp:448
+#: ../src/k4dirstat.cpp:413
 msgid "Open URL..."
 msgstr "Atidaryti URL..."
 
-#: ../src/k4dirstat.cpp:468
+#: ../src/k4dirstat.cpp:433
 msgid "Closing directory..."
 msgstr "Uždaromas katalogas..."
 
-#: ../src/k4dirstat.cpp:480
+#: ../src/k4dirstat.cpp:445
 msgid "Refreshing directory tree..."
 msgstr "Įkeliamas iš naujo katalogo medis..."
 
-#: ../src/k4dirstat.cpp:491
+#: ../src/k4dirstat.cpp:456
 msgid "Refreshing selected subtree..."
 msgstr "Įkeliamas iš naujo pasirinktas pomedis..."
 
 #. startDir
 #. filter
 #. parent
-#: ../src/k4dirstat.cpp:512
+#: ../src/k4dirstat.cpp:477
 msgid "Write to Cache File"
-msgstr "Rašyti į Talpyklos Failą"
+msgstr "Rašyti į talpyklos failą"
 
-#: ../src/k4dirstat.cpp:521
+#: ../src/k4dirstat.cpp:486
 msgid "File %1 exists. Overwrite?"
 msgstr "Failas %1 jau yra. Pakeisti?"
 
-#: ../src/k4dirstat.cpp:522
+#: ../src/k4dirstat.cpp:487
 msgid "Overwrite?"
 msgstr "Pakeisti?"
 
-#: ../src/k4dirstat.cpp:529
+#: ../src/k4dirstat.cpp:494
 msgid "Writing cache file..."
 msgstr "Įrašoma į talpyklos failą..."
 
-#: ../src/k4dirstat.cpp:533
+#: ../src/k4dirstat.cpp:498
 msgid "Error writing cache file %1"
 msgstr "Klaida, įrašant talpyklos failą %1"
 
-#: ../src/k4dirstat.cpp:536
+#: ../src/k4dirstat.cpp:501
 msgid "Write Error"
-msgstr "Įrašymo Klaida"
+msgstr "Įrašymo klaida"
 
-#: ../src/k4dirstat.cpp:539
+#: ../src/k4dirstat.cpp:504
 msgid "Wrote cache file %1"
 msgstr "Parašytas talpyklos failas %1"
 
 #. startDir
 #. filter
 #. parent
-#: ../src/k4dirstat.cpp:549
+#: ../src/k4dirstat.cpp:514
 msgid "Read Cache File"
-msgstr "Skaityti Talpyklos Failą"
+msgstr "Skaityti talpyklos failą"
 
 #. caption
-#: ../src/k4dirstat.cpp:551
+#: ../src/k4dirstat.cpp:516
 msgid "Reading cache file..."
 msgstr "Skaitomas talpyklos failas..."
 
@@ -771,4 +749,4 @@ msgstr "&Pagalba"
 #. i18n: ectx: ToolBar (mainToolBar)
 #: ui_rc.cpp:21 ui_rc.cpp:21
 msgid "Main Toolbar"
-msgstr "Pagrindinė Įrankių Juosta"
+msgstr "Pagrindinė įrankių juosta"
