@@ -164,7 +164,7 @@ static void konqOperationsDel(QWidget * m_mainWindow, const QList<QUrl> & urls) 
         KIO::Job* job = KIO::trash(urls);
         KIO::FileUndoManager::self()->recordJob( KIO::FileUndoManager::Trash, urls, QUrl("trash:/"), job );
         KJobWidgets::setWindow(job, m_mainWindow);
-        job->ui()->setAutoErrorHandlingEnabled(true); // or connect to the result signal
+        job->uiDelegate()->setAutoErrorHandlingEnabled(true); // or connect to the result signal
     }
 }
 
