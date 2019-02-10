@@ -92,7 +92,7 @@ int main(int argc, char **argv)
         {       
             // Process command line arguments as URLs or paths to scan
             QUrl u = QUrl::fromUserInput(args[0], QDir::currentPath(), QUrl::AssumeLocalFile);
-            kdirstat->openURL(u);
+            kdirstat->openURL(u.adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments));
         }
     }
 
