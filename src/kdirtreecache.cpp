@@ -355,7 +355,7 @@ KCacheReader::addItem()
     QString path, name;
     if(_tree->root()) {
         path = fileInfo.dir().path();
-        name = fileInfo.baseName();
+        name = fileInfo.fileName();
     } else {
         path = fileInfo.filePath();
         name = path;
