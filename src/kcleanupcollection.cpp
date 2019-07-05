@@ -8,156 +8,140 @@
  *   Updated:	2010-02-01
  */
 
-
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#include <config.h>
 #endif
 
-#include <KLocalizedString>
-#include "kstdcleanup.h"
 #include "kcleanupcollection.h"
-#include <KActionCollection>
 #include "kcleanupcollection_p.h"
-#include <QIcon>
+#include "kstdcleanup.h"
+#include <KActionCollection>
 #include <KIconEngine>
 #include <KIconLoader>
+#include <KLocalizedString>
+#include <QIcon>
 
 using namespace KDirStat;
 
 void CleanupAction::selectionChanged(KFileInfo *selection) {
-    selection_ = selection;
-    setEnabled(cleanup_.isEnabledFromSelection(selection));
+  selection_ = selection;
+  setEnabled(cleanup_.isEnabledFromSelection(selection));
 }
 
-KCleanupCollection::KCleanupCollection( KActionCollection & actionCollection )
-    : _actionCollection( actionCollection )
-{
-    /**
-     * All cleanups beloningt to this collection are stored in two separate Qt
-     * collections, a QList and a QDict. Make _one_ of them manage the cleanup
-     * objects, i.e. have them clear the KCleanup objects upon deleting. The
-     * QList is the master collection, the QDict the slave.
-     **/
-    
-    
-    _nextUserCleanupNo	= 0;
+KCleanupCollection::KCleanupCollection(KActionCollection &actionCollection)
+    : _actionCollection(actionCollection) {
+  /**
+   * All cleanups beloningt to this collection are stored in two separate Qt
+   * collections, a QList and a QDict. Make _one_ of them manage the cleanup
+   * objects, i.e. have them clear the KCleanup objects upon deleting. The
+   * QList is the master collection, the QDict the slave.
+   **/
+
+  _nextUserCleanupNo = 0;
 }
 
-KCleanupCollection::~KCleanupCollection()
-{
-    // No need to delete the cleanups: _cleanupList takes care of that
-    // (autoDelete!).  
+KCleanupCollection::~KCleanupCollection() {
+  // No need to delete the cleanups: _cleanupList takes care of that
+  // (autoDelete!).
 }
 
-CleanupAction * KCleanupCollection::add( KCleanup *newCleanup )
-{
-    CleanupAction * action = new CleanupAction(*newCleanup);
-    _actionCollection.addAction(newCleanup->id(), action);
-    cleanupActions.append(action);
+CleanupAction *KCleanupCollection::add(KCleanup *newCleanup) {
+  CleanupAction *action = new CleanupAction(*newCleanup);
+  _actionCollection.addAction(newCleanup->id(), action);
+  cleanupActions.append(action);
 
-    connect( this,   SIGNAL( selectionChanged( KFileInfo * ) ),
-	     action, SLOT  ( selectionChanged( KFileInfo * ) ) );
-    
-    connect( action, SIGNAL( executed() ), this, SLOT(cleanupExecuted()));
-    return action;
+  connect(this, SIGNAL(selectionChanged(KFileInfo *)), action,
+          SLOT(selectionChanged(KFileInfo *)));
+
+  connect(action, SIGNAL(executed()), this, SLOT(cleanupExecuted()));
+  return action;
 }
 
 void KCleanupCollection::readConfig() {
-    for(int i = 0; i < cleanupActions.count(); i++) {
-        cleanupActions[i]->cleanup().readConfig();
-        cleanupActions[i]->refresh();
-    }
+  for (int i = 0; i < cleanupActions.count(); i++) {
+    cleanupActions[i]->cleanup().readConfig();
+    cleanupActions[i]->refresh();
+  }
 }
 
 void KCleanupCollection::saveConfig() {
-    for(int i = 0; i < cleanupActions.count(); i++) {
-        cleanupActions[i]->cleanup().saveConfig();
+  for (int i = 0; i < cleanupActions.count(); i++) {
+    cleanupActions[i]->cleanup().saveConfig();
+  }
+}
+
+void KCleanupCollection::add(KCleanup *(*factory)(QString &iconName,
+                                                  QKeySequence &shortcut)) {
+  QString iconName;
+  QKeySequence shortcut;
+  QAction *action;
+  action = add(factory(iconName, shortcut));
+  if (!shortcut.isEmpty())
+    _actionCollection.setDefaultShortcut(action, shortcut);
+  if (!iconName.isEmpty())
+    action->setIcon(QIcon(new KIconEngine(iconName, KIconLoader::global())));
+}
+
+void KCleanupCollection::addStdCleanups() {
+  add(KStdCleanup::openInKonqueror);
+  add(KStdCleanup::openInTerminal);
+  add(KStdCleanup::compressSubtree);
+  add(KStdCleanup::makeClean);
+  add(KStdCleanup::deleteTrash);
+  add(KStdCleanup::moveToTrashBin);
+  add(KStdCleanup::hardDelete);
+}
+
+void KCleanupCollection::addUserCleanups(int number) {
+  for (int i = 0; i < number; i++) {
+    QString id;
+    id.sprintf("cleanup_user_defined_%d", _nextUserCleanupNo);
+    QString title;
+
+    if (_nextUserCleanupNo <= 9)
+      // Provide a keyboard shortcut for cleanup #0..#9
+      title = i18n("User Defined Cleanup #&%1", _nextUserCleanupNo);
+    else
+      // No keyboard shortcuts for cleanups #10.. - they would be duplicates
+      title = i18n("User Defined Cleanup #%1", _nextUserCleanupNo);
+
+    _nextUserCleanupNo++;
+
+    KCleanup *cleanup = new KCleanup(id, "", title);
+    Q_CHECK_PTR(cleanup);
+    cleanup->setEnabled(false);
+
+    CleanupAction *action = add(cleanup);
+    if (i <= 9) {
+      // Provide an application-wide keyboard accelerator for cleanup #0..#9
+      _actionCollection.setDefaultShortcut(action, Qt::CTRL + Qt::Key_0 + i);
     }
+  }
 }
 
-void KCleanupCollection::add(KCleanup * (*factory)(QString & iconName, QKeySequence & shortcut)) {
-    QString iconName;
-    QKeySequence shortcut;
-    QAction * action;
-    action = add(factory(iconName, shortcut));
-    if(!shortcut.isEmpty())
-        _actionCollection.setDefaultShortcut(action, shortcut);
-    if(!iconName.isEmpty())
-        action->setIcon(QIcon(new KIconEngine(iconName, KIconLoader::global())));
-}
-
-void
-KCleanupCollection::addStdCleanups()
-{
-    add( KStdCleanup::openInKonqueror);
-    add( KStdCleanup::openInTerminal);
-    add( KStdCleanup::compressSubtree);
-    add( KStdCleanup::makeClean);
-    add( KStdCleanup::deleteTrash);
-    add( KStdCleanup::moveToTrashBin);
-    add( KStdCleanup::hardDelete);
-}
-
-
-void
-KCleanupCollection::addUserCleanups( int number )
-{
-    for ( int i=0; i < number; i++ )
-    {
-	QString id;
-	id.sprintf( "cleanup_user_defined_%d", _nextUserCleanupNo );
-	QString title;
-
-	if ( _nextUserCleanupNo <= 9 )
-	    // Provide a keyboard shortcut for cleanup #0..#9
-	    title=i18n( "User Defined Cleanup #&%1", _nextUserCleanupNo);
-	else
-	    // No keyboard shortcuts for cleanups #10.. - they would be duplicates
-	    title=i18n( "User Defined Cleanup #%1", _nextUserCleanupNo);
-
-	_nextUserCleanupNo++;
-	
-	KCleanup *cleanup = new KCleanup( id, "", title);
-	Q_CHECK_PTR( cleanup );
-	cleanup->setEnabled( false );
-
-	CleanupAction * action = add( cleanup );
-	if ( i <= 9 )
-	{
-	    // Provide an application-wide keyboard accelerator for cleanup #0..#9
-	    _actionCollection.setDefaultShortcut(action, Qt::CTRL + Qt::Key_0 + i);
-	}
-	
-    }
-}
-
-void
-KCleanupCollection::cleanupExecuted()
-{
-    emit userActivity( 10 );
-}
+void KCleanupCollection::cleanupExecuted() { emit userActivity(10); }
 
 void KCleanupCollection::revertToDefault(int nbUserCleanups) {
-    _nextUserCleanupNo = 0;
-    for(int i = 0; i < cleanupActions.size(); i++)
-        _actionCollection.removeAction(cleanupActions[i]);
-    cleanupActions.clear();
-    addStdCleanups();
-    addUserCleanups(nbUserCleanups);
+  _nextUserCleanupNo = 0;
+  for (int i = 0; i < cleanupActions.size(); i++)
+    _actionCollection.removeAction(cleanupActions[i]);
+  cleanupActions.clear();
+  addStdCleanups();
+  addUserCleanups(nbUserCleanups);
 }
 
 QList<KCleanup> KCleanupCollection::cleanupsCopy() {
-    QList<KCleanup> toReturn;
-    toReturn.reserve(cleanupActions.size());
-    for(int i = 0; i < cleanupActions.size(); i++)
-        toReturn.append(cleanupActions[i]->cleanup());
-    return toReturn;
+  QList<KCleanup> toReturn;
+  toReturn.reserve(cleanupActions.size());
+  for (int i = 0; i < cleanupActions.size(); i++)
+    toReturn.append(cleanupActions[i]->cleanup());
+  return toReturn;
 }
 
-void KCleanupCollection::setCleanups(QList<KCleanup> & cleanups) {
-    Q_ASSERT(cleanups.size() == cleanupActions.size());
-    for(int i = 0; i < cleanups.size(); i++) {
-        cleanupActions[i]->cleanup() = cleanups[i];
-        cleanupActions[i]->refresh();
-    }
+void KCleanupCollection::setCleanups(QList<KCleanup> &cleanups) {
+  Q_ASSERT(cleanups.size() == cleanupActions.size());
+  for (int i = 0; i < cleanups.size(); i++) {
+    cleanupActions[i]->cleanup() = cleanups[i];
+    cleanupActions[i]->refresh();
+  }
 }

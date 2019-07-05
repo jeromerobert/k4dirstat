@@ -7,17 +7,14 @@
  *   Updated:	2007-02-11
  */
 
-
 #ifndef KActivityTracker_h
 #define KActivityTracker_h
 
-
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#include <config.h>
 #endif
 
 #include <qobject.h>
-
 
 /**
  * Helper class to track user activity of any kind: When the user uses an
@@ -30,81 +27,73 @@
  *
  * @short User activity tracker
  **/
-class KActivityTracker: public QObject
-{
-    Q_OBJECT
+class KActivityTracker : public QObject {
+  Q_OBJECT
 public:
-    /**
-     * Constructor. The ID is a name for the KConfig object to look in for
-     * accumulated activity points so far. 'initialThreshold' is only used if
-     * the application's @ref KConfig object doesn't contain a corresponding
-     * entry yet.
-     **/
-    KActivityTracker( QObject * 	parent,
-		      const QString &	id,
-		      long		initialThreshold );
+  /**
+   * Constructor. The ID is a name for the KConfig object to look in for
+   * accumulated activity points so far. 'initialThreshold' is only used if
+   * the application's @ref KConfig object doesn't contain a corresponding
+   * entry yet.
+   **/
+  KActivityTracker(QObject *parent, const QString &id, long initialThreshold);
 
-    /**
-     * Destructor.
-     **/
-    virtual ~KActivityTracker();
+  /**
+   * Destructor.
+   **/
+  virtual ~KActivityTracker();
 
-    /**
-     * Returns the number of activity points accumulated so far.
-     **/
-    long sum() const { return _sum; }
+  /**
+   * Returns the number of activity points accumulated so far.
+   **/
+  long sum() const { return _sum; }
 
-    /**
-     * Sets the activity threshold, i.e. when a signal will be sent.
-     **/
-    void setThreshold( long threshold );
-    
-    /**
-     * Returns the current threshold.
-     **/
-    long threshold() const { return _threshold; }
+  /**
+   * Sets the activity threshold, i.e. when a signal will be sent.
+   **/
+  void setThreshold(long threshold);
 
-    /**
-     * Check the sum of activity points accumulated so far against the current
-     * threshold and emit a signal if appropriate.
-     **/
-    void checkThreshold();
+  /**
+   * Returns the current threshold.
+   **/
+  long threshold() const { return _threshold; }
 
-    
+  /**
+   * Check the sum of activity points accumulated so far against the current
+   * threshold and emit a signal if appropriate.
+   **/
+  void checkThreshold();
+
 public slots:
 
-    /**
-     * Track an activity, i.e. add the specified amount of activity points to
-     * the accumulated sum.
-     **/
-    void trackActivity( int points );
+  /**
+   * Track an activity, i.e. add the specified amount of activity points to
+   * the accumulated sum.
+   **/
+  void trackActivity(int points);
 
-    /**
-     * Set the threshold to its double value.
-     **/
-    void doubleThreshold() { setThreshold( 2 * threshold() ); }
+  /**
+   * Set the threshold to its double value.
+   **/
+  void doubleThreshold() { setThreshold(2 * threshold()); }
 
-    
 signals:
 
-    /**
-     * Emitted when the activity threshold is reached.
-     *
-     * You might want to set the threshold to a new value when this signal is
-     * emitted. You can simply connect it to @ref doubleThreshold().
-     **/
-    void thresholdReached( void );
-
+  /**
+   * Emitted when the activity threshold is reached.
+   *
+   * You might want to set the threshold to a new value when this signal is
+   * emitted. You can simply connect it to @ref doubleThreshold().
+   **/
+  void thresholdReached(void);
 
 protected:
-
-    long	_sum;
-    long	_threshold;
-    long	_lastSignal;
-    QString 	_id;
+  long _sum;
+  long _threshold;
+  long _lastSignal;
+  QString _id;
 };
 
 #endif // KActivityTracker_h
-
 
 // EOF
