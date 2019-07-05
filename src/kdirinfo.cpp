@@ -5,7 +5,6 @@
  */
 
 #include "kdirinfo.h"
-#include "kdirtreeiterators.h"
 #include <QDebug>
 
 using namespace KDirStat;

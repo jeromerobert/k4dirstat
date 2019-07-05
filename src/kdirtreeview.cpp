@@ -26,7 +26,6 @@
 #include <ktoolinvocation.h>
 
 #include "kdirreadjob.h"
-#include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
 
 #define SEPARATE_READ_JOBS_COL 0

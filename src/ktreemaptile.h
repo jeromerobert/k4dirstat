@@ -6,7 +6,6 @@
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
  */
 
-#include "kdirtreeiterators.h"
 #include <QGraphicsRectItem>
 
 namespace KDirStat {

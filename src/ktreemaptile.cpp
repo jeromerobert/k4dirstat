@@ -10,7 +10,6 @@
 #include <qimage.h>
 #include <qpainter.h>
 
-#include "kdirtreeiterators.h"
 #include "kdirtreeview.h"
 #include "ktreemaptile.h"
 #include "ktreemapview.h"
