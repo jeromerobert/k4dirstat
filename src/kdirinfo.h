@@ -157,21 +157,8 @@ public:
    **/
   virtual int pendingReadJobs() { return _pendingReadJobs; }
 
-  /**
-   * Returns the first child of this item or 0 if there is none.
-   * Use the child's next() method to get the next child.
-   **/
-  virtual KFileInfo *firstChild() const { return _firstChild; }
-
-  /**
-   * Set this entry's first child.
-   * Use this method only if you know exactly what you are doing.
-   *
-   * Reimplemented - inherited from @ref KFileInfo.
-   **/
-  virtual void setFirstChild(KFileInfo *newfirstChild) {
-    _firstChild = newfirstChild;
-  }
+  virtual size_t numChildren() const { return children_.size(); }
+  virtual KFileInfo * child(size_t i) { return children_[i]; }
 
   /**
    * Insert a child into the children list.
@@ -193,7 +180,7 @@ public:
   /**
    * Set a "Dot Entry". This makes sense for directories only.
    **/
-  virtual void setDotEntry(KFileInfo *newDotEntry) { _dotEntry = newDotEntry; }
+  virtual void setDotEntry(KDirInfo *newDotEntry) { _dotEntry = newDotEntry; }
 
   /**
    * Returns true if this is a "Dot Entry". See @ref dotEntry() for
@@ -209,18 +196,6 @@ public:
    * Reimplemented - inherited from @ref KFileInfo.
    **/
   virtual void childAdded(KFileInfo *newChild);
-
-  /**
-   * Remove a child from the children list.
-   *
-   * IMPORTANT: This MUST be called just prior to deleting an object of
-   * this class. Regrettably, this cannot simply be moved to the
-   * destructor: Important parts of the object might already be destroyed
-   * (e.g., the virtual table - no more virtual methods).
-   *
-   * Reimplemented - inherited from @ref KFileInfo.
-   **/
-  virtual void unlinkChild(KFileInfo *deletedChild);
 
   /**
    * Notification that a child is about to be deleted somewhere in the
@@ -317,11 +292,7 @@ protected:
   bool _isMountPoint : 1; // Flag: is this a mount point?
   bool _isExcluded : 1;   // Flag: was this directory excluded?
   int _pendingReadJobs;   // number of open directories in this subtree
-
-  // Children management
-
-  KFileInfo *_firstChild; // pointer to the first child
-  KFileInfo *_dotEntry;   // pseudo entry to hold non-dir children
+  KDirInfo *_dotEntry;   // pseudo entry to hold non-dir children
 
   // Some cached values
 
@@ -337,7 +308,10 @@ protected:
   KDirReadState _readState;
 
 private:
+  void recalcOneChild(KFileInfo*);
   void init();
+  //TODO: could we store KFileInfo instead of KFileInfo* ?
+  std::vector<KFileInfo*> children_;
 
 }; // class KDirInfo
 

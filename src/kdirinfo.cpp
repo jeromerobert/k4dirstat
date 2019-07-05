@@ -5,6 +5,7 @@
  */
 
 #include "kdirinfo.h"
+#include "kdirtree.h"
 #include <QDebug>
 
 using namespace KDirStat;
@@ -48,7 +49,6 @@ void KDirInfo::init() {
   _isDotEntry = false;
   _pendingReadJobs = 0;
   _dotEntry = 0;
-  _firstChild = 0;
   _totalSize = _size;
   _totalBlocks = _blocks;
   _totalItems = 0;
@@ -64,21 +64,33 @@ void KDirInfo::init() {
 
 KDirInfo::~KDirInfo() {
   _beingDestroyed = true;
-  KFileInfo *child = _firstChild;
-
   // Recursively delete all children.
-
-  while (child) {
-    KFileInfo *nextChild = child->next();
-    delete child;
-    child = nextChild;
-  }
+  for(size_t i = 0; i < numChildren(); i++)
+    delete child(i);
 
   // Delete the dot entry.
-
   if (_dotEntry) {
     delete _dotEntry;
   }
+}
+
+void KDirInfo::recalcOneChild(KFileInfo * child) {
+  _totalSize += child->totalSize();
+  _totalBlocks += child->totalBlocks();
+  _totalItems += child->totalItems() + 1;
+  _totalSubDirs += child->totalSubDirs();
+  _totalFiles += child->totalFiles();
+
+  if (child->isDir())
+    _totalSubDirs++;
+
+  if (child->isFile())
+    _totalFiles++;
+
+  time_t childLatestMtime = child->latestMtime();
+
+  if (childLatestMtime > _latestMtime)
+    _latestMtime = childLatestMtime;
 }
 
 void KDirInfo::recalc() {
@@ -90,30 +102,11 @@ void KDirInfo::recalc() {
   _totalSubDirs = 0;
   _totalFiles = 0;
   _latestMtime = _mtime;
-
-  KFileInfoIterator it(this, KDotEntryAsSubDir);
-
-  while (*it) {
-    _totalSize += (*it)->totalSize();
-    _totalBlocks += (*it)->totalBlocks();
-    _totalItems += (*it)->totalItems() + 1;
-    _totalSubDirs += (*it)->totalSubDirs();
-    _totalFiles += (*it)->totalFiles();
-
-    if ((*it)->isDir())
-      _totalSubDirs++;
-
-    if ((*it)->isFile())
-      _totalFiles++;
-
-    time_t childLatestMtime = (*it)->latestMtime();
-
-    if (childLatestMtime > _latestMtime)
-      _latestMtime = childLatestMtime;
-
-    ++it;
+  for(size_t i = 0; i < numChildren(); i++) {
+    recalcOneChild(child(i));
   }
-
+  if(dotEntry())
+    recalcOneChild(dotEntry());
   _summaryDirty = false;
 }
 
@@ -203,8 +196,7 @@ void KDirInfo::insertChild(KFileInfo *newChild) {
      * none of our business; the corresponding "view" object for this tree
      * will take care of such niceties.
      **/
-    newChild->setNext(_firstChild);
-    _firstChild = newChild;
+    children_.push_back(newChild);
     newChild->setParent(this); // make sure the parent pointer is correct
 
     childAdded(newChild); // update summaries
@@ -273,39 +265,19 @@ void KDirInfo::deletingChild(KFileInfo *deletedChild) {
      * bothering about the validity of the children's list if this will all
      * be history anyway in a moment.
      **/
-
-    unlinkChild(deletedChild);
-  }
-}
-
-void KDirInfo::unlinkChild(KFileInfo *deletedChild) {
-  if (deletedChild->parent() != this) {
-    qCritical() << deletedChild << " is not a child of " << this
-                << " - cannot unlink from children list!" << endl;
-    return;
-  }
-
-  if (deletedChild == _firstChild) {
-    // qDebug() << "Unlinking first child " << deletedChild << endl;
-    _firstChild = deletedChild->next();
-    return;
-  }
-
-  KFileInfo *child = firstChild();
-
-  while (child) {
-    if (child->next() == deletedChild) {
-      // qDebug() << "Unlinking " << deletedChild << endl;
-      child->setNext(deletedChild->next());
-
+    if (deletedChild->parent() != this) {
+      qCritical() << deletedChild << " is not a child of " << this
+                  << " - cannot unlink from children list!" << endl;
       return;
     }
-
-    child = child->next();
+    auto it = std::find(children_.begin(), children_.end(), deletedChild);
+    if(it == children_.end()) {
+      qCritical() << "Couldn't unlink " << deletedChild << " from " << this
+                  << " children list" << endl;
+    } else {
+      children_.erase(it);
+    }
   }
-
-  qCritical() << "Couldn't unlink " << deletedChild << " from " << this
-              << " children list" << endl;
 }
 
 void KDirInfo::readJobAdded() {
@@ -335,15 +307,12 @@ void KDirInfo::finalizeAll(KDirTree* tree) {
   if (_isDotEntry)
     return;
 
-  KFileInfo *child = firstChild();
-
-  while (child) {
-    KDirInfo *dir = dynamic_cast<KDirInfo *>(child);
-
-    if (dir && !dir->isDotEntry())
-      dir->finalizeAll(tree);
-
-    child = child->next();
+  for(size_t i = 0; i < numChildren(); i++) {
+    if(child(i)->isDirInfo()) {
+      KDirInfo *dir = static_cast<KDirInfo *>(child(i));
+      if(!dir->isDotEntry())
+        dir->finalizeAll(tree);
+    }
   }
 
   // Optimization: As long as this directory is not finalized yet, it does
@@ -367,27 +336,24 @@ KDirReadState KDirInfo::readState() const {
 }
 
 void KDirInfo::cleanupDotEntries() {
-  if (!_dotEntry || _isDotEntry)
+  if (!_dotEntry || _isDotEntry) {
+    children_.shrink_to_fit();
     return;
+  }
 
   // Reparent dot entry children if there are no subdirectories on this level
 
-  if (!_firstChild) {
+  if (numChildren() == 0) {
     // qDebug() << "Reparenting children of solo dot entry " << this << endl;
-
-    KFileInfo *child = _dotEntry->firstChild();
-    _firstChild = child;         // Move the entire children chain here.
-    _dotEntry->setFirstChild(0); // _dotEntry will be deleted below.
-
-    while (child) {
-      child->setParent(this);
-      child = child->next();
-    }
+    children_ = _dotEntry->children_;
+    _dotEntry->children_.clear();
+    for(size_t i = 0; i < numChildren(); i++)
+      children_[i]->setParent(this);
   }
 
   // Delete dot entries without any children
 
-  if (!_dotEntry->firstChild()) {
+  if (_dotEntry->numChildren() == 0) {
     // qDebug() << "Removing empty dot entry " << this << endl;
 
     delete _dotEntry;

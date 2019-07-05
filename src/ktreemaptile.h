@@ -206,14 +206,16 @@ protected:
    *
    * 'scale' is the scaling factor between file sizes and pixels.
    **/
-  KFileInfoList squarify(const QRectF &rect, double scale,
-                         KFileInfoSortedBySizeIterator &it);
+  void squarify(const QRectF &rect, double scale,
+                std::vector<KFileInfo*>::iterator &,
+                std::vector<KFileInfo*>::iterator end,
+                std::vector<KFileInfo*> & output);
 
   /**
    * Lay out all members of 'row' within 'rect' along its longer side.
    * Returns the new rectangle with the layouted area subtracted.
    **/
-  QRectF layoutRow(const QRectF &rect, double scale, KFileInfoList &row);
+  QRectF layoutRow(const QRectF &rect, double scale, std::vector<KFileInfo*> &row);
 
   /**
    * Draw the tile.

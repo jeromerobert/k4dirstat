@@ -32,6 +32,7 @@ typedef long long KFileSize;
 // Forward declarations
 class KDirInfo;
 class KDirTree;
+class KFileInfo;
 
 /**
  * Status of a directory read job.
@@ -97,13 +98,7 @@ public:
             const QString &filenameWithoutPath, mode_t mode, KFileSize size,
             time_t mtime, KFileSize blocks = -1, nlink_t links = 1);
 
-  /**
-   * Destructor.
-   *
-   * Don't forget to call @ref KFileInfo::unlinkChild() when deleting
-   * objects of this class!
-   **/
-  virtual ~KFileInfo();
+  virtual ~KFileInfo() {};
 
   /**
    * Returns whether or not this is a local file (protocol "file:").
@@ -333,40 +328,13 @@ public:
    **/
   void setParent(KDirInfo *newParent) { _parent = newParent; }
 
-  /**
-   * Returns a pointer to the next entry on the same level
-   * or 0 if there is none.
-   **/
-  KFileInfo *next() const { return _next; }
-
-  /**
-   * Set the "next" pointer.
-   **/
-  void setNext(KFileInfo *newNext) { _next = newNext; }
-
-  /**
-   * Returns the first child of this item or 0 if there is none.
-   * Use the child's next() method to get the next child.
-   *
-   * This default implementation always returns 0.
-   **/
-  virtual KFileInfo *firstChild() const { return 0; }
-
-  /**
-   * Set this entry's first child.
-   * Use this method only if you know exactly what you are doing.
-   *
-   * This default implementation does nothing.
-   * Derived classes might want to overwrite this.
-   **/
-  virtual void setFirstChild(KFileInfo *newFirstChild) {
-    NOT_USED(newFirstChild);
-  }
+  virtual size_t numChildren() const { return 0; }
+  virtual KFileInfo * child(size_t) { return nullptr; }
 
   /**
    * Returns true if this entry has any children.
    **/
-  virtual bool hasChildren() const;
+  bool hasChildren() const { return numChildren() > 0 || dotEntry(); }
 
   /**
    * Returns true if this entry is in subtree 'subtree', i.e. if this is
@@ -416,7 +384,7 @@ public:
    *
    * This default implementation does nothing.
    **/
-  virtual void setDotEntry(KFileInfo *newDotEntry) { NOT_USED(newDotEntry); }
+  virtual void setDotEntry(KDirInfo *newDotEntry) { NOT_USED(newDotEntry); }
 
   /**
    * Returns true if this is a "Dot Entry".
@@ -441,19 +409,6 @@ public:
    * This default implementation does nothing.
    **/
   virtual void childAdded(KFileInfo *newChild) { NOT_USED(newChild); }
-
-  /**
-   * Remove a child from the children list.
-   *
-   * IMPORTANT: This MUST be called just prior to deleting an object of
-   * this class. Regrettably, this cannot simply be moved to the
-   * destructor: Important parts of the object might already be destroyed
-   * (e.g., the virtual table - no more virtual methods).
-   *
-   * This default implementation does nothing.
-   * Derived classes that can handle children should overwrite this.
-   **/
-  virtual void unlinkChild(KFileInfo *deletedChild) { NOT_USED(deletedChild); }
 
   /**
    * Notification that a child is about to be deleted somewhere in the
@@ -572,7 +527,6 @@ protected:
   time_t _mtime;          // modification time
 
   KDirInfo *_parent; // pointer to the parent entry
-  KFileInfo *_next;  // pointer to the next entry
 }; // class KFileInfo
 
 //----------------------------------------------------------------------

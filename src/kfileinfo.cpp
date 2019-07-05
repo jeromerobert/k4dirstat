@@ -22,8 +22,7 @@
 
 using namespace KDirStat;
 
-KFileInfo::KFileInfo(KDirInfo *parent, const char *name)
-    : _parent(parent), _next(0) {
+KFileInfo::KFileInfo(KDirInfo *parent, const char *name) : _parent(parent) {
   _isLocalFile = true;
   _isSparseFile = false;
   _name = name ? name : "";
@@ -36,8 +35,7 @@ KFileInfo::KFileInfo(KDirInfo *parent, const char *name)
 }
 
 KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
-                     KDirInfo *parent)
-    : _parent(parent), _next(0) {
+                     KDirInfo *parent): _parent(parent) {
   Q_CHECK_PTR(statInfo);
 
   _isLocalFile = true;
@@ -81,7 +79,7 @@ KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
 }
 
 KFileInfo::KFileInfo(const KFileItem *fileItem, KDirInfo *parent)
-    : _parent(parent), _next(0) {
+    : _parent(parent) {
   Q_CHECK_PTR(fileItem);
 
   _isLocalFile = fileItem->isLocalFile();
@@ -118,7 +116,7 @@ KFileInfo::KFileInfo(KDirInfo *parent,
                      const QString &filenameWithoutPath, mode_t mode,
                      KFileSize size, time_t mtime, KFileSize blocks,
                      nlink_t links)
-    : _parent(parent), _next(0) {
+    : _parent(parent) {
   _name = filenameWithoutPath;
   _isLocalFile = true;
   _mode = mode;
@@ -138,21 +136,6 @@ KFileInfo::KFileInfo(KDirInfo *parent,
   }
 
   // qDebug() << "Created KFileInfo " << this << endl;
-}
-
-KFileInfo::~KFileInfo() {
-  // NOP
-
-  /**
-   * The destructor should also take care about unlinking this object from
-   * its parent's children list, but regrettably that just doesn't work: At
-   * this point (within the destructor) parts of the object are already
-   * destroyed, e.g., the virtual table - virtual methods don't work any
-   * more. Thus, somebody from outside must call deletingChild() just prior
-   * to the actual "delete".
-   *
-   * This sucks, but it's the C++ standard.
-   **/
 }
 
 KFileSize KFileInfo::allocatedSize() const { return blocks() * blockSize(); }
@@ -221,8 +204,6 @@ int KFileInfo::treeLevel() const {
     return 0;
 }
 
-bool KFileInfo::hasChildren() const { return firstChild() || dotEntry(); }
-
 bool KFileInfo::isInSubtree(const KFileInfo *subtree) const {
   const KFileInfo *ancestor = this;
 
@@ -257,15 +238,10 @@ KFileInfo *KFileInfo::locate(QString url, bool findDotEntries) {
 
     // Search all children
 
-    KFileInfo *child = firstChild();
-
-    while (child) {
-      KFileInfo *foundChild = child->locate(url, findDotEntries);
-
+    for(size_t i = 0; i < numChildren(); i++) {
+      KFileInfo *foundChild = this->child(i)->locate(url, findDotEntries);
       if (foundChild)
         return foundChild;
-      else
-        child = child->next();
     }
 
     // Special case: The dot entry is requested.

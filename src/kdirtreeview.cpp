@@ -1172,18 +1172,13 @@ void KDirTreeViewItem::deferredClone() {
 
   int level = _orig->treeLevel();
   bool startingClean = childCount() == 0;
-  KFileInfo *origChild = _orig->firstChild();
-
-  while (origChild) {
-    if (startingClean || !locate(origChild,
+  for(size_t i = 0; i < _orig->numChildren(); i++) {
+    if (startingClean || !locate(_orig->child(i),
                                  false, // lazy
                                  true,  // doClone
                                  level)) {
-      // qDebug() << "Deferred cloning " << origChild << endl;
-      new KDirTreeViewItem(_view, this, origChild);
+      new KDirTreeViewItem(_view, this, _orig->child(i));
     }
-
-    origChild = origChild->next();
   }
 
   // Clone the dot entry
@@ -1220,7 +1215,7 @@ void KDirTreeViewItem::cleanupDotEntries() {
 
   // Reparent dot entry children if there are no subdirectories on this level
 
-  if (!_orig->firstChild()) {
+  if (_orig->numChildren() == 0) {
     // qDebug() << "Removing solo dot entry clone " << _orig << endl;
     addChildren(dotEntry->takeChildren());
     /*
@@ -1240,7 +1235,7 @@ void KDirTreeViewItem::cleanupDotEntries() {
 
   // Delete dot entries without any children
 
-  if (!_orig->dotEntry()->firstChild() && dotEntry) {
+  if (_orig->numChildren() == 0 && dotEntry) {
     // qDebug() << "Removing empty dot entry clone " << _orig << endl;
     delete dotEntry;
   }

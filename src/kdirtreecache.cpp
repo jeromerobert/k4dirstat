@@ -58,30 +58,17 @@ void KCacheWriter::writeTree(gzFile cache, KFileInfo *item) {
   if (!item)
     return;
 
-  //
   // Write entry for this item
-  //
-
   if (!item->isDotEntry())
     writeItem(cache, item);
 
-  //
   // Write file children
-  //
-
   if (item->dotEntry())
     writeTree(cache, item->dotEntry());
 
-  //
   // Recurse through subdirectories
-  //
-
-  KFileInfo *child = item->firstChild();
-
-  while (child) {
-    writeTree(cache, child);
-    child = child->next();
-  }
+  for(size_t i = 0; i < item->numChildren(); i++)
+    writeTree(cache, item->child(i));
 }
 
 void KCacheWriter::writeItem(gzFile cache, KFileInfo *item) {

@@ -18,6 +18,26 @@ using namespace KDirStat;
 using std::max;
 using std::min;
 
+struct childSizeComparator {
+  bool operator() (KFileInfo* f1, KFileInfo* f2) {
+    return f1->totalSize() > f2->totalSize();
+  }
+};
+
+std::vector<KFileInfo*> sortedChildBySize(KFileInfo * info, KFileSize minSize) {
+  std::vector<KFileInfo*> r;
+  r.reserve(info->numChildren());
+  for(size_t i = 0; i < info->numChildren(); i++) {
+    if(info->child(i)->totalSize() >= minSize)
+      r.push_back(info->child(i));
+  }
+  if(info->dotEntry() && info->dotEntry()->totalSize() >= minSize)
+      r.push_back(info->dotEntry());
+  std::sort(r.begin(), r.end(), childSizeComparator());
+  r.shrink_to_fit();
+  return r;
+}
+
 KTreemapTile::KTreemapTile(KTreemapView *parentView, KTreemapTile *parentTile,
                            KFileInfo *orig, const QRectF &rect,
                            KOrientation orientation)
@@ -97,38 +117,27 @@ void KTreemapTile::createChildrenSimple(const QRectF &rect,
   double scale = (double)size / (double)_orig->totalSize();
 
   _cushionSurface.addRidge(childDir, _cushionSurface.height(), rect);
+  std::vector<KFileInfo*> sorted = sortedChildBySize(
+      _orig, _parentView->minTileSize() / scale);
 
-  KFileInfoSortedBySizeIterator it(
-      _orig, (KFileSize)(_parentView->minTileSize() / scale),
-      KDotEntryAsSubDir);
+  for(size_t i = 0; i < sorted.size(); i++) {
+    QRect childRect;
+    int childSize = scale * sorted[i]->totalSize();
+    assert(childSize >= _parentView->minTileSize());;
+    if (dir == KTreemapHorizontal)
+      childRect = QRect(rect.x() + offset, rect.y(), childSize, rect.height());
+    else
+      childRect = QRect(rect.x(), rect.y() + offset, rect.width(), childSize);
 
-  while (*it) {
-    int childSize = 0;
+    KTreemapTile *tile = new KTreemapTile(_parentView, this, sorted[i], childRect, childDir);
+    Q_CHECK_PTR(tile);
 
-    childSize = (int)(scale * (*it)->totalSize());
+    tile->cushionSurface().addRidge(
+        dir, _cushionSurface.height() * _parentView->heightScaleFactor(),
+        childRect);
 
-    if (childSize >= _parentView->minTileSize()) {
-      QRect childRect;
-
-      if (dir == KTreemapHorizontal)
-        childRect =
-            QRect(rect.x() + offset, rect.y(), childSize, rect.height());
-      else
-        childRect = QRect(rect.x(), rect.y() + offset, rect.width(), childSize);
-
-      KTreemapTile *tile =
-          new KTreemapTile(_parentView, this, *it, childRect, childDir);
-      Q_CHECK_PTR(tile);
-
-      tile->cushionSurface().addRidge(
-          dir, _cushionSurface.height() * _parentView->heightScaleFactor(),
-          childRect);
-
-      offset += childSize;
-    }
-
+    offset += childSize;
     ++count;
-    ++it;
   }
 }
 
@@ -149,30 +158,34 @@ void KTreemapTile::createSquarifiedChildren(const QRectF &rect) {
     }
 #endif
 
-  KFileInfoSortedBySizeIterator it(_orig, minSize, KDotEntryAsSubDir);
+  std::vector<KFileInfo*> sorted = sortedChildBySize(_orig, minSize);
+  std::vector<KFileInfo*>::iterator it = sorted.begin();
   QRectF childrenRect = rect;
+  for(size_t i = 0; i < sorted.size(); i++) {
 
-  while (*it) {
-    KFileInfoList row = squarify(childrenRect, scale, it);
+  }
+  std::vector<KFileInfo*> row;
+  while (it != sorted.end()) {
+    row.clear();
+    squarify(childrenRect, scale, it, sorted.end(), row);
     childrenRect = layoutRow(childrenRect, scale, row);
   }
 }
 
-KFileInfoList KTreemapTile::squarify(const QRectF &rect, double scale,
-                                     KFileInfoSortedBySizeIterator &it) {
+void KTreemapTile::squarify(const QRectF &rect, double scale,
+                            std::vector<KFileInfo*>::iterator &it,
+                            std::vector<KFileInfo*>::iterator end,
+                            std::vector<KFileInfo*> & row) {
   // qDebug() << "squarify() " << _orig << " " << rect << endl;
-
-  KFileInfoList row;
   int length = max(rect.width(), rect.height());
 
   if (length == 0) // Sanity check
   {
     qWarning() << Q_FUNC_INFO << "Zero length";
 
-    if (*it) // Prevent endless loop in case of error:
+    if (it != end) // Prevent endless loop in case of error:
       ++it;  // Advance iterator.
-
-    return row;
+    return;
   }
 
   bool improvingAspectRatio = true;
@@ -184,13 +197,13 @@ KFileInfoList KTreemapTile::squarify(const QRectF &rect, double scale,
   // doing all other calculations in the loop.
   const double scaledLengthSquare = length * (double)length / scale;
 
-  while (*it && improvingAspectRatio) {
+  while (it != end && improvingAspectRatio) {
     sum += (*it)->totalSize();
 
-    if (!row.isEmpty() && sum != 0 && (*it)->totalSize() != 0) {
+    if (!row.empty() && sum != 0 && (*it)->totalSize() != 0) {
       double sumSquare = sum * sum;
       double worstAspectRatio =
-          max(scaledLengthSquare * row.first()->totalSize() / sumSquare,
+          max(scaledLengthSquare * row[0]->totalSize() / sumSquare,
               sumSquare / (scaledLengthSquare * (*it)->totalSize()));
 
       if (lastWorstAspectRatio >= 0.0 &&
@@ -203,20 +216,18 @@ KFileInfoList KTreemapTile::squarify(const QRectF &rect, double scale,
 
     if (improvingAspectRatio) {
       // qDebug() << "Adding " << *it << " size " << (*it)->totalSize() << endl;
-      row.append(*it);
+      row.push_back(*it);
       ++it;
     } else {
       // qDebug() << "Getting worse after adding " << *it << " size " <<
       // (*it)->totalSize() << endl;
     }
   }
-
-  return row;
 }
 
 QRectF KTreemapTile::layoutRow(const QRectF &rect, double scale,
-                               KFileInfoList &row) {
-  if (row.isEmpty())
+                               std::vector<KFileInfo*> &row) {
+  if (row.empty())
     return rect;
 
   // Determine the direction in which to subdivide.
@@ -229,7 +240,9 @@ QRectF KTreemapTile::layoutRow(const QRectF &rect, double scale,
 
   // This row's secondary length is determined by the area (the number of
   // pixels) to be allocated for all of the row's items.
-  KFileSize sum = row.sumTotalSizes();
+  KFileSize sum = 0;
+  for(size_t i = 0; i < row.size(); i++)
+      sum += row[i]->totalSize();
   int secondary = (int)(sum * scale / primary);
 
   if (sum == 0) // Prevent division by zero.

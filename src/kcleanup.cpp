@@ -162,10 +162,8 @@ void KCleanup::executeRecursive(KFileInfo *item, KDirTree* tree) {
   if (worksFor(item, tree)) {
     if (_recurse) {
       // Recurse into all subdirectories.
-
-      KFileInfo *subdir = item->firstChild();
-
-      while (subdir) {
+      for(size_t i = 0; i < item->numChildren(); i++) {
+        KFileInfo *subdir = item->child(i);
         if (subdir->isDir()) {
           /**
            * Recursively execute in this subdirectory, but only if it
@@ -176,7 +174,6 @@ void KCleanup::executeRecursive(KFileInfo *item, KDirTree* tree) {
            **/
           executeRecursive(subdir, tree);
         }
-        subdir = subdir->next();
       }
     }
 
