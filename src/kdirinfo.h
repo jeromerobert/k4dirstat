@@ -1,23 +1,8 @@
+#pragma once
 /*
- *   File name: kdirinfo.h
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
- *
- *   Updated:	2007-02-11
  */
-
-#ifndef KDirInfo_h
-#define KDirInfo_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#if 0
-#include <limits.h>
-#include <sys/types.h>
-#endif
 
 #include "kfileinfo.h"
 #include <kfileitem.h>
@@ -358,6 +343,3 @@ private:
 
 } // namespace KDirStat
 
-#endif // ifndef KDirInfo_h
-
-// EOF

@@ -1,18 +1,9 @@
+#pragma once
 /*
- *   File name:	kactivitytracker.h
  *   Summary:	Utility object to track user activity
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
- *
- *   Updated:	2007-02-11
  */
-
-#ifndef KActivityTracker_h
-#define KActivityTracker_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <qobject.h>
 
@@ -94,6 +85,3 @@ protected:
   QString _id;
 };
 
-#endif // KActivityTracker_h
-
-// EOF

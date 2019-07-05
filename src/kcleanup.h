@@ -1,15 +1,10 @@
+#pragma once
+
 /*
- *   File name:	kcleanup.h
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-20
  */
-
-#ifndef KCleanup_h
-#define KCleanup_h
 
 #include "kdirtree.h"
 
@@ -282,6 +277,3 @@ protected:
 };
 } // namespace KDirStat
 
-#endif // ifndef KCleanup_h
-
-// EOF

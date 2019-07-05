@@ -1,16 +1,9 @@
 /*
- *   File name:	kdirtreecache.cpp
  *   Summary:	KDirStat cache reader / writer
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirtree.h"
 #include "kdirtreecache.h"
@@ -565,4 +558,3 @@ void KCacheReader::killTrailingWhiteSpace(char *cptr) {
     *cptr-- = 0;
 }
 
-// EOF

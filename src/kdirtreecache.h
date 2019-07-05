@@ -1,19 +1,10 @@
+#pragma once
 /*
- *   File name: kdirtreecache.h
  *   Summary:	KDirStat cache reader / writer
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KDirTreeCache_h
-#define KDirTreeCache_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirtree.h"
 #include <stdio.h>
@@ -232,6 +223,3 @@ protected:
 
 } // namespace KDirStat
 
-#endif // ifndef KDirTreeCache_h
-
-// EOF

@@ -1,19 +1,9 @@
+#pragma once
 /*
- *   File name:	kdirstatsettings.h
- *   Summary:	Settings dialog for KDirStat
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-19
  */
-
-#ifndef KDirStatSettings_h
-#define KDirStatSettings_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "k4dirstat.h"
 #include "kcleanup.h"
@@ -664,6 +654,3 @@ void addHStretch(QWidget *parent);
  **/
 void addVStretch(QWidget *parent);
 
-#endif // ifndef KDirStatSettings_h
-
-// EOF

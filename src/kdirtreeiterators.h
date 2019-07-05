@@ -1,19 +1,10 @@
+#pragma once
+
 /*
- *   File name:	kdirtreeiterators.h
- *   Summary:	Support classes for KDirStat - KDirTree iterators
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KDirTreeIterators_h
-#define KDirTreeIterators_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirtree.h"
 
@@ -321,10 +312,6 @@ protected:
   bool _ascending;
 };
 
-//----------------------------------------------------------------------
-//			       Static Functions
-//----------------------------------------------------------------------
-
 /**
  * Generic comparison function as expected by all kinds of sorting etc.
  * algorithms. Requires operator<() and operator==() to be defined for this
@@ -341,6 +328,3 @@ template <class T> inline int compare(T val1, T val2) {
 
 } // namespace KDirStat
 
-#endif // ifndef KDirTreeIterators_h
-
-// EOF

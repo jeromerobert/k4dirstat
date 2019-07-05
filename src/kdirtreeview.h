@@ -1,19 +1,10 @@
+#pragma once
+
 /*
- *   File name:	kdirtreeview.h
- *   Summary:	High level classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KDirTreeView_h
-#define KDirTreeView_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirtree.h"
 #include <QTreeWidget>
@@ -795,6 +786,3 @@ QColor contrastingColor(const QColor &desiredColor,
 
 } // namespace KDirStat
 
-#endif // ifndef KDirTreeView_h
-
-// EOF

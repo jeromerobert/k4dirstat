@@ -1,19 +1,10 @@
+#pragma once
+
 /*
- *   File name:	ktreemaptile.h
- *   Summary:	High level classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KTreemapTile_h
-#define KTreemapTile_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirtreeiterators.h"
 #include <QGraphicsRectItem>
@@ -278,6 +269,3 @@ inline QDebug &operator<<(QDebug &stream, const QRect &rect) {
   return stream;
 }
 
-#endif // ifndef KTreemapTile_h
-
-// EOF

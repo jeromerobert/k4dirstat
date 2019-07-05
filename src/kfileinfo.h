@@ -1,19 +1,10 @@
+#pragma once
+
 /*
- *   File name: kfileinfo.h
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KFileInfo_h
-#define KFileInfo_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <QDebug>
 #include <kfileitem.h>
@@ -634,6 +625,3 @@ inline QDebug &operator<<(QDebug &stream, KFileSize lSize) {
 
 } // namespace KDirStat
 
-#endif // ifndef KFileInfo_h
-
-// EOF

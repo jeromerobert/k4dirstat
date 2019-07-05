@@ -1,16 +1,8 @@
 /*
- *   File name:	kfileinfo.cpp
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirinfo.h"
 #include "kfileinfo.h"
@@ -340,4 +332,3 @@ QString KDirStat::formatSize(KFileSize lSize) {
   return sizeString;
 }
 
-// EOF

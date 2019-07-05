@@ -1,19 +1,10 @@
+#pragma once
+
 /*
- *   File name: kexcluderules.h
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KExcludeRules_h
-#define KExcludeRules_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <QList>
 #include <qregexp.h>
@@ -142,6 +133,3 @@ private:
 
 } // namespace KDirStat
 
-#endif // ifndef KExcludeRules_h
-
-// EOF

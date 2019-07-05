@@ -1,19 +1,9 @@
+#pragma once
 /*
- *   File name:	ktreemapview.h
- *   Summary:	High level classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KTreemapView_h
-#define KTreemapView_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
@@ -390,6 +380,3 @@ public:
 
 } // namespace KDirStat
 
-#endif // ifndef KTreemapView_h
-
-// EOF

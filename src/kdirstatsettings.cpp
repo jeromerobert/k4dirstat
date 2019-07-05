@@ -1,16 +1,8 @@
 /*
- *   File name: kdirstatsettings.cpp
- *   Summary:	Settings dialog for KDirStat
  *   License:	GPL - See file COPYING for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-20
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -985,4 +977,3 @@ void addVStretch(QWidget *parent) {
   stretch->setSizePolicy(sp);
 }
 
-// EOF

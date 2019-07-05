@@ -1,16 +1,9 @@
 /*
- *   File name:	kcleanup.cpp
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <qapplication.h>
 #include <qregexp.h>
@@ -317,4 +310,3 @@ void KCleanup::saveConfig() const {
   config.writeEntry("refreshPolicy", (int)_refreshPolicy);
 }
 
-// EOF

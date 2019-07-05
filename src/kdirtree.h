@@ -1,19 +1,10 @@
+#pragma once
+
 /*
- *   File name: kdirtree.h
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
-
-#ifndef KDirTree_h
-#define KDirTree_h
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "kdirinfo.h"
 #include "kdirreadjob.h"
@@ -371,6 +362,3 @@ protected:
 
 } // namespace KDirStat
 
-#endif // ifndef KDirTree_h
-
-// EOF
