@@ -111,8 +111,8 @@ k4dirstat::k4dirstat()
   connect(_treeView, SIGNAL(progressInfo(const QString &)), this,
           SLOT(statusMsg(const QString &)));
 
-  connect(_treeView, SIGNAL(treeSelectionChanged(KFileInfo *)), this,
-          SLOT(selectionChanged(KFileInfo *)));
+  connect(_treeView, SIGNAL(treeSelectionChanged(KFileInfo *, KDirTree*)), this,
+          SLOT(selectionChanged(KFileInfo *, KDirTree*)));
 
   connect(_treeView, SIGNAL(contextMenu(KDirTreeViewItem *, const QPoint &)),
           this, SLOT(contextMenu(KDirTreeViewItem *, const QPoint &)));
@@ -321,8 +321,8 @@ void k4dirstat::initCleanups() {
   _cleanupCollection->addUserCleanups(USER_CLEANUPS);
   _cleanupCollection->readConfig();
 
-  connect(_treeView, SIGNAL(treeSelectionChanged(KFileInfo *)),
-          _cleanupCollection, SIGNAL(selectionChanged(KFileInfo *)));
+  connect(_treeView, SIGNAL(treeSelectionChanged(KFileInfo *, KDirTree*)),
+          _cleanupCollection, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)));
 
   connect(this, SIGNAL(readConfig(void)), _cleanupCollection,
           SLOT(readConfig(void)));
@@ -544,7 +544,7 @@ void k4dirstat::cleanupOpenWith() {
   KRun::displayOpenWithDialog(urlList, this, false);
 }
 
-void k4dirstat::selectionChanged(KFileInfo *selection) {
+void k4dirstat::selectionChanged(KFileInfo *selection, KDirTree*) {
   if (selection) {
     _editCopy->setEnabled(true);
     _reportMailToOwner->setEnabled(true);
@@ -674,8 +674,8 @@ void k4dirstat::createTreemapView() {
 
   connect(_treemapView, SIGNAL(treemapChanged()), this, SLOT(updateActions()));
 
-  connect(_treemapView, SIGNAL(selectionChanged(KFileInfo *)), this,
-          SLOT(selectionChanged(KFileInfo *)));
+  connect(_treemapView, SIGNAL(selectionChanged(KFileInfo *, KDirTree *)), this,
+          SLOT(selectionChanged(KFileInfo *, KDirTree *)));
 
   if (_activityTracker) {
     connect(_treemapView, SIGNAL(userActivity(int)), _activityTracker,

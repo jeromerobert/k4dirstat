@@ -30,6 +30,7 @@ namespace KDirStat {
 class KCleanupCollection;
 class KDirTreeView;
 class KDirTreeViewItem;
+class KDirTree;
 class KFileInfo;
 class KSettingsDialog;
 class KTreemapView;
@@ -125,7 +126,7 @@ public slots:
    * Notification that the view's selection has changed.
    * Enable/disable user actions as appropriate.
    **/
-  void selectionChanged(KFileInfo *selection);
+  void selectionChanged(KFileInfo *selection, KDirTree*);
 
   /**
    * Ask user what application to open a file or directory with

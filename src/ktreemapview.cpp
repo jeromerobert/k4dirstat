@@ -50,10 +50,10 @@ KTreemapView::KTreemapView(KDirTree *tree, QWidget *parent,
     }
   }
   _refreshTimer.setSingleShot(true);
-  connect(this, SIGNAL(selectionChanged(KFileInfo *)), tree,
+  connect(this, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), tree,
           SLOT(selectItem(KFileInfo *)));
 
-  connect(tree, SIGNAL(selectionChanged(KFileInfo *)), this,
+  connect(tree, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), this,
           SLOT(selectTile(KFileInfo *)));
 
   connect(tree, SIGNAL(deletingChild(KFileInfo *)), this,
@@ -379,7 +379,7 @@ void KTreemapView::selectTile(KTreemapTile *tile) {
     _selectionRect->highlight(_selectedTile);
 
   if (oldSelection != _selectedTile) {
-    emit selectionChanged(_selectedTile ? _selectedTile->orig() : 0);
+    emit selectionChanged(_selectedTile ? _selectedTile->orig() : nullptr, _tree);
   }
 }
 

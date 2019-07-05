@@ -316,7 +316,7 @@ void KDirTree::selectItem(KFileInfo *newSelection) {
 #endif
 
   _selection = newSelection;
-  emit selectionChanged(_selection);
+  emit selectionChanged(_selection, this);
 }
 
 bool KDirTree::writeCache(const QString &cacheFileName) {

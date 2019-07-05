@@ -93,7 +93,7 @@ public:
    * KFileInfo. Checks all the other conditions (enabled(),
    * worksForDir(), worksForFile(), ...) accordingly.
    **/
-  bool worksFor(KFileInfo *item) const;
+  bool worksFor(KFileInfo *item, KDirTree *) const;
 
   /**
    * Return whether or not this cleanup action works for directories,
@@ -187,14 +187,14 @@ public:
    * The heart of the matter: Perform the cleanup with the KFileInfo
    * specified.
    **/
-  virtual void execute(KFileInfo *item);
+  virtual void execute(KFileInfo *item, KDirTree *);
 
   /**
    * Set enabled/disabled status according to 'selection' and internally
    * store 'selection' - this will also be used upon calling
    * @ref executeWithSelection() . '0' means "nothing selected".
    **/
-  bool isEnabledFromSelection(KFileInfo *selection);
+  bool isEnabledFromSelection(KFileInfo *selection, KDirTree *);
 
   /**
    * Read configuration.
@@ -210,7 +210,7 @@ protected:
   /**
    * Recursively perform the cleanup.
    **/
-  void executeRecursive(KFileInfo *item);
+  void executeRecursive(KFileInfo *item, KDirTree*);
 
   /**
    * Ask user for confirmation to execute this cleanup action for

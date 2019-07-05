@@ -135,14 +135,14 @@ static void konqOperationsDel(QWidget *m_mainWindow, const QList<QUrl> &urls) {
   }
 }
 
-void TrashBinCleanup::execute(KFileInfo *item) {
-  if (worksFor(item)) {
+void TrashBinCleanup::execute(KFileInfo *item, KDirTree * tree) {
+  if (worksFor(item, tree)) {
     QUrl url;
     url.setPath(item->url());
     QList<QUrl> urls;
     urls.append(url);
     konqOperationsDel(k4dirstat::instance(), urls);
-    item->tree()->deleteSubtree(item);
+    tree->deleteSubtree(item);
   }
 }
 

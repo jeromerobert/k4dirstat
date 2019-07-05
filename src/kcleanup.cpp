@@ -58,11 +58,11 @@ void KCleanup::copy(const KCleanup &src) {
 
 void KCleanup::setTitle(const QString &title) { _title = title; }
 
-bool KCleanup::worksFor(KFileInfo *item) const {
+bool KCleanup::worksFor(KFileInfo *item, KDirTree * tree) const {
   if (!_enabled || !item)
     return false;
 
-  if (worksLocalOnly() && !item->tree()->isFileProtocol())
+  if (worksLocalOnly() && !tree->isFileProtocol())
     return false;
 
   if (item->isDotEntry())
@@ -73,10 +73,10 @@ bool KCleanup::worksFor(KFileInfo *item) const {
   return worksForFile();
 }
 
-bool KCleanup::isEnabledFromSelection(KFileInfo *selection) {
+bool KCleanup::isEnabledFromSelection(KFileInfo *selection, KDirTree* tree) {
   bool enabled = false;
   if (selection) {
-    enabled = worksFor(selection);
+    enabled = worksFor(selection, tree);
 
     if (!selection->isFinished()) {
       // This subtree isn't finished reading yet
@@ -120,14 +120,11 @@ bool KCleanup::confirmation(KFileInfo *item) {
     return false;
 }
 
-void KCleanup::execute(KFileInfo *item) {
-  if (worksFor(item)) {
+void KCleanup::execute(KFileInfo *item, KDirTree * tree) {
+  if (worksFor(item, tree)) {
     if (_askForConfirmation && !confirmation(item))
       return;
-
-    KDirTree *tree = item->tree();
-
-    executeRecursive(item);
+    executeRecursive(item, tree);
 
     switch (_refreshPolicy) {
     case noRefresh:
@@ -161,8 +158,8 @@ void KCleanup::execute(KFileInfo *item) {
   }
 }
 
-void KCleanup::executeRecursive(KFileInfo *item) {
-  if (worksFor(item)) {
+void KCleanup::executeRecursive(KFileInfo *item, KDirTree* tree) {
+  if (worksFor(item, tree)) {
     if (_recurse) {
       // Recurse into all subdirectories.
 
@@ -177,7 +174,7 @@ void KCleanup::executeRecursive(KFileInfo *item) {
            * the dot entry) if there are no real subdirectories on
            * this directory level.
            **/
-          executeRecursive(subdir);
+          executeRecursive(subdir, tree);
         }
         subdir = subdir->next();
       }

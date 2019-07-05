@@ -262,7 +262,7 @@ signals:
    * Emitted when the currently selected item changes.
    * Caution: 'item' may be 0 when the selection is cleared.
    **/
-  void selectionChanged(KFileInfo *item);
+  void selectionChanged(KFileInfo *item, KDirTree*);
 
   /**
    * Emitted when the treemap changes, e.g. is rebuilt, zoomed in, or

@@ -323,11 +323,6 @@ public:
   //
 
   /**
-   * Returns a pointer to the @ref KDirTree this entry belongs to.
-   **/
-  KDirTree *tree() const { return _tree; }
-
-  /**
    * Returns a pointer to this entry's parent entry or 0 if there is
    * none.
    **/

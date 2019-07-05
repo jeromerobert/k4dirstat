@@ -326,7 +326,7 @@ signals:
    *
    * NOTE: 'newSelection' may be 0 if nothing is selected.
    **/
-  void selectionChanged(KFileInfo *newSelection);
+  void selectionChanged(KFileInfo *newSelection, KDirTree*);
 
   /**
    * Single line progress information, emitted when the read status
