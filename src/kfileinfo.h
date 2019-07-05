@@ -74,18 +74,18 @@ public:
   /**
    * Default constructor.
    **/
-  KFileInfo(KDirTree *tree, KDirInfo *parent = 0, const char *name = 0);
+  KFileInfo(KDirInfo *parent = nullptr, const char *name = nullptr);
 
   /**
    * Constructor from a stat buffer (i.e. based on an lstat() call).
    **/
   KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
-            KDirTree *tree, KDirInfo *parent = 0);
+            KDirInfo *parent = nullptr);
 
   /**
    * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
    **/
-  KFileInfo(const KFileItem *fileItem, KDirTree *tree, KDirInfo *parent = 0);
+  KFileInfo(const KFileItem *fileItem, KDirInfo *parent = nullptr);
 
   /**
    * Constructor from the bare neccessary fields
@@ -93,7 +93,7 @@ public:
    *
    * If 'blocks' is -1, it will be calculated from 'size'.
    **/
-  KFileInfo(KDirTree *tree, KDirInfo *parent,
+  KFileInfo(KDirInfo *parent,
             const QString &filenameWithoutPath, mode_t mode, KFileSize size,
             time_t mtime, KFileSize blocks = -1, nlink_t links = 1);
 
@@ -573,8 +573,6 @@ protected:
 
   KDirInfo *_parent; // pointer to the parent entry
   KFileInfo *_next;  // pointer to the next entry
-  KDirTree *_tree;   // pointer to the parent tree
-
 }; // class KFileInfo
 
 //----------------------------------------------------------------------

@@ -195,7 +195,7 @@ KCacheReader::~KCacheReader() {
   // qDebug() << "Cache reading finished" << endl;
 
   if (_toplevel)
-    _toplevel->finalizeAll();
+    _toplevel->finalizeAll(_tree);
 
   emit finished();
 }
@@ -347,7 +347,7 @@ void KCacheReader::addItem() {
 
   if (strcasecmp(type, "D") == 0) {
     // qDebug() << "Creating KDirInfo  for " << name << endl;
-    KDirInfo *dir = new KDirInfo(_tree, parent, name, mode, size, mtime);
+    KDirInfo *dir = new KDirInfo(parent, name, mode, size, mtime);
     dir->setReadState(KDirCached);
     _lastDir = dir;
 
@@ -383,7 +383,7 @@ void KCacheReader::addItem() {
       // name << endl;
 
       KFileInfo *item =
-          new KFileInfo(_tree, parent, name, mode, size, mtime, blocks, links);
+          new KFileInfo(parent, name, mode, size, mtime, blocks, links);
       parent->insertChild(item);
       _tree->childAddedNotify(item);
     } else {

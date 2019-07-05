@@ -37,24 +37,24 @@ public:
    * non-directory children. This is the only way to create a "dot
    * entry"!
    **/
-  KDirInfo(KDirTree *tree, KDirInfo *parent = 0, bool asDotEntry = false);
+  KDirInfo(KDirInfo *parent = nullptr, bool asDotEntry = false);
 
   /**
    * Constructor from a stat buffer (i.e. based on an lstat() call).
    **/
   KDirInfo(const QString &filenameWithoutPath, struct stat *statInfo,
-           KDirTree *tree, KDirInfo *parent = 0);
+           KDirInfo *parent = nullptr);
 
   /**
    * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
    **/
-  KDirInfo(const KFileItem *fileItem, KDirTree *tree, KDirInfo *parent = 0);
+  KDirInfo(const KFileItem *fileItem, KDirInfo *parent = nullptr);
 
   /**
    * Constructor from the bare neccessary fields
    * for use from a cache file reader
    **/
-  KDirInfo(KDirTree *tree, KDirInfo *parent, const QString &filenameWithoutPath,
+  KDirInfo(KDirInfo *parent, const QString &filenameWithoutPath,
            mode_t mode, KFileSize size, time_t mtime);
 
   /**
@@ -260,7 +260,7 @@ public:
    * Recursively finalize all directories from here on -
    * call finalizeLocal() recursively.
    **/
-  void finalizeAll();
+  void finalizeAll(KDirTree *);
 
   /**
    * Get the current state of the directory reading process:

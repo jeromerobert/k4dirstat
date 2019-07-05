@@ -92,11 +92,11 @@ void KDirTree::startReading(const QUrl &url) {
   if (_isFileProtocol && _enableLocalDirReader) {
     // qDebug() << "Using local directory reader for " << url.url() << endl;
     _readMethod = KDirReadLocal;
-    _root = KLocalDirReadJob::stat(url, this);
+    _root = KLocalDirReadJob::stat(url);
   } else {
     // qDebug() << "Using KIO methods for " << url.url() << endl;
     _readMethod = KDirReadKIO;
-    _root = KioDirReadJob::stat(url, this);
+    _root = KioDirReadJob::stat(url);
   }
 
   if (_root) {
@@ -171,8 +171,8 @@ void KDirTree::refresh(KFileInfo *subtree) {
     // Create new subtree root.
 
     subtree = (_readMethod == KDirReadLocal)
-                  ? KLocalDirReadJob::stat(url, this, parent)
-                  : KioDirReadJob::stat(url, this, parent);
+                  ? KLocalDirReadJob::stat(url, parent)
+                  : KioDirReadJob::stat(url, parent);
 
     // qDebug() << "New subtree: " << subtree << endl;
 

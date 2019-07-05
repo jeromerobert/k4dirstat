@@ -10,8 +10,8 @@
 
 using namespace KDirStat;
 
-KDirInfo::KDirInfo(KDirTree *tree, KDirInfo *parent, bool asDotEntry)
-    : KFileInfo(tree, parent) {
+KDirInfo::KDirInfo(KDirInfo *parent, bool asDotEntry)
+    : KFileInfo(parent) {
   init();
 
   if (asDotEntry) {
@@ -20,29 +20,29 @@ KDirInfo::KDirInfo(KDirTree *tree, KDirInfo *parent, bool asDotEntry)
     _name = ".";
   } else {
     _isDotEntry = false;
-    _dotEntry = new KDirInfo(tree, this, true);
+    _dotEntry = new KDirInfo(this, true);
   }
 }
 
 KDirInfo::KDirInfo(const QString &filenameWithoutPath, struct stat *statInfo,
-                   KDirTree *tree, KDirInfo *parent)
-    : KFileInfo(filenameWithoutPath, statInfo, tree, parent) {
+                   KDirInfo *parent)
+    : KFileInfo(filenameWithoutPath, statInfo, parent) {
   init();
-  _dotEntry = new KDirInfo(tree, this, true);
+  _dotEntry = new KDirInfo(this, true);
 }
 
-KDirInfo::KDirInfo(const KFileItem *fileItem, KDirTree *tree, KDirInfo *parent)
-    : KFileInfo(fileItem, tree, parent) {
+KDirInfo::KDirInfo(const KFileItem *fileItem, KDirInfo *parent)
+    : KFileInfo(fileItem, parent) {
   init();
-  _dotEntry = new KDirInfo(tree, this, true);
+  _dotEntry = new KDirInfo(this, true);
 }
 
-KDirInfo::KDirInfo(KDirTree *tree, KDirInfo *parent,
+KDirInfo::KDirInfo(KDirInfo *parent,
                    const QString &filenameWithoutPath, mode_t mode,
                    KFileSize size, time_t mtime)
-    : KFileInfo(tree, parent, filenameWithoutPath, mode, size, mtime) {
+    : KFileInfo(parent, filenameWithoutPath, mode, size, mtime) {
   init();
-  _dotEntry = new KDirInfo(tree, this, true);
+  _dotEntry = new KDirInfo(this, true);
 }
 
 void KDirInfo::init() {
@@ -332,7 +332,7 @@ void KDirInfo::readJobAborted() {
 
 void KDirInfo::finalizeLocal() { cleanupDotEntries(); }
 
-void KDirInfo::finalizeAll() {
+void KDirInfo::finalizeAll(KDirTree* tree) {
   if (_isDotEntry)
     return;
 
@@ -342,7 +342,7 @@ void KDirInfo::finalizeAll() {
     KDirInfo *dir = dynamic_cast<KDirInfo *>(child);
 
     if (dir && !dir->isDotEntry())
-      dir->finalizeAll();
+      dir->finalizeAll(tree);
 
     child = child->next();
   }
@@ -356,7 +356,7 @@ void KDirInfo::finalizeAll() {
   // get all their plain file children reparented to themselves, so they
   // would need to be processed in the loop, too.
 
-  _tree->sendFinalizeLocal(this); // Must be sent _before_ finalizeLocal()!
+  tree->sendFinalizeLocal(this); // Must be sent _before_ finalizeLocal()!
   finalizeLocal();
 }
 

@@ -93,7 +93,7 @@ void KLocalDirReadJob::startReading() {
         {
           if (S_ISDIR(statInfo.st_mode)) // directory child?
           {
-            KDirInfo *subDir = new KDirInfo(entryName, &statInfo, _tree, _dir);
+            KDirInfo *subDir = new KDirInfo(entryName, &statInfo, _dir);
             _dir->insertChild(subDir);
             childAdded(subDir);
 
@@ -166,8 +166,7 @@ void KLocalDirReadJob::startReading() {
                 delete cacheReadJob;
               }
             } else {
-              KFileInfo *child =
-                  new KFileInfo(entryName, &statInfo, _tree, _dir);
+              KFileInfo *child = new KFileInfo(entryName, &statInfo, _dir);
               _dir->insertChild(child);
               childAdded(child);
             }
@@ -181,7 +180,7 @@ void KLocalDirReadJob::startReading() {
            * Not much we can do when lstat() didn't work; let's at
            * least create an (almost empty) entry as a placeholder.
            */
-          KDirInfo *child = new KDirInfo(_tree, _dir, entry->d_name);
+          KDirInfo *child = new KDirInfo(_dir, entry->d_name);
           child->setReadState(KDirError);
           _dir->insertChild(child);
           childAdded(child);
@@ -206,8 +205,7 @@ void KLocalDirReadJob::startReading() {
   // Don't add anything after finished() since this deletes this job!
 }
 
-KFileInfo *KLocalDirReadJob::stat(const QUrl &url, KDirTree *tree,
-                                  KDirInfo *parent) {
+KFileInfo *KLocalDirReadJob::stat(const QUrl &url, KDirInfo *parent) {
   struct stat statInfo;
 
   if (lstat(url.path().toLocal8Bit(), &statInfo) == 0) // lstat() OK
@@ -216,14 +214,14 @@ KFileInfo *KLocalDirReadJob::stat(const QUrl &url, KDirTree *tree,
 
     if (S_ISDIR(statInfo.st_mode)) // directory?
     {
-      KDirInfo *dir = new KDirInfo(name, &statInfo, tree, parent);
+      KDirInfo *dir = new KDirInfo(name, &statInfo, parent);
 
       if (dir && parent && dir->device() != parent->device())
         dir->setMountPoint();
 
       return dir;
     } else // no directory
-      return new KFileInfo(name, &statInfo, tree, parent);
+      return new KFileInfo(name, &statInfo, parent);
   } else // lstat() failed
     return 0;
 }
@@ -278,7 +276,7 @@ void KioDirReadJob::entries(KIO::Job *job, const KIO::UDSEntryList &entryList) {
       if (entry.isDir() && // Directory child
           !entry.isLink()) // and not a symlink?
       {
-        KDirInfo *subDir = new KDirInfo(&entry, _tree, _dir);
+        KDirInfo *subDir = new KDirInfo(&entry, _dir);
         _dir->insertChild(subDir);
         childAdded(subDir);
 
@@ -293,7 +291,7 @@ void KioDirReadJob::entries(KIO::Job *job, const KIO::UDSEntryList &entryList) {
         }
       } else // non-directory child
       {
-        KFileInfo *child = new KFileInfo(&entry, _tree, _dir);
+        KFileInfo *child = new KFileInfo(&entry, _dir);
         _dir->insertChild(child);
         childAdded(child);
       }
@@ -317,16 +315,15 @@ void KioDirReadJob::finished(KIO::Job *job) {
   // Don't add anything after finished() since this deletes this job!
 }
 
-KFileInfo *KioDirReadJob::stat(const QUrl &url, KDirTree *tree,
-                               KDirInfo *parent) {
+KFileInfo *KioDirReadJob::stat(const QUrl &url, KDirInfo *parent) {
   KIO::StatJob *job = KIO::stat(url);
   if (job->exec()) {
     KFileItem entry(job->statResult(), url,
                     true,   // determine MIME type on demand
                     false); // URL specifies parent directory
 
-    return entry.isDir() ? new KDirInfo(&entry, tree, parent)
-                         : new KFileInfo(&entry, tree, parent);
+    return entry.isDir() ? new KDirInfo(&entry, parent)
+                         : new KFileInfo(&entry, parent);
   } else // remote stat() failed
     return 0;
 }

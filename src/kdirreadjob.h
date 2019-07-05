@@ -187,7 +187,7 @@ public:
    * Returns 0 if such information cannot be obtained (i.e. the
    * appropriate stat() call fails).
    **/
-  static KFileInfo *stat(const QUrl &url, KDirTree *tree, KDirInfo *parent = 0);
+  static KFileInfo *stat(const QUrl &url, KDirInfo *parent = nullptr);
 
 protected:
   /**
@@ -234,7 +234,7 @@ public:
    * Returns 0 if such information cannot be obtained (i.e. the
    * appropriate stat() call fails).
    **/
-  static KFileInfo *stat(const QUrl &url, KDirTree *tree, KDirInfo *parent = 0);
+  static KFileInfo *stat(const QUrl &url, KDirInfo *parent = 0);
 
   /**
    * Obtain the owner of the URL specified.

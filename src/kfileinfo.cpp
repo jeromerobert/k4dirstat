@@ -22,8 +22,8 @@
 
 using namespace KDirStat;
 
-KFileInfo::KFileInfo(KDirTree *tree, KDirInfo *parent, const char *name)
-    : _parent(parent), _next(0), _tree(tree) {
+KFileInfo::KFileInfo(KDirInfo *parent, const char *name)
+    : _parent(parent), _next(0) {
   _isLocalFile = true;
   _isSparseFile = false;
   _name = name ? name : "";
@@ -36,8 +36,8 @@ KFileInfo::KFileInfo(KDirTree *tree, KDirInfo *parent, const char *name)
 }
 
 KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
-                     KDirTree *tree, KDirInfo *parent)
-    : _parent(parent), _next(0), _tree(tree) {
+                     KDirInfo *parent)
+    : _parent(parent), _next(0) {
   Q_CHECK_PTR(statInfo);
 
   _isLocalFile = true;
@@ -80,9 +80,8 @@ KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
 #endif
 }
 
-KFileInfo::KFileInfo(const KFileItem *fileItem, KDirTree *tree,
-                     KDirInfo *parent)
-    : _parent(parent), _next(0), _tree(tree) {
+KFileInfo::KFileInfo(const KFileItem *fileItem, KDirInfo *parent)
+    : _parent(parent), _next(0) {
   Q_CHECK_PTR(fileItem);
 
   _isLocalFile = fileItem->isLocalFile();
@@ -115,11 +114,11 @@ KFileInfo::KFileInfo(const KFileItem *fileItem, KDirTree *tree,
   _mtime = fileItem->time(KFileItem::ModificationTime).toTime_t();
 }
 
-KFileInfo::KFileInfo(KDirTree *tree, KDirInfo *parent,
+KFileInfo::KFileInfo(KDirInfo *parent,
                      const QString &filenameWithoutPath, mode_t mode,
                      KFileSize size, time_t mtime, KFileSize blocks,
                      nlink_t links)
-    : _parent(parent), _next(0), _tree(tree) {
+    : _parent(parent), _next(0) {
   _name = filenameWithoutPath;
   _isLocalFile = true;
   _mode = mode;
