@@ -73,8 +73,8 @@ private:
   KDirTreeView *view;
 };
 
-KDirTreeView::KDirTreeView(QWidget *parent) : KDirTreeViewParentClass(parent) {
-  _tree = 0;
+KDirTreeView::KDirTreeView(QWidget *parent):
+  KDirTreeViewParentClass(parent), _tree(new KDirTree()) {
   _updateTimer = 0;
   _selection = 0;
   _openLevel = 1;
@@ -190,8 +190,7 @@ void KDirTreeView::setColumnAlignment(QTreeWidgetItem &item) {
 }
 
 KDirTreeView::~KDirTreeView() {
-  if (_tree)
-    delete _tree;
+  delete _tree;
 
   /*
    * Don't delete _updateTimer here, it's already automatically deleted by Qt!
@@ -261,13 +260,6 @@ void KDirTreeView::createTree() {
   clear();
   _currentDir = "";
 
-  if (_tree)
-    delete _tree;
-
-  // Create new (empty) dir tree
-
-  _tree = new KDirTree();
-
   // Connect signals
 
   connect(_tree, SIGNAL(progressInfo(const QString &)), this,
@@ -321,7 +313,7 @@ void KDirTreeView::prepareReading() {
 }
 
 void KDirTreeView::refreshAll() {
-  if (_tree && _tree->root()) {
+  if (_tree->root()) {
     clear();
     // Implicitly calling prepareReading() via the tree's startingReading()
     // signal
@@ -330,7 +322,7 @@ void KDirTreeView::refreshAll() {
 }
 
 void KDirTreeView::refreshSelected() {
-  if (_tree && _tree->root() && _selection) {
+  if (_tree->root() && _selection) {
     // Implicitly calling prepareReading() via the tree's startingReading()
     // signal
     _tree->refresh(_selection->orig());
@@ -340,8 +332,7 @@ void KDirTreeView::refreshSelected() {
 }
 
 void KDirTreeView::abortReading() {
-  if (_tree)
-    _tree->abortReading();
+  _tree->abortReading();
 }
 
 void KDirTreeView::clear() {
@@ -353,10 +344,7 @@ void KDirTreeView::clear() {
 }
 
 bool KDirTreeView::writeCache(const QString &cacheFileName) {
-  if (_tree)
-    return _tree->writeCache(cacheFileName);
-
-  return false;
+  return _tree->writeCache(cacheFileName);
 }
 
 void KDirTreeView::readCache(const QString &cacheFileName) {

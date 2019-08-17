@@ -175,7 +175,7 @@ public:
    * user can easily tell which summary fields belong to the directory
    * itself and which are the accumulated values of the entire subtree.
    **/
-  virtual KFileInfo *dotEntry() const { return _dotEntry; }
+  virtual KDirInfo *dotEntry() const { return _dotEntry; }
 
   /**
    * Set a "Dot Entry". This makes sense for directories only.

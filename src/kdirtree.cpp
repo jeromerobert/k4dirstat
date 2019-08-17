@@ -26,6 +26,7 @@ KDirTree::KDirTree() : QObject() {
 }
 
 KDirTree::~KDirTree() {
+  _jobQueue.clear();
   selectItem(0);
 
   if (_root)

@@ -377,7 +377,7 @@ public:
    *
    * This default implementation always returns 0.
    **/
-  virtual KFileInfo *dotEntry() const { return 0; }
+  virtual KDirInfo *dotEntry() const { return nullptr; }
 
   /**
    * Set a "Dot Entry". This makes sense for directories only.
