@@ -38,8 +38,9 @@ KCleanupCollection::~KCleanupCollection() {
 }
 
 CleanupAction *KCleanupCollection::add(KCleanup *newCleanup) {
-  CleanupAction *action = new CleanupAction(*newCleanup);
+  CleanupAction *action = new CleanupAction(*newCleanup, this);
   _actionCollection.addAction(newCleanup->id(), action);
+  delete newCleanup;
   cleanupActions.append(action);
 
   connect(this, SIGNAL(selectionChanged(KFileInfo *)), action,

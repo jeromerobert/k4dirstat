@@ -37,10 +37,11 @@ using namespace KDirStat;
 /** @brief Rendering of the percentage bar */
 class KDirItemDelegate : public QStyledItemDelegate {
 public:
-  KDirItemDelegate(KDirTreeView *view) : view(view) {
+  KDirItemDelegate(KDirTreeView *view) : QStyledItemDelegate(view), view(view) {
     // always use the Fusion style because it has the best
     // progress bar precision
     style = QStyleFactory::create("Fusion");
+    style->setParent(this);
   }
 
   virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -173,7 +174,7 @@ KDirTreeView::KDirTreeView(QWidget *parent) : KDirTreeViewParentClass(parent) {
   connect(this, SIGNAL(collapsed(const QModelIndex &)), this,
           SLOT(resizeIndexToContents(const QModelIndex &)));
 
-  _contextInfo = new QMenu();
+  _contextInfo = new QMenu(this);
   infoAction = new QAction(_contextInfo);
   _contextInfo->addAction(infoAction);
   createTree();

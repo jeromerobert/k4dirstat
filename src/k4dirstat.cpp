@@ -315,6 +315,7 @@ void k4dirstat::setupActions() {
 
 void k4dirstat::initCleanups() {
   _cleanupCollection = new KCleanupCollection(*actionCollection());
+  _cleanupCollection->setParent(this);
   Q_CHECK_PTR(_cleanupCollection);
   _cleanupCollection->addStdCleanups();
   _cleanupCollection->addUserCleanups(USER_CLEANUPS);

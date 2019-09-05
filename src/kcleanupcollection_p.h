@@ -7,7 +7,7 @@ class CleanupAction : public QAction {
   Q_OBJECT
 
 public:
-  CleanupAction(KCleanup cleanup) : QAction(NULL), cleanup_(cleanup) {
+  CleanupAction(KCleanup cleanup, QObject * parent) : QAction(parent), cleanup_(cleanup) {
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
     setEnabled(false);
     refresh();
