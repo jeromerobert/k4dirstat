@@ -359,4 +359,7 @@ void KDirInfo::cleanupDotEntries() {
     delete _dotEntry;
     _dotEntry = 0;
   }
+  if(_dotEntry)
+    _dotEntry->cleanupDotEntries(); // just to shrink_to_fit
+  children_.shrink_to_fit();
 }

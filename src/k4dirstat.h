@@ -179,7 +179,7 @@ public slots:
   /**
    * Opens a context menu for tree view items.
    **/
-  void contextMenu(KDirTreeViewItem *item, const QPoint &pos);
+  void contextMenu(const QPoint &pos);
 
   /**
    * Opens a context menu for treemap tiles.

@@ -7,7 +7,7 @@
  */
 
 #include "kdirtree.h"
-#include <QTreeWidget>
+#include <QTreeView>
 #include <qdatetime.h>
 #include <qpixmap.h>
 
@@ -17,30 +17,23 @@
 class QWidget;
 class QTimer;
 class QMenu;
+class QSortFilterProxyModel;
 class KPacManAnimation;
-
-#define USE_KLISTVIEW 0
-
 // Open a new name space since KDE's name space is pretty much cluttered
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
 namespace KDirStat {
+
+class KDirModel;
 #define KDirTreeViewMaxFillColor 16
 
-#if USE_KLISTVIEW
-#define KDirTreeViewParentClass KListView
-#else
-#define KDirTreeViewParentClass QTreeWidget
-#endif
-
-class KDirTreeViewItem;
-
-class KDirTreeView : public QTreeWidget
+class KDirTreeView : public QTreeView
 // Using
 //		class KDirTreeView: public KDirTreeViewParentClass
 // or some other 'ifdef' ... construct seems to confuse "moc".
 {
+  friend KDirModel;
   Q_OBJECT
 
 public:
@@ -54,22 +47,13 @@ public:
    **/
   virtual ~KDirTreeView();
 
-  /**
-   * Locate the counterpart to an original tree item "wanted" somewhere
-   * within this view tree. Returns 0 on failure.
-   * If "lazy" is set, only the open part of the tree is searched.
-   * "doClone" specifies whether or not to (deferred) clone nodes that
-   * are not cloned yet. This is only used if "lazy" is false.
-   **/
-  KDirTreeViewItem *locate(KFileInfo *wanted, bool lazy = true,
-                           bool doClone = true);
 
-  KDirTreeViewItem *topLevelItem(int index) const;
+  KDirModel * model() const;
 
   /**
    * Return the currently selected item or 0, if none is selected.
    **/
-  KDirTreeViewItem *selection() const { return _selection; }
+  KFileInfo *selection() const;
 
   /**
    * Returns the default level until which items are opened by default
@@ -222,9 +206,8 @@ public:
    * Increase debug counter #i
    **/
   void incDebugCount(int i);
+  QSortFilterProxyModel * proxyModel() const;
 
-  void setColumnAlignment(QTreeWidgetItem &item);
-  void mousePressEvent(QMouseEvent *event);
 public slots:
 
   /**
@@ -251,35 +234,6 @@ public slots:
    * Clear this view's contents.
    **/
   void clear();
-
-  /**
-   * Select a (QListViewItem) item. Triggers selectionChanged() signals.
-   **/
-  void selectItem(QTreeWidgetItem *item);
-
-  /**
-   * Select an item. Triggers selectionChanged() signals.
-   * Overloaded for convenience.
-   **/
-  void selectItem(KDirTreeViewItem *item) {
-    selectItem((QTreeWidgetItem *)item);
-  }
-
-  /**
-   * Select a KDirTree item. Used for connecting the @ref
-   * KDirTree::selectionChanged() signal.
-   **/
-  void selectItem(KFileInfo *item);
-
-  /**
-   * Clear the current selection. Triggers selectionChanged() signals.
-   **/
-  void clearSelection();
-
-  /**
-   * Close all tree branches except the one specified.
-   **/
-  void closeAllExcept(KDirTreeViewItem *except);
 
   /**
    * Send a standardized mail to the owner of the selected branch.
@@ -332,6 +286,12 @@ public slots:
   void readCache(const QString &cacheFileName);
 
 protected slots:
+
+  /**
+   * Select a KDirTree item. Used for connecting the @ref
+   * KDirTree::selectionChanged() signal.
+   **/
+  void selectItem(KFileInfo *item);
 
   /**
    * Add a child as a clone of original tree item "newChild" to this view
@@ -410,11 +370,11 @@ protected slots:
    **/
   void popupContextInfo(const QPoint &pos, const QString &info);
 
-  void updateSelection();
-
   void resizeIndexToContents(const QModelIndex &index);
 
-  void itemExpandedSlot(QTreeWidgetItem *);
+  /** Translate QItemSelection to KFileInfo */
+  void fileSelectionChanged(const QItemSelection &selected,
+                            const QItemSelection &deselected);
 
 signals:
 
@@ -441,18 +401,6 @@ signals:
   void aborted();
 
   /**
-   * Emitted when the currently selected item changes.
-   * Caution: 'item' may be 0 when the selection is cleared.
-   **/
-  void treeSelectionChanged(KDirTreeViewItem *item);
-
-  /**
-   * Emitted when the currently selected item changes.
-   * Caution: 'item' may be 0 when the selection is cleared.
-   **/
-  void treeSelectionChanged(KFileInfo *item, KDirTree *);
-
-  /**
    * Emitted when a context menu for this item should be opened.
    * (usually on right click). 'pos' contains the click's mouse
    * coordinates.
@@ -463,7 +411,7 @@ signals:
    * The context menu may not open on a right click on every column,
    * usually only in the nameCol().
    **/
-  void contextMenu(KDirTreeViewItem *item, const QPoint &pos);
+  void contextMenu(const QPoint &pos );
 
   /**
    * Emitted at user activity. Some interactive actions are assigned an
@@ -479,7 +427,7 @@ protected:
    * Create a new tree (and delete the old one if there is one)
    **/
   void createTree();
-
+  QString asciiDump(QModelIndex &) const;
   //
   // Data members
   //
@@ -488,7 +436,6 @@ protected:
   QTimer *_updateTimer;
   QTime _stopWatch;
   QString _currentDir;
-  KDirTreeViewItem *_selection;
   QMenu *_contextInfo;
   QAction *infoAction;
 
@@ -536,203 +483,6 @@ protected:
   QPixmap _workingIcon;
   QPixmap _readyIcon;
 };
-
-class KDirTreeViewItem : public QTreeWidgetItem {
-public:
-  /**
-   * Constructor for the root item.
-   **/
-  KDirTreeViewItem(KDirTreeView *view, KFileInfo *orig);
-
-  /**
-   * Constructor for all other items.
-   **/
-  KDirTreeViewItem(KDirTreeView *view, KDirTreeViewItem *parent,
-                   KFileInfo *orig);
-
-  /**
-   * Destructor.
-   **/
-  virtual ~KDirTreeViewItem();
-
-  /**
-   * Locate the counterpart to an original tree item "wanted" somewhere
-   * within this view tree. Returns 0 on failure.
-   *
-   * When "lazy" is set, only the open part of the tree is searched.
-   * "doClone" specifies whether or not to (deferred) clone nodes that
-   * are not cloned yet. This is only used if "lazy" is false.
-   * "Level" is just a hint for the current tree level for better
-   * performance. It will be calculated automatically if omitted.
-   **/
-  KDirTreeViewItem *locate(KFileInfo *wanted, bool lazy = true,
-                           bool doClone = true, int level = -1);
-
-  /**
-   * Recursively update the visual representation of the summary fields.
-   * This update is as lazy as possible for optimum performance.
-   **/
-  void updateSummary();
-
-  /**
-   * Bring (the top level of) this branch of the view tree in sync with
-   * the original tree. Does _not_ recurse into subdirectories - only
-   * this level of this branch is processed. Called when lazy tree
-   * cloning is in effect and this branch is about to be opened.
-   **/
-  void deferredClone();
-
-  /**
-   * Finalize this level - clean up unneeded / undesired dot entries.
-   **/
-  void finalizeLocal();
-
-  /**
-   * Returns the corresponding view.
-   **/
-  KDirTreeView *view() { return _view; }
-
-  /**
-   * Returns the parent view item or 0 if this is the root.
-   **/
-  KDirTreeViewItem *parent() { return _parent; }
-
-  /**
-   * Returns the corresponding original item of the "real" (vs. view)
-   * tree where all the important information resides.
-   **/
-  KFileInfo *orig() const { return _orig; }
-
-  /** Specialization of QTreeWidgetItem::child */
-  inline KDirTreeViewItem *child(int index) const {
-    return static_cast<KDirTreeViewItem *>(this->QTreeWidgetItem::child(index));
-  }
-
-  virtual bool operator<(const QTreeWidgetItem &other) const;
-  /**
-   * Perform any necessary pending updates when a branch is opened.
-   * Reimplemented from @ref QListViewItem.
-   **/
-  virtual void setOpen(bool open);
-
-  /**
-   * Notification that a branch in this subtree has been opened or close
-   * somewhere. Don't call this if the state hasn't really changed!
-   **/
-  void openNotify(bool open);
-
-  /**
-   * Recursively open this subtree and all its ancestors up to the root.
-   **/
-  void openSubtree();
-
-  /**
-   * Recursively close all tree branches from here on downwards.
-   **/
-  void closeSubtree();
-
-  /**
-   * Close all tree branches except this one from the root on.
-   **/
-  void closeAllExceptThis();
-
-  /**
-   * Returns the number of open items in this subtree.
-   **/
-  int openCount() const { return _openCount; }
-
-  /**
-   * Recursively return an ASCII representation of all open items from
-   * here on.
-   **/
-  QString asciiDump();
-
-  float percent() const { return _percent; }
-
-  /**
-   * Set the appropriate icon depending on this item's type and open /
-   * closed state.
-   **/
-  void setIcon();
-
-protected:
-  /**
-   * Remove dot entry if it doesn't have any children.
-   * Reparent all of the dot entry's children if there are no
-   * subdirectories on this level.
-   **/
-  void cleanupDotEntries();
-
-  /**
-   * Find this entry's dot entry (clone).
-   *
-   * This doesn't create one if deferred cloning is in effect (which is
-   * not a drawback since cloning directory nodes create a dot entry
-   * clone along with the directory clone).
-   *
-   * Returns 0 if there is no dot entry clone.
-   **/
-  KDirTreeViewItem *findDotEntry() const;
-
-  /**
-   * Generic comparison function.
-   **/
-  template <typename T> inline int compare(T a, T b) const {
-    if (a < b)
-      return -1;
-    if (a > b)
-      return 1;
-    return 0;
-  }
-
-private:
-  /**
-   * Comparison function used for sorting the list.
-   *
-   * Using this function is much more efficient than overwriting
-   * QListViewItem::key() which operates on QStrings.
-   *
-   * Returns:
-   * -1 if this <  other
-   *  0 if this == other
-   * +1 if this >  other
-   *
-   **/
-  int compare(const KDirTreeViewItem *other, int col) const;
-
-  /**
-   * Initializations common to all constructors.
-   **/
-  void init(KDirTreeView *view, KDirTreeViewItem *parent, KFileInfo *orig);
-
-  int height() { return _view->visualItemRect(this).height(); }
-
-protected:
-  // Data members
-
-  KDirTreeView *_view;
-  KDirTreeViewItem *_parent;
-  KFileInfo *_orig;
-  float _percent;
-  int _openCount;
-};
-
-inline QDebug &operator<<(QDebug &stream, KDirTreeViewItem *item) {
-  if (item) {
-    if (item->orig()) {
-      stream << item->orig()->debugUrl();
-    } else {
-      stream << "<NULL orig()> " << endl;
-    }
-  } else
-    stream << "<NULL>";
-
-  return stream;
-}
-
-//----------------------------------------------------------------------
-//			       Static Functions
-//----------------------------------------------------------------------
 
 /**
  * Format a file size with all digits, yet human readable using the current

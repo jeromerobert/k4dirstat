@@ -1,7 +1,8 @@
 /*
  *   License:	LGPL - See file COPYING.LIB for details.
- *   Author:	Stefan Hundhammer <sh@suse.de>
+ *   Authors:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
+ *              Jerome Robert <jeromerobert@gmx.com>
  */
 
 #include <stdlib.h>
@@ -12,6 +13,8 @@
 #include <QMouseEvent>
 #include <QStyleFactory>
 #include <QStyledItemDelegate>
+#include <QSortFilterProxyModel>
+#include <QStandardItemModel>
 #include <qcolor.h>
 #include <qmenu.h>
 #include <qtimer.h>
@@ -33,6 +36,272 @@
 
 using namespace KDirStat;
 
+class KDirStat::KDirModel: public QStandardItemModel {
+  KDirTreeView & view_;
+  QStringList headers_;
+
+  int numChildren(KFileInfo * f) const {
+    return f->numChildren() + (f->dotEntry() ? 1 : 0);
+  }
+
+  QStandardItem * createItem(KFileInfo * f) const {
+    assert(f != nullptr);
+    QStandardItem * newItem = new QStandardItem();
+    newItem->setData(QVariant::fromValue(static_cast<void*>(f)));
+    newItem->setColumnCount(headers_.size());
+    newItem->setEditable(false);
+    assert(newItem->data().value<void*>() == f);
+    return newItem;
+  }
+
+public:
+  KDirModel(KDirTreeView * view, QStringList headers):
+    QStandardItemModel(view), view_(*view), headers_(headers) {
+    setColumnCount(headers_.size());
+  }
+
+  bool canFetchMore(const QModelIndex &parent) const override {
+    if(parent.isValid()) {
+      KFileInfo * f = indexToFile(parent);
+      bool finished = f->readState() == KDirFinished;
+      return finished && (rowCount(parent) < numChildren(f));
+    } else {
+      return false;
+    }
+  }
+
+  bool hasChildren(const QModelIndex &) const override {
+    return true;
+  }
+
+  void fetchMore(const QModelIndex &parent) override {
+    KFileInfo * f = indexToFile(parent);
+    int n = numChildren(f);
+    QStandardItem * item = itemFromIndex(parent);
+    int rc = item->rowCount();
+    QList<QStandardItem*> list;
+    list.reserve(n-rc);
+    for(int i = rc; i < n; i++) {
+      KFileInfo * c;
+      if(f->dotEntry()) {
+        c = i == 0 ? f->dotEntry() : f->child(i - 1);
+      } else
+        c = f->child(i);
+      list.append(createItem(c));
+    }
+    item->insertRows(rc, list);
+    assert(rowCount(parent) == n);
+  }
+
+  void removeFile(KFileInfo* file) {
+    QModelIndex tr = fileToIndex(file, false);
+    removeRow(tr.row(), parent(tr));
+  }
+
+  void updateData(QModelIndex r = QModelIndex()) {
+    QModelIndex end = sibling(r.row(), columnCount() - 1, r);
+    emit dataChanged(r, end);
+    for(int i = 0; i < rowCount(r); i++) {
+      updateData(index(i, 0, r));
+    }
+  }
+
+  QModelIndex fileToIndex(KFileInfo* file, bool fetch=true) {
+    if(file == view_.tree()->root())
+      return indexFromItem(invisibleRootItem()->child(0));
+    QModelIndex p = fileToIndex(file->parent(), fetch);
+    if(fetch && canFetchMore(p))
+      fetchMore(p);
+    for(int i = 0; i < rowCount(p); i++) {
+      QModelIndex id = index(i, 0, p);
+      if(indexToFile(id) == file)
+        return id;
+    }
+    return QModelIndex();
+  }
+
+  KFileInfo * indexToFile(const QModelIndex & i) const {
+    QStandardItem * si = itemFromIndex(sibling(i.row(), 0, i));
+    assert(si != nullptr);
+    assert(si != invisibleRootItem());
+    void * rv = si->data().value<void*>();
+    assert(rv != nullptr);
+    return static_cast<KFileInfo*>(rv);
+  }
+
+  void setRoot(KDirInfo * root) {
+    QStandardItem * r = invisibleRootItem();
+    r->removeRows(0, r->rowCount());
+    r->appendRow(createItem(root));
+  }
+
+  QModelIndex getRoot() {
+    QModelIndex r = indexFromItem(invisibleRootItem()->child(0));
+    if(canFetchMore(r))
+      fetchMore(r);
+    return r;
+  }
+
+  QModelIndexList children(const QModelIndex & mi) {
+    QModelIndexList r;
+    r.reserve(rowCount(mi));
+    for(int i = 0; i < rowCount(mi); i++)
+      r.append(index(i, 0, mi));
+    return r;
+  }
+
+  QVariant dataDisplay(KFileInfo * _orig, int column) const {
+    QString prefix = _orig->readState() == KDirAborted ? " >" : " ";
+    bool multi = _orig->isDir() || _orig->isDotEntry();
+    if(column == view_.percentNumCol()) {
+      if (_orig->parent() && // only if there is a parent as calculation base
+        _orig->parent()->pendingReadJobs() < 1 && // not before subtree is finished reading
+        _orig->parent()->totalSize() > 0 && // avoid division by zero
+        !_orig->isExcluded()) // not if this is an excluded object (dir)
+      {
+        return formatPercent(100. * _orig->totalSize() / _orig->parent()->totalSize());
+      } else {
+        return "";
+      }
+    } else if(column == view_.percentBarCol() && _orig->isDir() && _orig->isExcluded()) {
+      return i18n("[excluded]");
+    } else if(column == view_.totalSubDirsCol() && _orig->isDir()) {
+      return " " + formatCount(_orig->totalSubDirs());
+    } else if(column == view_.readJobsCol() && multi) {
+#if SEPARATE_READ_JOBS_COL
+      return " " + formatCount(_orig->pendingReadJobs(), true);
+#else
+      int jobs = _orig->pendingReadJobs();
+      return jobs > 0 ? i18n("[%1 Read Jobs]",
+        formatCount(_orig->pendingReadJobs(), true)) : "";
+#endif
+    } else if(column == view_.totalSizeCol() && multi) {
+      return prefix + formatSize(_orig->totalSize());
+    } else if(column == view_.totalItemsCol() && multi) {
+      return prefix + formatSizeLong(_orig->totalItems());
+    } else if(column == view_.totalFilesCol() && multi) {
+      return prefix + formatSizeLong(_orig->totalFiles());
+    } else if(column == view_.nameCol())
+      return _orig->isDotEntry() ? i18n("<Files>") :  _orig->name();
+    else if(column == view_.latestMtimeCol()) {
+      return localeTimeDate(_orig->latestMtime());
+    } else if(column == view_.ownSizeCol() && !_orig->isDevice()) {
+      QString text;
+      if (_orig->isFile() && _orig->links() > 1) {
+        // Regular file with multiple links
+        if (_orig->isSparseFile()) {
+          text = i18n("%1 / %2 Links (allocated: %3)",
+                      formatSize(_orig->byteSize()), formatSize(_orig->links()),
+                      formatSize(_orig->allocatedSize()));
+        } else {
+          text = i18n("%1 / %2 Links", formatSize(_orig->byteSize()),
+                      _orig->links());
+        }
+      } else if(!_orig->isDotEntry()){
+        // No multiple links or no regular file
+        if (_orig->isSparseFile()) {
+          text = i18n("%1 (allocated: %2)", formatSize(_orig->byteSize()),
+                      formatSize(_orig->allocatedSize()));
+        } else {
+          text = formatSize(_orig->size());
+        }
+      }
+      return text;
+    }
+    return QVariant();
+  }
+
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const override {
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+      return headers_[section];
+    else
+      return QVariant();
+  }
+
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override {
+    KFileInfo * _orig = indexToFile(index);
+    if(_orig == nullptr) {
+      return QVariant();
+    } else if(role == Qt::DisplayRole) {
+      return dataDisplay(_orig, index.column());
+    } else if(role == Qt::TextAlignmentRole) {
+      int c = index.column();
+      if(c == view_._totalSizeCol ||
+          c == view_._percentNumCol ||
+          c == view_._ownSizeCol ||
+          c == view_._totalItemsCol ||
+          c == view_._totalFilesCol ||
+          c == view_._totalSubDirsCol ||
+          c == view_._readJobsCol)
+          return Qt::AlignRight;
+    } else if(role == Qt::DecorationRole && index.column() == 0) {
+      QPixmap icon;
+      if (_orig->isDotEntry()) {
+        icon = view_.isExpanded(index) ? view_.openDotEntryIcon() :
+               view_.closedDotEntryIcon();
+      } else if (_orig->isDir()) {
+        if (_orig->readState() == KDirAborted) {
+          icon = view_.stopIcon();
+        } else if (_orig->readState() == KDirError) {
+          icon = view_.unreadableDirIcon();
+        } else {
+          if (_orig->isMountPoint()) {
+            icon = view_.mountPointIcon();
+          } else {
+            icon = view_.isExpanded(index) ? view_.openDirIcon() : view_.closedDirIcon();
+          }
+        }
+      } else if (_orig->isFile())
+        icon = view_.fileIcon();
+      else if (_orig->isSymLink())
+        icon = view_.symLinkIcon();
+      else if (_orig->isBlockDevice())
+        icon = view_.blockDevIcon();
+      else if (_orig->isCharDevice())
+        icon = view_.charDevIcon();
+      else if (_orig->isSpecial())
+        icon = view_.fifoIcon();
+      return icon;
+    }
+    return QVariant();
+  }
+};
+
+class KDirSortFilterProxyModel : public QSortFilterProxyModel {
+// https://doc.qt.io/qt-5/qtwidgets-itemviews-customsortfiltermodel-example.html
+public:
+  KDirSortFilterProxyModel(KDirTreeView * view): QSortFilterProxyModel(view) {}
+protected:
+  bool lessThan(const QModelIndex &left, const QModelIndex &right) const override {
+    KDirTreeView * _view = static_cast<KDirTreeView *>(parent());
+    KDirModel * m = static_cast<KDirModel*>(sourceModel());
+    KFileInfo * _orig = m->indexToFile(left);
+    KFileInfo * otherOrig = m->indexToFile(right);
+    assert(left.column() == right.column());
+    int column = left.column();
+    if (column == _view->totalSizeCol() || column == _view->percentNumCol() ||
+      column == _view->percentBarCol())
+      return _orig->totalSize() > otherOrig->totalSize();
+    else if (column == _view->ownSizeCol())
+      return _orig->size() > otherOrig->size();
+    else if (column == _view->totalItemsCol())
+      return _orig->totalItems() > otherOrig->totalItems();
+    else if (column == _view->totalFilesCol())
+      return _orig->totalFiles() > otherOrig->totalFiles();
+    else if (column == _view->totalSubDirsCol())
+      return _orig->totalSubDirs() > otherOrig->totalSubDirs();
+    else if (column == _view->latestMtimeCol())
+      return _orig->latestMtime() > otherOrig->latestMtime();
+    else if (_orig->isDotEntry()) // make sure dot entries are last in the list
+      return true;
+    else if (otherOrig->isDotEntry())
+      return false;
+    assert(false);
+    return false;
+  }
+};
+
 /** @brief Rendering of the percentage bar */
 class KDirItemDelegate : public QStyledItemDelegate {
 public:
@@ -45,24 +314,24 @@ public:
 
   virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
                      const QModelIndex &index) const {
-    KDirTreeViewItem *item =
-        static_cast<KDirTreeViewItem *>(index.internalPointer());
+    QModelIndex srcIdx = view->proxyModel()->mapToSource(index);
+    KFileInfo * item = view->model()->indexToFile(srcIdx);
     if (view->readJobsCol() == view->percentBarCol()) {
-      QString t = item->text(view->readJobsCol());
-      if (!t.isEmpty()) {
+      if (item->pendingReadJobs() > 0) {
+        QString t =
+            i18n("[%1 Read Jobs]", formatCount(item->pendingReadJobs(), true));
         QApplication::style()->drawItemText(
             painter, option.rect, Qt::AlignRight, view->palette(), true, t);
-        return;
       }
-    } else if (item->orig()->treeLevel() > 0) {
+    } else if (item->treeLevel() > 0) {
       QStyleOptionProgressBar o;
       o.rect = option.rect;
       o.minimum = 0;
       o.maximum = 100;
-      o.progress = item->percent();
+      o.progress = 100 * item->totalSize() / item->parent()->totalSize();
       o.palette.setColor(QPalette::Highlight,
-                         view->fillColor(item->orig()->treeLevel() - 1));
-      if (!item->isSelected())
+                         view->fillColor(item->treeLevel() - 1));
+      if (view->selection() != item)
         o.palette.setColor(QPalette::Base, view->palette().base().color());
       style->drawControl(QStyle::CE_ProgressBar, &o, painter);
     }
@@ -73,10 +342,27 @@ private:
   KDirTreeView *view;
 };
 
+KFileInfo * KDirTreeView::selection() const {
+  QModelIndexList indices = selectedIndexes();
+  if(indices.empty())
+    return nullptr;
+  else {
+    QModelIndex idx = proxyModel()->mapToSource(indices[0]);
+    return model()->indexToFile(idx);
+  }
+}
+
+QSortFilterProxyModel * KDirTreeView::proxyModel() const {
+  return static_cast<QSortFilterProxyModel*>(QTreeView::model());
+}
+
+KDirModel * KDirTreeView::model() const {
+  return static_cast<KDirModel*>(proxyModel()->sourceModel());
+}
+
 KDirTreeView::KDirTreeView(QWidget *parent):
-  KDirTreeViewParentClass(parent), _tree(new KDirTree()) {
+  QTreeView(parent), _tree(new KDirTree()) {
   _updateTimer = 0;
-  _selection = 0;
   _openLevel = 1;
   _doLazyClone = true;
   _doPacManAnimation = false;
@@ -118,8 +404,6 @@ KDirTreeView::KDirTreeView(QWidget *parent):
   _totalSubDirsCol = numCol++;
   colLabels << i18n("Last Change");
   _latestMtimeCol = numCol++;
-  setColumnCount(numCol);
-  setHeaderLabels(colLabels);
 
 #if !SEPARATE_READ_JOBS_COL
   _readJobsCol = _percentBarCol;
@@ -158,35 +442,22 @@ KDirTreeView::KDirTreeView(QWidget *parent):
   connect(app, SIGNAL(paletteChanged(const QPalette &)), this,
           SLOT(paletteChanged()));
 
-  connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
-
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
           SLOT(popupContextMenu(const QPoint &)));
 
   connect(this, SIGNAL(expanded(const QModelIndex &)), this,
           SLOT(resizeIndexToContents(const QModelIndex &)));
-  connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)), this,
-          SLOT(itemExpandedSlot(QTreeWidgetItem *)));
-  connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this,
-          SLOT(itemExpandedSlot(QTreeWidgetItem *)));
   connect(this, SIGNAL(collapsed(const QModelIndex &)), this,
           SLOT(resizeIndexToContents(const QModelIndex &)));
 
   _contextInfo = new QMenu(this);
   infoAction = new QAction(_contextInfo);
   _contextInfo->addAction(infoAction);
+  QSortFilterProxyModel *proxyModel = new KDirSortFilterProxyModel(this);
+  proxyModel->setSourceModel(new KDirModel(this, colLabels));
+  setModel(proxyModel);
   createTree();
-}
-
-void KDirTreeView::setColumnAlignment(QTreeWidgetItem &item) {
-  item.setTextAlignment(_totalSizeCol, Qt::AlignRight);
-  item.setTextAlignment(_percentNumCol, Qt::AlignRight);
-  item.setTextAlignment(_ownSizeCol, Qt::AlignRight);
-  item.setTextAlignment(_totalItemsCol, Qt::AlignRight);
-  item.setTextAlignment(_totalFilesCol, Qt::AlignRight);
-  item.setTextAlignment(_totalSubDirsCol, Qt::AlignRight);
-  item.setTextAlignment(_readJobsCol, Qt::AlignRight);
 }
 
 KDirTreeView::~KDirTreeView() {
@@ -226,7 +497,7 @@ void KDirTreeView::idleDisplay() {
     removeColumn(_readJobsCol);
   }
 #else
-  if (sortColumn() == _readJobsCol && sortColumn() >= 0) {
+  if (proxyModel()->sortColumn() == _readJobsCol && proxyModel()->sortColumn() >= 0) {
     // A pathological case: The user requested sorting by read jobs, and
     // now that everything is read, the items are still in that sort order.
     // Not only is that sort order now useless (since all read jobs are
@@ -280,8 +551,8 @@ void KDirTreeView::createTree() {
   connect(_tree, SIGNAL(finalizeLocal(KDirInfo *)), this,
           SLOT(finalizeLocal(KDirInfo *)));
 
-  connect(this, SIGNAL(treeSelectionChanged(KFileInfo *, KDirTree*)), _tree,
-          SLOT(selectItem(KFileInfo *)));
+  connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+          this, SLOT(fileSelectionChanged(const QItemSelection&, const QItemSelection&)));
 
   connect(_tree, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), this,
           SLOT(selectItem(KFileInfo *)));
@@ -322,10 +593,10 @@ void KDirTreeView::refreshAll() {
 }
 
 void KDirTreeView::refreshSelected() {
-  if (_tree->root() && _selection) {
+  if (_tree->root() && selection()) {
     // Implicitly calling prepareReading() via the tree's startingReading()
     // signal
-    _tree->refresh(_selection->orig());
+    _tree->refresh(selection());
   }
 
   logActivity(10);
@@ -336,8 +607,7 @@ void KDirTreeView::abortReading() {
 }
 
 void KDirTreeView::clear() {
-  clearSelection();
-  KDirTreeViewParentClass::clear();
+  selectionModel()->clearSelection();
 
   for (int i = 0; i < DEBUG_COUNTERS; i++)
     _debugCount[i] = 0;
@@ -353,80 +623,51 @@ void KDirTreeView::readCache(const QString &cacheFileName) {
   _tree->readCache(cacheFileName);
 }
 
-void KDirTreeView::slotAddChild(KFileInfo *newChild) {
-  if (newChild->parent()) {
-    KDirTreeViewItem *cloneParent = locate(newChild->parent(),
-                                           _doLazyClone, // lazy
-                                           true);        // doClone
-
-    if (cloneParent) {
-      if (cloneParent->isExpanded() || !_doLazyClone) {
-        // qDebug() << "Immediately cloning " << newChild << endl;
-        new KDirTreeViewItem(this, cloneParent, newChild);
-      }
-    } else // Error
-    {
-      if (!_doLazyClone) {
-        qCritical() << Q_FUNC_INFO << "Can't find parent view item for "
-                    << newChild << endl;
-      }
+void KDirTreeView::slotAddChild(KFileInfo * f) {
+  if(f != _tree->root()) {
+    QModelIndex idx = model()->fileToIndex(f->parent(), false);
+    QModelIndex proxyIdx = proxyModel()->mapFromSource(idx);
+    if(idx.isValid() && isExpanded(proxyIdx) && model()->canFetchMore(idx)) {
+      model()->fetchMore(idx);
     }
-  } else // No parent - top level item
-  {
-    // qDebug() << "Immediately top level cloning " << newChild << endl;
-    new KDirTreeViewItem(this, newChild);
   }
 }
 
-void KDirTreeView::deleteChild(KFileInfo *child) {
-  KDirTreeViewItem *clone = locate(child,
-                                   false,  // lazy
-                                   false); // doClone
-  KDirTreeViewItem *nextSelection = 0;
-
-  if (clone) {
-    if (clone == _selection) {
-      /**
-       * The selected item is about to be deleted. Select some other item
-       * so there is still something selected: Preferably the next item
-       * or the parent if there is no next. This cannot be done from
-       * outside because the order of items is not known to the outside;
-       * it might appear very random if the next item in the KFileInfo
-       * list would be selected. The order of that list is definitely
-       * different than the order of this view - which is what the user
-       * sees. So let's give the user a reasonable next selection so he
-       * can continue working without having to explicitly select another
-       * item.
-       *
-       * This is very useful if the user just activated a cleanup action
-       * that deleted an item: It makes sense to implicitly select the
-       * next item so he can clean up many items in a row.
-       **/
-      KDirTreeViewItem *parent = clone->parent();
-      if (parent) {
-        int ip = parent->indexOfChild(clone);
-        nextSelection = parent->child(ip + 1);
-      }
-    }
-
-    KDirTreeViewItem *parent = clone->parent();
-    delete clone;
-
-    while (parent) {
-      parent->updateSummary();
-      parent = parent->parent();
-    }
-
-    if (nextSelection)
-      selectItem(nextSelection);
+void KDirTreeView::deleteChild(KFileInfo *clone) {
+ /**
+  * The selected item is about to be deleted. Select some other item
+  * so there is still something selected: Preferably the next item
+  * or the parent if there is no next. This cannot be done from
+  * outside because the order of items is not known to the outside;
+  * it might appear very random if the next item in the KFileInfo
+  * list would be selected. The order of that list is definitely
+  * different than the order of this view - which is what the user
+  * sees. So let's give the user a reasonable next selection so he
+  * can continue working without having to explicitly select another
+  * item.
+  *
+  * This is very useful if the user just activated a cleanup action
+  * that deleted an item: It makes sense to implicitly select the
+  * next item so he can clean up many items in a row.
+  **/
+  QModelIndex nextSelection;
+  QModelIndexList indices = selectedIndexes();
+  for(int i = 0; i < indices.length(); i++) {
+    QModelIndex mi = proxyModel()->mapToSource(indices[i]);
+    if(model()->indexToFile(mi) == clone)
+      nextSelection = model()->sibling(mi.row() + 1, mi.column(), mi);
   }
+  if(nextSelection.isValid()) {
+    QModelIndex pIdx = proxyModel()->mapFromSource(nextSelection);
+    setCurrentIndex(pIdx);
+  }
+  model()->removeFile(clone);
 }
 
 void KDirTreeView::updateSummary() {
+  model()->updateData();
   bool se = isSortingEnabled();
   setSortingEnabled(false);
-  for (int i = 0; i < topLevelItemCount(); i++)
-    topLevelItem(i)->updateSummary();
   for (int column = 0; column < this->model()->columnCount(); column++) {
     resizeColumnToContents(column);
   }
@@ -449,10 +690,7 @@ void KDirTreeView::slotFinished() {
   if (_tree->root() && _tree->root()->totalSubDirs() == 0 && // No subdirs
       _tree->root()->totalItems() > 0) // but file children
   {
-    QTreeWidgetItem *root = topLevelItem(0);
-
-    if (root)
-      root->setExpanded(true);
+    setExpanded(QModelIndex(), true);
   }
 
 #if 0
@@ -484,12 +722,9 @@ void KDirTreeView::slotAborted() {
 }
 
 void KDirTreeView::finalizeLocal(KDirInfo *dir) {
-  if (dir) {
-    KDirTreeViewItem *clone = locate(dir,
-                                     false,  // lazy
-                                     false); // doClone
-    if (clone)
-      clone->finalizeLocal();
+  if(dir == _tree->root()) {
+    model()->setRoot(dir);
+    setExpanded(proxyModel()->mapFromSource(model()->getRoot()), true);
   }
 }
 
@@ -504,83 +739,30 @@ void KDirTreeView::sendProgressInfo(const QString &newCurrentDir) {
 #endif
 }
 
-KDirTreeViewItem *KDirTreeView::locate(KFileInfo *wanted, bool lazy,
-                                       bool doClone) {
-  for (int i = 0; i < topLevelItemCount(); i++) {
-    KDirTreeViewItem *wantedChild =
-        topLevelItem(i)->locate(wanted, lazy, doClone, 0);
-    if (wantedChild)
-      return wantedChild;
+void KDirTreeView::fileSelectionChanged(const QItemSelection &selected, const QItemSelection &) {
+  KFileInfo * newSelection = nullptr;
+  if(!selected.empty()) {
+    QModelIndex idx = proxyModel()->mapToSource(selected.indexes()[0]);
+    newSelection = model()->indexToFile(idx);
   }
-
-  return NULL;
-}
-
-int KDirTreeView::openCount() {
-  int count = 0;
-  for (int i = 0; i < topLevelItemCount(); i++)
-    count += topLevelItem(i)->openCount();
-  return count;
-}
-
-void KDirTreeView::updateSelection() {
-  QList<QTreeWidgetItem *> l = selectedItems();
-  selectItem(l.empty() ? NULL : l.at(0));
-}
-
-void KDirTreeView::selectItem(QTreeWidgetItem *listViewItem) {
-  _selection = dynamic_cast<KDirTreeViewItem *>(listViewItem);
-
-  if (_selection) {
-    // qDebug() << Q_FUNC_INFO << " Selecting item " << _selection << endl;
-    setCurrentItem(_selection);
-  } else {
-    // qDebug() << Q_FUNC_INFO << " Clearing selection" << endl;
-    clearSelection();
-  }
-
-  emit treeSelectionChanged(_selection);
-  emit treeSelectionChanged(_selection ? _selection->orig() : nullptr, _tree);
+  tree()->selectItem(newSelection);
 }
 
 void KDirTreeView::selectItem(KFileInfo *newSelection) {
   // Short-circuit for the most common case: The signal has been triggered by
   // this view, and the KDirTree has sent it right back.
 
-  if (_selection && _selection->orig() == newSelection)
+  if (selection() == newSelection)
     return;
 
-  if (!newSelection)
-    clearSelection();
-  else {
-    _selection = locate(newSelection,
-                        false, // lazy
-                        true); // doClone
-    if (_selection) {
-      closeAllExcept(_selection);
-      emit treeSelectionChanged(_selection);
-      setCurrentItem(_selection);
-    } else
-      qCritical() << "Couldn't clone item " << newSelection << endl;
+  if (newSelection) {
+    QModelIndex pIdx = proxyModel()->mapFromSource(model()->fileToIndex(newSelection));
+    collapseAll();
+    setExpanded(pIdx, true);
+    setCurrentIndex(pIdx);
+  } else {
+    selectionModel()->clearSelection();
   }
-}
-
-void KDirTreeView::clearSelection() {
-  // qDebug() << Q_FUNC_INFO << endl;
-  _selection = 0;
-  QTreeWidget::clearSelection();
-
-  emit treeSelectionChanged((KDirTreeViewItem *)0);
-  emit treeSelectionChanged(nullptr, _tree);
-}
-
-void KDirTreeView::closeAllExcept(KDirTreeViewItem *except) {
-  if (!except) {
-    qCritical() << Q_FUNC_INFO << ": NULL pointer passed" << endl;
-    return;
-  }
-
-  except->closeAllExceptThis();
 }
 
 const QColor &KDirTreeView::fillColor(int level) const {
@@ -667,14 +849,10 @@ void KDirTreeView::paletteChanged() {
 }
 
 void KDirTreeView::popupContextMenu(const QPoint &localPos) {
-  KDirTreeViewItem *item = (KDirTreeViewItem *)itemAt(localPos);
-
-  if (!item)
-    return;
-
+  QModelIndex idx = indexAt(localPos);
   int column = columnAt(localPos.x());
   QPoint pos = viewport()->mapToGlobal(localPos);
-  KFileInfo *orig = item->orig();
+  KFileInfo *orig = model()->indexToFile(proxyModel()->mapToSource(idx));
 
   if (!orig) {
     qCritical() << "NULL item->orig()" << endl;
@@ -703,17 +881,17 @@ void KDirTreeView::popupContextMenu(const QPoint &localPos) {
       // selection - all user operations refer to the current selection.
       // Just right-clicking on an item does not make it the current
       // item!
-      selectItem(item);
+      setCurrentIndex(idx);
 
       // Let somebody from outside pop up the context menu, if so desired.
-      emit contextMenu(item, pos);
+      emit contextMenu(pos);
     }
   }
 
   // If the column is one with a large size in kB/MB/GB, open a
   // info popup with the exact number.
 
-  if (column == _ownSizeCol && !item->orig()->isDotEntry()) {
+  if (column == _ownSizeCol && !orig->isDotEntry()) {
     if (orig->isSparseFile() || (orig->links() > 1 && orig->isFile())) {
       QString text;
 
@@ -738,14 +916,14 @@ void KDirTreeView::popupContextMenu(const QPoint &localPos) {
   }
 
   if (column == _totalSizeCol &&
-      (item->orig()->isDir() || item->orig()->isDotEntry())) {
-    popupContextSizeInfo(pos, item->orig()->totalSize());
+      (orig->isDir() || orig->isDotEntry())) {
+    popupContextSizeInfo(pos, orig->totalSize());
   }
 
   // Show alternate time / date format in time / date related columns.
 
   if (column == _latestMtimeCol) {
-    popupContextInfo(pos, formatTimeDate(item->orig()->latestMtime()));
+    popupContextInfo(pos, formatTimeDate(orig->latestMtime()));
   }
 
   logActivity(3);
@@ -809,17 +987,35 @@ void KDirTreeView::saveConfig() const {
 
 void KDirTreeView::logActivity(int points) { emit userActivity(points); }
 
+QString KDirTreeView::asciiDump(QModelIndex & idx) const {
+  KFileInfo * _orig = model()->indexToFile(proxyModel()->mapToSource(idx));
+  QString dump = QString("%1 %2")
+      .arg(formatSize( _orig->totalSize()))
+      .arg(_orig->debugUrl());
+
+  if ( isExpanded(idx) ) {
+    for(int i = 0; i < proxyModel()->rowCount(idx); i++) {
+      QModelIndex sidx = proxyModel()->index(i, 0, idx);
+      dump += asciiDump(sidx);
+    }
+  }
+
+  return dump;
+}
+
 void KDirTreeView::sendMailToOwner() {
-  if (!_selection) {
+  QModelIndexList indices = selectedIndexes();
+  if (indices.empty()) {
     qCritical() << Q_FUNC_INFO << "Nothing selected!" << endl;
     return;
   }
-
-  QString owner = KioDirReadJob::owner(fixedUrl(_selection->orig()->url()));
+  QModelIndex idx = indices.at(0);
+  KFileInfo * orig = model()->indexToFile(proxyModel()->mapToSource(idx));
+  QString owner = KioDirReadJob::owner(fixedUrl(orig->url()));
   QString subject = i18n("Disk Usage");
   QString body =
       i18n("Please check your disk usage and clean up if you can. Thank you.") +
-      "\n\n" + _selection->asciiDump() + "\n\n" +
+      "\n\n" + asciiDump(idx) + "\n\n" +
       i18n("Disk usage report generated by k4dirstat") +
       "\nhttps://bitbucket.org/jeromerobert/k4dirstat/";
 
@@ -843,513 +1039,10 @@ void KDirTreeView::sendMailToOwner() {
   logActivity(10);
 }
 
-KDirTreeViewItem *KDirTreeView::topLevelItem(int index) const {
-  return dynamic_cast<KDirTreeViewItem *>(
-      this->QTreeWidget::topLevelItem(index));
-}
-
-/**
- * Overriden from QTreeView to call deferredClone before expanding.
- * This is not possible using existing signals because they only allow
- * to be notified after expanding. This would have been possible
- * using canFetch/fetchMore from QAbstractItemModel but would have needed
- * to rewrite a model from scratch.
- */
-void KDirTreeView::mousePressEvent(QMouseEvent *event) {
-  if (style()->styleHint(QStyle::SH_ListViewExpand_SelectMouseType, 0, this) ==
-      QEvent::MouseButtonPress) {
-    KDirTreeViewItem *item =
-        static_cast<KDirTreeViewItem *>(itemAt(event->pos()));
-    if (item != NULL) {
-      if (!item->isExpanded() && doLazyClone())
-        item->deferredClone();
-      QTreeWidget::mousePressEvent(event);
-    }
-  } else
-    QTreeWidget::mousePressEvent(event);
-}
-
 void KDirTreeView::resizeIndexToContents(const QModelIndex &index) {
   resizeColumnToContents(index.column());
 }
 
-void KDirTreeView::itemExpandedSlot(QTreeWidgetItem *item) {
-  KDirTreeViewItem *kItem = dynamic_cast<KDirTreeViewItem *>(item);
-  if (kItem) {
-    if (kItem->isExpanded())
-      kItem->updateSummary();
-    else
-      kItem->setIcon();
-  }
-}
-
-KDirTreeViewItem::KDirTreeViewItem(KDirTreeView *view, KFileInfo *orig)
-    : QTreeWidgetItem(view) {
-  init(view, 0, orig);
-}
-
-KDirTreeViewItem::KDirTreeViewItem(KDirTreeView *view, KDirTreeViewItem *parent,
-                                   KFileInfo *orig)
-    : QTreeWidgetItem(parent) {
-  Q_CHECK_PTR(parent);
-  init(view, parent, orig);
-}
-
-void KDirTreeViewItem::init(KDirTreeView *view, KDirTreeViewItem *parent,
-                            KFileInfo *orig) {
-  _view = view;
-  _parent = parent;
-  _orig = orig;
-  _percent = 0.0;
-  _openCount = 0;
-
-  // _view->incDebugCount(1);
-  // qDebug() << "new KDirTreeViewItem for " << orig << endl;
-
-  if (_orig->isDotEntry()) {
-    setText(view->nameCol(), i18n("<Files>"));
-    setExpanded(false);
-  } else {
-    setText(view->nameCol(), _orig->name());
-
-    if (!_orig->isDevice()) {
-      QString text;
-
-      if (_orig->isFile() &&
-          (_orig->links() > 1)) // Regular file with multiple links
-      {
-        if (_orig->isSparseFile()) {
-          text = i18n("%1 / %2 Links (allocated: %3)",
-                      formatSize(_orig->byteSize()), formatSize(_orig->links()),
-                      formatSize(_orig->allocatedSize()));
-        } else {
-          text = i18n("%1 / %2 Links", formatSize(_orig->byteSize()),
-                      _orig->links());
-        }
-      } else // No multiple links or no regular file
-      {
-        if (_orig->isSparseFile()) {
-          text = i18n("%1 (allocated: %2)", formatSize(_orig->byteSize()),
-                      formatSize(_orig->allocatedSize()));
-        } else {
-          text = formatSize(_orig->size());
-        }
-      }
-
-      setText(view->ownSizeCol(), text);
-
-#ifdef NEVER_EXECUTED
-      // Never executed because during init() a read job for this
-      // directory will still be pending. Only the read job will figure
-      // out if an exclude rule applies.
-
-      if (_orig->isExcluded()) {
-        setText(_view->percentBarCol(), i18n("[excluded]"));
-      }
-#endif
-    }
-
-    setExpanded(_orig->treeLevel() < _view->openLevel());
-    /*
-     * Don't use KDirTreeViewItem::setOpen() here since this might call
-     * KDirTreeViewItem::deferredClone() which would confuse bookkeeping
-     * with addChild() signals that might arrive, too - resulting in double
-     * dot entries.
-     */
-  }
-
-  if (_view->doLazyClone() && (_orig->isDir() || _orig->isDotEntry())) {
-    /*
-     * Determine whether or not this item can be opened.
-     *
-     * Normally, Qt handles this very well, but when lazy cloning is in
-     * effect, Qt cannot know whether or not there are children - they may
-     * only be in the original tree until the user tries to open this
-     * item. So let's assume there may be children as long as the directory
-     * is still being read.
-     */
-
-    if (_orig->readState() == KDirQueued || _orig->readState() == KDirReading ||
-        _orig->readState() == KDirCached) {
-      setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
-    } else // KDirFinished, KDirError, KDirAborted
-    {
-      setChildIndicatorPolicy(_orig->hasChildren()
-                                  ? QTreeWidgetItem::ShowIndicator
-                                  : QTreeWidgetItem::DontShowIndicator);
-    }
-  }
-
-  if (!parent || parent->isExpanded()) {
-    setIcon();
-  }
-
-  _openCount = isExpanded() ? 1 : 0;
-  view->setColumnAlignment(*this);
-}
-
-KDirTreeViewItem::~KDirTreeViewItem() {
-  if (this == _view->selection())
-    _view->clearSelection();
-}
-
-void KDirTreeViewItem::setIcon() {
-  QPixmap icon;
-
-  if (_orig->isDotEntry()) {
-    icon =
-        isExpanded() ? _view->openDotEntryIcon() : _view->closedDotEntryIcon();
-  } else if (_orig->isDir()) {
-    if (_orig->readState() == KDirAborted) {
-      icon = _view->stopIcon();
-    } else if (_orig->readState() == KDirError) {
-      icon = _view->unreadableDirIcon();
-      setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
-    } else {
-      if (_orig->isMountPoint()) {
-        icon = _view->mountPointIcon();
-      } else {
-        icon = isExpanded() ? _view->openDirIcon() : _view->closedDirIcon();
-      }
-    }
-  } else if (_orig->isFile())
-    icon = _view->fileIcon();
-  else if (_orig->isSymLink())
-    icon = _view->symLinkIcon();
-  else if (_orig->isBlockDevice())
-    icon = _view->blockDevIcon();
-  else if (_orig->isCharDevice())
-    icon = _view->charDevIcon();
-  else if (_orig->isSpecial())
-    icon = _view->fifoIcon();
-
-  QTreeWidgetItem::setIcon(_view->iconCol(), icon);
-}
-
-void KDirTreeViewItem::updateSummary() {
-  // _view->incDebugCount(2);
-
-  // Update this item
-
-  setIcon();
-  setText(_view->latestMtimeCol(), "  " + localeTimeDate(_orig->latestMtime()));
-
-  if (_orig->isDir() || _orig->isDotEntry()) {
-    QString prefix = " ";
-
-    if (_orig->readState() == KDirAborted)
-      prefix = " >";
-
-    setText(_view->totalSizeCol(), prefix + formatSize(_orig->totalSize()));
-    setText(_view->totalItemsCol(), prefix + formatCount(_orig->totalItems()));
-    setText(_view->totalFilesCol(), prefix + formatCount(_orig->totalFiles()));
-
-    if (_view->readJobsCol() >= 0) {
-#if SEPARATE_READ_JOBS_COL
-      setText(_view->readJobsCol(),
-              " " + formatCount(_orig->pendingReadJobs(), true));
-#else
-      int jobs = _orig->pendingReadJobs();
-      QString text = "";
-
-      if (jobs > 0) {
-        text =
-            i18n("[%1 Read Jobs]", formatCount(_orig->pendingReadJobs(), true));
-      }
-
-      setText(_view->readJobsCol(), text);
-#endif
-    }
-  }
-
-  if (_orig->isDir()) {
-    setText(_view->totalSubDirsCol(), " " + formatCount(_orig->totalSubDirs()));
-
-    if (_orig->isExcluded())
-      setText(_view->percentBarCol(), i18n("[excluded]"));
-  }
-
-  // Calculate and display percentage
-
-  if (_orig->parent() && // only if there is a parent as calculation base
-      _orig->parent()->pendingReadJobs() <
-          1 && // not before subtree is finished reading
-      _orig->parent()->totalSize() > 0 && // avoid division by zero
-      !_orig->isExcluded()) // not if this is an excluded object (dir)
-  {
-    _percent =
-        (100.0 * _orig->totalSize()) / (float)_orig->parent()->totalSize();
-    setText(_view->percentNumCol(), formatPercent(_percent));
-  } else {
-    _percent = 0.0;
-    setText(_view->percentNumCol(), "");
-  }
-
-  if (!isExpanded()) // Lazy update: Nobody can see the children
-    return;          // -> don't update them.
-
-  // Update all children
-  // copy children because sorting may change the loop order
-  QVector<KDirTreeViewItem *> tmp(childCount());
-  for (int i = 0; i < childCount(); i++)
-    tmp[i] = child(i);
-  for (int i = 0; i < tmp.size(); i++)
-    tmp[i]->updateSummary();
-}
-
-KDirTreeViewItem *KDirTreeViewItem::locate(KFileInfo *wanted, bool lazy,
-                                           bool doClone, int level) {
-  if (lazy && !isExpanded()) {
-    /*
-     * In "lazy" mode, we don't bother searching all the children of this
-     * item if they are not visible (i.e. the branch is open) anyway. In
-     * this case, cloning that branch is deferred until the branch is
-     * actually opened - which in most cases will never happen anyway (most
-     * users don't manually open each and every subtree). If and when it
-     * happens, we'll probably be fast enough bringing the view tree in
-     * sync with the original tree since opening a branch requires manual
-     * interaction which is a whole lot slower than copying a couple of
-     * objects.
-     *
-     * Note that this mode is _independent_ of lazy cloning in general: The
-     * caller explicitly specifies if he wants to locate an item at all
-     * cost, even if that means deferred cloning children whose creation
-     * has been delayed until now.
-     */
-
-    // qDebug() << "Too lazy to search for " << wanted << " from " << this <<
-    // endl;
-    return 0;
-  }
-
-  if (_orig == wanted) {
-    return this;
-  }
-
-  if (level < 0)
-    level = _orig->treeLevel();
-
-  if (wanted->urlPart(level) == _orig->name()) {
-    // Search all children
-    if (!childCount() && _orig->hasChildren() && doClone)
-      deferredClone();
-    for (int i = 0; i < childCount(); i++) {
-      KDirTreeViewItem *foundChild =
-          child(i)->locate(wanted, lazy, doClone, level + 1);
-      if (foundChild)
-        return foundChild;
-    }
-  }
-
-  return 0;
-}
-
-void KDirTreeViewItem::deferredClone() {
-  // _view->incDebugCount(3);
-
-  if (!_orig->hasChildren()) {
-    // qDebug() << Q_FUNC_INFO << "Oops, no children - sorry for bothering you!"
-    // << endl;
-    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
-    return;
-  }
-
-  takeChildren();
-
-  // Clone all normal children
-
-  int level = _orig->treeLevel();
-  bool startingClean = childCount() == 0;
-  for(size_t i = 0; i < _orig->numChildren(); i++) {
-    if (startingClean || !locate(_orig->child(i),
-                                 false, // lazy
-                                 true,  // doClone
-                                 level)) {
-      new KDirTreeViewItem(_view, this, _orig->child(i));
-    }
-  }
-
-  // Clone the dot entry
-
-  if (_orig->dotEntry() && (startingClean || !locate(_orig->dotEntry(),
-                                                     false, // lazy
-                                                     true,  // doClone
-                                                     level))) {
-    // qDebug() << "Deferred cloning dot entry for " << _orig << endl;
-    new KDirTreeViewItem(_view, this, _orig->dotEntry());
-  }
-}
-
-void KDirTreeViewItem::finalizeLocal() {
-  // qDebug() << Q_FUNC_INFO << _orig << endl;
-  cleanupDotEntries();
-
-  if (_orig->totalItems() == 0)
-  // _orig->hasChildren() would give a wrong answer here since it counts
-  // the dot entry, too - which might be removed a moment later.
-  {
-    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
-  }
-}
-
-void KDirTreeViewItem::cleanupDotEntries() {
-  if (!_orig->dotEntry())
-    return;
-
-  KDirTreeViewItem *dotEntry = findDotEntry();
-
-  if (!dotEntry)
-    return;
-
-  // Reparent dot entry children if there are no subdirectories on this level
-
-  if (_orig->numChildren() == 0) {
-    // qDebug() << "Removing solo dot entry clone " << _orig << endl;
-    addChildren(dotEntry->takeChildren());
-    /*
-     * Immediately delete the (now emptied) dot entry. The algorithm for
-     * the original tree doesn't quite fit here - there, the dot entry is
-     * actually deleted in the step below. But the 'no children' check for
-     * this fails here since the original dot entry still _has_ its
-     * children - they will be deleted only after all clones have been
-     * processed.
-     *
-     * This had been the cause for a core that took me quite some time to
-     * track down.
-     */
-    delete dotEntry;
-    dotEntry = 0;
-  }
-
-  // Delete dot entries without any children
-
-  if (_orig->numChildren() == 0 && dotEntry) {
-    // qDebug() << "Removing empty dot entry clone " << _orig << endl;
-    delete dotEntry;
-  }
-}
-
-KDirTreeViewItem *KDirTreeViewItem::findDotEntry() const {
-  for (int i = 0; i < childCount(); i++) {
-    if (child(i)->orig()->isDotEntry())
-      return child(i);
-  }
-  return NULL;
-}
-
-void KDirTreeViewItem::setOpen(bool open) {
-  if (isExpanded() != open) {
-    openNotify(open);
-  }
-
-  setExpanded(open);
-}
-
-void KDirTreeViewItem::openNotify(bool open) {
-  if (open)
-    _openCount++;
-  else
-    _openCount--;
-
-  if (_parent)
-    _parent->openNotify(open);
-}
-
-void KDirTreeViewItem::openSubtree() {
-  if (parent())
-    parent()->setOpen(true);
-
-  setOpen(true);
-}
-
-void KDirTreeViewItem::closeSubtree() {
-  setOpen(false);
-
-  if (_openCount > 0) {
-    for (int i = 0; i < childCount(); i++)
-      child(i)->closeSubtree();
-  }
-
-  _openCount = 0; // just to be sure
-}
-
-void KDirTreeViewItem::closeAllExceptThis() {
-  if (_parent) {
-    KDirTreeViewItem *sibling = _parent;
-    for (int i = 0; i < sibling->childCount(); i++) {
-      if (sibling->child(i) != this)
-        sibling->child(i)->closeSubtree();
-    }
-    setOpen(true);
-    _parent->closeAllExceptThis(); // Recurse up
-  }
-}
-
-QString KDirTreeViewItem::asciiDump() {
-  QString dump = QString("%1 %2")
-                     .arg(formatSize(_orig->totalSize()))
-                     .arg(_orig->debugUrl());
-
-  if (isExpanded()) {
-    for (int i = 0; i < childCount(); i++)
-      dump += child(i)->asciiDump();
-  }
-
-  return dump;
-}
-
-bool KDirTreeViewItem::
-operator<(const QTreeWidgetItem &otherListViewItem) const {
-  int column = treeWidget() ? treeWidget()->sortColumn() : 0;
-  const KDirTreeViewItem *other =
-      dynamic_cast<const KDirTreeViewItem *>(&otherListViewItem);
-  if (other) {
-    if (_view->nameCol() == column)
-      return this->orig()->name() < other->orig()->name();
-    else
-      return compare(other, column) == -1;
-  } else
-    return QTreeWidgetItem::operator<(otherListViewItem);
-}
-
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int KDirTreeViewItem::compare(const KDirTreeViewItem *other, int column) const {
-  KFileInfo *otherOrig = other->orig();
-
-#if !SEPARATE_READ_JOBS_COL
-  if (column == _view->readJobsCol())
-    return -compare(_orig->pendingReadJobs(), otherOrig->pendingReadJobs());
-  else
-#endif
-      if (column == _view->totalSizeCol() || column == _view->percentNumCol() ||
-          column == _view->percentBarCol())
-    return -compare(_orig->totalSize(), otherOrig->totalSize());
-
-  else if (column == _view->ownSizeCol())
-    return -compare(_orig->size(), otherOrig->size());
-  else if (column == _view->totalItemsCol())
-    return -compare(_orig->totalItems(), otherOrig->totalItems());
-  else if (column == _view->totalFilesCol())
-    return -compare(_orig->totalFiles(), otherOrig->totalFiles());
-  else if (column == _view->totalSubDirsCol())
-    return -compare(_orig->totalSubDirs(), otherOrig->totalSubDirs());
-  else if (column == _view->latestMtimeCol())
-    return -compare(_orig->latestMtime(), otherOrig->latestMtime());
-  else {
-    if (_orig->isDotEntry()) // make sure dot entries are last in the list
-      return 1;
-
-    if (otherOrig->isDotEntry())
-      return -1;
-  }
-  return -2;
-}
 
 QString KDirStat::formatSizeLong(KFileSize size) {
   return QLocale().toString(size);

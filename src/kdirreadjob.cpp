@@ -191,12 +191,12 @@ void KLocalDirReadJob::startReading() {
     closedir(_diskDir);
     // qDebug() << "Finished reading " << _dir << endl;
     _dir->setReadState(KDirFinished);
-    _tree->sendFinalizeLocal(_dir);
     _dir->finalizeLocal();
+    _tree->sendFinalizeLocal(_dir);
   } else {
     _dir->setReadState(KDirError);
-    _tree->sendFinalizeLocal(_dir);
     _dir->finalizeLocal();
+    _tree->sendFinalizeLocal(_dir);
     // qWarning() << Q_FUNC_INFO << "opendir(" << dirName << ") failed" << endl;
     // opendir() doesn't set 'errno' according to POSIX  :-(
   }

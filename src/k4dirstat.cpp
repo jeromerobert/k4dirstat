@@ -111,11 +111,11 @@ k4dirstat::k4dirstat()
   connect(_treeView, SIGNAL(progressInfo(const QString &)), this,
           SLOT(statusMsg(const QString &)));
 
-  connect(_treeView, SIGNAL(treeSelectionChanged(KFileInfo *, KDirTree*)), this,
+  connect(_treeView->tree(), SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), this,
           SLOT(selectionChanged(KFileInfo *, KDirTree*)));
 
-  connect(_treeView, SIGNAL(contextMenu(KDirTreeViewItem *, const QPoint &)),
-          this, SLOT(contextMenu(KDirTreeViewItem *, const QPoint &)));
+  connect(_treeView, SIGNAL(contextMenu(const QPoint &)),
+          this, SLOT(contextMenu(const QPoint &)));
 
   connect(this, SIGNAL(readConfig()), _treeView, SLOT(readConfig()));
   connect(this, SIGNAL(saveConfig()), _treeView, SLOT(saveConfig()));
@@ -321,7 +321,7 @@ void k4dirstat::initCleanups() {
   _cleanupCollection->addUserCleanups(USER_CLEANUPS);
   _cleanupCollection->readConfig();
 
-  connect(_treeView, SIGNAL(treeSelectionChanged(KFileInfo *, KDirTree*)),
+  connect(_treeView->tree(), SIGNAL(selectionChanged(KFileInfo *, KDirTree*)),
           _cleanupCollection, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)));
 
   connect(this, SIGNAL(readConfig(void)), _cleanupCollection,
@@ -519,7 +519,7 @@ void k4dirstat::editCopy() {
     QGuiApplication *app =
         dynamic_cast<QGuiApplication *>(QCoreApplication::instance());
     if (app)
-      app->clipboard()->setText(_treeView->selection()->orig()->url());
+      app->clipboard()->setText(_treeView->selection()->url());
   }
 
 #if 0
@@ -533,7 +533,7 @@ void k4dirstat::cleanupOpenWith() {
   if (!_treeView->selection())
     return;
 
-  KFileInfo *sel = _treeView->selection()->orig();
+  KFileInfo *sel = _treeView->selection();
 
   if (sel->isDotEntry())
     return;
@@ -638,9 +638,7 @@ void k4dirstat::statusMsg(const QString &text) {
   statusBar()->showMessage(text);
 }
 
-void k4dirstat::contextMenu(KDirTreeViewItem *item, const QPoint &pos) {
-  NOT_USED(item);
-
+void k4dirstat::contextMenu(const QPoint &pos) {
   if (_treeViewContextMenu)
     _treeViewContextMenu->popup(pos);
 }
