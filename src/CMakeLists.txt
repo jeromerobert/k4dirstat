@@ -15,7 +15,6 @@ set(k4dirstat_SRCS
    kdirreadjob.cpp
    kdirinfo.cpp
    kdirtreecache.cpp
-   kdirtreeiterators.cpp
    kdirstatsettings.cpp
  )
 

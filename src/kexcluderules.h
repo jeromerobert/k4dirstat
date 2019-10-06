@@ -1,162 +1,135 @@
+#pragma once
+
 /*
- *   File name: kexcluderules.h
- *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
  *   Author:	Stefan Hundhammer <sh@suse.de>
  *              Joshua Hodosh <kdirstat@grumpypenguin.org>
- *
- *   Updated:	2010-02-01
  */
 
-
-#ifndef KExcludeRules_h
-#define KExcludeRules_h
-
-
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
-#include <qstring.h>
-#include <qregexp.h>
 #include <QList>
+#include <qregexp.h>
+#include <qstring.h>
 
-namespace KDirStat
-{
-    /**
-     * One single exclude rule to check text (file names) against.
-     * It can be enabled or disabled. Only enabled rules can ever match; a
-     * disabled exclude rule will never exclude anything.
-     **/
-    class KExcludeRule
-    {
-    public:
+namespace KDirStat {
+/**
+ * One single exclude rule to check text (file names) against.
+ * It can be enabled or disabled. Only enabled rules can ever match; a
+ * disabled exclude rule will never exclude anything.
+ **/
+class KExcludeRule {
+public:
+  /**
+   * Constructor.
+   **/
+  KExcludeRule(const QRegExp &regexp);
 
-	/**
-	 * Constructor.
-	 **/
-	KExcludeRule( const QRegExp & regexp );
+  /**
+   * Destructor.
+   **/
+  virtual ~KExcludeRule();
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~KExcludeRule();
+  /**
+   * Check a string (usually a file name) against this exclude rule.
+   * Returns 'true' if the string matches, i.e. if the object this string
+   * belongs to should be excluded.
+   *
+   * Only enabled exclude rules will ever match; as long as it is
+   * disabled, this will always return 'false'.
+   **/
+  bool match(const QString &text);
 
-	/**
-	 * Check a string (usually a file name) against this exclude rule.
-	 * Returns 'true' if the string matches, i.e. if the object this string
-	 * belongs to should be excluded.
-	 *
-	 * Only enabled exclude rules will ever match; as long as it is
-	 * disabled, this will always return 'false'.
-	 **/
-	bool match( const QString & text );
+  /**
+   * Returns this rule's regular expression.
+   **/
+  QRegExp regexp() const { return _regexp; }
 
-	/**
-	 * Returns this rule's regular expression.
-	 **/
-	QRegExp regexp() const { return _regexp; }
+  /**
+   * Change this rule's regular expression.
+   **/
+  void setRegexp(const QRegExp &regexp) { _regexp = regexp; }
 
-	/**
-	 * Change this rule's regular expression.
-	 **/
-	void setRegexp( const QRegExp & regexp ) { _regexp = regexp; }
+  /**
+   * Check if this rule is enabled.
+   **/
+  bool isEnabled() const { return _enabled; }
 
-	/**
-	 * Check if this rule is enabled.
-	 **/
-	bool isEnabled() const { return _enabled; }
+  /**
+   * Enable or disable this rule.
+   * New rules are always enabled by default.
+   **/
+  void enable(bool enable = true) { _enabled = enable; }
 
-	/**
-	 * Enable or disable this rule.
-	 * New rules are always enabled by default.
-	 **/
-	void enable( bool enable = true ) { _enabled = enable; }
+private:
+  QRegExp _regexp;
+  bool _enabled;
+};
 
+/**
+ * Container for multiple exclude rules.
+ *
+ * Normal usage:
+ *
+ *     KExcludeRules::excludeRules()->add( new KExcludeRule( ... ) );
+ *     ...
+ *     if ( KExcludeRules::excludeRules()->match( filename ) )
+ *	   {
+ *         // exclude this file
+ *     }
+ **/
+class KExcludeRules {
+public:
+  /**
+   * Constructor.
+   *
+   * Most applications will want to use excludeRules() instead to create
+   * and use a singleton object of this class.
+   **/
+  KExcludeRules() {}
 
-    private:
+  /**
+   * Destructor.
+   **/
+  ~KExcludeRules();
 
-	QRegExp	_regexp;
-	bool	_enabled;
-    };
+  /**
+   * Return the singleton object of this class.
+   * This will create one if there is none yet.
+   **/
+  static KExcludeRules *excludeRules();
 
+  /**
+   * Add an exclude rule to this rule set.
+   * This transfers ownership of that rule to this rule set;
+   * it will be destroyed with 'delete' after use.
+   **/
+  void add(KExcludeRule *rule);
 
-    /**
-     * Container for multiple exclude rules.
-     *
-     * Normal usage:
-     *
-     *     KExcludeRules::excludeRules()->add( new KExcludeRule( ... ) );
-     *     ...
-     *     if ( KExcludeRules::excludeRules()->match( filename ) )
-     *	   {
-     *         // exclude this file
-     *     }
-     **/
-    class KExcludeRules
-    {
-    public:
+  /**
+   * Check a string against the exclude rules.
+   * This will return 'true' if the text matches any (enabled) rule.
+   *
+   * Note that this operation will move current().
+   **/
+  bool match(const QString &text);
 
-	/**
-	 * Constructor.
-	 *
-	 * Most applications will want to use excludeRules() instead to create
-	 * and use a singleton object of this class.
-	 **/
-	KExcludeRules(){}
+  /**
+   * Find the exclude rule that matches 'text'.
+   * Return 0 if there is no match.
+   *
+   * This is intended to explain to the user which rule matched.
+   **/
+  const KExcludeRule *matchingRule(const QString &text);
 
-	/**
-	 * Destructor.
-	 **/
-	~KExcludeRules();
+  /**
+   * Clear (delete) all exclude rules.
+   **/
+  void clear() { _rules.clear(); }
 
-	/**
-	 * Return the singleton object of this class.
-	 * This will create one if there is none yet.
-	 **/
-	static KExcludeRules * excludeRules();
+  const QList<KExcludeRule *> &rules() const { return _rules; }
 
-	/**
-	 * Add an exclude rule to this rule set.
-	 * This transfers ownership of that rule to this rule set;
-	 * it will be destroyed with 'delete' after use.
-	 **/
-	void add( KExcludeRule * rule );
+private:
+  QList<KExcludeRule *> _rules;
+};
 
-	/**
-	 * Check a string against the exclude rules.
-	 * This will return 'true' if the text matches any (enabled) rule.
-	 *
-	 * Note that this operation will move current().
-	 **/
-	bool match( const QString & text );
-
-	/**
-	 * Find the exclude rule that matches 'text'.
-	 * Return 0 if there is no match.
-	 *
-	 * This is intended to explain to the user which rule matched.
-	 **/
-	const KExcludeRule * matchingRule( const QString & text );
-
-	/**
-	 * Clear (delete) all exclude rules.
-	 **/
-	void clear() { _rules.clear(); }
-
-        const QList<KExcludeRule*> & rules() const {
-            return _rules;
-        }
-    private:
-
-	QList<KExcludeRule*>    _rules;
-    };
-
-}	// namespace KDirStat
-
-
-#endif // ifndef KExcludeRules_h
-
-
-// EOF
+} // namespace KDirStat
 

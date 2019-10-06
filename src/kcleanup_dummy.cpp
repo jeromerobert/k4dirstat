@@ -3,7 +3,5 @@
 
 using namespace KDirStat;
 
-KCleanup:KCleanup (QString id,
-                   QString command,
-                   QString title,
-                   KActionCollection * parent)
+KCleanup : KCleanup(QString id, QString command, QString title,
+                    KActionCollection *parent)

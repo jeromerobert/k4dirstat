@@ -13,7 +13,6 @@
 #ifndef K4DIRSTAT_H
 #define K4DIRSTAT_H
 
-
 #include <kxmlguiwindow.h>
 
 class QPrinter;
@@ -27,16 +26,16 @@ class KAction;
 class KRecentFilesAction;
 class KToggleAction;
 
-namespace KDirStat
-{
-    class KCleanupCollection;
-    class KDirTreeView;
-    class KDirTreeViewItem;
-    class KFileInfo;
-    class KSettingsDialog;
-    class KTreemapView;
-    class KTreemapTile;
-}
+namespace KDirStat {
+class KCleanupCollection;
+class KDirTreeView;
+class KDirTreeViewItem;
+class KDirTree;
+class KFileInfo;
+class KSettingsDialog;
+class KTreemapView;
+class KTreemapTile;
+} // namespace KDirStat
 
 using namespace KDirStat;
 
@@ -48,300 +47,297 @@ using namespace KDirStat;
  * @author %{AUTHOR} <%{EMAIL}>
  * @version %{VERSION}
  */
-class k4dirstat : public KXmlGuiWindow
-{
-    Q_OBJECT
+class k4dirstat : public KXmlGuiWindow {
+  Q_OBJECT
 public:
-    /**
-     * Default Constructor
-     */
-    k4dirstat();
+  /**
+   * Default Constructor
+   */
+  k4dirstat();
 
-    static k4dirstat * instance() { return instance_; }
+  static k4dirstat *instance() { return instance_; }
 
-    /**
-     * Default Destructor
-     */
-    virtual ~k4dirstat();
+  /**
+   * Default Destructor
+   */
+  virtual ~k4dirstat();
 
-    /**
-     * Open an URL specified by command line argument.
-     **/
-    void openURL( const QUrl & url );
+  /**
+   * Open an URL specified by command line argument.
+   **/
+  void openURL(const QUrl &url);
 
-    /**
-     * Return the main window's @ref KDirTreeView.
-     **/
-    KDirTreeView * treeView() const { return _treeView; }
+  /**
+   * Return the main window's @ref KDirTreeView.
+   **/
+  KDirTreeView *treeView() const { return _treeView; }
 
-    /**
-     * Returns the main window's @ref KTreemapView or 0 if there is none.
-     *
-     * Caution: Do not try to cache this value. The treemap view is destroyed
-     * and re-created frequently!
-     **/
-    KTreemapView * treemapView() const { return _treemapView; }
+  /**
+   * Returns the main window's @ref KTreemapView or 0 if there is none.
+   *
+   * Caution: Do not try to cache this value. The treemap view is destroyed
+   * and re-created frequently!
+   **/
+  KTreemapView *treemapView() const { return _treemapView; }
 
 public slots:
-    /**
-     * Open a directory tree.
-     **/
-    void fileAskOpenDir();
+  /**
+   * Open a directory tree.
+   **/
+  void fileAskOpenDir();
 
-    /**
-     * Open a (possibly remote) directory tree.
-     **/
-    void fileAskOpenUrl();
+  /**
+   * Open a (possibly remote) directory tree.
+   **/
+  void fileAskOpenUrl();
 
-    /**
-     * Refresh the entire directory tree, i.e. re-read everything from disk.
-     **/
-    void refreshAll();
+  /**
+   * Refresh the entire directory tree, i.e. re-read everything from disk.
+   **/
+  void refreshAll();
 
-    /**
-     * Refresh the selected subtree, i.e. re-read it from disk.
-     **/
-    void refreshSelected();
+  /**
+   * Refresh the selected subtree, i.e. re-read it from disk.
+   **/
+  void refreshSelected();
 
-    /**
-     * Refresh the entire directory tree, i.e. re-read everything from disk.
-     **/
-    void stopReading();
+  /**
+   * Refresh the entire directory tree, i.e. re-read everything from disk.
+   **/
+  void stopReading();
 
-    /**
-     * Open a directory tree from the "recent" menu.
-     **/
-    void fileOpenRecent( const QUrl& url );
+  /**
+   * Open a directory tree from the "recent" menu.
+   **/
+  void fileOpenRecent(const QUrl &url);
 
-    /**
-     * asks for saving if the file is modified, then closes the current file
-     * and window
-     **/
-    void fileCloseDir();
+  /**
+   * asks for saving if the file is modified, then closes the current file
+   * and window
+   **/
+  void fileCloseDir();
 
-    /**
-     * put the marked text/object into the clipboard
-     **/
-    void editCopy();
+  /**
+   * put the marked text/object into the clipboard
+   **/
+  void editCopy();
 
-    /**
-     * Notification that the view's selection has changed.
-     * Enable/disable user actions as appropriate.
-     **/
-    void selectionChanged( KFileInfo *selection );
+  /**
+   * Notification that the view's selection has changed.
+   * Enable/disable user actions as appropriate.
+   **/
+  void selectionChanged(KFileInfo *selection, KDirTree*);
 
-    /**
-     * Ask user what application to open a file or directory with
-     **/
-    void cleanupOpenWith();
+  /**
+   * Ask user what application to open a file or directory with
+   **/
+  void cleanupOpenWith();
 
-    /**
-     * Toggle treemap view
-     **/
-    void toggleTreemapView();
+  /**
+   * Toggle treemap view
+   **/
+  void toggleTreemapView();
 
-    /**
-     * Zoom in the treemap at the currently selected tile.
-     **/
-    void treemapZoomIn();
+  /**
+   * Zoom in the treemap at the currently selected tile.
+   **/
+  void treemapZoomIn();
 
-    /**
-     * Zoom out the treemap after zooming in.
-     **/
-    void treemapZoomOut();
+  /**
+   * Zoom out the treemap after zooming in.
+   **/
+  void treemapZoomOut();
 
-    /**
-     * Select the parent of the currently selected treemap tile.
-     **/
-    void treemapSelectParent();
+  /**
+   * Select the parent of the currently selected treemap tile.
+   **/
+  void treemapSelectParent();
 
-    /**
-     * Rebuild the treemap.
-     **/
-    void treemapRebuild();
+  /**
+   * Rebuild the treemap.
+   **/
+  void treemapRebuild();
 
-    /**
-     * Invoke online help about treemaps.
-     **/
-    void treemapHelp();
+  /**
+   * Invoke online help about treemaps.
+   **/
+  void treemapHelp();
 
-    /**
-     * Open settings dialog
-     **/
-    void preferences();
+  /**
+   * Open settings dialog
+   **/
+  void preferences();
 
-    /**
-     * Changes the statusbar contents for the standard label permanently, used
-     * to indicate current actions.
-     *
-     * @param text the text that is displayed in the statusbar
-     **/
-    void statusMsg( const QString &text );
+  /**
+   * Changes the statusbar contents for the standard label permanently, used
+   * to indicate current actions.
+   *
+   * @param text the text that is displayed in the statusbar
+   **/
+  void statusMsg(const QString &text);
 
-    /**
-     * Opens a context menu for tree view items.
-     **/
-    void contextMenu( KDirTreeViewItem * item, const QPoint &pos );
+  /**
+   * Opens a context menu for tree view items.
+   **/
+  void contextMenu(const QPoint &pos);
 
-    /**
-     * Opens a context menu for treemap tiles.
-     **/
-    void contextMenu( KTreemapTile * tile, const QPoint &pos );
+  /**
+   * Opens a context menu for treemap tiles.
+   **/
+  void contextMenu(KTreemapTile *tile, const QPoint &pos);
 
-    /**
-     * Create a treemap view. This makes only sense after a directory tree is
-     * completely read.
-     **/
-    void createTreemapView();
+  /**
+   * Create a treemap view. This makes only sense after a directory tree is
+   * completely read.
+   **/
+  void createTreemapView();
 
-    /**
-     * Create a treemap view after all events are processed.
-     **/
-    void createTreemapViewDelayed();
+  /**
+   * Create a treemap view after all events are processed.
+   **/
+  void createTreemapViewDelayed();
 
-    /**
-     * Delete an existing treemap view if there is one.
-     **/
-    void deleteTreemapView();
+  /**
+   * Delete an existing treemap view if there is one.
+   **/
+  void deleteTreemapView();
 
-    /**
-     * Sends a user feedback mail.
-     **/
-    //void sendFeedbackMail();
+  /**
+   * Sends a user feedback mail.
+   **/
+  // void sendFeedbackMail();
 
-    /**
-     * Read configuration for the main window.
-     **/
-    void readMainWinConfig();
+  /**
+   * Read configuration for the main window.
+   **/
+  void readMainWinConfig();
 
-    /**
-     * Save the main window's configuration.
-     **/
-    void saveMainWinConfig();
+  /**
+   * Save the main window's configuration.
+   **/
+  void saveMainWinConfig();
 
-    /**
-     * Revert all cleanups to default values.
-     **/
-    void revertCleanupsToDefaults();
+  /**
+   * Revert all cleanups to default values.
+   **/
+  void revertCleanupsToDefaults();
 
-    /**
-     * For the settings dialog only: Return the internal cleanup collection.
-     **/
-    KCleanupCollection * cleanupCollection() { return _cleanupCollection; }
+  /**
+   * For the settings dialog only: Return the internal cleanup collection.
+   **/
+  KCleanupCollection *cleanupCollection() { return _cleanupCollection; }
 
-    /**
-     * Returns true if the pacman animation in the tool bar is enabled, false
-     * otherwise.
-     **/
-    bool pacManEnabled() const { return _pacMan != 0; }
+  /**
+   * Returns true if the pacman animation in the tool bar is enabled, false
+   * otherwise.
+   **/
+  bool pacManEnabled() const { return _pacMan != 0; }
 
-    /**
-     * Ask user if he wouldn't like to rate this program.
-     **/
-    //void askForFeedback();
+  /**
+   * Ask user if he wouldn't like to rate this program.
+   **/
+  // void askForFeedback();
 
-    /**
-     * Notification that a feedback mail has been sent, thus don't remind
-     * the user any more.
-     **/
-    //void feedbackMailSent();
+  /**
+   * Notification that a feedback mail has been sent, thus don't remind
+   * the user any more.
+   **/
+  // void feedbackMailSent();
 
-    /**
-     * Update enabled/disabled state of the user actions.
-     **/
-    void updateActions();
+  /**
+   * Update enabled/disabled state of the user actions.
+   **/
+  void updateActions();
 
-    /**
-     * Open a file selection box to save the current directory tree to a
-     * kdirstat cache file
-     **/
-    void askWriteCache();
+  /**
+   * Open a file selection box to save the current directory tree to a
+   * kdirstat cache file
+   **/
+  void askWriteCache();
 
-    /**
-     * Open a file selection box to read a directory tree from a kdirstat cache
-     * file
-     **/
-    void askReadCache();
+  /**
+   * Open a file selection box to read a directory tree from a kdirstat cache
+   * file
+   **/
+  void askReadCache();
 
 private slots:
-    void triggerSaveConfig();
+  void triggerSaveConfig();
 
 signals:
 
-    /**
-     * Emitted when the configuration is to be read - other than at program
-     * startup / object creation where each object is responsible for reading
-     * its configuraton at an appropriate time.
-     **/
-    void readConfig();
+  /**
+   * Emitted when the configuration is to be read - other than at program
+   * startup / object creation where each object is responsible for reading
+   * its configuraton at an appropriate time.
+   **/
+  void readConfig();
 
-    /**
-     * Emitted when the configuration is to be saved.
-     **/
-    void saveConfig();
+  /**
+   * Emitted when the configuration is to be saved.
+   **/
+  void saveConfig();
 
-//private slots:
-//    void optionsPreferences();
+  // private slots:
+  //    void optionsPreferences();
 
 protected:
+  /**
+   * Initialize @ref KCleanup actions.
+   **/
+  void initCleanups();
 
-    /**
-     * Initialize @ref KCleanup actions.
-     **/
-    void initCleanups();
+  /**
+   * Set up status bar for the main window by initializing a status label.
+   **/
+  void initStatusBar();
 
-    /**
-     * Set up status bar for the main window by initializing a status label.
-     **/
-    void initStatusBar();
+  // Widgets
 
-    // Widgets
+  QSplitter *_splitter;
+  KDirTreeView *_treeView;
+  KTreemapView *_treemapView;
+  KPacMan *_pacMan;
+  QWidget *_pacManDelimiter;
+  QMenu *_treeViewContextMenu;
+  QMenu *_treemapContextMenu;
+  KDirStat::KSettingsDialog *_settingsDialog;
+  KFeedbackDialog *_feedbackDialog;
+  KActivityTracker *_activityTracker;
 
-    QSplitter *			_splitter;
-    KDirTreeView *		    _treeView;
-    KTreemapView *		    _treemapView;
-    KPacMan *			_pacMan;
-    QWidget *			_pacManDelimiter;
-    QMenu *			_treeViewContextMenu;
-    QMenu *			_treemapContextMenu;
-    KDirStat::KSettingsDialog *	_settingsDialog;
-    KFeedbackDialog *		_feedbackDialog;
-    KActivityTracker *		_activityTracker;
+  QAction *_fileAskOpenDir;
+  QAction *_fileAskOpenUrl;
+  KRecentFilesAction *_fileOpenRecent;
+  QAction *_fileCloseDir;
+  QAction *_fileRefreshAll;
+  QAction *_fileRefreshSelected;
+  QAction *_fileReadExcludedDir;
+  QAction *_fileContinueReadingAtMountPoint;
+  QAction *_fileStopReading;
+  QAction *_fileAskWriteCache;
+  QAction *_fileAskReadCache;
+  QAction *_fileQuit;
+  QAction *_editCopy;
+  QAction *_cleanupOpenWith;
+  QAction *_treemapZoomIn;
+  QAction *_treemapZoomOut;
+  QAction *_treemapSelectParent;
+  QAction *_treemapRebuild;
 
-    QAction * 			_fileAskOpenDir;
-    QAction * 			_fileAskOpenUrl;
-    KRecentFilesAction *	_fileOpenRecent;
-    QAction * 			_fileCloseDir;
-    QAction * 			_fileRefreshAll;
-    QAction *			_fileRefreshSelected;
-    QAction *			_fileReadExcludedDir;
-    QAction *			_fileContinueReadingAtMountPoint;
-    QAction *			_fileStopReading;
-    QAction *			_fileAskWriteCache;
-    QAction *			_fileAskReadCache;
-    QAction * 			_fileQuit;
-    QAction * 			_editCopy;
-    QAction * 			_cleanupOpenWith;
-    QAction *	 		_treemapZoomIn;
-    QAction *			_treemapZoomOut;
-    QAction *			_treemapSelectParent;
-    QAction * 			_treemapRebuild;
+  QAction *_reportMailToOwner;
+  QAction *_helpSendFeedbackMail;
+  KToggleAction *_showTreemapView;
 
-    QAction *			_reportMailToOwner;
-    QAction *			_helpSendFeedbackMail;
-    KToggleAction * 		_showTreemapView;
+  KCleanupCollection *_cleanupCollection;
 
-    KCleanupCollection *	_cleanupCollection;
-
-    int				_treemapViewHeight;
-
-private:
-    void setupActions();
-    static k4dirstat * instance_;
+  int _treemapViewHeight;
 
 private:
+  void setupActions();
+  static k4dirstat *instance_;
 
-    QPrinter   *m_printer;
+private:
+  QPrinter *m_printer;
 };
 
 #endif // _K4DIRSTAT_H_
