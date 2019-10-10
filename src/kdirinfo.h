@@ -67,21 +67,21 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual KFileSize totalSize();
+  KFileSize totalSize() override;
 
   /**
    * Returns the total size in blocks of this subtree.
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual KFileSize totalBlocks();
+  KFileSize totalBlocks() override;
 
   /**
    * Returns the total number of children in this subtree, excluding this item.
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual int totalItems();
+  int totalItems() override;
 
   /**
    * Returns the total number of subdirectories in this subtree,
@@ -89,7 +89,7 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual int totalSubDirs();
+  int totalSubDirs() override;
 
   /**
    * Returns the total number of plain file children in this subtree,
@@ -97,24 +97,24 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual int totalFiles();
+  int totalFiles() override;
 
   /**
    * Returns the latest modification time of this subtree.
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual time_t latestMtime();
+  time_t latestMtime() override;
 
   /**
    * Returns 'true' if this had been excluded while reading.
    **/
-  virtual bool isExcluded() const { return _isExcluded; }
+  bool isExcluded() const override { return _isExcluded; }
 
   /**
    * Set the 'excluded' status.
    **/
-  virtual void setExcluded(bool excl = true) { _isExcluded = excl; }
+  void setExcluded(bool excl = true) override { _isExcluded = excl; }
 
   /**
    * Returns whether or not this is a mount point.
@@ -124,7 +124,7 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual bool isMountPoint() { return _isMountPoint; }
+  bool isMountPoint() override { return _isMountPoint; }
 
   /**
    * Sets the mount point state, i.e. whether or not this is a mount
@@ -132,14 +132,14 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual void setMountPoint(bool isMountPoint = true);
+  void setMountPoint(bool isMountPoint = true) override;
 
   /**
    * Returns true if this subtree is finished reading.
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual bool isFinished();
+  bool isFinished() override;
 
   /**
    * Returns true if this subtree is busy, i.e. it is not finished
@@ -147,7 +147,7 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual bool isBusy();
+  bool isBusy() override;
 
   /**
    * Returns the number of pending read jobs in this subtree. When this
@@ -155,10 +155,10 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual int pendingReadJobs() { return _pendingReadJobs; }
+  int pendingReadJobs() override { return _pendingReadJobs; }
 
-  virtual size_t numChildren() const { return children_.size(); }
-  virtual KFileInfo * child(size_t i) { return children_[i]; }
+  size_t numChildren() const override { return children_.size(); }
+  KFileInfo * child(size_t i) override { return children_[i]; }
 
   /**
    * Insert a child into the children list.
@@ -166,7 +166,7 @@ public:
    * The order of children in this list is absolutely undefined;
    * don't rely on any implementation-specific order.
    **/
-  virtual void insertChild(KFileInfo *newChild);
+  void insertChild(KFileInfo *newChild) override;
 
   /**
    * Get the "Dot Entry" for this node if there is one (or 0 otherwise):
@@ -175,12 +175,12 @@ public:
    * user can easily tell which summary fields belong to the directory
    * itself and which are the accumulated values of the entire subtree.
    **/
-  virtual KDirInfo *dotEntry() const { return _dotEntry; }
+  KDirInfo *dotEntry() const override { return _dotEntry; }
 
   /**
    * Set a "Dot Entry". This makes sense for directories only.
    **/
-  virtual void setDotEntry(KDirInfo *newDotEntry) { _dotEntry = newDotEntry; }
+  void setDotEntry(KDirInfo *newDotEntry) override { _dotEntry = newDotEntry; }
 
   /**
    * Returns true if this is a "Dot Entry". See @ref dotEntry() for
@@ -188,14 +188,14 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual bool isDotEntry() const { return _isDotEntry; }
+  bool isDotEntry() const override { return _isDotEntry; }
 
   /**
    * Notification that a child has been added somewhere in the subtree.
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual void childAdded(KFileInfo *newChild);
+  void childAdded(KFileInfo *newChild) override;
 
   /**
    * Notification that a child is about to be deleted somewhere in the
@@ -203,7 +203,7 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual void deletingChild(KFileInfo *deletedChild);
+  void deletingChild(KFileInfo *deletedChild) override;
 
   /**
    * Notification of a new directory read job somewhere in the subtree.
@@ -248,7 +248,7 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual KDirReadState readState() const;
+  KDirReadState readState() const override;
 
   /**
    * Set the state of the directory reading process.
@@ -265,7 +265,7 @@ public:
    *
    * Reimplemented - inherited from @ref KFileInfo.
    **/
-  virtual bool isDirInfo() const { return true; }
+  bool isDirInfo() const override { return true; }
 
 protected:
   /**

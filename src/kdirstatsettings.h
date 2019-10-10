@@ -198,21 +198,21 @@ public slots:
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void apply();
+  void apply() override;
 
   /**
    * Revert all values to their defaults.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void revertToDefaults();
+  void revertToDefaults() override;
 
   /**
    * Set up all fields prior to displaying the dialog.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void setup();
+  void setup() override;
 
 protected slots:
 
@@ -285,21 +285,21 @@ public slots:
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void apply();
+  void apply() override;
 
   /**
    * Revert all values to their defaults.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void revertToDefaults();
+  void revertToDefaults() override;
 
   /**
    * Set up all fields prior to displaying the dialog.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void setup();
+  void setup() override;
 
   /**
    * Switch back and forth between all the cleanup actions very much
@@ -373,7 +373,7 @@ public:
    **/
   void updateTitle(KCleanup *cleanup = 0);
 
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 signals:
 
   /**
@@ -495,21 +495,21 @@ public slots:
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void apply();
+  void apply() override;
 
   /**
    * Revert all values to their defaults.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void revertToDefaults();
+  void revertToDefaults() override;
 
   /**
    * Set up all fields prior to displaying the dialog.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void setup();
+  void setup() override;
 
   /**
    * Check the enabled state of all widgets depending on the value of
@@ -580,21 +580,21 @@ public slots:
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void apply();
+  void apply() override;
 
   /**
    * Revert all values to their defaults.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void revertToDefaults();
+  void revertToDefaults() override;
 
   /**
    * Set up all fields prior to displaying the dialog.
    *
    * Inherited from @ref KSettingsPage.
    **/
-  virtual void setup();
+  void setup() override;
 
   /**
    * Check the enabled state of all widgets depending on the value of

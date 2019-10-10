@@ -195,7 +195,7 @@ protected:
    *
    * Inherited and reimplemented from @ref KDirReadJob.
    **/
-  virtual void startReading();
+  void startReading() override;
 
   DIR *_diskDir;
 
@@ -261,7 +261,7 @@ protected:
    *
    * Inherited and reimplemented from @ref KDirReadJob.
    **/
-  virtual void startReading();
+  void startReading() override;
 
   KIO::ListJob *_job;
 
@@ -301,7 +301,7 @@ public:
    *
    * Inherited and reimplemented from @ref KDirReadJob.
    **/
-  virtual void read();
+  void read() override;
 
   /**
    * Return the associated cache reader.

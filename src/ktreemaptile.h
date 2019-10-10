@@ -222,8 +222,8 @@ protected:
    *
    * Reimplemented from QCanvasRectangle.
    **/
-  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                     QWidget *widget = 0);
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                     QWidget *widget = 0) override;
 
   /**
    * Render a cushion as described in "cushioned treemaps" by Jarke

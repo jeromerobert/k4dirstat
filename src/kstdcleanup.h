@@ -47,7 +47,7 @@ class TrashBinCleanup : public KCleanup {
 public:
   TrashBinCleanup();
 public slots:
-  virtual void execute(KFileInfo *item, KDirTree * tree);
+  void execute(KFileInfo *item, KDirTree * tree) override;
 };
 
 } // namespace KDirStat

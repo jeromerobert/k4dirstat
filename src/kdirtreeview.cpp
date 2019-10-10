@@ -312,8 +312,8 @@ public:
     style->setParent(this);
   }
 
-  virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                     const QModelIndex &index) const {
+  void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                     const QModelIndex &index) const override {
     QModelIndex srcIdx = view->proxyModel()->mapToSource(index);
     KFileInfo * item = view->model()->indexToFile(srcIdx);
     if (view->readJobsCol() == view->percentBarCol()) {

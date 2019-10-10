@@ -55,7 +55,7 @@ public:
    * Returns the minimum recommended size for this widget.
    * Reimplemented from QWidget.
    **/
-  virtual QSize minimumSizeHint() const { return QSize(0, 0); }
+  QSize minimumSizeHint() const override { return QSize(0, 0); }
 
   /**
    * Returns this treemap view's currently selected treemap tile or 0 if
@@ -296,7 +296,7 @@ protected:
   /**
    * Catch mouse click - emits a selectionChanged() signal.
    **/
-  virtual void mousePressEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
 
   /**
    * Catch mouse double click:
@@ -313,7 +313,7 @@ protected:
    *
    * Reimplemented from QFrame.
    **/
-  virtual void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
 
   /**
    * Convenience method to read a color from 'config'.
