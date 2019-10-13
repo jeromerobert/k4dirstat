@@ -15,7 +15,6 @@ using namespace KDirStat;
 
 KDirTree::KDirTree() : QObject() {
   _root = 0;
-  _selection = 0;
   _isFileProtocol = false;
   _isBusy = false;
   _readMethod = KDirReadUnknown;
@@ -27,7 +26,7 @@ KDirTree::KDirTree() : QObject() {
 
 KDirTree::~KDirTree() {
   _jobQueue.clear();
-  selectItem(0);
+  selectItems();
 
   if (_root)
     delete _root;
@@ -42,7 +41,7 @@ void KDirTree::readConfig() {
 
 void KDirTree::setRoot(KFileInfo *newRoot) {
   if (_root) {
-    selectItem(0);
+    selectItems();
     emit deletingChild(_root);
     delete _root;
     emit childDeleted();
@@ -55,7 +54,7 @@ void KDirTree::clear(bool sendSignals) {
   _jobQueue.clear();
 
   if (_root) {
-    selectItem(0);
+    selectItems();
 
     if (sendSignals)
       emit deletingChild(_root);
@@ -123,6 +122,15 @@ void KDirTree::startReading(const QUrl &url) {
   }
 }
 
+void KDirTree::selectionInSubTree(KFileInfo *subtree) {
+  for(size_t i = 0; i < _selection.size(); i++) {
+    if(_selection[i]->isInSubtree(subtree)) {
+      selectItems();
+      break;
+    }
+  }
+}
+
 void KDirTree::refresh(KFileInfo *subtree) {
   if (!_root)
     return;
@@ -139,9 +147,7 @@ void KDirTree::refresh(KFileInfo *subtree) {
     KDirInfo *parent = subtree->parent();
 
     // Select nothing if the current selection is to be deleted
-
-    if (_selection && _selection->isInSubtree(subtree))
-      selectItem(0);
+    selectionInSubTree(subtree);
 
     // Clear any old "excluded" status
 
@@ -227,9 +233,7 @@ void KDirTree::deletingChildNotify(KFileInfo *deletedChild) {
 
   // Only now check for selection and root: Give connected objects
   // (i.e. views) a chance to change either while handling the signal.
-
-  if (_selection && _selection->isInSubtree(deletedChild))
-    selectItem(0);
+  selectionInSubTree(deletedChild);
 
   if (deletedChild == _root)
     _root = 0;
@@ -284,7 +288,7 @@ void KDirTree::deleteSubtree(KFileInfo *subtree) {
   delete subtree;
 
   if (subtree == _root) {
-    selectItem(0);
+    selectItems();
     _root = 0;
   }
 
@@ -305,19 +309,11 @@ void KDirTree::sendFinished() { emit finished(); }
 
 void KDirTree::sendAborted() { emit aborted(); }
 
-void KDirTree::selectItem(KFileInfo *newSelection) {
-  if (newSelection == _selection)
-    return;
-
-#if 0
-    if ( newSelection )
-	qDebug() << Q_FUNC_INFO << " selecting " << newSelection << endl;
-    else
-	qDebug() << Q_FUNC_INFO << " selecting nothing" << endl;
-#endif
-
-  _selection = newSelection;
-  emit selectionChanged(_selection, this);
+void KDirTree::selectItems(const std::vector<KFileInfo *> & newSelection) {
+  if (newSelection != _selection) {
+    _selection = newSelection;
+    emit selectionChanged(this);
+  }
 }
 
 bool KDirTree::writeCache(const QString &cacheFileName) {

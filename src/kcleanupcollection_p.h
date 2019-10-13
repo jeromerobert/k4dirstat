@@ -26,16 +26,15 @@ signals:
    **/
   void executed();
 public slots:
-  void selectionChanged(KFileInfo *selection, KDirTree *);
+  void selectionChanged(KDirTree *);
 private slots:
   void slotTriggered() {
-    cleanup_.execute(selection_, tree_);
+    cleanup_.execute(tree_);
     emit executed();
   }
 
 private:
   KCleanup cleanup_;
-  KFileInfo *selection_;
   KDirTree * tree_;
 };
 } // namespace KDirStat

@@ -458,6 +458,7 @@ KDirTreeView::KDirTreeView(QWidget *parent):
   proxyModel->setSourceModel(new KDirModel(this, colLabels));
   setModel(proxyModel);
   createTree();
+  setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
 KDirTreeView::~KDirTreeView() {
@@ -554,8 +555,8 @@ void KDirTreeView::createTree() {
   connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
           this, SLOT(fileSelectionChanged(const QItemSelection&, const QItemSelection&)));
 
-  connect(_tree, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), this,
-          SLOT(selectItem(KFileInfo *)));
+  connect(_tree, SIGNAL(selectionChanged(KDirTree*)), this,
+          SLOT(updateSelection(KDirTree *)));
 }
 
 void KDirTreeView::prepareReading() {
@@ -652,14 +653,14 @@ void KDirTreeView::deleteChild(KFileInfo *clone) {
   **/
   QModelIndex nextSelection;
   QModelIndexList indices = selectedIndexes();
+  std::sort(indices.begin(), indices.end());
   for(int i = 0; i < indices.length(); i++) {
     QModelIndex mi = proxyModel()->mapToSource(indices[i]);
     if(model()->indexToFile(mi) == clone)
-      nextSelection = model()->sibling(mi.row() + 1, mi.column(), mi);
+      nextSelection = proxyModel()->sibling(indices[i].row() + 1, indices[i].column(), indices[i]);
   }
   if(nextSelection.isValid()) {
-    QModelIndex pIdx = proxyModel()->mapFromSource(nextSelection);
-    setCurrentIndex(pIdx);
+    setCurrentIndex(nextSelection);
   }
   model()->removeFile(clone);
 }
@@ -739,29 +740,62 @@ void KDirTreeView::sendProgressInfo(const QString &newCurrentDir) {
 #endif
 }
 
-void KDirTreeView::fileSelectionChanged(const QItemSelection &selected, const QItemSelection &) {
-  KFileInfo * newSelection = nullptr;
-  if(!selected.empty()) {
-    QModelIndex idx = proxyModel()->mapToSource(selected.indexes()[0]);
-    newSelection = model()->indexToFile(idx);
+void KDirTreeView::fileSelectionChanged(const QItemSelection &, const QItemSelection &) {
+  if(this->bypassTreeSelection) {
+    return;
   }
-  tree()->selectItem(newSelection);
+  std::vector<KFileInfo *> newSelection;
+  QList<QModelIndex> idxs = selectedIndexes();
+  for(int i = 0; i < idxs.size(); i++) {
+    QModelIndex idx = proxyModel()->mapToSource(idxs[i]);
+    if(idx.column() == 0)
+      newSelection.push_back(model()->indexToFile(idx));
+  }
+  this->bypassTreeSelection = true;
+  tree()->selectItems(newSelection);
+  this->bypassTreeSelection = false;
 }
 
-void KDirTreeView::selectItem(KFileInfo *newSelection) {
+void KDirTreeView::updateSelection(KDirTree * tree) {
+  if(this->bypassTreeSelection)
+    return;
   // Short-circuit for the most common case: The signal has been triggered by
   // this view, and the KDirTree has sent it right back.
+  QSet<QModelIndex> newSelSet, curSelSet;
+  for(size_t i = 0; i < tree->selection().size(); i++) {
+    QModelIndex pIdx = proxyModel()->mapFromSource(
+          model()->fileToIndex(tree->selection()[i]));
+    newSelSet.insert(pIdx);
+  }
+  const QItemSelection & curSel = selectionModel()->selection();
+  for(int i = 0; i < curSel.size(); i++) {
+    QList<QModelIndex> idxs = curSel[i].indexes();
+    for(int j = 0; j < idxs.size(); j++) {
+      if(idxs[j].column() == 0)
+        curSelSet.insert(idxs[j]);
+    }
+  }
 
-  if (selection() == newSelection)
-    return;
-
-  if (newSelection) {
-    QModelIndex pIdx = proxyModel()->mapFromSource(model()->fileToIndex(newSelection));
-    collapseAll();
-    setExpanded(pIdx, true);
-    setCurrentIndex(pIdx);
-  } else {
-    selectionModel()->clearSelection();
+  if (newSelSet != curSelSet) {
+    QItemSelection newSel;
+    auto it = newSelSet.begin();
+    if(it != newSelSet.end()) {
+      assert(it->isValid());
+      assert(it->model() == proxyModel());
+      if(newSelSet.size() == 1) {
+        collapseAll();
+        selectionModel()->setCurrentIndex(*it, QItemSelectionModel::NoUpdate);
+      }
+      while(it != newSelSet.end()) {
+        setExpanded(*it, true);
+        newSel.select(*it, *it);
+        ++it;
+      }
+    }
+    this->bypassTreeSelection = true;
+    selectionModel()->select(newSel, QItemSelectionModel::ClearAndSelect |
+                             QItemSelectionModel::Current | QItemSelectionModel::Rows);
+    this->bypassTreeSelection = false;
   }
 }
 
@@ -881,7 +915,8 @@ void KDirTreeView::popupContextMenu(const QPoint &localPos) {
       // selection - all user operations refer to the current selection.
       // Just right-clicking on an item does not make it the current
       // item!
-      setCurrentIndex(idx);
+      if(selectedIndexes().size() < 2)
+        setCurrentIndex(idx);
 
       // Let somebody from outside pop up the context menu, if so desired.
       emit contextMenu(pos);

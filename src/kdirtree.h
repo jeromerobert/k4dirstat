@@ -45,7 +45,7 @@ typedef enum {
  **/
 class KDirTree : public QObject {
   Q_OBJECT
-
+  void selectionInSubTree(KFileInfo *);
 public:
   /**
    * Constructor.
@@ -98,7 +98,8 @@ public slots:
    *
    * Select nothing if '0' is passed.
    **/
-  void selectItem(KFileInfo *newSelection);
+  void selectItems(const std::vector<KFileInfo *> &
+                   newSelection = std::vector<KFileInfo*>());
 
   /**
    * Delete a subtree.
@@ -183,15 +184,13 @@ public:
    * Return the tree's current selection.
    *
    * Even though the KDirTree by itself doesn't have a visual
-   * representation, it supports the concept of one single selected
-   * item. Views can use this to transparently keep track of this single
-   * selected item, notifying the KDirTree and thus other views with @ref
-   * KDirTree::selectItem() . Attached views should connect to the @ref
+   * representation, it supports the concept of selection. Views can use
+   * this to transparently keep track of the selection, notifying the
+   * KDirTree and thus other views with @ref KDirTree::selectItem().
+   * Attached views should connect to the @ref
    * selectionChanged() signal to be notified when the selection changes.
-   *
-   * NOTE: This method returns 0 if nothing is selected.
    **/
-  KFileInfo *selection() const { return _selection; }
+  const std::vector<KFileInfo *> & selection() const { return _selection; }
 
   /**
    * Notification that a child has been added.
@@ -326,7 +325,7 @@ signals:
    *
    * NOTE: 'newSelection' may be 0 if nothing is selected.
    **/
-  void selectionChanged(KFileInfo *newSelection, KDirTree*);
+  void selectionChanged(KDirTree*);
 
   /**
    * Single line progress information, emitted when the read status
@@ -350,7 +349,7 @@ protected slots:
 
 protected:
   KFileInfo *_root;
-  KFileInfo *_selection;
+  std::vector<KFileInfo *> _selection;
   KDirReadJobQueue _jobQueue;
   KDirReadMethod _readMethod;
   bool _crossFileSystems;

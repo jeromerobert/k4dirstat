@@ -89,7 +89,7 @@ signals:
    * This is intended for use together with a @ref KActivityTracker.
    **/
   void userActivity(int points);
-  void selectionChanged(KFileInfo *, KDirTree *);
+  void selectionChanged(KDirTree *);
 
 protected slots:
 

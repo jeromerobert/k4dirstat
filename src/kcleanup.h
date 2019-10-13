@@ -187,14 +187,9 @@ public:
    * The heart of the matter: Perform the cleanup with the KFileInfo
    * specified.
    **/
-  virtual void execute(KFileInfo *item, KDirTree *);
+  virtual void execute(KDirTree *);
 
-  /**
-   * Set enabled/disabled status according to 'selection' and internally
-   * store 'selection' - this will also be used upon calling
-   * @ref executeWithSelection() . '0' means "nothing selected".
-   **/
-  bool isEnabledFromSelection(KFileInfo *selection, KDirTree *);
+  bool isEnabledFromSelection(KDirTree *);
 
   /**
    * Read configuration.
@@ -216,7 +211,7 @@ protected:
    * Ask user for confirmation to execute this cleanup action for
    * 'item'. Returns 'true' if user accepts, 'false' otherwise.
    **/
-  bool confirmation(KFileInfo *item);
+  bool confirmation(KDirTree *);
 
   /**
    * Retrieve the directory part of a KFileInfo's path.

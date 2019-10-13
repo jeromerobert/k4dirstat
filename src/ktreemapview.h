@@ -95,14 +95,12 @@ public slots:
    * 'tile' may be 0. In this case, only the previous selection is
    * deselected.
    **/
-  void selectTile(KTreemapTile *tile);
+  void selectTile(KTreemapTile *tile, bool emitEvent = true);
 
   /**
-   * Search the treemap for a tile with the specified KFileInfo node and
-   * select that tile if it is found. If nothing is found or if 'node' is
-   * 0, the previously selected tile is deselected.
+   * Update the map view selection from the KDirTree selection
    **/
-  void selectTile(KFileInfo *node);
+  void updateSelection(KDirTree *);
 
   /**
    * Zoom in one level towards the currently selected treemap tile:
@@ -257,13 +255,6 @@ public:
   double heightScaleFactor() const { return _heightScaleFactor; }
 
 signals:
-
-  /**
-   * Emitted when the currently selected item changes.
-   * Caution: 'item' may be 0 when the selection is cleared.
-   **/
-  void selectionChanged(KFileInfo *item, KDirTree*);
-
   /**
    * Emitted when the treemap changes, e.g. is rebuilt, zoomed in, or
    * zoomed out.

@@ -35,6 +35,7 @@ class KDirTreeView : public QTreeView
 {
   friend KDirModel;
   Q_OBJECT
+  bool bypassTreeSelection = false;
 
 public:
   /**
@@ -291,7 +292,7 @@ protected slots:
    * Select a KDirTree item. Used for connecting the @ref
    * KDirTree::selectionChanged() signal.
    **/
-  void selectItem(KFileInfo *item);
+  void updateSelection(KDirTree *item);
 
   /**
    * Add a child as a clone of original tree item "newChild" to this view

@@ -50,11 +50,9 @@ KTreemapView::KTreemapView(KDirTree *tree, QWidget *parent,
     }
   }
   _refreshTimer.setSingleShot(true);
-  connect(this, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), tree,
-          SLOT(selectItem(KFileInfo *)));
 
-  connect(tree, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), this,
-          SLOT(selectTile(KFileInfo *)));
+  connect(tree, SIGNAL(selectionChanged(KDirTree*)), this,
+          SLOT(updateSelection(KDirTree *)));
 
   connect(tree, SIGNAL(deletingChild(KFileInfo *)), this,
           SLOT(deleteNotify(KFileInfo *)));
@@ -320,9 +318,7 @@ void KTreemapView::rebuildTreemap(KFileInfo *newRoot) {
   }
 
   // Synchronize selection with the tree
-
-  if (_tree->selection())
-    selectTile(_tree->selection());
+  updateSelection(_tree);
   emit treemapChanged();
 }
 
@@ -360,7 +356,7 @@ void KTreemapView::resizeEvent(QResizeEvent *event) {
   _refreshTimer.start();
 }
 
-void KTreemapView::selectTile(KTreemapTile *tile) {
+void KTreemapView::selectTile(KTreemapTile *tile, bool emitEvent) {
   // qDebug() << Q_FUNC_INFO << endl;
 
   KTreemapTile *oldSelection = _selectedTile;
@@ -378,12 +374,20 @@ void KTreemapView::selectTile(KTreemapTile *tile) {
   if (_selectionRect)
     _selectionRect->highlight(_selectedTile);
 
-  if (oldSelection != _selectedTile) {
-    emit selectionChanged(_selectedTile ? _selectedTile->orig() : nullptr, _tree);
+  if (emitEvent && oldSelection != _selectedTile) {
+    std::vector<KFileInfo *> sel;
+    if(_selectedTile != nullptr)
+       sel.push_back(_selectedTile->orig());
+    _tree->selectItems(sel);
   }
 }
 
-void KTreemapView::selectTile(KFileInfo *node) { selectTile(findTile(node)); }
+void KTreemapView::updateSelection(KDirTree * tree) {
+  if(tree->selection().size() == 1)
+    selectTile(findTile(tree->selection()[0]), false);
+  else
+    selectTile(nullptr, false);
+}
 
 KTreemapTile *KTreemapView::findTile(KFileInfo *node) {
   if (!node)

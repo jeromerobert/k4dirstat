@@ -73,10 +73,13 @@ bool KCleanup::worksFor(KFileInfo *item, KDirTree * tree) const {
   return worksForFile();
 }
 
-bool KCleanup::isEnabledFromSelection(KFileInfo *selection, KDirTree* tree) {
-  bool enabled = false;
-  if (selection) {
-    enabled = worksFor(selection, tree);
+bool KCleanup::isEnabledFromSelection(KDirTree* tree) {
+  if(tree->selection().empty())
+    return false;
+  for(auto it = tree->selection().begin(); it != tree->selection().end(); ++it) {
+    KFileInfo * selection = *it;
+    if(!worksFor(selection, tree))
+      return false;
 
     if (!selection->isFinished()) {
       // This subtree isn't finished reading yet
@@ -89,7 +92,7 @@ bool KCleanup::isEnabledFromSelection(KFileInfo *selection, KDirTree* tree) {
 
         // Prevent premature deletion of this tree - this would
         // cause a core dump for sure.
-        enabled = false;
+        return false;
         break;
 
       default:
@@ -97,16 +100,19 @@ bool KCleanup::isEnabledFromSelection(KFileInfo *selection, KDirTree* tree) {
       }
     }
   }
-  return enabled;
+  return true;
 }
 
-bool KCleanup::confirmation(KFileInfo *item) {
-  QString msg;
+bool KCleanup::confirmation(KDirTree * tree) {
+  QString msg = cleanTitle();
 
-  if (item->isDir() || item->isDotEntry()) {
-    msg = i18n("%1\nin directory %2", cleanTitle(), item->url());
-  } else {
-    msg = i18n("%1\nfor file %2", cleanTitle(), item->url());
+  if(tree->selection().size() == 1) {
+    KFileInfo * item = tree->selection()[0];
+    if (item->isDir() || item->isDotEntry()) {
+      msg = i18n("%1\nin directory %2", cleanTitle(), item->url());
+    } else {
+      msg = i18n("%1\nfor file %2", cleanTitle(), item->url());
+    }
   }
 
   if (KMessageBox::warningContinueCancel(
@@ -120,10 +126,13 @@ bool KCleanup::confirmation(KFileInfo *item) {
     return false;
 }
 
-void KCleanup::execute(KFileInfo *item, KDirTree * tree) {
-  if (worksFor(item, tree)) {
-    if (_askForConfirmation && !confirmation(item))
-      return;
+void KCleanup::execute(KDirTree * tree) {
+  if (_askForConfirmation && !confirmation(tree))
+    return;
+
+  std::vector<KFileInfo *> selection = tree->selection();
+  for(auto it = selection.begin(); it != selection.end(); ++it) {
+    KFileInfo * item = *it;
     executeRecursive(item, tree);
 
     switch (_refreshPolicy) {

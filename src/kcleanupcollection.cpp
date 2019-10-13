@@ -15,10 +15,9 @@
 
 using namespace KDirStat;
 
-void CleanupAction::selectionChanged(KFileInfo *selection, KDirTree * tree) {
-  selection_ = selection;
+void CleanupAction::selectionChanged(KDirTree * tree) {
   tree_ = tree;
-  setEnabled(cleanup_.isEnabledFromSelection(selection, tree));
+  setEnabled(cleanup_.isEnabledFromSelection(tree));
 }
 
 KCleanupCollection::KCleanupCollection(KActionCollection &actionCollection)
@@ -44,8 +43,8 @@ CleanupAction *KCleanupCollection::add(KCleanup *newCleanup) {
   delete newCleanup;
   cleanupActions.append(action);
 
-  connect(this, SIGNAL(selectionChanged(KFileInfo *, KDirTree*)), action,
-          SLOT(selectionChanged(KFileInfo *, KDirTree*)));
+  connect(this, SIGNAL(selectionChanged(KDirTree*)), action,
+          SLOT(selectionChanged(KDirTree*)));
 
   connect(action, SIGNAL(executed()), this, SLOT(cleanupExecuted()));
   return action;
