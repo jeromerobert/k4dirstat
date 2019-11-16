@@ -132,7 +132,8 @@ public:
   void setRoot(KDirInfo * root) {
     QStandardItem * r = invisibleRootItem();
     r->removeRows(0, r->rowCount());
-    r->appendRow(createItem(root));
+    if(root != nullptr)
+      r->appendRow(createItem(root));
   }
 
   QModelIndex getRoot() {
@@ -609,7 +610,7 @@ void KDirTreeView::abortReading() {
 
 void KDirTreeView::clear() {
   selectionModel()->clearSelection();
-
+  model()->setRoot(nullptr);
   for (int i = 0; i < DEBUG_COUNTERS; i++)
     _debugCount[i] = 0;
 }
