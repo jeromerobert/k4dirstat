@@ -11,7 +11,6 @@
  */
 
 #include "k4dirstat.h"
-//#include "k4dirstatview.h"
 #include "settings.h"
 
 #include <QtGui/QDropEvent>
@@ -458,11 +457,11 @@ void k4dirstat::refreshAll() {
 }
 
 void k4dirstat::refreshSelected() {
-  if (!_treeView->selection())
-    return;
-
   statusMsg(i18n("Refreshing selected subtree..."));
-  _treeView->refreshSelected();
+  auto sel = _treeView->tree()->selection();
+  for(auto it = sel.begin(); it != sel.end(); ++it)
+    if(!(*it)->isDotEntry())
+    _treeView->tree()->refresh(*it);
   statusMsg(i18n("Ready."));
 }
 
@@ -544,14 +543,23 @@ void k4dirstat::cleanupOpenWith() {
   KRun::displayOpenWithDialog(urlList, this, false);
 }
 
+bool atLeastOneNotDotEntry(KDirTree * tree) {
+  auto sel = tree->selection();
+  for(auto it = sel.begin(); it != sel.end(); ++it) {
+    if((*it)->isDotEntry())
+      return false;
+  }
+  return true;
+}
+
 void k4dirstat::selectionChanged(KDirTree* tree) {
+  _fileRefreshSelected->setEnabled(atLeastOneNotDotEntry(tree));
   if (tree->selection().size() == 1) {
     // TODO: Most action have been written for single selection. We keep
     // that logic until all actions have been ported to multi-selection.
      KFileInfo * selection = tree->selection()[0];
     _editCopy->setEnabled(true);
     _reportMailToOwner->setEnabled(true);
-    _fileRefreshSelected->setEnabled(!selection->isDotEntry());
     _cleanupOpenWith->setEnabled(!selection->isDotEntry());
     _fileReadExcludedDir->setEnabled(selection->isExcluded());
 
@@ -565,7 +573,6 @@ void k4dirstat::selectionChanged(KDirTree* tree) {
   } else {
     _editCopy->setEnabled(false);
     _reportMailToOwner->setEnabled(false);
-    _fileRefreshSelected->setEnabled(false);
     _fileContinueReadingAtMountPoint->setEnabled(false);
     _cleanupOpenWith->setEnabled(false);
     statusMsg("");

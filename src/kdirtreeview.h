@@ -222,11 +222,6 @@ public slots:
   void refreshAll();
 
   /**
-   * Refresh (i.e. re-read from disk) the selected subtree.
-   **/
-  void refreshSelected();
-
-  /**
    * Forcefully stop a running read process.
    **/
   void abortReading();

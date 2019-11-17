@@ -594,16 +594,6 @@ void KDirTreeView::refreshAll() {
   }
 }
 
-void KDirTreeView::refreshSelected() {
-  if (_tree->root() && selection()) {
-    // Implicitly calling prepareReading() via the tree's startingReading()
-    // signal
-    _tree->refresh(selection());
-  }
-
-  logActivity(10);
-}
-
 void KDirTreeView::abortReading() {
   _tree->abortReading();
 }
