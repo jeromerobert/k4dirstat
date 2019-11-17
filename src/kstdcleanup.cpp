@@ -30,7 +30,7 @@ KCleanup *KStdCleanup::openInKonqueror(QString &icon, QKeySequence &shortcut) {
 }
 
 KCleanup *KStdCleanup::openInTerminal(QString &icon, QKeySequence &shortcut) {
-  KCleanup *cleanup = new KCleanup("cleanup_open_in_terminal", "konsole",
+  KCleanup *cleanup = new KCleanup("cleanup_open_in_terminal", "konsole --workdir %p",
                                    i18n("Open in &Terminal"));
   Q_CHECK_PTR(cleanup);
   cleanup->setWorksForDir(true);
