@@ -1,6 +1,6 @@
 # Overview
 
-See the [wiki](https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home).
+See the [wiki](https://github.com/jeromerobert/k4dirstat/wiki/Overview).
 
 # Building
 

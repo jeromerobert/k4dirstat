@@ -34,12 +34,12 @@ int main(int argc, char **argv) {
                    KAboutLicense::GPL,
                    "\u00A9 2015-2019 J\u00E9r\u00F4me Robert, \u00A9 2010 Joshua "
                    "Hodosh, \u00A9 1999-2008 Stefan Hundhammer",
-                   "", "https://bitbucket.org/jeromerobert/k4dirstat",
-                   "https://bitbucket.org/jeromerobert/k4dirstat/issues");
+                   "", "https://github.com/jeromerobert/k4dirstat",
+                   "https://github.com/jeromerobert/k4dirstat/issues");
 
   about.addAuthor("J\u00E9r\u00F4me Robert",
                   i18n("KF5 Port, current maintainer."), "",
-                  "https://bitbucket.org/jeromerobert/k4dirstat");
+                  "https://github.com/jeromerobert/k4dirstat");
   about.addAuthor("Stefan Hundhammer", i18n("Original kdirstat author."),
                   "kdirstat@gmx.de", "http://kdirstat.sourceforge.net/");
   about.addAuthor("Joshua Hodosh", i18n("Port to KDE4"),
