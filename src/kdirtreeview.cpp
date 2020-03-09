@@ -34,9 +34,9 @@
 #define SEPARATE_READ_JOBS_COL 0
 #define VERBOSE_PROGRESS_INFO 0
 
-using namespace KDirStat;
+namespace KDirStat {
 
-class KDirStat::KDirModel: public QStandardItemModel {
+class KDirModel: public QStandardItemModel {
   KDirTreeView & view_;
   QStringList headers_;
 
@@ -1070,11 +1070,11 @@ void KDirTreeView::resizeIndexToContents(const QModelIndex &index) {
 }
 
 
-QString KDirStat::formatSizeLong(KFileSize size) {
+QString formatSizeLong(KFileSize size) {
   return QLocale().toString(size);
 }
 
-QString KDirStat::hexKey(KFileSize size) {
+QString hexKey(KFileSize size) {
   /**
    * This is optimized for performance, not for aesthetics.
    * And every now and then the old C hacker breaks through in most of us...
@@ -1096,7 +1096,7 @@ QString KDirStat::hexKey(KFileSize size) {
   return QString(key);
 }
 
-QString KDirStat::formatTime(long millisec, bool showMilliSeconds) {
+QString formatTime(long millisec, bool showMilliSeconds) {
   QString formattedTime;
   int hours;
   int min;
@@ -1120,7 +1120,7 @@ QString KDirStat::formatTime(long millisec, bool showMilliSeconds) {
   return formattedTime;
 }
 
-QString KDirStat::formatCount(int count, bool suppressZero) {
+QString formatCount(int count, bool suppressZero) {
   if (suppressZero && count == 0)
     return "";
 
@@ -1130,7 +1130,7 @@ QString KDirStat::formatCount(int count, bool suppressZero) {
   return countString;
 }
 
-QString KDirStat::formatPercent(float percent) {
+QString formatPercent(float percent) {
   QString percentString;
 
   percentString.sprintf("%.1f%%", percent);
@@ -1138,7 +1138,7 @@ QString KDirStat::formatPercent(float percent) {
   return percentString;
 }
 
-QString KDirStat::formatTimeDate(time_t rawTime) {
+QString formatTimeDate(time_t rawTime) {
   QString timeDateString;
   struct tm *t = localtime(&rawTime);
 
@@ -1186,13 +1186,13 @@ QString KDirStat::formatTimeDate(time_t rawTime) {
   return timeDateString;
 }
 
-QString KDirStat::localeTimeDate(time_t rawTime) {
+QString localeTimeDate(time_t rawTime) {
   QDateTime timeDate;
   timeDate.setTime_t(rawTime);
   return timeDate.toString(Qt::DefaultLocaleShortDate);
 }
 
-QColor KDirStat::contrastingColor(const QColor &desiredColor,
+QColor contrastingColor(const QColor &desiredColor,
                                   const QColor &contrastColor) {
   if (desiredColor != contrastColor) {
     return desiredColor;
@@ -1207,3 +1207,4 @@ QColor KDirStat::contrastingColor(const QColor &desiredColor,
   }
 }
 
+} //namespace
