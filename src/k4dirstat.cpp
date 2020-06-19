@@ -391,17 +391,10 @@ void k4dirstat::readMainWinConfig() {
 
 void k4dirstat::saveMainWinConfig() {
   KConfigGroup config = KSharedConfig::openConfig()->group("General Options");
-
-  config.writeEntry("Geometry", size());
+  _fileOpenRecent->saveEntries(config);
   config.writeEntry("Show Treemap", _showTreemapView->isChecked());
-  // Config entries for 2.0? seriously?
-  // config.writeEntry( "ToolBarPos", 		(int) toolBar( "mainToolBar"
-  // )->pos() );
-
   if (_treemapView)
     config.writeEntry("TreemapViewHeight", _treemapView->height());
-
-  _fileOpenRecent->saveEntries(config);
 }
 
 //============================================================================
