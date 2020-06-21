@@ -17,6 +17,7 @@
 
 class QPrinter;
 class KUrl;
+class QLabel;
 
 class QSplitter;
 class KActivityTracker;
@@ -304,6 +305,7 @@ protected:
   KDirStat::KSettingsDialog *_settingsDialog;
   KFeedbackDialog *_feedbackDialog;
   KActivityTracker *_activityTracker;
+  QLabel * _freeSpaceLabel;
 
   QAction *_fileAskOpenDir;
   QAction *_fileAskOpenUrl;

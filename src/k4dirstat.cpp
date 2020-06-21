@@ -51,6 +51,8 @@
 #include <QList>
 #include <QMenu>
 #include <QSplitter>
+#include <QStorageInfo>
+#include <QLabel>
 
 #include "settings.h"
 
@@ -141,6 +143,8 @@ k4dirstat::k4dirstat()
   // setup the cleanup actions
   initCleanups();
 
+  _freeSpaceLabel = new QLabel();
+  statusBar()->addPermanentWidget(_freeSpaceLabel);
   // add a status bar
   statusBar()->show();
 
@@ -563,6 +567,9 @@ void k4dirstat::selectionChanged(KDirTree* tree) {
       _fileContinueReadingAtMountPoint->setEnabled(false);
 
     statusMsg(selection->url());
+    QStorageInfo i(selection->url());
+    if(i.isValid())
+      _freeSpaceLabel->setText(formatSize(i.bytesFree()) + " free");
   } else {
     _editCopy->setEnabled(false);
     _reportMailToOwner->setEnabled(false);
