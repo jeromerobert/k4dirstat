@@ -175,7 +175,20 @@ KCacheReader::KCacheReader(const QString &fileName, KDirTree *tree,
   checkHeader();
 }
 
+static void setStateRecursive(KDirInfo * root) {
+  // Once the whole cache file is read set the state of each KDirInfo to
+  // finished so the tree view can start fetching the tree
+  root->setReadState(KDirFinished);
+  for(int i = 0; i < root->numChildren(); i++) {
+    KFileInfo * f = root->child(i);
+    if(f->isDirInfo()) {
+      setStateRecursive(static_cast<KDirInfo*>(f));
+    }
+  }
+}
+
 KCacheReader::~KCacheReader() {
+  setStateRecursive(_toplevel);
   if (_cache)
     gzclose(_cache);
 
