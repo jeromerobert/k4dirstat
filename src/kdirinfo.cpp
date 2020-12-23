@@ -267,13 +267,13 @@ void KDirInfo::deletingChild(KFileInfo *deletedChild) {
      **/
     if (deletedChild->parent() != this) {
       qCritical() << deletedChild << " is not a child of " << this
-                  << " - cannot unlink from children list!" << endl;
+                  << " - cannot unlink from children list!" << Qt::endl;
       return;
     }
     auto it = std::find(children_.begin(), children_.end(), deletedChild);
     if(it == children_.end()) {
       qCritical() << "Couldn't unlink " << deletedChild << " from " << this
-                  << " children list" << endl;
+                  << " children list" << Qt::endl;
     } else {
       children_.erase(it);
     }

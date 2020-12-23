@@ -61,7 +61,7 @@ KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
       qDebug() << "Found sparse file: " << this
                << "    Byte size: " << formatSize(byteSize())
                << "  Allocated: " << formatSize(allocatedSize()) << " ("
-               << (int)_blocks << " blocks)" << endl;
+               << (int)_blocks << " blocks)" << Qt::endl;
     }
 
 #if 0
@@ -173,7 +173,7 @@ QString KFileInfo::urlPart(int targetLevel) const {
 
   if (level < targetLevel) {
     qCritical() << Q_FUNC_INFO << "URL level " << targetLevel
-                << " requested, this is level " << level << endl;
+                << " requested, this is level " << level << Qt::endl;
     return "";
   }
 

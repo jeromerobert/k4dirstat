@@ -56,7 +56,7 @@ void KDirReadJob::finished() {
   if (_queue)
     _queue->jobFinishedNotify(this);
   else
-    qCritical() << "No job queue for " << _dir << endl;
+    qCritical() << "No job queue for " << _dir << Qt::endl;
 }
 
 void KDirReadJob::childAdded(KFileInfo *newChild) {
@@ -138,7 +138,7 @@ void KLocalDirReadJob::startReading() {
                   dirName) // Does this cache file match this directory?
               {
                 qDebug() << "Using cache file " << fullName << " for "
-                         << dirName << endl;
+                         << dirName << Qt::endl;
 
                 cacheReadJob->reader()
                     ->rewind(); // Read offset was moved by firstDir()
@@ -161,7 +161,7 @@ void KLocalDirReadJob::startReading() {
                 return;
               } else {
                 qDebug() << "NOT using cache file " << fullName << " with dir "
-                         << firstDirInCache << " for " << dirName << endl;
+                         << firstDirInCache << " for " << dirName << Qt::endl;
 
                 delete cacheReadJob;
               }
@@ -174,7 +174,7 @@ void KLocalDirReadJob::startReading() {
         } else // lstat() error
         {
           qWarning() << "lstat(" << fullName << ") failed: " << strerror(errno)
-                     << endl;
+                     << Qt::endl;
 
           /*
            * Not much we can do when lstat() didn't work; let's at
@@ -242,7 +242,7 @@ void KioDirReadJob::startReading() {
   QUrl url = QUrl::fromUserInput(_dir->url(), QDir::currentPath(),
                                  QUrl::AssumeLocalFile);
   if (!url.isValid()) {
-    qWarning() << Q_FUNC_INFO << "URL malformed: " << _dir->url() << endl;
+    qWarning() << Q_FUNC_INFO << "URL malformed: " << _dir->url() << Qt::endl;
   }
 
   _job = KIO::listDir(url);
@@ -260,7 +260,7 @@ void KioDirReadJob::entries(KIO::Job *job, const KIO::UDSEntryList &entryList) {
   QUrl url(_dir->url()); // Cache this - it's expensive!
 
   if (!url.isValid()) {
-    qWarning() << Q_FUNC_INFO << "URL malformed: " << _dir->url() << endl;
+    qWarning() << Q_FUNC_INFO << "URL malformed: " << _dir->url() << Qt::endl;
   }
 
   KIO::UDSEntryList::ConstIterator it = entryList.begin();

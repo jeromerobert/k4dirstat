@@ -35,7 +35,7 @@ bool KCacheWriter::writeCache(const QString &fileName, KDirTree *tree) {
   gzFile cache = gzopen(fileName.toLocal8Bit(), "w");
 
   if (cache == 0) {
-    qCritical() << "Can't open " << fileName << ": " << strerror(errno) << endl;
+    qCritical() << "Can't open " << fileName << ": " << strerror(errno) << Qt::endl;
     return false;
   }
 
@@ -388,7 +388,7 @@ void KCacheReader::addItem() {
       _tree->childAddedNotify(item);
     } else {
       qCritical() << _fileName << ":" << _lineNo << ": "
-                  << "No parent for item " << name << endl;
+                  << "No parent for item " << name << Qt::endl;
     }
   }
 }
@@ -439,7 +439,7 @@ bool KCacheReader::checkHeader() {
         strcmp(field(3), "file]") != 0) {
       _ok = false;
       qCritical() << _fileName << ":" << _lineNo << ": Unknown file format"
-                  << endl;
+                  << Qt::endl;
     }
   }
 
@@ -451,7 +451,7 @@ bool KCacheReader::checkHeader() {
 
     if (!_ok)
       qCritical() << _fileName << ":" << _lineNo
-                  << ": Incompatible cache file version" << endl;
+                  << ": Incompatible cache file version" << Qt::endl;
   }
 
   // qDebug() << "Cache file header check OK: " << _ok << endl;
@@ -477,7 +477,7 @@ bool KCacheReader::readLine() {
 
       if (!gzeof(_cache)) {
         _ok = false;
-        qCritical() << _fileName << ":" << _lineNo << ": Read error" << endl;
+        qCritical() << _fileName << ":" << _lineNo << ": Read error" << Qt::endl;
         emit error();
       }
 

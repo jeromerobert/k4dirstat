@@ -273,7 +273,7 @@ void KDirTree::deleteSubtree(KFileInfo *subtree) {
       } else // no parent - this should never happen (?)
       {
         qCritical() << "Internal error: Killing dot entry without parent "
-                    << parent << endl;
+                    << parent << Qt::endl;
 
         // Better leave that dot entry alone - we shouldn't have come
         // here in the first place. Who knows what will happen if this

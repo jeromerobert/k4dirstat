@@ -56,7 +56,7 @@ bool KExcludeRules::match(const QString &text) {
 #if VERBOSE_EXCLUDE_MATCHES
 
       qDebug() << text << " matches exclude rule " << rule->regexp().pattern()
-               << endl;
+               << Qt::endl;
 
 #endif
       return true;

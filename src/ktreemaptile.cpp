@@ -143,7 +143,7 @@ void KTreemapTile::createChildrenSimple(const QRectF &rect,
 
 void KTreemapTile::createSquarifiedChildren(const QRectF &rect) {
   if (_orig->totalSize() == 0) {
-    qCritical() << Q_FUNC_INFO << "Zero totalSize()" << endl;
+    qCritical() << Q_FUNC_INFO << "Zero totalSize()" << Qt::endl;
     return;
   }
 

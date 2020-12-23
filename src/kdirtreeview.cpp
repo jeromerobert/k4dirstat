@@ -792,7 +792,7 @@ void KDirTreeView::updateSelection(KDirTree * tree) {
 
 const QColor &KDirTreeView::fillColor(int level) const {
   if (level < 0) {
-    qWarning() << Q_FUNC_INFO << "Invalid argument: " << level << endl;
+    qWarning() << Q_FUNC_INFO << "Invalid argument: " << level << Qt::endl;
     level = 0;
   }
 
@@ -802,7 +802,7 @@ const QColor &KDirTreeView::fillColor(int level) const {
 const QColor &KDirTreeView::rawFillColor(int level) const {
   if (level < 0 || level > KDirTreeViewMaxFillColor) {
     level = 0;
-    qWarning() << Q_FUNC_INFO << "Invalid argument: " << level << endl;
+    qWarning() << Q_FUNC_INFO << "Invalid argument: " << level << Qt::endl;
   }
 
   return _fillColor[level % KDirTreeViewMaxFillColor];
@@ -815,11 +815,11 @@ void KDirTreeView::setFillColor(int level, const QColor &color) {
 
 void KDirTreeView::setUsedFillColors(int usedFillColors) {
   if (usedFillColors < 1) {
-    qWarning() << Q_FUNC_INFO << "Invalid argument: " << usedFillColors << endl;
+    qWarning() << Q_FUNC_INFO << "Invalid argument: " << usedFillColors << Qt::endl;
     usedFillColors = 1;
   } else if (usedFillColors >= KDirTreeViewMaxFillColor) {
     qWarning() << Q_FUNC_INFO << "Invalid argument: " << usedFillColors
-               << " (max: " << KDirTreeViewMaxFillColor - 1 << ")" << endl;
+               << " (max: " << KDirTreeViewMaxFillColor - 1 << ")" << Qt::endl;
     usedFillColors = KDirTreeViewMaxFillColor - 1;
   }
 
@@ -880,7 +880,7 @@ void KDirTreeView::popupContextMenu(const QPoint &localPos) {
   KFileInfo *orig = model()->indexToFile(proxyModel()->mapToSource(idx));
 
   if (!orig) {
-    qCritical() << "NULL item->orig()" << endl;
+    qCritical() << "NULL item->orig()" << Qt::endl;
     return;
   }
 
@@ -1032,7 +1032,7 @@ QString KDirTreeView::asciiDump(QModelIndex & idx) const {
 void KDirTreeView::sendMailToOwner() {
   QModelIndexList indices = selectedIndexes();
   if (indices.empty()) {
-    qCritical() << Q_FUNC_INFO << "Nothing selected!" << endl;
+    qCritical() << Q_FUNC_INFO << "Nothing selected!" << Qt::endl;
     return;
   }
   QModelIndex idx = indices.at(0);

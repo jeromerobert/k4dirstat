@@ -382,11 +382,11 @@ void k4dirstat::readMainWinConfig() {
        it != excludeRules.end(); ++it) {
     QString ruleText = *it;
     KExcludeRules::excludeRules()->add(new KExcludeRule(QRegExp(ruleText)));
-    qDebug() << "Adding exclude rule: " << ruleText << endl;
+    qDebug() << "Adding exclude rule: " << ruleText << Qt::endl;
   }
 
   if (excludeRules.size() == 0)
-    qDebug() << "No exclude rules defined" << endl;
+    qDebug() << "No exclude rules defined" << Qt::endl;
 }
 
 void k4dirstat::saveMainWinConfig() {
