@@ -1,5 +1,7 @@
 # Overview
 
+![Screenshot of the k4dirstat UI, with the 'tree view' at the top and the 'treemap view' at the bottom](doc/screenshot.png)
+
 See the [wiki](https://github.com/jeromerobert/k4dirstat/wiki/Overview).
 
 # Building
