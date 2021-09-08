@@ -27,7 +27,6 @@
 #include <QFileDialog>
 #include <QGuiApplication>
 #include <kmessagebox.h>
-#include <krun.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolinvocation.h>
@@ -43,6 +42,8 @@
 #include "kexcluderules.h"
 #include "ktreemaptile.h"
 #include "ktreemapview.h"
+#include <KIO/ApplicationLauncherJob>
+#include <KIO/JobUiDelegate>
 #include <KHelpClient>
 #include <KIconEngine>
 #include <KIconLoader>
@@ -537,7 +538,10 @@ void k4dirstat::cleanupOpenWith() {
   QList<QUrl> urlList;
   urlList.append(QUrl::fromUserInput(sel->url(), QDir::currentPath(),
                                      QUrl::AssumeLocalFile));
-  KRun::displayOpenWithDialog(urlList, this, false);
+  auto *job = new KIO::ApplicationLauncherJob();
+  job->setUrls(urlList);
+  job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
+  job->start();
 }
 
 bool atLeastOneNotDotEntry(KDirTree * tree) {
