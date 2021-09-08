@@ -679,7 +679,7 @@ void KGeneralSettingsPage::addExcludeRule() {
   QString text =
       QInputDialog::getText(this, i18n("New exclude rule"),
                             i18n("Regular expression for new exclude rule:"),
-                            QLineEdit::Normal, QString::null, &ok);
+                            QLineEdit::Normal, QString(), &ok);
   if (ok && !text.isEmpty()) {
     QListWidgetItem *l = new QListWidgetItem(_excludeRulesListView);
     l->setText(text);
