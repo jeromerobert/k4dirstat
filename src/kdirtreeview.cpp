@@ -284,6 +284,8 @@ protected:
     if (column == _view->totalSizeCol() || column == _view->percentNumCol() ||
       column == _view->percentBarCol())
       return _orig->totalSize() > otherOrig->totalSize();
+    else if (column == _view->nameCol())
+      return _orig->name() > otherOrig->name();
     else if (column == _view->ownSizeCol())
       return _orig->size() > otherOrig->size();
     else if (column == _view->totalItemsCol())
