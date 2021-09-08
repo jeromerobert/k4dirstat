@@ -15,6 +15,7 @@
 #include <QStyledItemDelegate>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
+#include <QTextStream>
 #include <qcolor.h>
 #include <qmenu.h>
 #include <qtimer.h>
@@ -974,6 +975,11 @@ void KDirTreeView::popupContextInfo(const QPoint &pos, const QString &info) {
   _contextInfo->popup(pos);
 }
 
+/** Convert an int to a QString using the "%02d" printf format */
+static QString intToStr(int value) {
+  return QStringLiteral("%1").arg(value, 2, 10, QLatin1Char('0'));
+}
+
 void KDirTreeView::readConfig() {
   KConfigGroup config = KSharedConfig::openConfig()->group("Tree Colors");
   _usedFillColors = config.readEntry("usedFillColors", -1);
@@ -991,9 +997,7 @@ void KDirTreeView::readConfig() {
     QColor defaultColor(Qt::blue);
 
     for (int i = 0; i < KDirTreeViewMaxFillColor; i++) {
-      QString name;
-      name.sprintf("fillColor_%02d", i);
-      _fillColor[i] = config.readEntry(name, defaultColor);
+      _fillColor[i] = config.readEntry("fillColor_" + intToStr(i), defaultColor);
     }
   }
 
@@ -1007,9 +1011,7 @@ void KDirTreeView::saveConfig() const {
   config.writeEntry("usedFillColors", _usedFillColors);
 
   for (int i = 0; i < KDirTreeViewMaxFillColor; i++) {
-    QString name;
-    name.sprintf("fillColor_%02d", i);
-    config.writeEntry(name, _fillColor[i]);
+    config.writeEntry("fillColor_" + intToStr(i), _fillColor[i]);
   }
 }
 
@@ -1099,7 +1101,6 @@ QString hexKey(KFileSize size) {
 }
 
 QString formatTime(long millisec, bool showMilliSeconds) {
-  QString formattedTime;
   int hours;
   int min;
   int sec;
@@ -1112,13 +1113,10 @@ QString formatTime(long millisec, bool showMilliSeconds) {
 
   sec = millisec / 1000L;
   millisec %= 1000L;
-
+  QString formattedTime = intToStr(hours) + ":" + intToStr(min) + ":" + intToStr(sec);
   if (showMilliSeconds) {
-    formattedTime.sprintf("%02d:%02d:%02d.%03ld", hours, min, sec, millisec);
-  } else {
-    formattedTime.sprintf("%02d:%02d:%02d", hours, min, sec);
+    formattedTime += QStringLiteral(".%1").arg(millisec, 3, 10, QLatin1Char('0'));
   }
-
   return formattedTime;
 }
 
@@ -1133,11 +1131,7 @@ QString formatCount(int count, bool suppressZero) {
 }
 
 QString formatPercent(float percent) {
-  QString percentString;
-
-  percentString.sprintf("%.1f%%", percent);
-
-  return percentString;
+  return QString::number(percent, 'f', 1) + "%";
 }
 
 QString formatTimeDate(time_t rawTime) {
@@ -1180,11 +1174,11 @@ QString formatTimeDate(time_t rawTime) {
    * Stefan Hundhammer <sh@suse.de>	2001-05-28
    * (in quite some fit of frustration)
    */
-  timeDateString.sprintf("%4d-%02d-%02d  %02d:%02d:%02d", t->tm_year + 1900,
-                         t->tm_mon +
-                             1, // another brain-dead common pitfall - 0..11
-                         t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
-
+  QTextStream s(&timeDateString);
+  s << qSetFieldWidth(4) << (t->tm_year + 1900) << qSetFieldWidth(0) << "-"
+    << intToStr(t->tm_mon + 1) << "-" << intToStr(t->tm_mday) << "  "
+    << intToStr(t->tm_hour) << ":" << intToStr(t->tm_min) << ":"
+    << intToStr(t->tm_sec);
   return timeDateString;
 }
 

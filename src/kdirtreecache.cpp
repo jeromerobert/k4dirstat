@@ -128,25 +128,19 @@ void KCacheWriter::writeItem(gzFile cache, KFileInfo *item) {
 }
 
 QString KCacheWriter::formatSize(KFileSize size) {
-  QString str;
-
   if (size >= GB && size % GB == 0) {
-    str.sprintf("%lldG", size / GB);
-    return str;
+    return QString("%1G").arg(size / GB);
   }
 
   if (size >= MB && size % MB == 0) {
-    str.sprintf("%lldM", size / MB);
-    return str;
+    return QString("%1M").arg(size / MB);
   }
 
   if (size >= KB && size % KB == 0) {
-    str.sprintf("%lldK", size / KB);
-    return str;
+    return QString("%1K").arg(size / KB);
   }
 
-  str.sprintf("%lld", size);
-  return str;
+  return QString::number(size);
 }
 
 KCacheReader::KCacheReader(const QString &fileName, KDirTree *tree,

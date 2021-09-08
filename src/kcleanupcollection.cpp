@@ -87,8 +87,7 @@ void KCleanupCollection::addStdCleanups() {
 
 void KCleanupCollection::addUserCleanups(int number) {
   for (int i = 0; i < number; i++) {
-    QString id;
-    id.sprintf("cleanup_user_defined_%d", _nextUserCleanupNo);
+    QString id = QString("cleanup_user_defined_%1").arg(_nextUserCleanupNo);
     QString title;
 
     if (_nextUserCleanupNo <= 9)

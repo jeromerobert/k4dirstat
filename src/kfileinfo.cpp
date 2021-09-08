@@ -272,7 +272,6 @@ QUrl KDirStat::fixedUrl(const QString &dirtyUrl) {
 
 QString KDirStat::formatSize(KFileSize lSize) {
   QString sizeString;
-  double size;
   QString unit;
 
   if (lSize < 1024) {
@@ -280,21 +279,21 @@ QString KDirStat::formatSize(KFileSize lSize) {
 
     unit = i18n("Bytes");
   } else {
-    size = lSize / 1024.0; // kB
+    double size = lSize / 1024.0; // kB
 
     if (size < 1024.0) {
-      sizeString.sprintf("%.1f", size);
+      sizeString = QString::number(size, 'f', 1);
       unit = i18n("kB");
     } else {
       size /= 1024.0; // MB
 
       if (size < 1024.0) {
-        sizeString.sprintf("%.1f", size);
+        sizeString = QString::number(size, 'f', 1);
         unit = i18n("MB");
       } else {
         size /= 1024.0; // GB - we won't go any further...
 
-        sizeString.sprintf("%.2f", size);
+        sizeString = QString::number(size, 'f', 2);
         unit = i18n("GB");
       }
     }
