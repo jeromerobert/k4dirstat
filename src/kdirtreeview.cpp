@@ -96,7 +96,16 @@ public:
 
   void removeFile(KFileInfo* file) {
     QModelIndex tr = fileToIndex(file, false);
-    removeRow(tr.row(), parent(tr));
+    QModelIndex parentIdx = parent(tr);
+    removeRow(tr.row(), parentIdx);
+    // Refresh parents
+    QStandardItem * si = itemFromIndex(parentIdx);
+    while(si != nullptr) {
+      QModelIndex begin = si->index();
+      QModelIndex end = begin.siblingAtColumn(columnCount() - 1);
+      emit dataChanged(begin, end);
+      si = si->parent();
+    }
   }
 
   void updateData(QModelIndex r = QModelIndex()) {
