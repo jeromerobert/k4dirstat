@@ -513,7 +513,7 @@ void KDirTreeView::idleDisplay() {
     // semantics like the percentage bar column (that had doubled as the
     // read job column while reading) now has.
 
-    sortByColumn(_percentNumCol);
+    sortByColumn(_percentNumCol, Qt::AscendingOrder);
   }
 #endif
   _readJobsCol = -1;
@@ -580,7 +580,7 @@ void KDirTreeView::prepareReading() {
 
   // Change display to busy state
 
-  sortByColumn(_totalSizeCol);
+  sortByColumn(_totalSizeCol, Qt::AscendingOrder);
   busyDisplay();
   emit startingReading();
 
