@@ -10,6 +10,7 @@
 #include <QTreeView>
 #include <qdatetime.h>
 #include <qpixmap.h>
+#include <QElapsedTimer>
 
 #define DEBUG_COUNTERS 10
 
@@ -430,7 +431,7 @@ protected:
 
   KDirTree *_tree;
   QTimer *_updateTimer;
-  QTime _stopWatch;
+  QElapsedTimer _stopWatch;
   QString _currentDir;
   QMenu *_contextInfo;
   QAction *infoAction;
