@@ -854,7 +854,7 @@ void KDirTreeView::setDefaultFillColors() {
 
 void KDirTreeView::setTreeBackground(const QColor &color) {
   _treeBackground = color;
-  _percentageBarBackground = _treeBackground.dark(115);
+  _percentageBarBackground = _treeBackground.darker(115);
 
   QGuiApplication *app =
       dynamic_cast<QGuiApplication *>(QCoreApplication::instance());
@@ -1200,12 +1200,12 @@ QColor contrastingColor(const QColor &desiredColor,
     return desiredColor;
   }
 
-  if (contrastColor != contrastColor.light()) {
+  if (contrastColor != contrastColor.lighter()) {
     // try a little lighter
-    return contrastColor.light();
+    return contrastColor.lighter();
   } else {
     // try a little darker
-    return contrastColor.dark();
+    return contrastColor.darker();
   }
 }
 
