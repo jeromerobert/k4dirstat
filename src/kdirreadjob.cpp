@@ -180,7 +180,7 @@ void KLocalDirReadJob::startReading() {
            * Not much we can do when lstat() didn't work; let's at
            * least create an (almost empty) entry as a placeholder.
            */
-          KDirInfo *child = new KDirInfo(_dir, entry->d_name);
+          KDirInfo *child = new KDirInfo(_dir);
           child->setReadState(KDirError);
           _dir->insertChild(child);
           childAdded(child);
