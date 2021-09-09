@@ -168,7 +168,7 @@ public:
     } else if(column == view_.percentBarCol() && _orig->isDir() && _orig->isExcluded()) {
       return i18n("[excluded]");
     } else if(column == view_.totalSubDirsCol() && _orig->isDir()) {
-      return " " + formatCount(_orig->totalSubDirs());
+      return QVariant(" " + formatCount(_orig->totalSubDirs()));
     } else if(column == view_.readJobsCol() && multi) {
 #if SEPARATE_READ_JOBS_COL
       return " " + formatCount(_orig->pendingReadJobs(), true);
@@ -178,11 +178,11 @@ public:
         formatCount(_orig->pendingReadJobs(), true)) : "";
 #endif
     } else if(column == view_.totalSizeCol() && multi) {
-      return prefix + formatSize(_orig->totalSize());
+      return QVariant(prefix + formatSize(_orig->totalSize()));
     } else if(column == view_.totalItemsCol() && multi) {
-      return prefix + formatSizeLong(_orig->totalItems());
+      return QVariant(prefix + formatSizeLong(_orig->totalItems()));
     } else if(column == view_.totalFilesCol() && multi) {
-      return prefix + formatSizeLong(_orig->totalFiles());
+      return QVariant(prefix + formatSizeLong(_orig->totalFiles()));
     } else if(column == view_.nameCol())
       return _orig->isDotEntry() ? i18n("<Files>") :  _orig->name();
     else if(column == view_.latestMtimeCol()) {
@@ -1056,8 +1056,8 @@ void KDirTreeView::sendMailToOwner() {
   QUrl mail;
   mail.setScheme("mailto");
   mail.setPath(owner);
-  mail.setQuery("?subject=" + QUrl::toPercentEncoding(subject) +
-                "&body=" + QUrl::toPercentEncoding(body));
+  mail.setQuery(QString("?subject=" + QUrl::toPercentEncoding(subject) +
+                "&body=" + QUrl::toPercentEncoding(body)));
 
   // TODO: Check for maximum command line length.
   //

@@ -46,6 +46,7 @@ find_package(ZLIB)
 ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+add_definitions(-DQT_USE_QSTRINGBUILDER)
 
 git_version(K4DIRSTAT_VERSION 3.2.2 k4dirstat-)
 add_subdirectory( doc )
