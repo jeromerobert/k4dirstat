@@ -115,6 +115,9 @@ void KDirInfo::setMountPoint(bool isMountPoint) {
 }
 
 KFileSize KDirInfo::totalSize() {
+  if (_readState == KDirOnRequestOnly)
+      return 0;
+
   if (_summaryDirty)
     recalc();
 
@@ -122,6 +125,9 @@ KFileSize KDirInfo::totalSize() {
 }
 
 KFileSize KDirInfo::totalBlocks() {
+  if (_readState == KDirOnRequestOnly)
+      return 0;
+
   if (_summaryDirty)
     recalc();
 
