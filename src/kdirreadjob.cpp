@@ -94,8 +94,6 @@ void KLocalDirReadJob::startReading() {
           if (S_ISDIR(statInfo.st_mode)) // directory child?
           {
             KDirInfo *subDir = new KDirInfo(entryName, &statInfo, _dir);
-            _dir->insertChild(subDir);
-            childAdded(subDir);
 
             if (KExcludeRules::excludeRules()->match(fullName)) {
               subDir->setExcluded();
@@ -121,6 +119,9 @@ void KLocalDirReadJob::startReading() {
                 }
               }
             }
+
+            _dir->insertChild(subDir);
+            childAdded(subDir);
           } else // non-directory child
           {
             if (entryName == DEFAULT_CACHE_NAME) // .kdirstat.cache.gz found?
