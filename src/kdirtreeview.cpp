@@ -341,7 +341,8 @@ public:
       o.rect = option.rect;
       o.minimum = 0;
       o.maximum = 100;
-      o.progress = 100 * item->totalSize() / item->parent()->totalSize();
+      KFileSize ps = item->parent()->totalSize();
+      o.progress = ps == 0 ? 100 : 100 * item->totalSize() / ps;
       o.palette.setColor(QPalette::Highlight,
                          view->fillColor(item->treeLevel() - 1));
       if (view->selection() != item)
