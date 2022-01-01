@@ -19,6 +19,7 @@
 // handling.
 
 #define FRAGMENT_SIZE 2048
+static const size_t LSTAT_BLOCK_SIZE = 512;
 
 using namespace KDirStat;
 
@@ -100,9 +101,9 @@ KFileInfo::KFileInfo(const KFileItem *fileItem, KDirInfo *parent)
     // need to bother with special cases depending on how this object was
     // constructed.
 
-    _blocks = _size / blockSize();
+    _blocks = _size / LSTAT_BLOCK_SIZE;
 
-    if ((_size % blockSize()) > 0)
+    if ((_size % LSTAT_BLOCK_SIZE) > 0)
       _blocks++;
 
     // There is no way to find out via KFileInfo if this is a sparse file.
@@ -126,9 +127,9 @@ KFileInfo::KFileInfo(KDirInfo *parent,
 
   if (blocks < 0) {
     _isSparseFile = false;
-    _blocks = _size / blockSize();
+    _blocks = _size / LSTAT_BLOCK_SIZE;
 
-    if ((_size % blockSize()) > 0)
+    if ((_size % LSTAT_BLOCK_SIZE) > 0)
       _blocks++;
   } else {
     _isSparseFile = true;
@@ -138,8 +139,7 @@ KFileInfo::KFileInfo(KDirInfo *parent,
   // qDebug() << "Created KFileInfo " << this << endl;
 }
 
-KFileSize KFileInfo::allocatedSize() const { return blocks() * blockSize(); }
-
+KFileSize KFileInfo::allocatedSize() const { return blocks() * LSTAT_BLOCK_SIZE; }
 KFileSize KFileInfo::size() const {
   KFileSize sz = _isSparseFile ? allocatedSize() : _size;
 

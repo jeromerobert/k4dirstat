@@ -206,12 +206,6 @@ public:
   KFileSize blocks() const { return _blocks; }
 
   /**
-   * The size of one single block that @ref blocks() returns.
-   * Notice: This is _not_ the blocksize that lstat() returns!
-   **/
-  KFileSize blockSize() const { return 512L; }
-
-  /**
    * The modification time of the file (not the inode).
    **/
   time_t mtime() const { return _mtime; }
