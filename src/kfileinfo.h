@@ -197,6 +197,9 @@ public:
    * the true allocated size for sparse files. For plain files with
    * multiple links this will be size/no_links, for sparse files it is
    * the number of bytes actually allocated.
+   *
+   * This is only called in the treeview to display the size of individual
+   * files. It's not used to compute the size of folders recursively.
    **/
   KFileSize size() const;
 
@@ -427,17 +430,10 @@ public:
   virtual bool isDirInfo() const { return false; }
 
   /**
-   * Returns true if this is a sparse file, i.e. if this file has
-   * actually fewer disk blocks allocated than its byte size would call
-   * for.
-   *
-   * This is a cheap operation since it relies on a cached flag that is
-   * calculated in the constructor rather than doing repeated
-   * calculations and comparisons.
-   *
-   * Please not that @ref size() already takes this into account.
-   **/
-  bool isSparseFile() const { return _isSparseFile; }
+   * @brief return true if allocatedSize() and byteSize() are different
+   * enough to be reported in the tree view.
+   */
+  bool isSparseFile() const;
 
   //
   // File type / mode convenience methods.
@@ -506,7 +502,6 @@ protected:
 
   QString _name;          // the file name (without path!)
   bool _isLocalFile : 1;  // flag: local or remote file?
-  bool _isSparseFile : 1; // (cache) flag: sparse file (file with "holes")?
   dev_t _device;          // device this object resides on
   mode_t _mode;           // file permissions + object type
   nlink_t _links;         // number of links

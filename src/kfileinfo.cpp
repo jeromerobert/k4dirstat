@@ -13,19 +13,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-// Some file systems (NTFS seems to be among them) may handle block fragments
-// well. Don't report files as "sparse" files if the block size is only a few
-// bytes less than the byte size - it may be due to intelligent fragment
-// handling.
-
-#define FRAGMENT_SIZE 2048
 static const size_t LSTAT_BLOCK_SIZE = 512;
 
 using namespace KDirStat;
 
 KFileInfo::KFileInfo(KDirInfo *parent, const char *name) : _parent(parent) {
+  // TODO: this contructor is only used by KDirInfo and should be moved there
   _isLocalFile = true;
-  _isSparseFile = false;
   _name = name ? name : "";
   _device = 0;
   _mode = 0;
@@ -50,33 +44,10 @@ KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
   if (isSpecial()) {
     _size = 0;
     _blocks = 0;
-    _isSparseFile = false;
   } else {
     _size = statInfo->st_size;
     _blocks = statInfo->st_blocks;
-    _isSparseFile =
-        isFile() && allocatedSize() + FRAGMENT_SIZE <
-                        _size; // allow for intelligent fragment handling
-
-    if (_isSparseFile) {
-      qDebug() << "Found sparse file: " << this
-               << "    Byte size: " << formatSize(byteSize())
-               << "  Allocated: " << formatSize(allocatedSize()) << " ("
-               << (int)_blocks << " blocks)" << Qt::endl;
-    }
-
-#if 0
-	if ( isFile() && _links > 1 )
-	{
-	    qDebug() << _links << " hard links: " << this << endl;
-	}
-#endif
   }
-
-#if 0
-#warning Debug mode: Huge sizes
-    _size <<= 10;
-#endif
 }
 
 KFileInfo::KFileInfo(const KFileItem *fileItem, KDirInfo *parent)
@@ -92,7 +63,6 @@ KFileInfo::KFileInfo(const KFileItem *fileItem, KDirInfo *parent)
   if (isSpecial()) {
     _size = 0;
     _blocks = 0;
-    _isSparseFile = false;
   } else {
     _size = fileItem->size();
 
@@ -105,9 +75,6 @@ KFileInfo::KFileInfo(const KFileItem *fileItem, KDirInfo *parent)
 
     if ((_size % LSTAT_BLOCK_SIZE) > 0)
       _blocks++;
-
-    // There is no way to find out via KFileInfo if this is a sparse file.
-    _isSparseFile = false;
   }
 
   _mtime = fileItem->time(KFileItem::ModificationTime).toTime_t();
@@ -126,22 +93,28 @@ KFileInfo::KFileInfo(KDirInfo *parent,
   _links = links;
 
   if (blocks < 0) {
-    _isSparseFile = false;
     _blocks = _size / LSTAT_BLOCK_SIZE;
 
     if ((_size % LSTAT_BLOCK_SIZE) > 0)
       _blocks++;
   } else {
-    _isSparseFile = true;
     _blocks = blocks;
   }
 
   // qDebug() << "Created KFileInfo " << this << endl;
 }
 
+bool KFileInfo::isSparseFile() const {
+  if(isSpecial() || !isFile())
+    return false;
+  // Report difference between allocatedSize and byteSize() only if it's
+  // significant.
+  return std::abs(allocatedSize() - _size) > 4096;
+}
+
 KFileSize KFileInfo::allocatedSize() const { return blocks() * LSTAT_BLOCK_SIZE; }
 KFileSize KFileInfo::size() const {
-  KFileSize sz = _isSparseFile ? allocatedSize() : _size;
+  KFileSize sz = isSparseFile() ? allocatedSize() : _size;
 
   if (_links > 1)
     sz /= _links;
