@@ -70,13 +70,6 @@ public:
   KFileSize totalSize() override;
 
   /**
-   * Returns the total size in blocks of this subtree.
-   *
-   * Reimplemented - inherited from @ref KFileInfo.
-   **/
-  KFileSize totalBlocks() override;
-
-  /**
    * Returns the total number of children in this subtree, excluding this item.
    *
    * Reimplemented - inherited from @ref KFileInfo.
@@ -297,7 +290,6 @@ protected:
   // Some cached values
 
   KFileSize _totalSize;
-  KFileSize _totalBlocks;
   int _totalItems;
   int _totalSubDirs;
   int _totalFiles;

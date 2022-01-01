@@ -223,12 +223,6 @@ public:
   virtual KFileSize totalSize() { return size(); }
 
   /**
-   * Returns the total size in blocks of this subtree.
-   * Derived classes that have children should overwrite this.
-   **/
-  virtual KFileSize totalBlocks() { return _blocks; }
-
-  /**
    * Returns the total number of children in this subtree, excluding this item.
    * Derived classes that have children should overwrite this.
    **/

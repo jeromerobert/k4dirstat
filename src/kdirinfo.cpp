@@ -50,7 +50,6 @@ void KDirInfo::init() {
   _pendingReadJobs = 0;
   _dotEntry = 0;
   _totalSize = _size;
-  _totalBlocks = _blocks;
   _totalItems = 0;
   _totalSubDirs = 0;
   _totalFiles = 0;
@@ -76,7 +75,6 @@ KDirInfo::~KDirInfo() {
 
 void KDirInfo::recalcOneChild(KFileInfo * child) {
   _totalSize += child->totalSize();
-  _totalBlocks += child->totalBlocks();
   _totalItems += child->totalItems() + 1;
   _totalSubDirs += child->totalSubDirs();
   _totalFiles += child->totalFiles();
@@ -97,7 +95,6 @@ void KDirInfo::recalc() {
   // qDebug() << Q_FUNC_INFO << this << endl;
 
   _totalSize = _size;
-  _totalBlocks = _blocks;
   _totalItems = 0;
   _totalSubDirs = 0;
   _totalFiles = 0;
@@ -122,16 +119,6 @@ KFileSize KDirInfo::totalSize() {
     recalc();
 
   return _totalSize;
-}
-
-KFileSize KDirInfo::totalBlocks() {
-  if (_readState == KDirOnRequestOnly)
-      return 0;
-
-  if (_summaryDirty)
-    recalc();
-
-  return _totalBlocks;
 }
 
 int KDirInfo::totalItems() {
@@ -218,7 +205,6 @@ void KDirInfo::insertChild(KFileInfo *newChild) {
 void KDirInfo::childAdded(KFileInfo *newChild) {
   if (!_summaryDirty) {
     _totalSize += newChild->totalSize();
-    _totalBlocks += newChild->blocks();
     _totalItems++;
 
     if (newChild->isDir())
