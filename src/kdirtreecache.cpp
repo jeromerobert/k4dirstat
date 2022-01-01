@@ -110,7 +110,7 @@ void KCacheWriter::writeItem(gzFile cache, KFileInfo *item) {
 
   // Write size
 
-  gzprintf(cache, "\t%s", formatSize(item->size()).toLocal8Bit().constData());
+  gzprintf(cache, "\t%s", formatSize(item->byteSize()).toLocal8Bit().constData());
 
   // Write mtime
 
@@ -118,8 +118,7 @@ void KCacheWriter::writeItem(gzFile cache, KFileInfo *item) {
 
   // Optional fields
 
-  if (item->isSparseFile())
-    gzprintf(cache, "\tblocks: %lld", item->blocks());
+  gzprintf(cache, "\tblocks: %lld", item->blocks());
 
   if (item->isFile() && item->links() > 1)
     gzprintf(cache, "\tlinks: %u", (unsigned)item->links());
