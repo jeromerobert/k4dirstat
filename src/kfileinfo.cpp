@@ -23,7 +23,7 @@ KFileInfo::KFileInfo(KDirInfo *parent, const char *name) : _parent(parent) {
   _name = name ? name : "";
   _device = 0;
   _mode = 0;
-  _links = 0;
+  _links = 1;
   _size = 0;
   _blocks = 0;
   _mtime = 0;

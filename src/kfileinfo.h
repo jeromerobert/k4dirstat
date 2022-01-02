@@ -217,7 +217,7 @@ public:
    * Returns the total size in bytes of this subtree.
    * Derived classes that have children should overwrite this.
    **/
-  virtual KFileSize totalSize() { return size(); }
+  virtual KFileSize totalSize() { return allocatedSize() / _links; }
 
   /**
    * Returns the total number of children in this subtree, excluding this item.
