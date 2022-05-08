@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k4dirstat\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-08 16:39+0200\n"
-"PO-Revision-Date: 2015-01-10 12:54+0000\n"
+"PO-Revision-Date: 2022-05-08 16:51+0200\n"
 "Last-Translator: Alexandre Gillet <alexandre.gillet@yahoo.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/k4dirstat/"
 "language/fr/)\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../src/kdirtreeview.cpp:178
 msgid "[excluded]"
@@ -91,7 +92,7 @@ msgstr "Annulé. Temps écoulé: %1"
 
 #: ../src/kdirtreeview.cpp:740
 msgid "Elapsed time: %1   reading directory %2"
-msgstr "Temps écoulé: %1   lecture du répertoire %2 "
+msgstr "Temps écoulé: %1   lecture du répertoire %2"
 
 #: ../src/kdirtreeview.cpp:743
 msgid "Elapsed time: %1"
@@ -199,8 +200,8 @@ msgid ""
 "Really revert all settings to their default values?\n"
 "You will lose all changes you ever made!"
 msgstr ""
-"Revenir vraiment aux valeurs par défaut pour tous les paramètres ?\n"
-"Vous perdrez tous les changements déjà effectués !\""
+"Vraiment revenir aux valeurs par défaut pour tous les paramètres ?\n"
+"Vous perdrez tous les changements déjà effectués !"
 
 #. caption
 #: ../src/kdirstatsettings.cpp:102
@@ -305,7 +306,7 @@ msgstr "Lecture du dossier"
 
 #: ../src/kdirstatsettings.cpp:551
 msgid "Cross &File System Boundaries"
-msgstr ""
+msgstr "Traverse les systèmes de fichiers"
 
 #: ../src/kdirstatsettings.cpp:553
 msgid "Use Optimized &Local Directory Read Methods"
@@ -391,11 +392,11 @@ msgstr ""
 
 #: ../src/kdirstatsettings.cpp:798
 msgid "&Files: "
-msgstr "&Fichiers:"
+msgstr "&Fichiers :"
 
 #: ../src/kdirstatsettings.cpp:805
 msgid "&Directories: "
-msgstr "&Répertoires:"
+msgstr "&Répertoires :"
 
 #: ../src/kdirstatsettings.cpp:812
 msgid "Gr&id: "
@@ -430,7 +431,7 @@ msgstr "Rafraîchir la &sélection"
 
 #: ../src/k4dirstat.cpp:203
 msgid "Read &Excluded Directory"
-msgstr ""
+msgstr "Lecture de la liste d'exclusion"
 
 #: ../src/k4dirstat.cpp:208
 msgid "Continue Reading at &Mount Point"
@@ -442,11 +443,11 @@ msgstr "Arrêter la lecture"
 
 #: ../src/k4dirstat.cpp:218
 msgid "&Write to Cache File..."
-msgstr "&Ecrire dans le fichier cache"
+msgstr "&Ecrire dans le fichier cache…"
 
 #: ../src/k4dirstat.cpp:223
 msgid "&Read Cache File..."
-msgstr "&Lecture du fichier cache"
+msgstr "&Lecture du fichier cache…"
 
 #: ../src/k4dirstat.cpp:232
 msgid "Open With"
@@ -525,8 +526,8 @@ msgid ""
 "Writes the current directory tree to a cache file that can be loaded much "
 "faster"
 msgstr ""
-"Ecrit la hiérarchie des répertoire courant dans un fichier cache pouvant "
-"être chargé beaucoup plus rapidement "
+"Ecrit la hiérarchie des répertoires courant dans un fichier cache pouvant "
+"être chargé beaucoup plus rapidement"
 
 #: ../src/k4dirstat.cpp:298
 msgid "Reads a directory tree from a cache file"
@@ -546,7 +547,7 @@ msgstr ""
 
 #: ../src/k4dirstat.cpp:304
 msgid "Enables/disables the treemap view"
-msgstr "Active/désactive la carte d’arborescence "
+msgstr "Active/désactive la carte d’arborescence"
 
 #: ../src/k4dirstat.cpp:305
 msgid "Zoom treemap in"
@@ -629,11 +630,11 @@ msgstr "Erreur pendant l’écriture du fichier cache %1"
 
 #: ../src/k4dirstat.cpp:497
 msgid "Write Error"
-msgstr "Erreur d’écriture "
+msgstr "Erreur d’écriture"
 
 #: ../src/k4dirstat.cpp:500
 msgid "Wrote cache file %1"
-msgstr "Ecriture du fichier cache %1 terminée "
+msgstr "Ecriture du fichier cache %1 terminée"
 
 #: ../src/k4dirstat.cpp:505
 msgid "Read Cache File"
@@ -655,7 +656,7 @@ msgstr "Nettoyage défini par l'utilisateur #%1"
 
 #: ../src/kfileinfo.cpp:259
 msgid "kB"
-msgstr "Ko"
+msgstr "ko"
 
 #: ../src/kfileinfo.cpp:265
 msgid "MB"
@@ -679,15 +680,15 @@ msgstr ""
 
 #: ../src/main.cpp:41
 msgid "KF5 Port, current maintainer."
-msgstr ""
+msgstr "Portage KF5 et mainteneur actuel."
 
 #: ../src/main.cpp:43
 msgid "Original kdirstat author."
-msgstr ""
+msgstr "Créateur de kdirstat."
 
 #: ../src/main.cpp:45
 msgid "Port to KDE4"
-msgstr ""
+msgstr "Portage KDE4"
 
 #: ../src/main.cpp:48
 msgid "SequoiaView Team"
@@ -702,9 +703,8 @@ msgid "Jarke J. van Wijk, Huub van de Wetering, Mark Bruls"
 msgstr ""
 
 #: ../src/main.cpp:54
-#, fuzzy
 msgid "for their papers about treemaps."
-msgstr "Aide à propos des cartes d’arborescence"
+msgstr "pour leurs publications sur les treemaps."
 
 #: ../src/main.cpp:57
 msgid "Ben Shneiderman"
@@ -752,7 +752,7 @@ msgstr "&Rapport"
 #. i18n: ectx: Menu (help)
 #: ui_rc.cpp:18
 msgid "&Help"
-msgstr "&Aide "
+msgstr "&Aide"
 
 #. i18n: file: ../src/k4dirstatui.rc:96
 #. i18n: ectx: ToolBar (mainToolBar)
