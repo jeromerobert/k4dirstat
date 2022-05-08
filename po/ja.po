@@ -8,284 +8,138 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-26 23:31-0500\n"
+"POT-Creation-Date: 2022-05-08 16:39+0200\n"
 "PO-Revision-Date: 2003-10-29 17:08+0900\n"
 "Last-Translator: Toyohiro Asukai <toyohiro@ksmplus.com>\n"
 "Language-Team:  <Kdeveloper@kde.gr.jp>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 3.1.2\n"
-"Language: ja\n"
 
-#: ../src/main.cpp:23
-msgid ""
-"k4dirstat - Directory statistics.\n"
-"\n"
-"Shows where all your disk space has gone\n"
-"and helps you clean it up."
+#: ../src/kdirtreeview.cpp:178
+msgid "[excluded]"
 msgstr ""
 
-#: ../src/k4dirstat.cpp:167
-msgid "Open &URL..."
-msgstr "URLを開く(&U)..."
+#: ../src/kdirtreeview.cpp:186 ../src/kdirtreeview.cpp:335
+msgid "[%1 Read Jobs]"
+msgstr "[%1 読込みジョブ]"
 
-#: ../src/k4dirstat.cpp:175
-msgid "Refresh &All"
-msgstr "全てリフレッシュ(&A)"
+#: ../src/kdirtreeview.cpp:196
+msgid "<Files>"
+msgstr "<ファイル>"
 
-#: ../src/k4dirstat.cpp:180
-msgid "Refresh &Selected"
-msgstr "選択した項目のリフレッシュ(&S)"
+#: ../src/kdirtreeview.cpp:204
+msgid "%1 / %2 Links (allocated: %3)"
+msgstr ""
 
-#: ../src/k4dirstat.cpp:183
+#: ../src/kdirtreeview.cpp:208
+msgid "%1 / %2 Links"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:214
+msgid "%1 (allocated: %2)"
+msgstr ""
+
+#: ../src/kdirtreeview.cpp:401
+msgid "Name"
+msgstr "名前"
+
+#: ../src/kdirtreeview.cpp:404
+msgid "Subtree Percentage"
+msgstr "サブツリー・バーセンテージ"
+
+#: ../src/kdirtreeview.cpp:406
+msgid "Percentage"
+msgstr "パーセンテージ"
+
+#: ../src/kdirtreeview.cpp:408
+msgid "Subtree Total"
+msgstr "サブツリー合計"
+
+#: ../src/kdirtreeview.cpp:411
+msgid "Own Size"
+msgstr "サイズ"
+
+#: ../src/kdirtreeview.cpp:413
+msgid "Items"
+msgstr "アイテム数"
+
+#: ../src/kdirtreeview.cpp:415
+msgid "Files"
+msgstr "ファイル数"
+
+#: ../src/kdirtreeview.cpp:417
+msgid "Subdirs"
+msgstr "サブディレクトリ数"
+
+#: ../src/kdirtreeview.cpp:419
+msgid "Last Change"
+msgstr "最終更新日"
+
+#: ../src/kdirtreeview.cpp:501
+msgid "Read Jobs"
+msgstr "読取りジョブ"
+
+#: ../src/kdirtreeview.cpp:683
+msgid "Finished. Elapsed time: %1"
+msgstr "終了. 経過時間 : %1"
+
+#: ../src/kdirtreeview.cpp:715
+msgid "Aborted. Elapsed time: %1"
+msgstr "中断. 経過時間 : %1"
+
+#: ../src/kdirtreeview.cpp:740
+msgid "Elapsed time: %1   reading directory %2"
+msgstr "経過時間: %1   ディレクトリ読込み中 %2"
+
+#: ../src/kdirtreeview.cpp:743
 #, fuzzy
-msgid "Read &Excluded Directory"
+msgid "Elapsed time: %1"
+msgstr "中断. 経過時間 : %1"
+
+#: ../src/kdirtreeview.cpp:911
+#, fuzzy
+msgid "Matching exclude rule:   %1"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/k4dirstat.cpp:187
-msgid "Continue Reading at &Mount Point"
-msgstr "マウント・ポイントで読み続ける(&M)"
-
-#: ../src/k4dirstat.cpp:191
-msgid "Stop Rea&ding"
-msgstr "読込み中止(&d)"
-
-#: ../src/k4dirstat.cpp:196
-msgid "&Write to Cache File..."
-msgstr ""
-
-#: ../src/k4dirstat.cpp:200
-msgid "&Read Cache File..."
-msgstr ""
-
-#: ../src/k4dirstat.cpp:207
-msgid "Open With"
-msgstr ""
-
-#: ../src/k4dirstat.cpp:210
-msgid "Zoom in"
-msgstr "ズームイン"
-
-#: ../src/k4dirstat.cpp:215
-msgid "Zoom out"
-msgstr "ズームアウト"
-
-#: ../src/k4dirstat.cpp:220
-msgid "Select Parent"
-msgstr "親を選択"
-
-#: ../src/k4dirstat.cpp:225
-msgid "Rebuild Treemap"
-msgstr "ツリーマップの再構築"
-
-#: ../src/k4dirstat.cpp:227
-msgid "Show Treemap"
-msgstr "ツリーマップ表示"
-
-#: ../src/k4dirstat.cpp:234
-msgid "Help about Treemaps"
-msgstr "ツリーマップのヘルプ"
-
-#: ../src/k4dirstat.cpp:240
-msgid "Send &Mail to Owner"
-msgstr "オーナーにメイル送信(&M)"
-
-#. _helpSendFeedbackMail = actionCollection()->addAction("help_send_feedback_mail",this, SLOT(sendFeedbackMail()));
-#. _helpSendFeedbackMail->setText(i18n("Send &Feedback Mail"));
-#: ../src/k4dirstat.cpp:246
-msgid "Opens a directory"
-msgstr "ディレクトリを開きます"
-
-#: ../src/k4dirstat.cpp:247
-msgid "Opens a (possibly remote) directory"
-msgstr "(恐らく遠隔)ディレクトリーを開きます"
-
-#: ../src/k4dirstat.cpp:248
-msgid "Opens a recently used directory"
+#: ../src/kdirtreeview.cpp:913
+#, fuzzy
+msgid "<Unknown exclude rule>"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/k4dirstat.cpp:249
-msgid "Closes the current directory"
-msgstr "カレント・ディレクトリを閉じます"
-
-#: ../src/k4dirstat.cpp:250
-msgid "Re-reads the entire directory tree"
-msgstr "再度ディレクトリー全体を読みます"
-
-#: ../src/k4dirstat.cpp:251
-msgid "Re-reads the selected subtree"
-msgstr "選択されたサブツリーを再度読みます"
-
-#: ../src/k4dirstat.cpp:252
-msgid "Scan directory tree that was previously excluded"
+#: ../src/kdirtreeview.cpp:939
+msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
 msgstr ""
 
-#: ../src/k4dirstat.cpp:253
-msgid "Scan mounted file systems"
-msgstr "マウントしたファイル・システムをスキャンします"
-
-#: ../src/k4dirstat.cpp:254
-msgid "Stops directory reading"
-msgstr "ディレクトリーの読込みを中止"
-
-#: ../src/k4dirstat.cpp:255
-msgid ""
-"Writes the current directory tree to a cache file that can be loaded much "
-"faster"
+#: ../src/kdirtreeview.cpp:945
+msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
 msgstr ""
 
-#: ../src/k4dirstat.cpp:256
-msgid "Reads a directory tree from a cache file"
+#: ../src/kdirtreeview.cpp:975 ../src/kfileinfo.cpp:253
+msgid "Bytes"
+msgstr "バイト"
+
+#: ../src/kdirtreeview.cpp:977
+msgid "%1 (%2 Bytes)"
 msgstr ""
 
-#: ../src/k4dirstat.cpp:257
-msgid "Quits the application"
-msgstr "アプリケーションを中止します"
+#: ../src/kdirtreeview.cpp:1055
+msgid "Disk Usage"
+msgstr "ディスク使用状況"
 
-#: ../src/k4dirstat.cpp:258
-msgid "Copies the URL of the selected item to the clipboard"
-msgstr "選択されたアイテムのURLをクリップボードにコピーします"
-
-#: ../src/k4dirstat.cpp:259
-msgid "Open file or directory with arbitrary application"
+#: ../src/kdirtreeview.cpp:1057
+msgid "Please check your disk usage and clean up if you can. Thank you."
 msgstr ""
+"ディスク使用状況を確認してください、もし可能なら不要ファイルを削除してくださ"
+"い"
 
-#: ../src/k4dirstat.cpp:260
-msgid "Enables/disables the treemap view"
-msgstr "ツリーマップを表示/非表示"
+#: ../src/kdirtreeview.cpp:1059
+msgid "Disk usage report generated by k4dirstat"
+msgstr "k4dirstatによってディスク使用状況レポートを作成しました"
 
-#: ../src/k4dirstat.cpp:261
-msgid "Zoom treemap in"
-msgstr "ツリーマップズームイン"
-
-#: ../src/k4dirstat.cpp:262
-msgid "Zoom treemap out"
-msgstr "ツリーマップズームアウト"
-
-#: ../src/k4dirstat.cpp:263
-msgid "Select parent"
-msgstr "親を選択"
-
-#: ../src/k4dirstat.cpp:264
-msgid "Rebuild treemap to fit into available space"
-msgstr "利用可能なスペースに入れるべきツリーマップを再構築"
-
-#: ../src/k4dirstat.cpp:265
-msgid "Opens the preferences dialog"
-msgstr "プレファレンス・ダイアログを開く"
-
-#: ../src/k4dirstat.cpp:266
-msgid "Sends a mail to the owner of the selected subtree"
-msgstr "選択されたサブツリーの所有者へメールを送信"
-
-#: ../src/k4dirstat.cpp:339 ../src/k4dirstat.cpp:351 ../src/k4dirstat.cpp:432
-#: ../src/k4dirstat.cpp:445 ../src/k4dirstat.cpp:455 ../src/k4dirstat.cpp:466
-#: ../src/k4dirstat.cpp:474 ../src/k4dirstat.cpp:485
-msgid "Ready."
-msgstr "準備ができています"
-
-#: ../src/k4dirstat.cpp:344 ../src/k4dirstat.cpp:425 ../src/k4dirstat.cpp:450
-msgid "Opening directory..."
-msgstr "ディレクトリーを開いてます..."
-
-#: ../src/k4dirstat.cpp:427
-msgid "Open Directory..."
-msgstr "ディレクトリー開きます"
-
-#: ../src/k4dirstat.cpp:437
-msgid "Opening URL..."
-msgstr "URLを開いています..."
-
-#. startDir
-#: ../src/k4dirstat.cpp:440
-msgid "Open URL..."
-msgstr "URL開きます..."
-
-#: ../src/k4dirstat.cpp:460
-msgid "Closing directory..."
-msgstr "ディレクトリーを閉じています..."
-
-#: ../src/k4dirstat.cpp:472
-msgid "Refreshing directory tree..."
-msgstr "ディレクトリーツリーのリフレッシュ中..."
-
-#: ../src/k4dirstat.cpp:483
-msgid "Refreshing selected subtree..."
-msgstr "選択されたサブツリーのリフレッシュ中..."
-
-#. startDir
-#. filter
-#. parent
-#: ../src/k4dirstat.cpp:504
-msgid "Write to Cache File"
-msgstr ""
-
-#: ../src/k4dirstat.cpp:513
-msgid "File %1 exists. Overwrite?"
-msgstr ""
-
-#: ../src/k4dirstat.cpp:514
-msgid "Overwrite?"
-msgstr ""
-
-#: ../src/k4dirstat.cpp:521
-msgid "Writing cache file..."
-msgstr ""
-
-#: ../src/k4dirstat.cpp:525
-msgid "Error writing cache file %1"
-msgstr ""
-
-#: ../src/k4dirstat.cpp:528
-msgid "Write Error"
-msgstr ""
-
-#: ../src/k4dirstat.cpp:531
-msgid "Wrote cache file %1"
-msgstr ""
-
-#. startDir
-#. filter
-#. parent
-#: ../src/k4dirstat.cpp:541
-msgid "Read Cache File"
-msgstr ""
-
-#. caption
-#: ../src/k4dirstat.cpp:543
-msgid "Reading cache file..."
-msgstr ""
-
-#: ../src/kstdcleanup.cpp:28
-msgid "Open in &Konqueror"
-msgstr "Konquerorで開く(&K)"
-
-#: ../src/kstdcleanup.cpp:48
-msgid "Open in &Terminal"
-msgstr "ターミナルで開く(&T)"
-
-#: ../src/kstdcleanup.cpp:67
-msgid "&Compress"
-msgstr "圧縮(&C)"
-
-#: ../src/kstdcleanup.cpp:85
-msgid "&make clean"
-msgstr "&make clean"
-
-#: ../src/kstdcleanup.cpp:102
-msgid "Delete T&rash Files"
-msgstr "ゴミ箱を空に(&r)"
-
-#: ../src/kstdcleanup.cpp:120
-msgid "Delete (to Trash &Bin)"
-msgstr "ゴミ箱へ(&B)"
-
-#: ../src/kstdcleanup.cpp:144
-msgid "&Delete (no way to undelete!)"
-msgstr "削除(復元できない)(&D)"
-
-#: ../src/kcleanup.cpp:173
+#: ../src/kcleanup.cpp:112
 msgid ""
 "%1\n"
 "in directory %2"
@@ -293,7 +147,7 @@ msgstr ""
 "%1\n"
 "ディレクトリー %2"
 
-#: ../src/kcleanup.cpp:177
+#: ../src/kcleanup.cpp:114
 msgid ""
 "%1\n"
 "for file %2"
@@ -303,42 +157,48 @@ msgstr ""
 
 #. parentWidget
 #. message
-#: ../src/kcleanup.cpp:182 ../src/kdirstatsettings.cpp:122
+#: ../src/kcleanup.cpp:121 ../src/kdirstatsettings.cpp:101
 msgid "Please Confirm"
 msgstr "確認してください"
 
 #. caption
-#: ../src/kcleanup.cpp:183
+#: ../src/kcleanup.cpp:122
 msgid "Confirm"
 msgstr "確認"
 
-#. Provide a keyboard shortcut for cleanup #0..#9
-#: ../src/kcleanupcollection.cpp:235
-msgid "User Defined Cleanup #&%1"
-msgstr "ユーザ・クリーンアップを定義しました #&%1"
+#: ../src/kstdcleanup.cpp:20
+msgid "Open a file &browser"
+msgstr ""
 
-#. No keyboard shortcuts for cleanups #10.. - they would be duplicates
-#: ../src/kcleanupcollection.cpp:238
-msgid "User Defined Cleanup #%1"
-msgstr "ユーザ・クリーンアップを定義しました #%1"
+#: ../src/kstdcleanup.cpp:34
+msgid "Open in &Terminal"
+msgstr "ターミナルで開く(&T)"
 
-#: ../src/kdirstatsettings.cpp:75
+#: ../src/kstdcleanup.cpp:49
+msgid "&Compress"
+msgstr "圧縮(&C)"
+
+#: ../src/kstdcleanup.cpp:62
+msgid "&make clean"
+msgstr "&make clean"
+
+#: ../src/kstdcleanup.cpp:75
+msgid "Delete T&rash Files"
+msgstr "ゴミ箱を空に(&r)"
+
+#: ../src/kstdcleanup.cpp:106
+msgid "&Delete (no way to undelete!)"
+msgstr "削除(復元できない)(&D)"
+
+#: ../src/kstdcleanup.cpp:121
+msgid "Delete (to Trash &Bin)"
+msgstr "ゴミ箱へ(&B)"
+
+#: ../src/kdirstatsettings.cpp:43
 msgid "Settings"
 msgstr "設定"
 
-#: ../src/kdirstatsettings.cpp:87
-msgid "&Tree Colors"
-msgstr "ツリー色(&T)"
-
-#: ../src/kdirstatsettings.cpp:91
-msgid "Tree&map"
-msgstr "ツリーマップ(&m)"
-
-#: ../src/kdirstatsettings.cpp:95
-msgid "&General"
-msgstr "一般(&G)"
-
-#: ../src/kdirstatsettings.cpp:120
+#: ../src/kdirstatsettings.cpp:99
 msgid ""
 "Really revert all settings to their default values?\n"
 "You will lose all changes you ever made!"
@@ -347,78 +207,77 @@ msgstr ""
 "貴方は、これまでに作った全ての変更を失います!"
 
 #. caption
-#: ../src/kdirstatsettings.cpp:123
+#: ../src/kdirstatsettings.cpp:102
 msgid "&Really Revert to Defaults"
 msgstr "本当に、デフォルト値に戻します。(&R)"
 
-#: ../src/kdirstatsettings.cpp:209
+#: ../src/kdirstatsettings.cpp:152
 msgid "Tree Level %1"
 msgstr "ツリーレベル %1"
 
-#. border, spacing
 #. The topmost check box: "Enabled".
-#: ../src/kdirstatsettings.cpp:545
+#: ../src/kdirstatsettings.cpp:379
 msgid "&Enabled"
 msgstr "有効(&E)"
 
-#: ../src/kdirstatsettings.cpp:582
+#: ../src/kdirstatsettings.cpp:414
 msgid "&Title:"
 msgstr "タイトル(&T):"
 
-#: ../src/kdirstatsettings.cpp:583
+#: ../src/kdirstatsettings.cpp:418
 msgid "&Command Line:"
 msgstr "コマンドライン(&C):"
 
-#: ../src/kdirstatsettings.cpp:585
+#: ../src/kdirstatsettings.cpp:422
 #, c-format
 msgid "%p Full Path"
 msgstr "%p フルパス"
 
-#: ../src/kdirstatsettings.cpp:588
+#: ../src/kdirstatsettings.cpp:425
 #, c-format
 msgid "%n File / Directory Name Without Path"
 msgstr "%n パスのない、ファイル/ディレクトリ名"
 
-#: ../src/kdirstatsettings.cpp:591
+#: ../src/kdirstatsettings.cpp:428
 msgid "%t KDE Trash Directory"
 msgstr "%t KDE ゴミ箱のディレクトリー"
 
 #. "Recurse into subdirs" check box
-#: ../src/kdirstatsettings.cpp:597
+#: ../src/kdirstatsettings.cpp:433
 msgid "&Recurse into Subdirectories"
 msgstr "サブディレクトリへの再帰(&R)"
 
 #. "Ask for confirmation" check box
-#: ../src/kdirstatsettings.cpp:602
+#: ../src/kdirstatsettings.cpp:438
 msgid "&Ask for Confirmation"
 msgstr "確認を求める(&A)"
 
 #. The "Works for..." check boxes, grouped together in a button group.
-#: ../src/kdirstatsettings.cpp:608
+#: ../src/kdirstatsettings.cpp:443
 msgid "Works for..."
 msgstr "動作..."
 
-#: ../src/kdirstatsettings.cpp:614
+#: ../src/kdirstatsettings.cpp:449
 msgid "&Directories"
 msgstr "ディレクトリ(&D)"
 
-#: ../src/kdirstatsettings.cpp:615
+#: ../src/kdirstatsettings.cpp:450
 msgid "&Files"
 msgstr "ファイル(&F)"
 
-#: ../src/kdirstatsettings.cpp:616
+#: ../src/kdirstatsettings.cpp:451
 msgid "<Files> P&seudo Entries"
 msgstr "<ファイル> 疑似エントリー(&s)"
 
-#: ../src/kdirstatsettings.cpp:626
+#: ../src/kdirstatsettings.cpp:463
 msgid "On Local Machine Only ('file:/' Protocol)"
 msgstr "ローカルマシン上のみ ('file:/' protocol)"
 
-#: ../src/kdirstatsettings.cpp:627
+#: ../src/kdirstatsettings.cpp:465
 msgid "Network Transparent (ftp, smb, tar, ...)"
 msgstr "ネットワークトランスペアレント(ftp, smb, tar, ...)"
 
-#: ../src/kdirstatsettings.cpp:647
+#: ../src/kdirstatsettings.cpp:482
 msgid "Refresh &Policy:"
 msgstr "リフレッシュのポリシー(&P):"
 
@@ -428,296 +287,443 @@ msgstr "リフレッシュのポリシー(&P):"
 #. I don't like this one bit. The ComboBox should provide something better
 #. than mere numeric IDs. One of these days I'm going to rewrite this
 #. thing!
-#: ../src/kdirstatsettings.cpp:658
+#: ../src/kdirstatsettings.cpp:493
 msgid "No Refresh"
 msgstr "リフレッシュなし"
 
-#: ../src/kdirstatsettings.cpp:659
+#: ../src/kdirstatsettings.cpp:494
 msgid "Refresh This Entry"
 msgstr "このエントリをリフレッシュ"
 
-#: ../src/kdirstatsettings.cpp:660
+#: ../src/kdirstatsettings.cpp:495
 msgid "Refresh This Entry's Parent"
 msgstr "エントリーの親をリフレッシュ"
 
-#: ../src/kdirstatsettings.cpp:661
+#: ../src/kdirstatsettings.cpp:496
 msgid "Assume Entry Has Been Deleted"
 msgstr "エントリーが削除されたと仮定"
 
-#. Create layout and widgets.
-#. border
-#. spacing
-#: ../src/kdirstatsettings.cpp:728
+#: ../src/kdirstatsettings.cpp:546
 msgid "Directory Reading"
 msgstr "ディレクトリーの読込み"
 
-#: ../src/kdirstatsettings.cpp:733
+#: ../src/kdirstatsettings.cpp:551
 msgid "Cross &File System Boundaries"
 msgstr "クロス・ファイル・システム境界(&F)"
 
-#: ../src/kdirstatsettings.cpp:734
+#: ../src/kdirstatsettings.cpp:553
 msgid "Use Optimized &Local Directory Read Methods"
 msgstr "ローカルディレクトリーを最適化(&L)"
 
-#: ../src/kdirstatsettings.cpp:741
-msgid "Animation"
-msgstr "アニメーション"
-
-#: ../src/kdirstatsettings.cpp:744
-msgid "P@cM@n Animation in Tool &Bar"
-msgstr "パックマンアニメーションツールバー(&B)"
-
-#: ../src/kdirstatsettings.cpp:745
-msgid "P@cM@n Animation in Directory &Tree"
-msgstr "ディレクトリーツリー内のパックマンアニメーション(&T)"
-
-#: ../src/kdirstatsettings.cpp:748
+#: ../src/kdirstatsettings.cpp:562
 #, fuzzy
 msgid "&Exclude Rules"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/kdirstatsettings.cpp:752
-msgid "Exclude Rule (Regular Expression)"
-msgstr ""
-
-#: ../src/kdirstatsettings.cpp:756
+#: ../src/kdirstatsettings.cpp:572
 msgid "&Add"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:757 ../src/kdirstatsettings.cpp:790
+#: ../src/kdirstatsettings.cpp:573 ../src/kdirstatsettings.cpp:605
 msgid "&Edit"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:758 ../src/kdirstatsettings.cpp:791
+#: ../src/kdirstatsettings.cpp:574 ../src/kdirstatsettings.cpp:609
 msgid "&Delete"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:894
+#: ../src/kdirstatsettings.cpp:680
 #, fuzzy
 msgid "New exclude rule"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/kdirstatsettings.cpp:895
+#: ../src/kdirstatsettings.cpp:681
 msgid "Regular expression for new exclude rule:"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:918
+#: ../src/kdirstatsettings.cpp:698
 #, fuzzy
 msgid "Edit exclude rule"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/kdirstatsettings.cpp:919
+#: ../src/kdirstatsettings.cpp:699
 msgid "Exclude rule (regular expression):"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:946
+#: ../src/kdirstatsettings.cpp:718
 msgid "Really delete exclude rule \"%1\"?"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:947
+#: ../src/kdirstatsettings.cpp:719
 msgid "Delete?"
 msgstr ""
 
-#: ../src/kdirstatsettings.cpp:975
+#: ../src/kdirstatsettings.cpp:736
 msgid "S&quarify Treemap"
 msgstr "四角のツリーマップ(&q)"
 
-#: ../src/kdirstatsettings.cpp:976
+#: ../src/kdirstatsettings.cpp:737
 msgid "Use C&ushion Shading"
 msgstr "濃淡な図形(&u)"
 
 #. Cushion parameters
-#: ../src/kdirstatsettings.cpp:981
+#: ../src/kdirstatsettings.cpp:743
 msgid "Cushion Parameters"
 msgstr "パラメータ"
 
-#: ../src/kdirstatsettings.cpp:986
+#: ../src/kdirstatsettings.cpp:746
 msgid "Ambient &Light"
 msgstr "アンビアント・ライト(&L)"
 
-#: ../src/kdirstatsettings.cpp:996
+#: ../src/kdirstatsettings.cpp:764
 msgid "&Height Scale"
 msgstr "高さ(&H)"
 
-#: ../src/kdirstatsettings.cpp:1006
+#: ../src/kdirstatsettings.cpp:781
 msgid "Draw Lines if Lo&w Contrast"
 msgstr "低いコントラスト時の描画ライン(&w)"
 
-#: ../src/kdirstatsettings.cpp:1010
+#: ../src/kdirstatsettings.cpp:783
 msgid "Always Draw &Grid"
 msgstr "グリッド表示(&G)"
 
-#: ../src/kdirstatsettings.cpp:1013
+#: ../src/kdirstatsettings.cpp:784
 msgid "Gr&id Color: "
 msgstr "グリッド色(&i): "
 
-#. addVStretch( vbox );
 #. Plain treemaps parameters
-#: ../src/kdirstatsettings.cpp:1023
+#: ../src/kdirstatsettings.cpp:794
 msgid "Colors for Plain Treemaps"
 msgstr "簡易・ツリーマップ時の色"
 
-#: ../src/kdirstatsettings.cpp:1026
+#: ../src/kdirstatsettings.cpp:798
 msgid "&Files: "
 msgstr "ファイル(&F): "
 
-#: ../src/kdirstatsettings.cpp:1031
+#: ../src/kdirstatsettings.cpp:805
 msgid "&Directories: "
 msgstr "ディレクトリ(&D): "
 
-#: ../src/kdirstatsettings.cpp:1036
+#: ../src/kdirstatsettings.cpp:812
 msgid "Gr&id: "
 msgstr "グリッド(&i): "
 
-#. rows, cols, spacing
 #. (col, stretch) don't stretch this column
 #. don't stretch
 #. stretch this as you like
-#: ../src/kdirstatsettings.cpp:1050
+#: ../src/kdirstatsettings.cpp:828
 msgid "Highlight R&ectangle: "
 msgstr "ハイライト(&g)・長方形(&e): "
 
-#: ../src/kdirstatsettings.cpp:1058
+#: ../src/kdirstatsettings.cpp:835
 msgid "Minim&um Treemap Tile Size: "
 msgstr "最小のツリーマップ・タイル・サイズ(&u): "
 
-#: ../src/kdirstatsettings.cpp:1065
+#: ../src/kdirstatsettings.cpp:845
 msgid "Auto-&Resize Treemap"
 msgstr "自動リサイズ・ツリーマップ(&R)"
 
-#: ../src/kdirtreeview.cpp:73 ../src/kdirinfomodel.cpp:106
-msgid "Name"
-msgstr "名前"
+#: ../src/k4dirstat.cpp:184
+msgid "Open &URL..."
+msgstr "URLを開く(&U)..."
 
-#: ../src/kdirtreeview.cpp:75 ../src/kdirinfomodel.cpp:108
-msgid "Subtree Percentage"
-msgstr "サブツリー・バーセンテージ"
+#: ../src/k4dirstat.cpp:194
+msgid "Refresh &All"
+msgstr "全てリフレッシュ(&A)"
 
-#: ../src/kdirtreeview.cpp:76 ../src/kdirinfomodel.cpp:110
-msgid "Percentage"
-msgstr "パーセンテージ"
+#: ../src/k4dirstat.cpp:199
+msgid "Refresh &Selected"
+msgstr "選択した項目のリフレッシュ(&S)"
 
-#: ../src/kdirtreeview.cpp:77 ../src/kdirinfomodel.cpp:112
-msgid "Subtree Total"
-msgstr "サブツリー合計"
-
-#: ../src/kdirtreeview.cpp:79 ../src/kdirinfomodel.cpp:114
-msgid "Own Size"
-msgstr "サイズ"
-
-#: ../src/kdirtreeview.cpp:80 ../src/kdirinfomodel.cpp:116
-msgid "Items"
-msgstr "アイテム数"
-
-#: ../src/kdirtreeview.cpp:81 ../src/kdirinfomodel.cpp:118
-msgid "Files"
-msgstr "ファイル数"
-
-#: ../src/kdirtreeview.cpp:82 ../src/kdirinfomodel.cpp:120
-msgid "Subdirs"
-msgstr "サブディレクトリ数"
-
-#: ../src/kdirtreeview.cpp:83 ../src/kdirinfomodel.cpp:122
-msgid "Last Change"
-msgstr "最終更新日"
-
-#: ../src/kdirtreeview.cpp:178
-msgid "Read Jobs"
-msgstr "読取りジョブ"
-
-#: ../src/kdirtreeview.cpp:471
-msgid "Finished. Elapsed time: %1"
-msgstr "終了. 経過時間 : %1"
-
-#: ../src/kdirtreeview.cpp:513
-msgid "Aborted. Elapsed time: %1"
-msgstr "中断. 経過時間 : %1"
-
-#: ../src/kdirtreeview.cpp:549
-msgid "Elapsed time: %1   reading directory %2"
-msgstr "経過時間: %1   ディレクトリ読込み中 %2"
-
-#: ../src/kdirtreeview.cpp:553
+#: ../src/k4dirstat.cpp:203
 #, fuzzy
-msgid "Elapsed time: %1"
-msgstr "中断. 経過時間 : %1"
-
-#: ../src/kdirtreeview.cpp:824
-#, fuzzy
-msgid "Matching exclude rule:   %1"
+msgid "Read &Excluded Directory"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/kdirtreeview.cpp:828
-#, fuzzy
-msgid "<Unknown exclude rule>"
+#: ../src/k4dirstat.cpp:208
+msgid "Continue Reading at &Mount Point"
+msgstr "マウント・ポイントで読み続ける(&M)"
+
+#: ../src/k4dirstat.cpp:213
+msgid "Stop Rea&ding"
+msgstr "読込み中止(&d)"
+
+#: ../src/k4dirstat.cpp:218
+msgid "&Write to Cache File..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:223
+msgid "&Read Cache File..."
+msgstr ""
+
+#: ../src/k4dirstat.cpp:232
+msgid "Open With"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:236
+msgid "Zoom in"
+msgstr "ズームイン"
+
+#: ../src/k4dirstat.cpp:242
+msgid "Zoom out"
+msgstr "ズームアウト"
+
+#: ../src/k4dirstat.cpp:248
+msgid "Select Parent"
+msgstr "親を選択"
+
+#: ../src/k4dirstat.cpp:255
+msgid "Rebuild Treemap"
+msgstr "ツリーマップの再構築"
+
+#: ../src/k4dirstat.cpp:258
+msgid "Show Treemap"
+msgstr "ツリーマップ表示"
+
+#: ../src/k4dirstat.cpp:267
+msgid "Help about Treemaps"
+msgstr "ツリーマップのヘルプ"
+
+#: ../src/k4dirstat.cpp:275
+msgid "Send &Mail to Owner"
+msgstr "オーナーにメイル送信(&M)"
+
+#. _helpSendFeedbackMail =
+#. actionCollection()->addAction("help_send_feedback_mail",this,
+#. SLOT(sendFeedbackMail())); _helpSendFeedbackMail->setText(i18n("Send
+#. &Feedback Mail"));
+#: ../src/k4dirstat.cpp:283
+msgid "Opens a directory"
+msgstr "ディレクトリを開きます"
+
+#: ../src/k4dirstat.cpp:284
+msgid "Opens a (possibly remote) directory"
+msgstr "(恐らく遠隔)ディレクトリーを開きます"
+
+#: ../src/k4dirstat.cpp:285
+msgid "Opens a recently used directory"
 msgstr "最近用いられているディレクトリーを開きます"
 
-#: ../src/kdirtreeview.cpp:858
-msgid "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)"
+#: ../src/k4dirstat.cpp:286
+msgid "Closes the current directory"
+msgstr "カレント・ディレクトリを閉じます"
+
+#: ../src/k4dirstat.cpp:287
+msgid "Re-reads the entire directory tree"
+msgstr "再度ディレクトリー全体を読みます"
+
+#: ../src/k4dirstat.cpp:288
+msgid "Re-reads the selected subtree"
+msgstr "選択されたサブツリーを再度読みます"
+
+#: ../src/k4dirstat.cpp:290
+msgid "Scan directory tree that was previously excluded"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:866
-msgid "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)"
+#: ../src/k4dirstat.cpp:292
+msgid "Scan mounted file systems"
+msgstr "マウントしたファイル・システムをスキャンします"
+
+#: ../src/k4dirstat.cpp:293
+msgid "Stops directory reading"
+msgstr "ディレクトリーの読込みを中止"
+
+#: ../src/k4dirstat.cpp:295
+msgid ""
+"Writes the current directory tree to a cache file that can be loaded much "
+"faster"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:908 ../src/kfileinfo.cpp:456
-msgid "Bytes"
-msgstr "バイト"
-
-#: ../src/kdirtreeview.cpp:912
-msgid "%1 (%2 Bytes)"
+#: ../src/k4dirstat.cpp:298
+msgid "Reads a directory tree from a cache file"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:1015
-msgid "Disk Usage"
-msgstr "ディスク使用状況"
+#: ../src/k4dirstat.cpp:299
+msgid "Quits the application"
+msgstr "アプリケーションを中止します"
 
-#: ../src/kdirtreeview.cpp:1017
-msgid "Please check your disk usage and clean up if you can. Thank you."
-msgstr ""
-"ディスク使用状況を確認してください、もし可能なら不要ファイルを削除してくださ"
-"い"
+#: ../src/k4dirstat.cpp:301
+msgid "Copies the URL of the selected item to the clipboard"
+msgstr "選択されたアイテムのURLをクリップボードにコピーします"
 
-#: ../src/kdirtreeview.cpp:1021
-msgid "Disk usage report generated by k4dirstat"
-msgstr "k4dirstatによってディスク使用状況レポートを作成しました"
-
-#: ../src/kdirtreeview.cpp:1084
-msgid "<Files>"
-msgstr "<ファイル>"
-
-#: ../src/kdirtreeview.cpp:1099
-msgid "%1 / %2 Links (allocated: %3)"
+#: ../src/k4dirstat.cpp:303
+msgid "Open file or directory with arbitrary application"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:1106
-msgid "%1 / %2 Links"
+#: ../src/k4dirstat.cpp:304
+msgid "Enables/disables the treemap view"
+msgstr "ツリーマップを表示/非表示"
+
+#: ../src/k4dirstat.cpp:305
+msgid "Zoom treemap in"
+msgstr "ツリーマップズームイン"
+
+#: ../src/k4dirstat.cpp:306
+msgid "Zoom treemap out"
+msgstr "ツリーマップズームアウト"
+
+#: ../src/k4dirstat.cpp:307
+msgid "Select parent"
+msgstr "親を選択"
+
+#: ../src/k4dirstat.cpp:309
+msgid "Rebuild treemap to fit into available space"
+msgstr "利用可能なスペースに入れるべきツリーマップを再構築"
+
+#: ../src/k4dirstat.cpp:310
+msgid "Opens the preferences dialog"
+msgstr "プレファレンス・ダイアログを開く"
+
+#: ../src/k4dirstat.cpp:312
+msgid "Sends a mail to the owner of the selected subtree"
+msgstr "選択されたサブツリーの所有者へメールを送信"
+
+#: ../src/k4dirstat.cpp:342 ../src/k4dirstat.cpp:352 ../src/k4dirstat.cpp:417
+#: ../src/k4dirstat.cpp:429 ../src/k4dirstat.cpp:438 ../src/k4dirstat.cpp:448
+#: ../src/k4dirstat.cpp:454 ../src/k4dirstat.cpp:463
+msgid "Ready."
+msgstr "準備ができています"
+
+#: ../src/k4dirstat.cpp:345 ../src/k4dirstat.cpp:410 ../src/k4dirstat.cpp:433
+msgid "Opening directory..."
+msgstr "ディレクトリーを開いてます..."
+
+#: ../src/k4dirstat.cpp:412
+msgid "Open Directory..."
+msgstr "ディレクトリー開きます"
+
+#: ../src/k4dirstat.cpp:421
+msgid "Opening URL..."
+msgstr "URLを開いています..."
+
+#. startDir
+#: ../src/k4dirstat.cpp:424
+msgid "Open URL..."
+msgstr "URL開きます..."
+
+#: ../src/k4dirstat.cpp:442
+msgid "Closing directory..."
+msgstr "ディレクトリーを閉じています..."
+
+#: ../src/k4dirstat.cpp:452
+msgid "Refreshing directory tree..."
+msgstr "ディレクトリーツリーのリフレッシュ中..."
+
+#: ../src/k4dirstat.cpp:458
+msgid "Refreshing selected subtree..."
+msgstr "選択されたサブツリーのリフレッシュ中..."
+
+#: ../src/k4dirstat.cpp:472
+msgid "Write to Cache File"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:1115
-msgid "%1 (allocated: %2)"
+#: ../src/k4dirstat.cpp:481
+msgid "File %1 exists. Overwrite?"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:1134 ../src/kdirtreeview.cpp:1278
-msgid "[excluded]"
+#: ../src/k4dirstat.cpp:482
+msgid "Overwrite?"
 msgstr ""
 
-#: ../src/kdirtreeview.cpp:1265
-msgid "[%1 Read Jobs]"
-msgstr "[%1 読込みジョブ]"
+#: ../src/k4dirstat.cpp:491
+msgid "Writing cache file..."
+msgstr ""
 
-#: ../src/kfileinfo.cpp:465
+#: ../src/k4dirstat.cpp:494
+msgid "Error writing cache file %1"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:497
+msgid "Write Error"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:500
+msgid "Wrote cache file %1"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:505
+msgid "Read Cache File"
+msgstr ""
+
+#: ../src/k4dirstat.cpp:508
+msgid "Reading cache file..."
+msgstr ""
+
+#. Provide a keyboard shortcut for cleanup #0..#9
+#: ../src/kcleanupcollection.cpp:95
+msgid "User Defined Cleanup #&%1"
+msgstr "ユーザ・クリーンアップを定義しました #&%1"
+
+#. No keyboard shortcuts for cleanups #10.. - they would be duplicates
+#: ../src/kcleanupcollection.cpp:98
+msgid "User Defined Cleanup #%1"
+msgstr "ユーザ・クリーンアップを定義しました #%1"
+
+#: ../src/kfileinfo.cpp:259
 msgid "kB"
 msgstr "kB"
 
-#: ../src/kfileinfo.cpp:474
+#: ../src/kfileinfo.cpp:265
 msgid "MB"
 msgstr "MB"
 
-#: ../src/kfileinfo.cpp:481
+#: ../src/kfileinfo.cpp:270
 msgid "GB"
 msgstr "GB"
 
+#: ../src/main.cpp:22
+msgid ""
+"k4dirstat - Directory statistics.\n"
+"\n"
+"Shows where all your disk space has gone\n"
+"and helps you clean it up."
+msgstr ""
+
+#: ../src/main.cpp:33 ../src/main.cpp:65
+msgid "k4dirstat"
+msgstr ""
+
+#: ../src/main.cpp:41
+msgid "KF5 Port, current maintainer."
+msgstr ""
+
+#: ../src/main.cpp:43
+msgid "Original kdirstat author."
+msgstr ""
+
+#: ../src/main.cpp:45
+msgid "Port to KDE4"
+msgstr ""
+
+#: ../src/main.cpp:48
+msgid "SequoiaView Team"
+msgstr ""
+
+#: ../src/main.cpp:49
+msgid "for showing just how useful treemaps really can be."
+msgstr ""
+
+#: ../src/main.cpp:53
+msgid "Jarke J. van Wijk, Huub van de Wetering, Mark Bruls"
+msgstr ""
+
+#: ../src/main.cpp:54
+#, fuzzy
+msgid "for their papers about treemaps."
+msgstr "ツリーマップのヘルプ"
+
+#: ../src/main.cpp:57
+msgid "Ben Shneiderman"
+msgstr ""
+
+#: ../src/main.cpp:58
+msgid ""
+"for his ingenious idea of treemaps -\n"
+"a truly intuitive way of visualizing tree contents."
+msgstr ""
+
+#. class KTreemapSelectionRect
+#. namespace KDirStat
 #. i18n: file: ../src/k4dirstatui.rc:16
 #. i18n: ectx: Menu (file)
 #: ui_rc.cpp:3
@@ -756,11 +762,32 @@ msgstr "レポート(&R)"
 msgid "&Help"
 msgstr ""
 
-#. i18n: file: ../src/k4dirstatui.rc:97
+#. i18n: file: ../src/k4dirstatui.rc:96
 #. i18n: ectx: ToolBar (mainToolBar)
 #: ui_rc.cpp:21
 msgid "Main Toolbar"
 msgstr ""
+
+#~ msgid "Open in &Konqueror"
+#~ msgstr "Konquerorで開く(&K)"
+
+#~ msgid "&Tree Colors"
+#~ msgstr "ツリー色(&T)"
+
+#~ msgid "Tree&map"
+#~ msgstr "ツリーマップ(&m)"
+
+#~ msgid "&General"
+#~ msgstr "一般(&G)"
+
+#~ msgid "Animation"
+#~ msgstr "アニメーション"
+
+#~ msgid "P@cM@n Animation in Tool &Bar"
+#~ msgstr "パックマンアニメーションツールバー(&B)"
+
+#~ msgid "P@cM@n Animation in Directory &Tree"
+#~ msgstr "ディレクトリーツリー内のパックマンアニメーション(&T)"
 
 #~ msgid "Send &Feedback Mail..."
 #~ msgstr "フィードバックメール送信(&F)..."
@@ -791,10 +818,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Directory or URL to open"
 #~ msgstr "ディレクトリーの読込み"
-
-#, fuzzy
-#~ msgid "for their papers about treemaps.\n"
-#~ msgstr "ツリーマップのヘルプ"
 
 #~ msgid "What is your general opinion about this program?"
 #~ msgstr "このプログラムに関するあなたの一般的な意見は、何ですか？"
@@ -973,7 +996,8 @@ msgstr ""
 #~ "Did you ever get a k4dirstat mail report telling you to clean up disk "
 #~ "space?"
 #~ msgstr ""
-#~ "ディスクスペースをきれいにするようにk4dirstatメール・レポートを得ましたか？"
+#~ "ディスクスペースをきれいにするようにk4dirstatメール・レポートを得ました"
+#~ "か？"
 
 #~ msgid "Could you figure yet out how to work with the treemaps?"
 #~ msgstr "Could you figure yet out how to work with the treemaps?"
