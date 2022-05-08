@@ -1,5 +1,4 @@
 *.gmo
-*.pot
 Makefile
 CMakeCache.txt
 moc_*.cpp
