@@ -39,6 +39,10 @@ KFileInfo::KFileInfo(const QString &filenameWithoutPath, struct stat *statInfo,
   _device = statInfo->st_dev;
   _mode = statInfo->st_mode;
   _links = statInfo->st_nlink;
+  if(_links == 0) {
+    // The file system probably does not support links
+    _links = 1;
+  }
   _mtime = statInfo->st_mtime;
 
   if (isSpecial()) {
