@@ -24,7 +24,7 @@ KCleanup *KStdCleanup::openInKonqueror(QString &icon, QKeySequence &shortcut) {
   cleanup->setWorksForDotEntry(true);
   cleanup->setWorksLocalOnly(false);
   cleanup->setRefreshPolicy(KCleanup::noRefresh);
-  icon = "konqueror";
+  icon = "system-file-manager";
   shortcut = Qt::CTRL + Qt::Key_K;
   return cleanup;
 }
