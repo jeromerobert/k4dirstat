@@ -30,6 +30,7 @@ static const char version[] = EXPAND(K4DIRSTAT_VERSION);
 
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
+  KLocalizedString::setApplicationDomain("k4dirstat");
   KAboutData about("k4dirstat", i18n("k4dirstat"), version, i18n(description),
                    KAboutLicense::GPL,
                    "\u00A9 2015-2019 J\u00E9r\u00F4me Robert, \u00A9 2010 Joshua "
