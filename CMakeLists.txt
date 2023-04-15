@@ -48,7 +48,7 @@ ADD_DEFINITIONS(-D_LARGE_FILES -D_FILE_OFFSET_BITS=64)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 add_definitions(-DQT_USE_QSTRINGBUILDER)
 
-git_version(K4DIRSTAT_VERSION 3.4.2 k4dirstat-)
+git_version(K4DIRSTAT_VERSION 3.4.3 k4dirstat-)
 add_subdirectory( doc )
 add_subdirectory( src )
 add_subdirectory( icons )
