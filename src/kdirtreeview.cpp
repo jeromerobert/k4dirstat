@@ -888,6 +888,10 @@ void KDirTreeView::paletteChanged() {
 
 void KDirTreeView::popupContextMenu(const QPoint &localPos) {
   QModelIndex idx = indexAt(localPos);
+  if(!idx.isValid()) {
+    // Right click in the treeview but not on an item
+    return;
+  }
   int column = columnAt(localPos.x());
   QPoint pos = viewport()->mapToGlobal(localPos);
   KFileInfo *orig = model()->indexToFile(proxyModel()->mapToSource(idx));
