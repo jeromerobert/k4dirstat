@@ -44,6 +44,7 @@
 #include "ktreemapview.h"
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
+#include <KIO/JobUiDelegateFactory>
 #include <KHelpClient>
 #include <KIconEngine>
 #include <KIconLoader>
@@ -54,7 +55,7 @@
 #include <QSplitter>
 #include <QStorageInfo>
 #include <QLabel>
-
+#include <kwidgetsaddons_version.h>
 #include "settings.h"
 
 #define USER_CLEANUPS 10 // Number of user cleanup actions
@@ -477,14 +478,20 @@ void k4dirstat::askWriteCache() {
 
     if (access(file_name.toLatin1(), F_OK) == 0) // file exists
     {
-      int button = KMessageBox::questionYesNoCancel(
-          this, i18n("File %1 exists. Overwrite?", file_name),
-          i18n("Overwrite?")); // caption
-
-      if (button == KMessageBox::Cancel)
-        return;
+      auto msg = i18n("File %1 exists. Overwrite?", file_name);
+      auto title = i18n("Overwrite?");
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+      int button = KMessageBox::questionTwoActionsCancel(this, msg, title,
+        KStandardGuiItem::overwrite(), KStandardGuiItem::back());
+      if (button == KMessageBox::SecondaryAction)
+        file_name = "";
+#else
+      int button = KMessageBox::questionYesNoCancel(this, msg, title);
       if (button == KMessageBox::No)
         file_name = "";
+#endif
+      if (button == KMessageBox::Cancel)
+        return;
     }
   } while (file_name.isEmpty());
 
@@ -493,7 +500,7 @@ void k4dirstat::askWriteCache() {
   if (!_treeView || !_treeView->writeCache(file_name)) {
     QString errMsg = i18n("Error writing cache file %1", file_name);
     statusMsg(errMsg);
-    KMessageBox::sorry(this, errMsg,
+    KMessageBox::error(this, errMsg,
                        i18n("Write Error")); // caption
   }
 
@@ -540,7 +547,11 @@ void k4dirstat::cleanupOpenWith() {
                                      QUrl::AssumeLocalFile));
   auto *job = new KIO::ApplicationLauncherJob();
   job->setUrls(urlList);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+  job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
+#else
   job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
+#endif
   job->start();
 }
 

@@ -28,6 +28,7 @@
 #include <KSharedConfig>
 #include <QGroupBox>
 #include <QMenu>
+#include <kwidgetsaddons_version.h>
 
 using namespace KDirStat;
 
@@ -714,14 +715,18 @@ void KGeneralSettingsPage::deleteExcludeRule() {
 
   if (item) {
     QString excludeRule = item->text();
-    int result = KMessageBox::questionYesNo(
-        this, i18n("Really delete exclude rule \"%1\"?", excludeRule),
-        i18n("Delete?")); // Window title
-    if (result == KMessageBox::Yes) {
+    auto msg = i18n("Really delete exclude rule \"%1\"?", excludeRule);
+    auto title = i18n("Delete?");
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    bool doIt = KMessageBox::questionTwoActions(this, msg, title,
+      KStandardGuiItem::del(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction;
+#else
+    bool doIt = KMessageBox::questionYesNo(this, msg, title) == KMessageBox::Yes;
+#endif
+    if (doIt) {
       _excludeRulesListView->takeItem(_excludeRulesListView->currentRow());
     }
   }
-
   checkEnabledState();
 }
 

@@ -12,6 +12,10 @@
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
 #include <KLocalizedString>
+#include <kio_version.h>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+ #include <KIO/DeleteOrTrashJob>
+#endif
 
 using namespace KDirStat;
 
@@ -121,6 +125,7 @@ TrashBinCleanup::TrashBinCleanup()
                i18n("Delete (to Trash &Bin)")) {}
 
 static void konqOperationsDel(QWidget *m_mainWindow, const QList<QUrl> &urls) {
+#if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
   KIO::JobUiDelegate uiDelegate;
   uiDelegate.setWindow(m_mainWindow);
   if (uiDelegate.askDeleteConfirmation(
@@ -133,6 +138,12 @@ static void konqOperationsDel(QWidget *m_mainWindow, const QList<QUrl> &urls) {
     job->uiDelegate()->setAutoErrorHandlingEnabled(
         true); // or connect to the result signal
   }
+#else
+  using Iface = KIO::AskUserActionInterface;
+  auto * job = new KIO::DeleteOrTrashJob(urls, Iface::Trash,
+    Iface::DefaultConfirmation, m_mainWindow);
+  job->start();
+#endif
 }
 
 void TrashBinCleanup::execute(KDirTree * tree) {
