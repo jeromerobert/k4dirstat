@@ -1,0 +1,64 @@
+name: Build
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        platform: ['appimage', 'deb']
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y extra-cmake-modules qtbase5-dev libkf5coreaddons-dev \
+          libkf5i18n-dev libkf5xmlgui-dev libkf5doctools-dev libkf5kio-dev
+
+    - name: Configure
+      run: cmake -DCMAKE_INSTALL_PREFIX=./install
+
+    - name: Build
+      run: make install
+
+    - name: Install packaging tools
+      run: |
+        sudo apt-get install -y dpkg-deb
+        wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+        chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+
+    - name: Package as .deb
+      if: matrix.platform == 'deb'
+      run: |
+        # Replace with your actual packaging commands
+        mkdir -p package/DEBIAN
+        # Create control file
+        echo "Package: mypackage" > package/DEBIAN/control
+        echo "Version: 1.0" >> package/DEBIAN/control
+        echo "Section: custom" >> package/DEBIAN/control
+        echo "Priority: optional" >> package/DEBIAN/control
+        echo "Architecture: all" >> package/DEBIAN/control
+        echo "Essential: no" >> package/DEBIAN/control
+        echo "Installed-Size: 1024" >> package/DEBIAN/control
+        echo "Maintainer: YourName" >> package/DEBIAN/control
+        echo "Description: My Package" >> package/DEBIAN/control
+        cp -r ./install/* package/
+        dpkg-deb --build package mypackage.deb
+
+    - name: Package as AppImage
+      if: matrix.platform == 'appimage'
+      run: |
+        # Replace with your actual packaging commands
+        ./linuxdeployqt-continuous-x86_64.AppImage ./install/usr/share/applications/myapp.desktop -appimage
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: program-${{ matrix.platform }}
+        path: ./*.deb ./*.AppImage
