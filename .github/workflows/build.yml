@@ -29,7 +29,6 @@ jobs:
 
     - name: Install packaging tools
       run: |
-        sudo apt-get install -y dpkg-deb
         wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
         chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
