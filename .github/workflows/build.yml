@@ -8,7 +8,7 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: ['appimage', 'deb']
+        platform: ['deb', 'rpm']
     runs-on: ubuntu-latest
 
     steps:
@@ -21,43 +21,54 @@ jobs:
         sudo apt-get install -y extra-cmake-modules qtbase5-dev libkf5coreaddons-dev \
           libkf5i18n-dev libkf5xmlgui-dev libkf5doctools-dev libkf5kio-dev
 
+        # Install RPM build dependencies
+        if [ "${{ matrix.platform }}" == "rpm" ]; then
+          sudo apt-get install -y rpm
+        fi
+
     - name: Configure
       run: cmake -DCMAKE_INSTALL_PREFIX=./install
 
     - name: Build
       run: make install
 
-    #- name: Install packaging tools
-    #  run: |
-    #    wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
-    #    chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-
-    - name: Package as .deb
-      if: matrix.platform == 'deb'
+    - name: Package as .deb or .rpm
       run: |
         # Replace with your actual packaging commands
         mkdir -p package/DEBIAN
-        # Create control file
-        echo "Package: mypackage" > package/DEBIAN/control
-        echo "Version: 1.0" >> package/DEBIAN/control
-        echo "Section: custom" >> package/DEBIAN/control
-        echo "Priority: optional" >> package/DEBIAN/control
-        echo "Architecture: all" >> package/DEBIAN/control
-        echo "Essential: no" >> package/DEBIAN/control
-        echo "Installed-Size: 1024" >> package/DEBIAN/control
-        echo "Maintainer: YourName" >> package/DEBIAN/control
-        echo "Description: My Package" >> package/DEBIAN/control
-        cp -r ./install/* package/
-        dpkg-deb --build package mypackage.deb
 
-    - name: Package as AppImage
-      if: matrix.platform == 'appimage'
-      run: |
-        # Replace with your actual packaging commands
-        ./linuxdeployqt-continuous-x86_64.AppImage ./install/usr/share/applications/myapp.desktop -appimage
+        if [ "${{ matrix.platform }}" == "deb" ]; then
+          # Create control file for Debian package
+          echo "Package: mypackage" > package/DEBIAN/control
+          echo "Version: 1.0" >> package/DEBIAN/control
+          echo "Section: custom" >> package/DEBIAN/control
+          echo "Priority: optional" >> package/DEBIAN/control
+          echo "Architecture: all" >> package/DEBIAN/control
+          echo "Essential: no" >> package/DEBIAN/control
+          echo "Installed-Size: 1024" >> package/DEBIAN/control
+          echo "Maintainer: YourName" >> package/DEBIAN/control
+          echo "Description: My Package" >> package/DEBIAN/control
+          cp -r ./install/* package/
+          dpkg-deb --build package mypackage.deb
+        elif [ "${{ matrix.platform }}" == "rpm" ]; then
+          # Create spec file for RPM package
+          echo "Name: mypackage" > package/mypackage.spec
+          echo "Version: 1.0" >> package/mypackage.spec
+          echo "Release: 1" >> package/mypackage.spec
+          echo "Summary: My Package" >> package/mypackage.spec
+          echo "License: MIT" >> package/mypackage.spec
+          echo "BuildArch: noarch" >> package/mypackage.spec
+          echo "BuildRequires: /usr/bin/rpm" >> package/mypackage.spec
+          echo "" >> package/mypackage.spec
+          echo "%description" >> package/mypackage.spec
+          echo "My Package description." >> package/mypackage.spec
+          echo "" >> package/mypackage.spec
+          cp -r ./install/* package/
+          rpmbuild -bb --define "_rpmdir $PWD" --define "_buildroot $PWD/package" package/mypackage.spec
+        fi
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: program-${{ matrix.platform }}
-        path: ./*.deb ./*.AppImage
+        path: ./*.${{ matrix.platform }}
