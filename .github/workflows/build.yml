@@ -21,10 +21,11 @@ jobs:
         sudo apt-get install -y extra-cmake-modules qtbase5-dev libkf5coreaddons-dev \
           libkf5i18n-dev libkf5xmlgui-dev libkf5doctools-dev libkf5kio-dev
 
-        # Install RPM build dependencies
+        # Install RPM build tools
         if [ "${{ matrix.platform }}" == "rpm" ]; then
-          sudo apt-get install -y rpm
+          sudo apt-get install -y rpm rpm-common
         fi
+
 
     - name: Configure
       run: cmake -DCMAKE_INSTALL_PREFIX=./install
