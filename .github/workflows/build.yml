@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -40,8 +40,13 @@ jobs:
           cp -r ./install/* package/
           dpkg-deb --build package mypackage.deb
 
+    - name: Debug
+      run: |
+        ls -la
+        pwd
+        
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: program-${{ matrix.platform }}
-        path: ./*.${{ matrix.platform }}
+        name: program-
+        path: ./mypackage.deb
