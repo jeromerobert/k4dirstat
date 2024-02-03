@@ -6,9 +6,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        platform: ['deb', 'rpm']
     runs-on: ubuntu-latest
 
     steps:
@@ -21,24 +18,15 @@ jobs:
         sudo apt-get install -y extra-cmake-modules qtbase5-dev libkf5coreaddons-dev \
           libkf5i18n-dev libkf5xmlgui-dev libkf5doctools-dev libkf5kio-dev
 
-        # Install RPM build tools
-        if [ "${{ matrix.platform }}" == "rpm" ]; then
-          sudo apt-get install -y rpm rpm-common
-        fi
-
-
     - name: Configure
       run: cmake -DCMAKE_INSTALL_PREFIX=./install
 
     - name: Build
       run: make install
 
-    - name: Package as .deb or .rpm
+    - name: Package as .deb
       run: |
-        # Replace with your actual packaging commands
         mkdir -p package/DEBIAN
-
-        if [ "${{ matrix.platform }}" == "deb" ]; then
           # Create control file for Debian package
           echo "Package: mypackage" > package/DEBIAN/control
           echo "Version: 1.0" >> package/DEBIAN/control
@@ -51,22 +39,6 @@ jobs:
           echo "Description: My Package" >> package/DEBIAN/control
           cp -r ./install/* package/
           dpkg-deb --build package mypackage.deb
-        elif [ "${{ matrix.platform }}" == "rpm" ]; then
-          # Create spec file for RPM package
-          echo "Name: mypackage" > package/mypackage.spec
-          echo "Version: 1.0" >> package/mypackage.spec
-          echo "Release: 1" >> package/mypackage.spec
-          echo "Summary: My Package" >> package/mypackage.spec
-          echo "License: MIT" >> package/mypackage.spec
-          echo "BuildArch: noarch" >> package/mypackage.spec
-          echo "BuildRequires: /usr/bin/rpm" >> package/mypackage.spec
-          echo "" >> package/mypackage.spec
-          echo "%description" >> package/mypackage.spec
-          echo "My Package description." >> package/mypackage.spec
-          echo "" >> package/mypackage.spec
-          cp -r ./install/* package/
-          rpmbuild -bb --define "_rpmdir $PWD" --define "_buildroot $PWD/package" package/mypackage.spec
-        fi
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
