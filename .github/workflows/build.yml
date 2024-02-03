@@ -27,26 +27,25 @@ jobs:
     - name: Package as .deb
       run: |
         mkdir -p package/DEBIAN
-          # Create control file for Debian package
-          echo "Package: mypackage" > package/DEBIAN/control
-          echo "Version: 1.0" >> package/DEBIAN/control
-          echo "Section: custom" >> package/DEBIAN/control
-          echo "Priority: optional" >> package/DEBIAN/control
-          echo "Architecture: all" >> package/DEBIAN/control
-          echo "Essential: no" >> package/DEBIAN/control
-          echo "Installed-Size: 1024" >> package/DEBIAN/control
-          echo "Maintainer: YourName" >> package/DEBIAN/control
-          echo "Description: My Package" >> package/DEBIAN/control
-          cp -r ./install/* package/
-          dpkg-deb --build package mypackage.deb
+        # Create control file for Debian package
+        echo "Package: k4dirstat" > package/DEBIAN/control
+        echo "Version: 1.0" >> package/DEBIAN/control
+        echo "Section: custom" >> package/DEBIAN/control
+        echo "Priority: optional" >> package/DEBIAN/control
+        echo "Architecture: all" >> package/DEBIAN/control
+        echo "Essential: no" >> package/DEBIAN/control
+        echo "Installed-Size: 1024" >> package/DEBIAN/control
+        echo "Maintainer: Mauro Druwel" >> package/DEBIAN/control
+        echo "Description: k4dirstat" >> package/DEBIAN/control
+        cp -r ./install/* package/
+        dpkg-deb --build package k4dirstat.deb
 
-    - name: Debug
-      run: |
-        ls -la
-        pwd
-        
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload To Release
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: program-
-        path: ./mypackage.deb
+          upload_url: ${{ github.event.release.upload_url }} 
+          asset_path: ./k4dirstat.deb
+          asset_name: k4dirstat.deb
+          asset_content_type: application/octet-stream
