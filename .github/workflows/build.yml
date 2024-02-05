@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y extra-cmake-modules qtbase5-dev libkf5coreaddons-dev \
+          libkf5i18n-dev libkf5xmlgui-dev libkf5doctools-dev libkf5kio-dev
+
+    - name: Configure
+      run: cmake -DCMAKE_INSTALL_PREFIX=./install
+
+    - name: Build
+      run: make install
+
+    - name: Package as .deb
+      run: |
+        mkdir -p package/DEBIAN
+        # Create control file for Debian package
+        echo "Package: k4dirstat" > package/DEBIAN/control
+        echo "Version: 1.0" >> package/DEBIAN/control
+        echo "Section: custom" >> package/DEBIAN/control
+        echo "Priority: optional" >> package/DEBIAN/control
+        echo "Architecture: all" >> package/DEBIAN/control
+        echo "Essential: no" >> package/DEBIAN/control
+        echo "Installed-Size: 1024" >> package/DEBIAN/control
+        echo "Maintainer: Mauro Druwel" >> package/DEBIAN/control
+        echo "Description: k4dirstat" >> package/DEBIAN/control
+        cp -r ./install/* package/
+        dpkg-deb --build package k4dirstat.deb
+
+    - name: Upload To Release
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ github.event.release.upload_url }} 
+          asset_path: ./k4dirstat.deb
+          asset_name: k4dirstat.deb
+          asset_content_type: application/octet-stream
